@@ -1,0 +1,3 @@
+# Already bundled in python_vendor; installation is optional for source rebuilds.
+sympy==1.14.0
+mpmath==1.3.0

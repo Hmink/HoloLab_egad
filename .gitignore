@@ -1,0 +1,15 @@
+.env
+.env.*
+node_modules/
+__pycache__/
+*.pyc
+
+!.env.example
+.venv/
+venv/
+.pytest_cache/
+.DS_Store
+*.log
+*.zip
+egad-pilot-session*.json
+student-data/

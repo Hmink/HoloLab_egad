@@ -1,0 +1,1191 @@
+--- a/web/src/camera-quality.js
++++ b/web/src/camera-quality.js
+@@ -0,0 +1,91 @@
++/** Camera resolution is independent of the model's input size and CSS preview size. */
++export const CAMERA_PROFILES = Object.freeze({
++  LOW: { width: 640, height: 480, label: "Low" },
++  HD: { width: 1280, height: 720, label: "HD" },
++  FHD: { width: 1920, height: 1080, label: "Full HD" },
++});
++export function cameraConstraints(quality = "HD", exact = false) {
++  const p = CAMERA_PROFILES[quality];
++  if (!p) throw Error("Unknown camera quality");
++  const bound = exact ? "exact" : "ideal";
++  return {
++    width: { [bound]: p.width },
++    height: { [bound]: p.height },
++    frameRate: { ideal: 60, max: 60 },
++    resizeMode: { ideal: "none" },
++  };
++}
++export function publicCameraSettings(track) {
++  const s = track?.getSettings?.() || {},
++    r = {};
++  for (const k of [
++    "width",
++    "height",
++    "frameRate",
++    "aspectRatio",
++    "resizeMode",
++    "focusMode",
++  ])
++    if (s[k] !== undefined) r[k] = s[k];
++  return r;
++}
++export async function configureCamera(track, quality = "HD") {
++  let actual = quality,
++    note = "";
++  try {
++    await track.applyConstraints(cameraConstraints(quality, true));
++  } catch (error) {
++    // Even a range in getCapabilities doesn't prove that a width/height pair exists.
++    actual = quality === "FHD" ? "HD" : quality;
++    await track.applyConstraints(cameraConstraints(actual, false));
++    note =
++      quality === "FHD"
++        ? "Camera không nhận Full HD; đã yêu cầu HD."
++        : "Camera dùng chế độ gần nhất hỗ trợ.";
++  }
++  const capabilities = track.getCapabilities?.() || {};
++  if (capabilities.focusMode?.includes("continuous")) {
++    try {
++      const s = publicCameraSettings(track);
++      await track.applyConstraints({
++        width: { exact: s.width },
++        height: { exact: s.height },
++        frameRate: { ideal: s.frameRate || 30 },
++        advanced: [{ focusMode: "continuous" }],
++      });
++    } catch {
++      /* Optional hardware control, not a startup failure. */
++    }
++  }
++  return {
++    applied: actual,
++    settings: publicCameraSettings(track),
++    autofocus: capabilities.focusMode?.includes("continuous") || false,
++    note,
++  };
++}
++export class CameraLoadPolicy {
++  constructor() {
++    this.reset();
++  }
++  reset() {
++    this.slowSince = null;
++    this.lastChange = -Infinity;
++  }
++  next(now, current, { fps, inferenceMs, ageMs }) {
++    const slow = (fps > 0 && fps < 42) || (inferenceMs > 70 && ageMs > 120);
++    if (!slow) {
++      this.slowSince = null;
++      return null;
++    }
++    if (this.slowSince === null) this.slowSince = now;
++    if (now - this.slowSince < 10000 || now - this.lastChange < 15000)
++      return null;
++    const lower = current === "FHD" ? "HD" : current === "HD" ? "LOW" : null;
++    if (lower) {
++      this.lastChange = now;
++      this.slowSince = null;
++    }
++    return lower;
++  }
++}
+--- a/web/src/capture.js
++++ b/web/src/capture.js
+@@ -1,3 +1,9 @@
++import {
++  cameraConstraints,
++  configureCamera,
++  publicCameraSettings,
++  CameraLoadPolicy,
++} from "./camera-quality.js";
+ /** One inference in flight, no queued camera frames; inference lives in Worker. */
+ export class HandCapture {
+   constructor(video, onResult, onStatus) {
+@@ -16,6 +22,12 @@
+     this.fault = false;
+     this.ready = false;
+     this.mediaCallback = null;
++    this.cameraQuality = "HD";
++    this.activeCameraQuality = "HD";
++    this.autoCameraQuality = true;
++    this.cameraPolicy = new CameraLoadPolicy();
++    this.qualityBusy = false;
++    this.cameraNote = "";
+   }
+   async init() {
+     if (this.worker && this.ready) return;
+@@ -87,26 +99,78 @@
+     } else {
+       const stream = await navigator.mediaDevices.getUserMedia({
+         audio: false,
+-        video: {
+-          width: { ideal: 640 },
+-          height: { ideal: 480 },
+-          frameRate: { ideal: 60, max: 60 },
+-        },
++        video: cameraConstraints(this.cameraQuality),
+       });
+       if (epoch !== this.epoch) {
+         stream.getTracks().forEach((t) => t.stop());
+         return false;
+       }
+       this.video.srcObject = stream;
++      await this.applyCameraQuality(this.cameraQuality);
+     }
+     await this.video.play();
+     await this.init();
+     if (epoch !== this.epoch) return false;
+     this.running = true;
++    this.cameraPolicy.reset();
+     this.lastMediaTime = -1;
+     this.lastSent = -Infinity;
+     this.schedule();
+     return true;
++  }
++  cameraReport() {
++    const track = this.video.srcObject?.getVideoTracks?.()[0];
++    return {
++      requested: this.cameraQuality,
++      applied: this.activeCameraQuality,
++      auto: this.autoCameraQuality,
++      settings: publicCameraSettings(track),
++      video_width: this.video.videoWidth || 0,
++      video_height: this.video.videoHeight || 0,
++      inference_width: this.inferenceWidth,
++      note: this.cameraNote,
++    };
++  }
++  async applyCameraQuality(quality, automatic = false) {
++    if (this.qualityBusy) return;
++    if (!automatic) {
++      this.cameraQuality = quality;
++      this.cameraPolicy.reset();
++    }
++    const track = this.video.srcObject?.getVideoTracks?.()[0];
++    if (!track) {
++      this.activeCameraQuality = quality;
++      return;
++    }
++    if (this.running) this.epoch++; // discard images from the previous camera aspect
++    const epoch = this.epoch;
++    this.qualityBusy = true;
++    try {
++      const report = await configureCamera(track, quality);
++      if (epoch !== this.epoch) return;
++      this.activeCameraQuality = report.applied;
++      this.cameraNote =
++        (automatic ? "Tự giảm chất lượng do tải cao. " : "") + report.note;
++      this.onStatus(
++        `${this.delegate || "Camera"} · ${report.settings.width}×${report.settings.height} · ${this.cameraNote}`,
++      );
++    } catch (error) {
++      if (epoch === this.epoch)
++        this.onStatus("Không đổi được chất lượng camera: " + error.message);
++    } finally {
++      this.qualityBusy = false;
++    }
++  }
++  adaptCamera(now, stats) {
++    if (
++      !this.running ||
++      !this.video.srcObject ||
++      !this.autoCameraQuality ||
++      this.qualityBusy
++    )
++      return;
++    const next = this.cameraPolicy.next(now, this.activeCameraQuality, stats);
++    if (next) this.applyCameraQuality(next, true);
+   }
+   schedule() {
+     if (!this.running) return;
+@@ -128,6 +192,7 @@
+     if (
+       !this.running ||
+       this.fault ||
++      this.qualityBusy ||
+       this.busy ||
+       this.video.readyState < 2 ||
+       mediaTime === this.lastMediaTime
+@@ -208,6 +273,7 @@
+     this.stopVideo();
+     this.worker?.terminate();
+     this.worker = null;
++    this.busy = false;
+     this.ready = false;
+   }
+ }
+--- a/web/src/environment.js
++++ b/web/src/environment.js
+@@ -15,7 +15,9 @@
+     return m;
+   };
+   cube(30, 14, 0.2, 0x61777c, 0, 1, -4);
+-  cube(30, 0.14, 9, 0x81999c, 0, -1.7, -1.5);
++  const table = cube(30, 0.14, 9, 0x81999c, 0, -1.7, -1.5);
++  table.name = "lab-table";
++  room.userData.table = table;
+   cube(30, 0.5, 0.12, 0x344c53, 0, -1.98, 2.9);
+   for (let x = -12; x < 13; x += 2.4) {
+     cube(0.018, 8, 0.02, 0x50676e, x, 1, -3.87);
+--- a/web/src/hand-worker.js
++++ b/web/src/hand-worker.js
+@@ -121,6 +121,8 @@
+           delegate,
+           epoch,
+           ...result,
++          width,
++          height,
+           transportMs: performance.now() - start - result.inferenceMs,
+         });
+         return;
+@@ -144,6 +146,8 @@
+         delegate,
+         epoch,
+         inferenceMs,
++        width,
++        height,
+         hands: result.landmarks.map((landmarks, i) => ({
+           landmarks,
+           label: result.handedness[i]?.[0]?.categoryName || "Unknown",
+--- a/web/src/interaction.js
++++ b/web/src/interaction.js
+@@ -124,6 +124,7 @@
+     h.object = object;
+     h.state = STATES.DRAGGING;
+     h.track.held = true;
++    this.adapter.acquire?.(object);
+     this.rebase(h);
+     this.adapter.select(object);
+     this.record({ type: "grab", hand: h.id, object: object.id });
+@@ -306,11 +307,18 @@
+             { ...a.position },
+             a.roll,
+             a.yaw + ((h.pointer.x - a.point.x) / this.width) * 5,
+-            clamp(
+-              a.pitch + ((h.pointer.y - a.point.y) / this.height) * 4,
+-              -1.2,
+-              1.2,
+-            ),
++            this.adapter.preserveFreeOrientation && Math.abs(a.pitch) > 1.2
++              ? a.pitch +
++                  clamp(
++                    ((h.pointer.y - a.point.y) / this.height) * 4,
++                    -1.2,
++                    1.2,
++                  )
++              : clamp(
++                  a.pitch + ((h.pointer.y - a.point.y) / this.height) * 4,
++                  -1.2,
++                  1.2,
++                ),
+           );
+         } else {
+           const z = clamp(
+@@ -322,7 +330,9 @@
+           this.adapter.move(
+             object,
+             { x: at.x + a.offset.x, y: at.y + a.offset.y, z },
+-            clamp(a.roll - angleDelta(h.angle, a.angle), -1.5, 1.5),
++            this.adapter.preserveFreeOrientation && Math.abs(a.roll) > 1.5
++              ? a.roll + clamp(-angleDelta(h.angle, a.angle), -1.5, 1.5)
++              : clamp(a.roll - angleDelta(h.angle, a.angle), -1.5, 1.5),
+             a.yaw,
+             a.pitch,
+           );
+--- a/web/src/main.js
++++ b/web/src/main.js
+@@ -268,18 +268,23 @@
+   setText($("object-species"), amounts.join(" | ") || m.note);
+ }
+ function move(object, position, roll, yaw, pitch) {
+-  object.target = view.clampPosition(position);
+-  object.roll = roll || 0;
+-  object.yaw = yaw || 0;
+-  object.pitch = pitch || 0;
++  view.physics.setTarget(
++    object,
++    view.clampPosition(position),
++    roll,
++    yaw,
++    pitch,
++  );
+ }
+ function park(object, reason) {
+-  object.target = view.clampPosition(object.target);
+-  if (reason !== "gesture")
+-    message("Đã đặt bình tại vị trí hiện tại; mở tay rồi gắp lại.");
++  // The remaining hand still owns a shared object; only the last release makes it dynamic.
++  if (!object.mouseOwned && interaction.owners(object).length === 0)
++    view.physics.release(object, reason === "gesture");
++  if (reason !== "gesture") message("Đã thả bình; mở tay rồi gắp lại.");
+ }
+ function beginMouse(object, p, isNew = false) {
+   if (!object || interaction.owners(object).length || viewing) return;
++  view.physics.beginGrab(object);
+   const at = view.toWorld(p, object.target.z);
+   mouse = {
+     object,
+@@ -438,7 +443,9 @@
+     if (bench?.active) bench.release();
+     return;
+   }
+-  const aspect = video.videoWidth / Math.max(1, video.videoHeight) || 16 / 9;
++  const aspect =
++    (data.width || video.videoWidth) /
++      Math.max(1, data.height || video.videoHeight) || 16 / 9;
+   // Worker input is mirrored. Toggle display only by reflecting those points once.
+   const observations = data.hands.map((h) =>
+     observation(h.landmarks, h.label, h.score, aspect, !mirror),
+@@ -569,6 +576,18 @@
+     $("latency"),
+     `Độ tuổi mẫu: ${latestResult ? Math.round(latestResult.ageMs) : "—"} ms · DPR ${view.pixelRatio.toFixed(2)}`,
+   );
++  const cam = capture.cameraReport();
++  setText(
++    $("camera-resolution"),
++    video.srcObject
++      ? `${cam.settings.width || cam.video_width}×${cam.settings.height || cam.video_height} · ${Math.round(cam.settings.frameRate || 0)} FPS camera · ảnh CV ≤${Math.min(capture.inferenceWidth, cam.video_width)} px${cam.note ? " · " + cam.note : ""}`
++      : "Camera chưa bật / video đầu vào",
++  );
++  capture.adaptCamera(now, {
++    fps: metrics.fps(now),
++    inferenceMs: latestResult?.inferenceMs || 0,
++    ageMs: latestResult?.ageMs || 0,
++  });
+   inspector();
+   if (metrics.current) {
+     const remain = Math.max(0, 60 - (now - metrics.current.start) / 1000);
+@@ -590,6 +609,21 @@
+   interaction.sweep(now);
+   if (!bench.active) automaticPour(now);
+   bench.tick(dt, now);
++  for (const item of view.objects) {
++    const owners = interaction.owners(item);
++    const held = item.mouseOwned || owners.length > 0;
++    const valid =
++      item.mouseOwned ||
++      owners.every(
++        (h) =>
++          h.track.observed &&
++          !h.track.ambiguous &&
++          !h.missing &&
++          now - h.lastReceived < 500,
++      );
++    view.physics.ownership(item, held, valid);
++  }
++  view.physics.step(dt, bench.active);
+   view.render(dt, now);
+   for (const item of view.objects) {
+     const p = view.toScreen(item.group.position),
+@@ -617,7 +651,7 @@
+     view.quality(ratio);
+     lastQuality = now;
+   }
+-  metrics.render(now, performance.now() - start);
++  metrics.render(now, performance.now() - start, view.physics.lastStepCost);
+ }
+ function resize() {
+   view.resize();
+@@ -629,7 +663,8 @@
+   // Rebase on the next valid observation instead of jumping after a viewport change.
+   for (const h of interaction.hands.values()) h.missing = true;
+   for (const item of view.objects)
+-    item.target = view.clampPosition(item.target);
++    if (view.physics.entries.get(item.id)?.held)
++      view.physics.setTarget(item, view.clampPosition(item.target));
+ }
+ async function loadSession(raw) {
+   const data = await post("/api/session", raw);
+@@ -816,7 +851,7 @@
+   $("benchmark").onclick = () => {
+     if (metrics.current) return;
+     metrics.begin(performance.now(), {
+-      version: "3.1.0",
++      version: "3.2.0",
+       input_source: inputSource,
+       delegate: capture.delegate || null,
+       width: innerWidth,
+@@ -826,8 +861,9 @@
+       initial_dpr: view.pixelRatio,
+       objects: view.objects.length,
+       titration: bench.active,
+-      camera_settings:
+-        video.srcObject?.getVideoTracks()[0]?.getSettings() || null,
++      camera_settings: capture.cameraReport(),
++      physics_engine: "Rapier 0.17.3",
++      physics_step_s: 1 / 120,
+       inference_width: capture.inferenceWidth,
+       tracking_cap_hz: capture.maxHz,
+     });
+@@ -840,6 +876,9 @@
+     download("HoloLab_benchmark.json", {
+       ...metrics.lastReport,
+       final_dpr: view.pixelRatio,
++      physics_engine: "Rapier 0.17.3",
++      physics_step_s: 1 / 120,
++      camera: capture.cameraReport(),
+       gesture_events: interaction.events,
+     });
+   };
+@@ -875,6 +914,7 @@
+           ...selected.target,
+           z: clamp(selected.target.z - e.deltaY * 0.002, -1.8, 1.5),
+         });
++        view.physics.editPose(selected);
+       }
+     },
+     { passive: false },
+@@ -917,6 +957,7 @@
+     if (key === "w") o.roll = o.pitch = 0;
+     if (key === "j") o.yaw += 0.13;
+     if (key === "l") o.yaw -= 0.13;
++    if (["a", "d", "w", "j", "l"].includes(key)) view.physics.editPose(o);
+     if (key === "k") {
+       o.sealed = !o.sealed;
+       o.version++;
+@@ -946,6 +987,7 @@
+   stocks = new Map(catalog.stocks.map((s) => [s.id, s]));
+   const profiles = await (await fetch("/profiles.json")).json();
+   view = new LabRenderer($("three"), profiles);
++  await view.initPhysics();
+   interaction = new Interaction(
+     {
+       pick,
+@@ -955,6 +997,8 @@
+       move,
+       select,
+       park,
++      acquire: (object) => view.physics.beginGrab(object),
++      preserveFreeOrientation: true,
+     },
+     { width: innerWidth, height: innerHeight },
+   );
+@@ -986,6 +1030,16 @@
+     );
+   };
+   setupReactionLibrary();
++  $("camera-quality").onchange = (e) =>
++    capture.applyCameraQuality(e.target.value);
++  $("camera-auto").onchange = (e) => {
++    capture.autoCameraQuality = e.target.checked;
++    capture.cameraPolicy.reset();
++  };
++  video.addEventListener("resize", () => {
++    overlayDirty = true;
++    for (const h of interaction.hands.values()) h.missing = true;
++  });
+   $("tracking-size").onchange = (e) => {
+     capture.inferenceWidth = Number(e.target.value);
+   };
+@@ -1007,6 +1061,10 @@
+       capture,
+       metrics,
+       spawn,
++      move,
++      park,
++      beginMouse,
++      endMouse,
+       createObject,
+       session,
+       loadSession,
+--- a/web/src/metrics.js
++++ b/web/src/metrics.js
+@@ -6,12 +6,12 @@
+     this.current = null;
+     this.lastReport = null;
+   }
+-  render(t, cost) {
+-    this.renders.push({ t, cost });
++  render(t, cost, physicsCost = 0) {
++    this.renders.push({ t, cost, physicsCost });
+     while (this.renders.length && t - this.renders[0].t > 3000)
+       this.renders.shift();
+     if (this.current) {
+-      this.current.render.push({ t, cost });
++      this.current.render.push({ t, cost, physicsCost });
+       if (t - this.current.start >= 60000) this.finish(t);
+     }
+   }
+@@ -67,6 +67,8 @@
+       render_fps: run.render.length / duration,
+       render_interval_p95_ms: p95(intervals),
+       render_cpu_mean_ms: mean(run.render.map((x) => x.cost)),
++      physics_cpu_mean_ms: mean(run.render.map((x) => x.physicsCost || 0)),
++      physics_cpu_p95_ms: p95(run.render.map((x) => x.physicsCost || 0)),
+       tracking_samples: run.track.length,
+       tracking_hz: run.track.length / duration,
+       detected_samples: run.track.filter((x) => x.hands > 0).length,
+--- a/web/src/physics.js
++++ b/web/src/physics.js
+@@ -0,0 +1,451 @@
++import * as THREE from "../vendor/three/three.module.js";
++import RAPIER from "../vendor/rapier/rapier.mjs";
++
++// A 1.1-scene-unit beaker is about 11 cm high. Masses below are kg.
++export const METRES_PER_UNIT = 0.1;
++export const FIXED_DT = 1 / 120;
++const SKIN = 0.003; // 0.3 mm: held objects must stay fully above the tabletop.
++const toMetres = (v) => ({
++  x: v.x * METRES_PER_UNIT,
++  y: v.y * METRES_PER_UNIT,
++  z: v.z * METRES_PER_UNIT,
++});
++const toScene = (v) => ({
++  x: v.x / METRES_PER_UNIT,
++  y: v.y / METRES_PER_UNIT,
++  z: v.z / METRES_PER_UNIT,
++});
++let initialized;
++export function initPhysics() {
++  return (initialized ??= RAPIER.init());
++}
++
++/** Rapier owns every free-desk mesh pose. Hand targets only drive kinematic bodies. */
++export class LabPhysics {
++  constructor(tableMesh) {
++    this.world = new RAPIER.World({ x: 0, y: -9.81, z: 0 });
++    this.world.timestep = FIXED_DT;
++    this.world.lengthUnit = 1;
++    this.world.numSolverIterations = 12;
++    this.world.numInternalPgsIterations = 1;
++    this.world.integrationParameters.contact_natural_frequency = 60;
++    this.world.maxCcdSubsteps = 4;
++    this.world.integrationParameters.normalizedAllowedLinearError = 0.00005;
++    this.entries = new Map();
++    this.accumulator = 0;
++    this.time = 0;
++    this.lastStepCost = 0;
++    this.totalSteps = 0;
++    this.vector = new THREE.Vector3();
++    this.quaternion = new THREE.Quaternion();
++    this.euler = new THREE.Euler(0, 0, 0, "XYZ");
++    tableMesh.updateWorldMatrix(true, false);
++    const size = new THREE.Vector3(),
++      position = new THREE.Vector3(),
++      rotation = new THREE.Quaternion();
++    tableMesh.matrixWorld.decompose(position, rotation, size);
++    const p = tableMesh.geometry.parameters;
++    size.set(
++      Math.abs(size.x * p.width),
++      Math.abs(size.y * p.height),
++      Math.abs(size.z * p.depth),
++    );
++    if (Math.abs(rotation.x) > 1e-6 || Math.abs(rotation.z) > 1e-6)
++      throw Error("Table must remain horizontal");
++    this.table = { position, rotation, size, top: position.y + size.y / 2 };
++    this.tableBody = this.world.createRigidBody(
++      RAPIER.RigidBodyDesc.fixed()
++        .setTranslation(
++          position.x * METRES_PER_UNIT,
++          position.y * METRES_PER_UNIT,
++          position.z * METRES_PER_UNIT,
++        )
++        .setRotation(rotation),
++    );
++    this.tableCollider = this.world.createCollider(
++      RAPIER.ColliderDesc.cuboid(
++        (size.x * METRES_PER_UNIT) / 2,
++        (size.y * METRES_PER_UNIT) / 2,
++        (size.z * METRES_PER_UNIT) / 2,
++      )
++        .setFriction(0.65)
++        .setRestitution(0.08),
++      this.tableBody,
++    );
++  }
++  /** Hulls use scaled local mesh vertices, including child pivots. Decorative rings/liquid are excluded. */
++  geometry(item) {
++    const root = item.group,
++      hulls = [];
++    root.updateWorldMatrix(true, true);
++    const inverse = new THREE.Matrix4().copy(root.matrixWorld).invert();
++    const scale = new THREE.Matrix4().makeScale(
++      root.scale.x,
++      root.scale.y,
++      root.scale.z,
++    );
++    root.traverse((node) => {
++      if (node === item.cap && !item.sealed) return;
++      if (
++        !node.isMesh ||
++        node.userData.noPhysics ||
++        node === item.ring ||
++        node === item.liquid
++      )
++        return;
++      let parent = node.parent;
++      while (parent && parent !== root) {
++        if (parent.userData.noPhysics) return;
++        parent = parent.parent;
++      }
++      const a = node.geometry?.attributes.position;
++      if (!a) return;
++      const transform = new THREE.Matrix4()
++        .copy(scale)
++        .multiply(inverse)
++        .multiply(node.matrixWorld);
++      const unique = new Map();
++      for (let i = 0; i < a.count; i++) {
++        const v = new THREE.Vector3()
++          .fromBufferAttribute(a, i)
++          .applyMatrix4(transform);
++        unique.set(`${v.x.toFixed(6)},${v.y.toFixed(6)},${v.z.toFixed(6)}`, v);
++      }
++      const vertices = new Float32Array(
++        [...unique.values()].flatMap((v) => [v.x, v.y, v.z]),
++      );
++      if (vertices.length >= 12) hulls.push(vertices);
++    });
++    if (!hulls.length) throw Error("No physical mesh for " + item.stock.kind);
++    return hulls;
++  }
++  add(item) {
++    const hulls = this.geometry(item);
++    const body = this.world.createRigidBody(
++      RAPIER.RigidBodyDesc.dynamic()
++        .setTranslation(
++          item.target.x * METRES_PER_UNIT,
++          item.target.y * METRES_PER_UNIT,
++          item.target.z * METRES_PER_UNIT,
++        )
++        .setRotation(item.group.quaternion)
++        .setCcdEnabled(true)
++        .setSoftCcdPrediction(0.02)
++        .setLinearDamping(0.15)
++        .setAngularDamping(0.55)
++        .setCanSleep(true),
++    );
++    const e = {
++      item,
++      body,
++      hulls,
++      colliders: [],
++      held: false,
++      paused: false,
++      history: [],
++      freeze: false,
++      sealed: item.sealed,
++      restTime: 0,
++    };
++    this.entries.set(item.id, e);
++    this.buildColliders(e);
++    const at = this.constrain(e, item.target, item.group.quaternion);
++    body.setTranslation(toMetres(at), true);
++    this.sync(e, true);
++    return e;
++  }
++  buildColliders(e) {
++    for (const c of e.colliders) this.world.removeCollider(c, true);
++    e.colliders = [];
++    const mass = this.mass(e.item) / e.hulls.length;
++    for (const points of e.hulls) {
++      const desc = RAPIER.ColliderDesc.roundConvexHull(
++        points.map((n) => n * METRES_PER_UNIT),
++        0.0005,
++      );
++      if (!desc) throw Error("Invalid collider geometry");
++      e.colliders.push(
++        this.world.createCollider(
++          desc
++            .setContactSkin(0.0003)
++            .setMass(mass)
++            .setFriction(0.6)
++            .setRestitution(0.08),
++          e.body,
++        ),
++      );
++    }
++  }
++  mass(item) {
++    return (
++      (item.stock.kind === "balance" ? 0.8 : 0.15) +
++      Math.max(0, item.mixture?.volume_ml || 0) / 1000
++    );
++  }
++  updateItem(item) {
++    const e = this.entries.get(item.id);
++    if (!e) return;
++    if (e.sealed !== item.sealed) {
++      e.hulls = this.geometry(item);
++      this.buildColliders(e);
++      e.sealed = item.sealed;
++    }
++    const mass = this.mass(item) / e.colliders.length;
++    e.colliders.forEach((c) => c.setMass(mass));
++    e.body.recomputeMassPropertiesFromColliders();
++  }
++  beginGrab(item) {
++    const e = this.entries.get(item.id);
++    if (!e || e.held) return;
++    this.sync(e, true); // Anchor against the actual body pose, not a stale target.
++    e.body.setBodyType(RAPIER.RigidBodyType.KinematicPositionBased, true);
++    e.body.setLinvel({ x: 0, y: 0, z: 0 }, true);
++    e.body.setAngvel({ x: 0, y: 0, z: 0 }, true);
++    e.held = true;
++    e.freeze = false;
++    e.history = [];
++    e.restTime = 0;
++  }
++  release(item, inherit = true) {
++    const e = this.entries.get(item.id);
++    if (!e || !e.held) return;
++    const velocity = new THREE.Vector3();
++    const h = e.history;
++    if (inherit && !e.freeze && h.length > 1) {
++      const last = h.at(-1),
++        first = h.find((s) => s.t >= last.t - 0.075) || h[0];
++      const dt = last.t - first.t;
++      if (dt > 0.008 && this.time - last.t < 0.1)
++        velocity.copy(last.p).sub(first.p).divideScalar(dt).clampLength(0, 12);
++    }
++    // Retain the actual current pose. No jump to an unconsumed hand target.
++    e.held = false;
++    e.freeze = false;
++    e.history = [];
++    e.restTime = 0;
++    e.body.setBodyType(RAPIER.RigidBodyType.Dynamic, true);
++    e.body.setLinvel(toMetres(velocity), true);
++    e.body.setAngvel({ x: 0, y: 0, z: 0 }, true);
++    this.sync(e, true);
++  }
++  freezeHeld(item) {
++    const e = this.entries.get(item.id);
++    if (!e?.held) return;
++    e.freeze = true;
++    e.history = [];
++    this.sync(e, true);
++    e.body.setNextKinematicTranslation(e.body.translation());
++    e.body.setNextKinematicRotation(e.body.rotation());
++    e.body.setLinvel({ x: 0, y: 0, z: 0 }, true);
++    e.body.setAngvel({ x: 0, y: 0, z: 0 }, true);
++  }
++  bounds(e, rotation, at = { x: 0, y: 0, z: 0 }) {
++    const min = { x: Infinity, y: Infinity, z: Infinity },
++      max = { x: -Infinity, y: -Infinity, z: -Infinity };
++    const q = this.quaternion.copy(rotation),
++      v = this.vector;
++    for (const hull of e.hulls)
++      for (let i = 0; i < hull.length; i += 3) {
++        v.set(hull[i], hull[i + 1], hull[i + 2]).applyQuaternion(q);
++        for (const axis of ["x", "y", "z"]) {
++          const n = v[axis] + at[axis];
++          if (n < min[axis]) min[axis] = n;
++          if (n > max[axis]) max[axis] = n;
++        }
++      }
++    const border = 0.0005 / METRES_PER_UNIT;
++    for (const axis of ["x", "y", "z"]) {
++      min[axis] -= border;
++      max[axis] += border;
++    }
++    return { min, max };
++  }
++  constrain(e, position, rotation) {
++    const p = { x: position.x, y: position.y, z: position.z },
++      b = this.bounds(e, rotation, p),
++      t = this.table;
++    if (
++      b.max.x >= t.position.x - t.size.x / 2 &&
++      b.min.x <= t.position.x + t.size.x / 2 &&
++      b.max.z >= t.position.z - t.size.z / 2 &&
++      b.min.z <= t.position.z + t.size.z / 2
++    ) {
++      p.y += Math.max(0, t.top + SKIN - b.min.y);
++    }
++    return p;
++  }
++  setTarget(
++    item,
++    position,
++    roll = item.roll,
++    yaw = item.yaw,
++    pitch = item.pitch,
++  ) {
++    const e = this.entries.get(item.id);
++    if (!e) return;
++    const q = new THREE.Quaternion().setFromEuler(
++      new THREE.Euler(pitch || 0, yaw || 0, roll || 0),
++    );
++    item.target = this.constrain(e, position, q);
++    item.roll = roll || 0;
++    item.yaw = yaw || 0;
++    item.pitch = pitch || 0;
++  }
++  /** Single explicit keyboard/wheel edit, never a second per-frame dynamic pose writer. */
++  editPose(item) {
++    const e = this.entries.get(item.id);
++    if (!e) return;
++    this.setTarget(item, item.target);
++    if (!e.held) {
++      const q = new THREE.Quaternion().setFromEuler(
++        new THREE.Euler(item.pitch, item.yaw, item.roll),
++      );
++      e.body.setTranslation(toMetres(item.target), true);
++      e.body.setRotation(q, true);
++      e.body.setLinvel({ x: 0, y: 0, z: 0 }, true);
++      e.body.setAngvel({ x: 0, y: 0, z: 0 }, true);
++      this.sync(e, true);
++    }
++  }
++  ownership(item, held, valid = true) {
++    const e = this.entries.get(item.id);
++    if (!e) return;
++    if (held) {
++      this.beginGrab(item);
++      if (!valid) this.freezeHeld(item);
++      else e.freeze = false;
++    } else if (e.held) this.release(item, false);
++  }
++  position(e) {
++    return toScene(e.body.translation());
++  }
++  sync(e, includeGoal = false) {
++    const { item, body } = e,
++      p = toScene(body.translation()),
++      q = body.rotation();
++    item.group.position.set(p.x, p.y, p.z);
++    item.group.quaternion.set(q.x, q.y, q.z, q.w);
++    if (!e.held || includeGoal) {
++      item.target = { x: p.x, y: p.y, z: p.z };
++      this.euler.setFromQuaternion(item.group.quaternion, "XYZ");
++      item.pitch = this.euler.x;
++      item.yaw = this.euler.y;
++      item.roll = this.euler.z;
++    }
++  }
++  /** Supplement Rapier CCD with a conservative tabletop velocity constraint.
++   * Kinematic poses and dynamic meshes are never projected after release.
++   * Sweep the full rotated collider support, then limit only the approaching
++   * body velocity. Rapier still integrates gravity and solves contact/friction.
++   */
++  guardTable(e) {
++    if (e.held || e.body.isSleeping()) return;
++    const body = e.body,
++      at = this.position(e),
++      current = new THREE.Quaternion().copy(body.rotation());
++    const v = toScene(body.linvel()),
++      w = body.angvel(),
++      speed = Math.hypot(w.x, w.y, w.z);
++    const next = current.clone();
++    if (speed > 1e-8)
++      next.premultiply(
++        new THREE.Quaternion().setFromAxisAngle(
++          new THREE.Vector3(w.x, w.y, w.z).divideScalar(speed),
++          speed * FIXED_DT,
++        ),
++      );
++    const b = this.bounds(e, next, at),
++      t = this.table;
++    if (
++      b.max.x < t.position.x - t.size.x / 2 ||
++      b.min.x > t.position.x + t.size.x / 2 ||
++      b.max.z < t.position.z - t.size.z / 2 ||
++      b.min.z > t.position.z + t.size.z / 2
++    )
++      return;
++    const gap = b.min.y - t.top;
++    const g = 9.81 / METRES_PER_UNIT;
++    // Includes one full substep of gravity: conservative against solver integration order.
++    const allowed = gap / FIXED_DT;
++    if (v.y * FIXED_DT - g * FIXED_DT * FIXED_DT < -gap) {
++      body.setLinvel(
++        {
++          x: body.linvel().x,
++          y: Math.max(v.y, -allowed + g * FIXED_DT) * METRES_PER_UNIT,
++          z: body.linvel().z,
++        },
++        true,
++      );
++    }
++    const currentGap = this.bounds(e, current, at).min.y - t.top;
++    if (
++      Math.abs(currentGap) < 0.012 &&
++      Math.hypot(v.x, v.y, v.z) < 1 &&
++      speed < 2
++    ) {
++      e.restTime += FIXED_DT;
++      if (e.restTime > 0.4) {
++        body.sleep();
++        e.restTime = 0;
++      }
++    } else e.restTime = 0;
++  }
++  step(dt, paused = false) {
++    const start = performance.now();
++    if (paused) {
++      this.accumulator = 0;
++      this.lastStepCost = 0;
++      return;
++    }
++    this.accumulator += Math.min(0.1, Math.max(0, dt));
++    let count = 0;
++    while (this.accumulator + 1e-9 >= FIXED_DT && count < 12) {
++      for (const e of this.entries.values())
++        if (e.held) {
++          const { item, body } = e;
++          const q = new THREE.Quaternion().copy(body.rotation());
++          const desired = new THREE.Quaternion().setFromEuler(
++            new THREE.Euler(item.pitch, item.yaw, item.roll),
++          );
++          q.slerp(desired, 1 - Math.exp(-FIXED_DT / 0.025));
++          const p = new THREE.Vector3()
++            .copy(toScene(body.translation()))
++            .lerp(item.target, 1 - Math.exp(-FIXED_DT / 0.025));
++          // Kinematic bodies ignore static contact forces: constrain their exact rotated support points before submission.
++          const safe = this.constrain(e, p, q);
++          body.setNextKinematicTranslation(toMetres(safe));
++          body.setNextKinematicRotation(q);
++        }
++      for (const e of this.entries.values()) this.guardTable(e);
++      this.world.step();
++      this.time += FIXED_DT;
++      this.totalSteps++;
++      for (const e of this.entries.values()) {
++        this.sync(e);
++        if (e.held && !e.freeze) {
++          e.history.push({
++            t: this.time,
++            p: new THREE.Vector3().copy(toScene(e.body.translation())),
++          });
++          while (e.history.length > 2 && this.time - e.history[0].t > 0.1)
++            e.history.shift();
++        }
++      }
++      this.accumulator -= FIXED_DT;
++      count++;
++    }
++    for (const e of this.entries.values()) this.sync(e);
++    this.lastStepCost = performance.now() - start;
++  }
++  remove(item) {
++    const e = this.entries.get(item.id);
++    if (e) {
++      this.world.removeRigidBody(e.body);
++      this.entries.delete(item.id);
++    }
++  }
++  dispose() {
++    this.world.free();
++    this.entries.clear();
++  }
++}
+--- a/web/src/render3d.js
++++ b/web/src/render3d.js
+@@ -1,6 +1,7 @@
+ import * as THREE from "three";
+ import { OrbitControls } from "../vendor/controls/OrbitControls.js";
+ import { buildEnvironment } from "./environment.js";
++import { LabPhysics, initPhysics } from "./physics.js";
+ import { clamp } from "./filters.js";
+ 
+ /** Meshes use v2's vessel profiles; no GL readback or bitmap compositing per frame. */
+@@ -56,6 +57,10 @@
+     this.up = new THREE.Vector3(0, 1, 0);
+     this.environment = buildEnvironment(this);
+   }
++  async initPhysics() {
++    await initPhysics();
++    this.physics = new LabPhysics(this.environment.userData.table);
++  }
+   resize() {
+     const r = this.element.getBoundingClientRect();
+     this.rect = r;
+@@ -152,6 +157,7 @@
+         }),
+       );
+       item.liquid.renderOrder = 1;
++      item.liquid.userData.noPhysics = true;
+       group.add(item.liquid);
+       const top = Math.max(...this.profiles.profiles[kind].map((p) => p[0]));
+       item.mouthY = top;
+@@ -202,14 +208,17 @@
+     );
+     ring.rotation.x = -Math.PI / 2;
+     ring.position.y = -1.02;
++    ring.userData.noPhysics = true;
+     group.add(ring);
+     item.ring = ring;
+     ring.visible = false;
+     item.sediment = new THREE.Group();
++    item.sediment.userData.noPhysics = true;
+     group.add(item.sediment);
+     this.scene.add(group);
+     this.objects.push(item);
+     this.updateMixture(item);
++    this.physics.add(item);
+   }
+   liquidGeometry(kind, ratio) {
+     // Integrate volume against the original interior profile, matching the v2 model.
+@@ -291,6 +300,7 @@
+       item.sediment.add(this.box(0.35, 0.16, 0.25, 0xba693b, 0, -0.62));
+     if (item.stock.kind === "solid")
+       item.group.children[0].visible = mix.solid_copper_g > 1e-9;
++    this.physics?.updateItem(item);
+   }
+   pick(point) {
+     const r = this.rect;
+@@ -397,6 +407,7 @@
+     this.effects.push({ item, kind, start: now, until: now + 2800, mesh });
+   }
+   remove(item) {
++    this.physics.remove(item);
+     this.scene.remove(item.group);
+     this.objects = this.objects.filter((o) => o !== item);
+     item.group.traverse((n) => {
+@@ -417,13 +428,7 @@
+     // Profile geometries and glass are shared and live for the scene lifetime.
+   }
+   render(dt, now) {
+-    const alpha = 1 - Math.exp(-Math.min(0.1, dt) / 0.025);
+-    for (const item of this.objects) {
+-      item.group.position.lerp(item.target, alpha);
+-      item.group.rotation.x += (item.pitch - item.group.rotation.x) * alpha;
+-      item.group.rotation.y += (item.yaw - item.group.rotation.y) * alpha;
+-      item.group.rotation.z += (item.roll - item.group.rotation.z) * alpha;
+-    }
++    // Mesh transforms were synchronized from Rapier in the physics step.
+     this.scene.updateMatrixWorld();
+     for (const s of this.streams) {
+       s.mesh.visible =
+--- a/web/index.html
++++ b/web/index.html
+@@ -3,7 +3,7 @@
+   <head>
+     <meta charset="utf-8" />
+     <meta name="viewport" content="width=device-width,initial-scale=1" />
+-    <title>HoloLab AR · ChemLab V3.1</title>
++    <title>HoloLab AR · ChemLab V3.2</title>
+     <link rel="stylesheet" href="styles.css" />
+     <script type="importmap">
+       { "imports": { "three": "/vendor/three/three.module.js" } }
+@@ -14,7 +14,7 @@
+       <header>
+         <div class="eyebrow">PHÒNG THÍ NGHIỆM ẢO</div>
+         <h1>HoloLab <span>AR</span></h1>
+-        <div class="version">CHEMLAB V3.1 · HAI TAY</div>
++        <div class="version">CHEMLAB V3.2 · HAI TAY</div>
+       </header>
+       <nav id="tabs">
+         <button data-group="tool" class="active">Dụng cụ</button
+@@ -77,6 +77,19 @@
+         >
+           Toàn màn hình</button
+         ><button id="help-button">Hướng dẫn</button>
++      </div>
++      <div class="controls camera-options">
++        <label
++          >Camera
++          <select id="camera-quality">
++            <option value="LOW">Low · 640×480</option>
++            <option value="HD" selected>HD · 1280×720</option>
++            <option value="FHD">Full HD · 1920×1080</option>
++          </select></label
++        ><label
++          ><input id="camera-auto" type="checkbox" checked /> Tự giảm khi tải
++          cao</label
++        ><span id="camera-resolution">Camera chưa bật</span>
+       </div>
+       <div class="camera-deck">
+         <div id="camera-preview">
+--- a/web/styles.css
++++ b/web/styles.css
+@@ -703,3 +703,10 @@
+ body.titrating #workspace {
+   min-height: 300px;
+ }
++
++/* Camera quality controls report intrinsic stream pixels, never CSS upscaling. */
++#camera-resolution {
++  font-size: 10px;
++  color: #a7c8d3;
++  font-variant-numeric: tabular-nums;
++}
+--- a/server.py
++++ b/server.py
+@@ -200,7 +200,7 @@
+         if self.path == "/api/catalog":
+             self.json(
+                 {
+-                    "version": "3.1.0",
++                    "version": "3.2.0",
+                     "native_tracking": bool(NATIVE.available),
+                     "stocks": [
+                         {**asdict(x), "mixture": mix_payload(Mixture.stock(x))}
+@@ -212,7 +212,7 @@
+             )
+             return
+         if self.path == "/api/health":
+-            self.json({"ok": True, "version": "3.1.0"})
++            self.json({"ok": True, "version": "3.2.0"})
+             return
+         if self.path.startswith("/api/experiment/"):
+             name = self.path.rsplit("/", 1)[-1]
+@@ -287,7 +287,7 @@
+         ("127.0.0.1", args.port), partial(Handler, directory=str(ROOT / "web"))
+     )
+     url = f"http://127.0.0.1:{server.server_port}"
+-    print(f"HoloLab AR V3.1: {url}\nGiu cua so nay mo. Ctrl+C de dung.", flush=True)
++    print(f"HoloLab AR V3.2: {url}\nGiu cua so nay mo. Ctrl+C de dung.", flush=True)
+     if not args.no_browser:
+         threading.Timer(0.5, lambda: webbrowser.open(url)).start()
+     try:
+--- a/package.json
++++ b/package.json
+@@ -1,6 +1,6 @@
+ {
+   "name": "hololab-ar-v3",
+-  "version": "3.1.0",
++  "version": "3.2.0",
+   "private": true,
+   "type": "module",
+   "scripts": {
+@@ -8,6 +8,7 @@
+     "vendor": "node tools/vendor.mjs"
+   },
+   "dependencies": {
++    "@dimforge/rapier3d-compat": "0.17.3",
+     "@mediapipe/tasks-vision": "0.10.32",
+     "three": "0.180.0"
+   }
+--- a/package-lock.json
++++ b/package-lock.json
+@@ -1,16 +1,23 @@
+ {
+   "name": "hololab-ar-v3",
+-  "version": "3.1.0",
++  "version": "3.2.0",
+   "lockfileVersion": 3,
+   "requires": true,
+   "packages": {
+     "": {
+       "name": "hololab-ar-v3",
+-      "version": "3.1.0",
++      "version": "3.2.0",
+       "dependencies": {
++        "@dimforge/rapier3d-compat": "0.17.3",
+         "@mediapipe/tasks-vision": "0.10.32",
+         "three": "0.180.0"
+       }
++    },
++    "node_modules/@dimforge/rapier3d-compat": {
++      "version": "0.17.3",
++      "resolved": "https://registry.npmjs.org/@dimforge/rapier3d-compat/-/rapier3d-compat-0.17.3.tgz",
++      "integrity": "sha512-hxtaaqtfUWQvYbA/vstSEMZupObTMdM1u+5vTQlXNdWueRRhJ+toxREhaplok5W1/4ErxO6qdezbRM2eqEQsqw==",
++      "license": "Apache-2.0"
+     },
+     "node_modules/@mediapipe/tasks-vision": {
+       "version": "0.10.32",
+--- a/tools/vendor.mjs
++++ b/tools/vendor.mjs
+@@ -18,3 +18,8 @@
+   `${dest}/MEDIAPIPE-package.json`,
+ );
+ console.log("Local runtime libraries copied");
++
++await mkdir(`${dest}/rapier`,{recursive:true});
++await copyFile('node_modules/@dimforge/rapier3d-compat/rapier.es.js',`${dest}/rapier/rapier.mjs`);
++await copyFile('node_modules/@dimforge/rapier3d-compat/package.json',`${dest}/rapier/package.json`);
++await copyFile('licenses/MEDIAPIPE-APACHE-2.0.txt',`${dest}/rapier/LICENSE-APACHE-2.0.txt`);
