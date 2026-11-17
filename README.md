@@ -33,23 +33,6 @@ Hoặc chạy `START_WINDOWS.bat` / `bash START_LINUX.sh`. Cần Python 3.10 tr�
 
 Mô hình pilot: TF-IDF ký tự + Logistic Regression, huấn luyện trên 45 câu **AI mô phỏng**, nhãn tạm do trợ lý đề xuất. Chưa có nhãn từng câu do giáo viên xác nhận. Model này chỉ đọc văn bản câu trả lời; câu hỏi được lưu vào nhật ký nhưng chưa tham gia phân loại. Không dùng để chấm điểm hay kết luận mức hiểu thật. Các ví dụ nạp sẵn lấy từ dữ liệu huấn luyện, không phải tập kiểm thử độc lập. Chi tiết: `training/metrics.json`, `docs/EGAD_DEMO.md`.
 
-## Đưa lên GitHub
-
-Giải nén ZIP rồi đưa **nội dung thư mục** lên repository, không chỉ upload nguyên ZIP. Dùng GitHub Desktop: Add local repository → chọn thư mục → create repository nếu chưa có Git → Commit → Publish repository. Hoặc:
-
-```bash
-git init
-git add .
-git commit -m "Initial HoloLab mouse lab and EGAD demo"
-git branch -M main
-git remote add origin https://github.com/YOUR_USERNAME/hololab-egad.git
-git push -u origin main
-```
-
-Tạo repository GitHub trống trước khi chạy lệnh, thay YOUR_USERNAME. Đăng nhập qua GitHub Desktop hoặc trình quản lý thông tin đăng nhập; không đưa token vào file. `.gitignore` loại node_modules, môi trường ảo, secrets và nhật ký cá nhân.
-
-**GitHub lưu mã nguồn không tự chạy server Python.** Bản này chạy cục bộ; chưa cấu hình GitHub Pages. Không bật Pages trực tiếp vì ứng dụng có API Python và các đường dẫn tài nguyên bắt đầu từ `/`. Nhúng vào Base44 cần triển khai dịch vụ riêng; xem `START_HERE_BASE44.md`.
-
 ## Phát triển và kiểm thử
 
 ```bash
