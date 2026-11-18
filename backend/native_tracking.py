@@ -9,8 +9,8 @@ import time
 
 
 class NativeTracking:
-    def __init__(self, root: Path, enabled=True):
-        self.model_path = root / "web/models/hand_landmarker.task"
+    def __init__(self, model_path: Path, enabled=True):
+        self.model_path = model_path
         self.available = enabled and all(
             importlib.util.find_spec(name) for name in ("cv2", "numpy", "mediapipe")
         )

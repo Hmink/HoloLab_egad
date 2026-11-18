@@ -12,18 +12,42 @@ from functools import partial
 from math import isfinite, pi
 import argparse
 import json
+import os
 import threading
 import webbrowser
 import socket
 
-from chemlab.chemistry import load_database
-from lab3d.catalog import CATALOG, STOCK
-from lab3d.mixture import Mixture, transfer
+from paths import WEB_DIR
+from version import VERSION
+
+
+def load_dotenv(path):
+    """Minimal .env reader (no dependency). Real environment variables win."""
+    if not path.is_file():
+        return
+    for line in path.read_text(encoding="utf-8").splitlines():
+        line = line.strip()
+        if line and not line.startswith("#") and "=" in line:
+            key, value = line.split("=", 1)
+            os.environ.setdefault(key.strip(), value.strip().strip("\"'"))
+
+
+load_dotenv(ROOT / ".env")
+
+try:
+    from chemlab.chemistry import load_database
+    from lab3d.catalog import CATALOG, STOCK
+    from lab3d.mixture import Mixture, transfer
+except ImportError as error:
+    raise SystemExit(
+        f"Thiếu mã lõi hóa học ({error.name}). Cần các thư mục chemlab/, lab3d/, data/ cạnh server.py (trong backend/) "
+        "và giao diện ở frontend/web/."
+    ) from error
 from native_tracking import NativeTracking
-from egad_local import assess as assess_egad
+from egad_llm import assess as assess_egad
 
 DB = load_database(ROOT / "data/chemistry.json")
-NATIVE = NativeTracking(ROOT)
+NATIVE = NativeTracking(WEB_DIR / "models" / "hand_landmarker.task")
 
 
 def finite(value, low, high):
@@ -204,7 +228,7 @@ class Handler(SimpleHTTPRequestHandler):
         if self.path == "/api/catalog":
             self.json(
                 {
-                    "version": "3.9.0",
+                    "version": VERSION,
                     "native_tracking": bool(NATIVE.available),
                     "stocks": [
                         {**asdict(x), "mixture": mix_payload(Mixture.stock(x))}
@@ -216,7 +240,7 @@ class Handler(SimpleHTTPRequestHandler):
             )
             return
         if self.path == "/api/health":
-            self.json({"ok": True, "version": "3.9.0"})
+            self.json({"ok": True, "version": VERSION})
             return
         if self.path.startswith("/api/experiment/"):
             name = self.path.rsplit("/", 1)[-1]
@@ -262,7 +286,7 @@ class Handler(SimpleHTTPRequestHandler):
             data = json.loads(self.rfile.read(size))
             if self.path == "/api/tracking/init":
                 self.json(NATIVE.initialize())
-            elif self.path == "/api/egad/local":
+            elif self.path in ("/api/egad/assess", "/api/egad/local"):
                 self.json(assess_egad(data))
             elif self.path == "/api/transfer":
                 self.json(transfer_request(data))
@@ -276,9 +300,10 @@ class Handler(SimpleHTTPRequestHandler):
             TypeError,
             AttributeError,
             RuntimeError,
-            ImportError,
         ) as error:
             self.json({"error": str(error)}, 400)
+        except ImportError:
+            self.json({"error": "Tính năng chưa được cài đặt"}, 400)
 
 
 def main():
@@ -287,13 +312,15 @@ def main():
     parser.add_argument("--no-browser", action="store_true")
     parser.add_argument("--browser-tracking", action="store_true")
     args = parser.parse_args()
+    if not WEB_DIR.is_dir():
+        raise SystemExit(f"Chưa có giao diện web tại {WEB_DIR}. Xem frontend/README.md.")
     if args.browser_tracking:
         NATIVE.available = False
     server = ThreadingHTTPServer(
-        ("127.0.0.1", args.port), partial(Handler, directory=str(ROOT / "web"))
+        ("127.0.0.1", args.port), partial(Handler, directory=str(WEB_DIR))
     )
     url = f"http://127.0.0.1:{server.server_port}"
-    print(f"HoloLab AR V3.9: {url}\nGiu cua so nay mo. Ctrl+C de dung.", flush=True)
+    print(f"HoloLab AR V{VERSION}: {url}\nGiu cua so nay mo. Ctrl+C de dung.", flush=True)
     if not args.no_browser:
         threading.Timer(0.5, lambda: webbrowser.open(url)).start()
     try:

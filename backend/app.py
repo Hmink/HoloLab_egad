@@ -14,7 +14,7 @@ from lab3d.hand_input import REGIONS, StableHandInput
 from lab3d.scene import LabScene
 from lab3d.ui import Renderer3D
 
-ROOT = Path(__file__).resolve().parent
+from paths import ROOT, WEB_DIR
 WINDOW = "ChemLab CV 3D - Virtual Experiment Studio"
 
 
@@ -26,7 +26,7 @@ def arguments():
     parser.add_argument("--height", type=int, default=900)
     parser.add_argument("--split", type=float, default=0.30)
     parser.add_argument(
-        "--model", type=Path, default=ROOT / "models/hand_landmarker.task"
+        "--model", type=Path, default=WEB_DIR / "models/hand_landmarker.task"
     )
     parser.add_argument(
         "--pinch", choices=("normalized", "pixels"), default="normalized"
