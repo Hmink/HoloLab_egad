@@ -1,7 +1,7 @@
 @echo off
 setlocal
 cd /d "%~dp0"
-title HoloLab AR V3.9
+title HoloLab AR
 if exist .venv\Scripts\python.exe (
   .venv\Scripts\python.exe server.py
   goto done

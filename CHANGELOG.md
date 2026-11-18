@@ -1,3 +1,12 @@
+# Unreleased
+
+- Dọn repo: báo cáo/patch lịch sử chuyển vào `docs/archive/`; bỏ launcher Linux trùng.
+- EGAD dùng Gemini API (thay adapter llama.cpp `egad_local.py` bằng `egad_llm.py`); endpoint `/api/egad/assess`; cần `consent_cloud`; key chỉ từ môi trường/`.env`.
+- Sửa đường dẫn model bàn tay về `web/models/`; phiên bản lấy từ `version.py`; `server.py` báo lỗi rõ khi thiếu mã lõi và không lộ lỗi nội bộ khi thiếu thư viện.
+- Thêm `tests/test_egad_llm.py`, `.env.example`.
+
+---
+
 # V3.9 · 05/11/2026
 
 - EGAD rubric 4 trạng thái, bằng chứng, lịch sử, câu hỏi gợi mở, quyền đồng ý/xóa/xuất.
@@ -17,7 +26,7 @@
 - Bounded session undo/redo and local saved sessions.
 - Rounded hollow tube profile and fixed rack with removable Rapier joints.
 - No changes to MediaPipe model/capture/filters/FSM or chemistry and liquid core.
-- Scope and measured limitations: VALIDATION_V38.md. Not full 20-tool/10-lesson completion.
+- Scope and measured limitations: docs/archive/VALIDATION_V38.md. Not full 20-tool/10-lesson completion.
 
 # V3.7 — 30/10/2026
 
@@ -25,7 +34,7 @@
 - Canvas tiền xử lý dùng willReadFrequently cho CPU/native; giữ đường canvas GPU. Không đổi model, confidence, numHands, độ phân giải CV mặc định hoặc thuật toán cử chỉ.
 - Nếu tạo/truyền VideoFrame không được hỗ trợ, đóng tài nguyên và tự dùng ImageBitmap; không lặp phép thử lỗi ở mọi frame. Đóng ảnh khi postMessage thất bại hoặc khi phiên camera đã đổi.
 - Báo riêng capture/queue/preprocess/model ms, transport và số đo 60 giây; không gộp FPS render với tốc độ tracking.
-- Kiểm tra lại release, physics, chất lỏng, bài học, UI, camera giả lập và chuyển dữ liệu ảnh. Chi tiết cùng giới hạn webcam thật/50 FPS: VALIDATION_V37.md.
+- Kiểm tra lại release, physics, chất lỏng, bài học, UI, camera giả lập và chuyển dữ liệu ảnh. Chi tiết cùng giới hạn webcam thật/50 FPS: docs/archive/VALIDATION_V37.md.
 - Không thêm dependency sản phẩm; đóng gói đầy đủ mã nguồn và thư viện offline.
 
 ---
@@ -41,7 +50,7 @@
 - Fire được engine xác nhận có thêm tia sáng/khói/flash có giới hạn và dispose. Không tự tạo phản ứng nổ, lửa khi pha axit hoặc kết tủa.
 - Bổ sung số đo camera thực/ảnh CV/min FPS/debounce; không coi debounce là độ trễ đầu–cuối.
 - Không đổi LiquidSimulation, lượng chất, các hằng số Rapier, model MediaPipe, One Euro hoặc thêm dependency sản phẩm.
-- Kết quả và giới hạn: VALIDATION_V36.md; chưa nghiệm thu webcam thật/50 FPS trên máy người dùng.
+- Kết quả và giới hạn: docs/archive/VALIDATION_V36.md; chưa nghiệm thu webcam thật/50 FPS trên máy người dùng.
 
 ---
 
@@ -53,7 +62,7 @@
 - AgCl/Cu(OH)₂/CaCO₃ có độ đục/hạt/lắng theo lượng sản phẩm; giữ engine bài học, điều kiện, câu hỏi và các hiệu ứng cũ.
 - Nhật ký học tập opt-in, xuất JSON/xóa; tutor quy tắc thử nghiệm, không gọi hoặc tuyên bố đã huấn luyện AI đánh giá kiến thức.
 - MediaPipe, bộ lọc, ID hai tay, pinch/release, camera, Rapier, chuẩn độ và dependency giữ nguyên. Có START_LINUX.sh.
-- Kiểm chứng/benchmark/giới hạn: VALIDATION_V35.md. Chưa nghiệm thu webcam thật; benchmark GPU phần mềm không đạt 50 FPS.
+- Kiểm chứng/benchmark/giới hạn: docs/archive/VALIDATION_V35.md. Chưa nghiệm thu webcam thật; benchmark GPU phần mềm không đạt 50 FPS.
 
 ---
 
@@ -65,7 +74,7 @@
 - Màn chiếu 3D 4 trang, hướng dẫn, nguồn chương trình và 4 câu hỏi có gợi ý mỗi bài.
 - Collider cốc rỗng cho bài nhúng Fe, kiểm tra nắp trước khi đóng, lưu/mở phiên bài học gồm lượng chất và pose.
 - Không thay CV, pinch/FSM, hai tay, One Euro, camera, chuẩn độ hoặc hóa học cũ. Không thêm dependency.
-- Kiểm chứng và giới hạn: VALIDATION_V34.md. Chưa nghiệm thu webcam thực hoặc 50 FPS trên máy người dùng.
+- Kiểm chứng và giới hạn: docs/archive/VALIDATION_V34.md. Chưa nghiệm thu webcam thực hoặc 50 FPS trên máy người dùng.
 
 ---
 
@@ -77,7 +86,7 @@
 - Bốn thành chắn và trần theo camera thao tác; giới hạn full collider cho cả held/dynamic; recovery lỗi hiếm, không recenter vật đang gắp.
 - Font Be Vietnam Pro local, UI trung tính, tăng cỡ chữ, thu gọn debug, nhãn tập trung dụng cụ đang chọn.
 - PBR glass/liquid, beaker có miệng rót, graduations lấy mức từ bộ tích phân thể tích cũ, nhãn chai/rim/rack/thiết bị và bóng tiếp xúc nhẹ.
-- 33 file CV/cử chỉ/camera/chuẩn độ/hóa học giữ nguyên. Xem VALIDATION_V33.md cho kết quả và hạn chế, gồm giảm FPS trong phép đo GPU phần mềm.
+- 33 file CV/cử chỉ/camera/chuẩn độ/hóa học giữ nguyên. Xem docs/archive/VALIDATION_V33.md cho kết quả và hạn chế, gồm giảm FPS trong phép đo GPU phần mềm.
 
 # V3.2 — 27/10/2026
 
@@ -86,7 +95,7 @@
 - Giữ bình khi tracking mất ngắn, bảo toàn hai owner và thêm quán tính từ chuyển động đã thực hiện.
 - Webcam HD mặc định, Low/HD/Full HD, báo độ phân giải thực tế; autofocus có điều kiện, chống kéo giãn, tự giảm tải.
 - Giữ model MediaPipe, chuẩn hóa pinch, hysteresis, One Euro, nhãn tay, dữ liệu và các chức năng thí nghiệm. Thêm hook acquire, không thay thuật toán CV.
-- Đo riêng CPU physics; log/checklist ở `VALIDATION_V32.md` và `validation_v32/`.
+- Đo riêng CPU physics; log/checklist ở `docs/archive/VALIDATION_V32.md` và `validation_v32/`.
 
 ---
 
@@ -98,7 +107,7 @@
 - Cân bằng điện tích cho axit axetic; phương trình ổn định số học cho axit mạnh, có tự ion hóa của nước.
 - Thư viện 100 phương trình với kiểm tra nguyên tố/chất giới hạn/điều kiện. Tách rõ khỏi phạm vi rót 3D cũ.
 - Capture cap 60 Hz, mặc định ảnh 640 px, tùy chọn 960 px; giữ no-duplicate/no-queue và GPU/CPU fallback.
-- Giữ nguyên 20 tệp lõi hóa học/dụng cụ. `VALIDATION_V31.md` ghi kết quả và mục tiêu tracking 50 Hz chưa đạt.
+- Giữ nguyên 20 tệp lõi hóa học/dụng cụ. `docs/archive/VALIDATION_V31.md` ghi kết quả và mục tiêu tracking 50 Hz chưa đạt.
 
 ---
 
@@ -115,4 +124,4 @@
 - Đường MediaPipe Python CPU tùy chọn tái sử dụng detector cũ, bỏ selector cũ; JPEG chỉ đi tới localhost. Thư viện/model Web đóng kèm.
 - FPS render, tracking Hz, tuổi mẫu, transport và JSON đo 60 giây riêng biệt.
 - Giữ nguyên 20 tệp lõi Python/dữ liệu; adapter hóa học và nhập phiên có kiểm tra, cập nhật kết quả nguyên tử.
-- Bổ sung unit, browser QA, replay lỗi và benchmark so sánh. Chưa nghiệm thu webcam thực; xem VALIDATION.md.
+- Bổ sung unit, browser QA, replay lỗi và benchmark so sánh. Chưa nghiệm thu webcam thực; xem docs/archive/VALIDATION.md.

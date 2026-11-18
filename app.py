@@ -26,7 +26,7 @@ def arguments():
     parser.add_argument("--height", type=int, default=900)
     parser.add_argument("--split", type=float, default=0.30)
     parser.add_argument(
-        "--model", type=Path, default=ROOT / "models/hand_landmarker.task"
+        "--model", type=Path, default=ROOT / "web/models/hand_landmarker.task"
     )
     parser.add_argument(
         "--pinch", choices=("normalized", "pixels"), default="normalized"

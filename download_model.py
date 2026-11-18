@@ -8,7 +8,7 @@ MODEL_URL = (
     "https://storage.googleapis.com/mediapipe-models/hand_landmarker/"
     "hand_landmarker/float16/1/hand_landmarker.task"
 )
-DEST = Path(__file__).resolve().parent / "models" / "hand_landmarker.task"
+DEST = Path(__file__).resolve().parent / "web" / "models" / "hand_landmarker.task"
 EXPECTED_SHA256 = "fbc2a30080c3c557093b5ddfc334698132eb341044ccee322ccf8bcf3607cde1"
 
 
@@ -23,7 +23,7 @@ def main():
     if verified(DEST):
         print(f"Đã có model: {DEST}")
         return
-    DEST.parent.mkdir(exist_ok=True)
+    DEST.parent.mkdir(parents=True, exist_ok=True)
     temp = DEST.with_suffix(".part")
     try:
         with urllib.request.urlopen(MODEL_URL, timeout=30) as response:
