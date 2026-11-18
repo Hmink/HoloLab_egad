@@ -1,14 +1,15 @@
 """Fetch Google's Hand Landmarker model once, then work entirely locally."""
 
 import hashlib
-from pathlib import Path
+
+from paths import WEB_DIR
 import urllib.request
 
 MODEL_URL = (
     "https://storage.googleapis.com/mediapipe-models/hand_landmarker/"
     "hand_landmarker/float16/1/hand_landmarker.task"
 )
-DEST = Path(__file__).resolve().parent / "web" / "models" / "hand_landmarker.task"
+DEST = WEB_DIR / "models" / "hand_landmarker.task"
 EXPECTED_SHA256 = "fbc2a30080c3c557093b5ddfc334698132eb341044ccee322ccf8bcf3607cde1"
 
 

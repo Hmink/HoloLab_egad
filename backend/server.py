@@ -17,6 +17,7 @@ import threading
 import webbrowser
 import socket
 
+from paths import WEB_DIR
 from version import VERSION
 
 
@@ -39,14 +40,14 @@ try:
     from lab3d.mixture import Mixture, transfer
 except ImportError as error:
     raise SystemExit(
-        f"Thiếu mã lõi hóa học ({error.name}). Cần các thư mục chemlab/, lab3d/, data/ và web/ "
-        "trong cùng thư mục với server.py."
+        f"Thiếu mã lõi hóa học ({error.name}). Cần các thư mục chemlab/, lab3d/, data/ cạnh server.py (trong backend/) "
+        "và giao diện ở frontend/web/."
     ) from error
 from native_tracking import NativeTracking
 from egad_llm import assess as assess_egad
 
 DB = load_database(ROOT / "data/chemistry.json")
-NATIVE = NativeTracking(ROOT)
+NATIVE = NativeTracking(WEB_DIR / "models" / "hand_landmarker.task")
 
 
 def finite(value, low, high):
@@ -311,10 +312,12 @@ def main():
     parser.add_argument("--no-browser", action="store_true")
     parser.add_argument("--browser-tracking", action="store_true")
     args = parser.parse_args()
+    if not WEB_DIR.is_dir():
+        raise SystemExit(f"Chưa có giao diện web tại {WEB_DIR}. Xem frontend/README.md.")
     if args.browser_tracking:
         NATIVE.available = False
     server = ThreadingHTTPServer(
-        ("127.0.0.1", args.port), partial(Handler, directory=str(ROOT / "web"))
+        ("127.0.0.1", args.port), partial(Handler, directory=str(WEB_DIR))
     )
     url = f"http://127.0.0.1:{server.server_port}"
     print(f"HoloLab AR V{VERSION}: {url}\nGiu cua so nay mo. Ctrl+C de dung.", flush=True)

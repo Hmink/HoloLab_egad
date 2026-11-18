@@ -13,7 +13,7 @@ from urllib.error import HTTPError, URLError
 from urllib.parse import quote
 from urllib.request import HTTPRedirectHandler, Request, build_opener
 
-ROOT = Path(__file__).resolve().parent
+from paths import WEB_DIR
 BUSY = threading.Lock()
 LABELS = {"correct", "incomplete", "misconception", "insufficient"}
 MAX_RESPONSE = 131072
@@ -86,13 +86,13 @@ def validate_result(raw, answer, concepts):
     }
 
 
-def load_reference(lesson_id, root=ROOT):
+def load_reference(lesson_id, web=WEB_DIR):
     """Lesson knowledge + rubric from web/data. Raises ValueError if unknown."""
     try:
-        lessons = json.loads((root / "web/data/lessons-thpt.json").read_text(encoding="utf-8"))["lessons"]
-        rubrics = json.loads((root / "web/data/egad-rubrics.json").read_text(encoding="utf-8"))
+        lessons = json.loads((web / "data/lessons-thpt.json").read_text(encoding="utf-8"))["lessons"]
+        rubrics = json.loads((web / "data/egad-rubrics.json").read_text(encoding="utf-8"))
     except OSError as error:
-        raise ProviderError("Thiếu dữ liệu bài học/rubric (web/data).") from error
+        raise ProviderError("Thiếu dữ liệu bài học/rubric (frontend/web/data).") from error
     lesson = next((x for x in lessons if x["id"] == lesson_id), None)
     rubric = rubrics.get(lesson_id)
     if not lesson or not rubric:

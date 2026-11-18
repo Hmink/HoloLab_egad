@@ -12,4 +12,4 @@ venv/
 *.zip
 egad-pilot-session*.json
 student-data/
-web/models/*.task
+frontend/web/models/*.task
