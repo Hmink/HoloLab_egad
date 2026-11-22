@@ -13,3 +13,5 @@ venv/
 egad-pilot-session*.json
 student-data/
 frontend/web/models/*.task
+frontend/web/index.html
+frontend/web/assets/

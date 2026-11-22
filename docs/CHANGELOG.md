@@ -1,5 +1,9 @@
 # Unreleased
 
+- Sửa phân loại lỗi Gemini: 404 là `model_not_found` (không thử lại, kèm hướng dẫn), mọi 4xx khác không thử lại; thêm `backend/list_models.py` liệt kê model dùng được với key; tách `envfile.py`.
+- API EGAD: thêm `question_id` (đưa câu hỏi vào prompt), `session_id` (trả lại nguyên giá trị), `error_code`/`retryable` cho mọi lỗi; `lab_actions` dành riêng cho GĐ4. Frontend gửi các trường mới và hiện nút "Thử chấm lại".
+- Frontend mới (Vite + React): khung ứng dụng, trang EGAD thử nghiệm, dữ liệu bài học/rubric nháp, test JS; thêm `docs/API.md`.
+- Backend chạy được khi thiếu lõi hóa học (API hóa học trả 503); `/api/health` báo `chemistry`; `GEMINI_BASE_URL` để test.
 - Dọn repo: báo cáo/patch lịch sử chuyển vào `archive/`; bỏ launcher Linux trùng.
 - EGAD dùng Gemini API (thay adapter llama.cpp `egad_local.py` bằng `egad_llm.py`); endpoint `/api/egad/assess`; cần `consent_cloud`; key chỉ từ môi trường/`.env`.
 - Sửa đường dẫn model bàn tay về `web/models/`; phiên bản lấy từ `version.py`; `server.py` báo lỗi rõ khi thiếu mã lõi và không lộ lỗi nội bộ khi thiếu thư viện.

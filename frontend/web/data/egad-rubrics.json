@@ -1,0 +1,9 @@
+{
+  "chloride": {
+    "concepts": [
+      {"id": "precipitate", "name": "Tạo kết tủa trắng AgCl", "description": "Nêu được hiện tượng kết tủa trắng và/hoặc phương trình Ag⁺ + Cl⁻ → AgCl↓."},
+      {"id": "insoluble_hno3", "name": "AgCl không tan trong HNO₃ loãng", "description": "Biết kết tủa không tan trong axit nitric loãng nên dùng để nhận biết Cl⁻."},
+      {"id": "soluble_nh3", "name": "AgCl tan trong dung dịch NH₃", "description": "Biết AgCl tan trong NH₃ do tạo phức [Ag(NH₃)₂]⁺."}
+    ]
+  }
+}

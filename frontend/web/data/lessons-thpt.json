@@ -1,0 +1,17 @@
+{
+  "_note": "BẢN NHÁP mẫu để thử EGAD. Nội dung chưa được giáo viên xác nhận.",
+  "lessons": [
+    {
+      "id": "chloride",
+      "title": "Nhận biết ion Cl⁻ bằng dung dịch AgNO₃",
+      "equations": ["Ag⁺ + Cl⁻ → AgCl↓ (trắng)", "AgCl + 2NH₃ → [Ag(NH₃)₂]⁺ + Cl⁻"],
+      "explanation": "Ion Ag⁺ kết hợp với Cl⁻ tạo AgCl ít tan. AgCl không tan trong HNO₃ loãng nhưng tan trong dung dịch NH₃ nhờ tạo phức [Ag(NH₃)₂]⁺.",
+      "phenomenon": "Xuất hiện kết tủa trắng như sữa; để ngoài ánh sáng kết tủa dần sẫm màu.",
+      "conditions": "Dung dịch chứa Cl⁻ và dung dịch AgNO₃; có thể thêm HNO₃ loãng để loại trừ các kết tủa khác.",
+      "questions": [
+        {"id": "q1", "text": "Nhỏ dung dịch AgNO₃ vào dung dịch NaCl. Em quan sát được gì và giải thích hiện tượng đó bằng phương trình ion."},
+        {"id": "q2", "text": "Vì sao có thể dùng AgNO₃ để nhận biết ion Cl⁻? Kết tủa tạo thành tan hay không tan trong HNO₃ và trong NH₃?"}
+      ]
+    }
+  ]
+}

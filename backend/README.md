@@ -13,8 +13,9 @@ python3 -m unittest discover -s tests -v
 |---|---|
 | `server.py` | HTTP server và API (`/api/egad/assess`, `/api/transfer`, `/api/session`...) |
 | `egad_llm.py` | EGAD: gọi Gemini và kiểm tra đầu ra |
+| `list_models.py` | Liệt kê model Gemini dùng được với key của bạn (khi gặp lỗi 404) |
 | `paths.py`, `version.py` | Đường dẫn dùng chung, số phiên bản duy nhất |
 | `native_tracking.py`, `download_model.py` | Tracking bàn tay tùy chọn (MediaPipe) |
 | `app.py`, `app_2d.py` | Bản desktop OpenCV cũ |
 
-Còn thiếu (chưa có trong repo): `chemlab/`, `lab3d/`, `data/`, `python_vendor/`. `server.py` sẽ báo lỗi rõ ràng khi thiếu.
+Còn thiếu (chưa có trong repo): `chemlab/`, `lab3d/`, `data/`, `python_vendor/`. Khi thiếu, `server.py` vẫn chạy (phục vụ web và EGAD) và các API hóa học trả 503.

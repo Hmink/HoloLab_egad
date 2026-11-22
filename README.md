@@ -4,25 +4,36 @@ Phòng thí nghiệm hóa học ảo (kéo thả bằng chuột, tùy chọn tra
 
 ## Trạng thái hiện tại (quan trọng)
 
-Repo này mới chỉ có **phần vỏ backend và tài liệu**. **Chưa có** giao diện web (`frontend/web/`, `frontend/ui/`), lõi hóa học (`backend/chemlab/`, `backend/lab3d/`, `backend/data/`), dữ liệu huấn luyện và bộ kiểm thử JS. `server.py` sẽ báo lỗi rõ ràng nếu thiếu các thư mục này. Các báo cáo cũ trong `docs/archive/` mô tả bản V3.9 đầy đủ nhưng **không phải kết quả chạy lại ở repo này**.
+Repo hiện có **backend (server + EGAD với Gemini)** và **frontend khung (trang EGAD thử nghiệm)**. **Chưa có** phòng thí nghiệm 3D, lõi hóa học (`backend/chemlab/`, `backend/lab3d/`, `backend/data/`) và dữ liệu huấn luyện; các API hóa học trả 503 cho đến khi có. Dữ liệu bài học/rubric trong `frontend/web/data/` là **bản nháp**, chưa được giáo viên xác nhận. Các báo cáo cũ trong `docs/archive/` mô tả bản V3.9 đầy đủ nhưng **không phải kết quả chạy lại ở repo này**.
 
-Đã có và kiểm thử được: lớp EGAD gọi Gemini (`egad_llm.py`) và `tests/test_egad_llm.py`.
+Đã kiểm thử: lớp EGAD gọi Gemini (10 test Python) và hàm thuần của frontend (5 test JS). Luồng giao diện → backend → Gemini đã chạy thử end-to-end với Gemini giả; **chưa thử với Gemini thật**.
 
 ## Cấu trúc
 
 ```
 backend/    Server Python, EGAD (Gemini), tracking, tests, script khởi động
-frontend/   Giao diện web (chưa có mã nguồn), package.json, vite.config.js
-docs/       CHANGELOG, THIRD_PARTY, hướng dẫn Base44, archive/ (báo cáo lịch sử)
+frontend/   Vite + React (trang EGAD thử nghiệm), dữ liệu bài học nháp
+docs/       API.md, CHANGELOG, THIRD_PARTY, hướng dẫn Base44, archive/ (báo cáo lịch sử)
 LICENSE
 ```
 
-## Bắt đầu
+## Chạy thử nhanh
 
 ```bash
 cd backend
-cp .env.example .env     # Windows: copy .env.example .env, rồi điền GEMINI_API_KEY
+cp .env.example .env          # Windows: copy .env.example .env, rồi điền GEMINI_API_KEY
 python3 -m unittest discover -s tests -v
+```
+
+```bash
+cd frontend
+npm install
+npm run build
+```
+
+```bash
+cd backend
+python3 server.py             # mở http://127.0.0.1:8765/#/egad
 ```
 
 ## EGAD với Gemini API
@@ -38,4 +49,4 @@ Ghi chú an toàn:
 - Gói miễn phí giới hạn tốc độ; lỗi 429 được báo rõ.
 - Kết quả mô hình luôn được kiểm tra: bằng chứng phải trích nguyên văn câu trả lời, nhãn tổng hợp phải nhất quán. Kết quả là **dự đoán, chưa được giáo viên xác nhận**, không dùng để chấm điểm.
 
-Chi tiết: `backend/README.md`, `frontend/README.md`. Giấy phép: `LICENSE`; thư viện bên thứ ba: `docs/THIRD_PARTY.md`.
+Chi tiết: `backend/README.md`, `frontend/README.md`, `docs/API.md`. Giấy phép: `LICENSE`; thư viện bên thứ ba: `docs/THIRD_PARTY.md`.
