@@ -12,4 +12,7 @@ venv/
 *.zip
 egad-pilot-session*.json
 student-data/
-frontend/web/models/*.task
+# build output of the EGAD React app (npm run build:app); the lab's web/ui/shell.js IS committed
+frontend/web/app/
+# local browser-QA output
+frontend/validation_github/

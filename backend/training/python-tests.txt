@@ -1,0 +1,22 @@
+..........................................................................................E........
+======================================================================
+ERROR: test_render_paths (unittest.loader._FailedTest.test_render_paths)
+----------------------------------------------------------------------
+ImportError: Failed to import test module: test_render_paths
+Traceback (most recent call last):
+  File "/opt/codex/runtimes/codex-primary-runtime/dependencies/python/lib/python3.12/unittest/loader.py", line 396, in _find_test_path
+    module = self._get_module_from_name(name)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/codex/runtimes/codex-primary-runtime/dependencies/python/lib/python3.12/unittest/loader.py", line 339, in _get_module_from_name
+    __import__(name)
+  File "/workspace/scratch/b420c189187b/project/tests/test_render_paths.py", line 6, in <module>
+    from chemlab.render import text, font
+  File "/workspace/scratch/b420c189187b/project/chemlab/render.py", line 6, in <module>
+    import cv2
+ModuleNotFoundError: No module named 'cv2'
+
+
+----------------------------------------------------------------------
+Ran 99 tests in 0.032s
+
+FAILED (errors=1)

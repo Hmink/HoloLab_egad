@@ -1,0 +1,56 @@
+[
+  {
+    "id": "CL01",
+    "topic": "Kết tủa AgCl",
+    "question": "Khi thêm dung dịch AgNO₃ vào dung dịch NaCl, hiện tượng gì xảy ra và chất mới tạo thành là gì?",
+    "rubric": "Xuất hiện kết tủa/chất rắn trắng; chất đó là AgCl."
+  },
+  {
+    "id": "CL02",
+    "topic": "Kết tủa AgCl",
+    "question": "Vì sao hai dung dịch này tạo kết tủa? Viết phương trình ion rút gọn.",
+    "rubric": "Ag⁺ kết hợp với Cl⁻ tạo AgCl ít tan; Ag⁺ + Cl⁻ → AgCl↓."
+  },
+  {
+    "id": "CL03",
+    "topic": "Kết tủa AgCl",
+    "question": "Vì sao cần một mẫu nước cất đối chứng khi nhận biết chloride bằng AgNO₃?",
+    "rubric": "Có mẫu so sánh; nước cất không chứa Cl⁻ nên không tạo kết tủa AgCl; giúp liên hệ kết tủa ở mẫu thử với chloride."
+  },
+  {
+    "id": "FE01",
+    "topic": "Sắt và CuSO₄",
+    "question": "Khi nhúng sắt vào dung dịch CuSO₄, chất rắn nào xuất hiện trên bề mặt sắt? Chất đó có màu gì?",
+    "rubric": "Đồng kim loại Cu bám lên sắt; màu đỏ nâu."
+  },
+  {
+    "id": "FE02",
+    "topic": "Sắt và CuSO₄",
+    "question": "Trong phản ứng Fe + Cu²⁺ → Fe²⁺ + Cu, chất nào nhường electron, chất nào nhận electron?",
+    "rubric": "Fe nhường electron: Fe → Fe²⁺ + 2e⁻; Cu²⁺ nhận electron: Cu²⁺ + 2e⁻ → Cu."
+  },
+  {
+    "id": "FE03",
+    "topic": "Sắt và CuSO₄",
+    "question": "Vì sao màu xanh của dung dịch CuSO₄ có thể nhạt dần khi phản ứng với sắt?",
+    "rubric": "Màu xanh do Cu²⁺; ion Cu²⁺ bị tiêu thụ và tạo Cu kim loại nên nhạt dần."
+  },
+  {
+    "id": "AB01",
+    "topic": "Trung hòa HCl–NaOH",
+    "question": "HCl phản ứng với NaOH tạo ra những chất gì? Viết phương trình hóa học.",
+    "rubric": "Tạo NaCl và H₂O; HCl + NaOH → NaCl + H₂O."
+  },
+  {
+    "id": "AB02",
+    "topic": "Trung hòa HCl–NaOH",
+    "question": "Trộn HCl và NaOH có luôn thu được dung dịch pH = 7 không? Giải thích ở khoảng 25 °C.",
+    "rubric": "Không; tùy số mol: HCl dư thì axit, NaOH dư thì bazơ; vừa đủ trong dung dịch loãng lý tưởng thì pH xấp xỉ 7."
+  },
+  {
+    "id": "AB03",
+    "topic": "Trung hòa HCl–NaOH",
+    "question": "Trộn 10 mL HCl 0,1 M với 5 mL NaOH 0,1 M. Chất nào dư và dung dịch sau phản ứng có tính gì? Trình bày cách xác định.",
+    "rubric": "n(HCl) = 1 mmol; n(NaOH) = 0,5 mmol; tỉ lệ 1:1; HCl dư 0,5 mmol; dung dịch có tính axit."
+  }
+]

@@ -1,0 +1,15 @@
+{
+  "retrieved_date": "2026-10-26",
+  "files": [
+    {
+      "name": "main.js",
+      "url": "https://raw.githubusercontent.com/collidingScopes/shape-creator-tutorial/main/main.js",
+      "sha256": "dd7b1117f544fd0540e76bd896ff176d52932410fde8e1a6624ad0738715d796"
+    },
+    {
+      "name": "README.md",
+      "url": "https://raw.githubusercontent.com/collidingScopes/shape-creator-tutorial/main/README.md",
+      "sha256": "3552e6979db47c0c9c41b4bd5d25452028923b2f176e1f8b3ea9e5c337fba816"
+    }
+  ]
+}

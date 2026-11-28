@@ -1,0 +1,55 @@
+{
+  "checks": [
+    {
+      "name": "10-card library and actual start through React UI",
+      "passed": true
+    },
+    {
+      "name": "Consent, real text entry, auto-label, evidence and revision history",
+      "passed": true
+    },
+    {
+      "name": "Untrusted student text renders without HTML execution",
+      "passed": true
+    },
+    {
+      "name": "Missing local model clearly reported, rubric still available, no paid endpoint",
+      "passed": true
+    },
+    {
+      "name": "Revoking consent clears history and displayed assessment",
+      "passed": true
+    },
+    {
+      "name": "All 10 lessons instantiate physical vessels and restore full sessions",
+      "passed": true
+    },
+    {
+      "name": "copper-hydroxide: live pour loop creates expected chemistry",
+      "passed": true
+    },
+    {
+      "name": "calcium-carbonate: live pour loop creates expected chemistry",
+      "passed": true
+    },
+    {
+      "name": "carbon-dioxide: live pour loop creates expected chemistry",
+      "passed": true
+    },
+    {
+      "name": "dilution: live pour loop creates expected chemistry",
+      "passed": true
+    },
+    {
+      "name": "In-lab catalog: accent-insensitive search and solid filter",
+      "passed": true
+    },
+    {
+      "name": "No JavaScript runtime errors",
+      "passed": true
+    }
+  ],
+  "errors": [],
+  "realModelTested": false,
+  "physicalWebcamTested": false
+}

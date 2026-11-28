@@ -1,0 +1,189 @@
+{
+  "checks": [
+    {
+      "name": "Startup: local Rapier WASM, Three.js, chemistry API",
+      "passed": true
+    },
+    {
+      "name": "Mouse grab → kinematic; release → dynamic and visible falling",
+      "passed": true
+    },
+    {
+      "name": "20 real-mesh drop/regrab cycles, tabletop block, rotated collider support, inertia",
+      "passed": true,
+      "cycles": 20,
+      "max_penetration_scene_units": 0,
+      "min_gap": 0.0031170780150568955,
+      "held_gap": 0.0030000142153328024,
+      "throw_velocity_m_per_s": {
+        "x": 0.2399357259273529,
+        "y": 0.0016693398356437683,
+        "z": 4.370188303602325e-28
+      }
+    },
+    {
+      "name": "Synthetic two-hand FSM, temporary tracking loss, valid release handoff",
+      "passed": true,
+      "held": [
+        1,
+        2
+      ],
+      "tracking_gap_froze": true,
+      "release_dynamic": true
+    },
+    {
+      "name": "Preserved chemical transfer quantities",
+      "passed": true
+    },
+    {
+      "name": "Preserved titration scene and microdose",
+      "passed": true
+    },
+    {
+      "name": "HD default and Low/HD/Full-HD camera modes report actual track and video sizes",
+      "passed": true,
+      "modes": [
+        {
+          "requested": "HD",
+          "applied": "HD",
+          "auto": false,
+          "settings": {
+            "width": 1280,
+            "height": 720,
+            "frameRate": 30,
+            "aspectRatio": 1.7777777777777777,
+            "resizeMode": "none"
+          },
+          "video_width": 1280,
+          "video_height": 720,
+          "inference_width": 640,
+          "note": ""
+        },
+        {
+          "requested": "FHD",
+          "applied": "HD",
+          "auto": false,
+          "settings": {
+            "width": 1280,
+            "height": 720,
+            "frameRate": 30,
+            "aspectRatio": 1.7777777777777777,
+            "resizeMode": "none"
+          },
+          "video_width": 1280,
+          "video_height": 720,
+          "inference_width": 640,
+          "note": "Camera không nhận Full HD; đã yêu cầu HD."
+        },
+        {
+          "requested": "LOW",
+          "applied": "LOW",
+          "auto": false,
+          "settings": {
+            "width": 640,
+            "height": 480,
+            "frameRate": 30,
+            "aspectRatio": 1.3333333333333333,
+            "resizeMode": "crop-and-scale"
+          },
+          "video_width": 640,
+          "video_height": 480,
+          "inference_width": 640,
+          "note": ""
+        },
+        {
+          "requested": "HD",
+          "applied": "HD",
+          "auto": false,
+          "settings": {
+            "width": 1280,
+            "height": 720,
+            "frameRate": 30,
+            "aspectRatio": 1.7777777777777777,
+            "resizeMode": "none"
+          },
+          "video_width": 1280,
+          "video_height": 720,
+          "inference_width": 640,
+          "note": ""
+        }
+      ]
+    },
+    {
+      "name": "Mirror/aspect preserved and real MediaPipe inference detects hands from fixture",
+      "passed": true,
+      "fit": "contain",
+      "mirror": "matrix(-1, 0, 0, 1, 0, 0)",
+      "tracking": {
+        "t": 7420,
+        "inferenceMs": 538.5,
+        "transportMs": null,
+        "ageMs": 1235.10009765625,
+        "hands": 1
+      }
+    },
+    {
+      "name": "60-second webcam-fixture + MediaPipe + Three.js + Rapier measurement",
+      "passed": true,
+      "schema": "hololab-benchmark-1",
+      "version": "3.2.0",
+      "input_source": "Y4M loop of static reference hands; not physical gestures",
+      "physical_camera_tested": false,
+      "backend": "CPU",
+      "camera": {
+        "requested": "HD",
+        "applied": "HD",
+        "auto": false,
+        "settings": {
+          "width": 1280,
+          "height": 720,
+          "frameRate": 30,
+          "aspectRatio": 1.7777777777777777,
+          "resizeMode": "none"
+        },
+        "video_width": 1280,
+        "video_height": 720,
+        "inference_width": 640,
+        "note": ""
+      },
+      "physics": "Rapier 0.17.3 / 120 Hz / 5 bodies",
+      "viewport": {
+        "width": 1366,
+        "height": 900
+      },
+      "environment": "Chromium headless / SwiftShader",
+      "moving_body": "programmatic hand target; other four bodies dynamic",
+      "duration_s": 60.01269999999701,
+      "complete": true,
+      "abort_reason": null,
+      "render_frames": 1797,
+      "render_fps": 29.943661924894055,
+      "render_interval_p95_ms": 200,
+      "render_cpu_mean_ms": 1.314190317142255,
+      "physics_cpu_mean_ms": 0.434335002608278,
+      "physics_cpu_p95_ms": 1.2000000029802322,
+      "tracking_samples": 149,
+      "tracking_hz": 2.4828078056812544,
+      "detected_samples": 149,
+      "inference_mean_ms": 170.84765100609135,
+      "transport_mean_ms": null,
+      "sample_age_p95_ms": 485.60009765625,
+      "target_render_50": false,
+      "target_tracking_50": false,
+      "target_render_45": false,
+      "note": "Render FPS is not tracking Hz. Sample age is not end-to-end motion latency. No images saved.",
+      "physics_last_frame_ms": 0.19999999552965164,
+      "physics_steps": 14940
+    },
+    {
+      "name": "Camera stop",
+      "passed": true
+    },
+    {
+      "name": "No page errors and no remote runtime dependencies",
+      "passed": true
+    }
+  ],
+  "page_errors": [],
+  "physical_camera_tested": false
+}

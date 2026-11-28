@@ -1,0 +1,103 @@
+{
+  "physicalWebcam": false,
+  "checks": [
+    {
+      "name": "Grade → topic → experiment → start uses UI",
+      "passed": true
+    },
+    {
+      "name": "AgCl: geometric pour, negative control, precipitate, foreign reagent blocked",
+      "passed": true,
+      "mol": 0.00009999999999999999,
+      "particles": 18,
+      "foreign": true
+    },
+    {
+      "name": "Quiz unlocks after reaction; wrong answer gives hint",
+      "passed": true
+    },
+    {
+      "name": "Indicator: physical pours produce pink then colorless with quantitative pH",
+      "passed": true
+    },
+    {
+      "name": "Guided session save/load retains matter",
+      "passed": true
+    },
+    {
+      "name": "Invalid lesson import is rejected before clearing current work",
+      "passed": true
+    },
+    {
+      "name": "Protein: alkaline biuret reagent gives purple",
+      "passed": true
+    },
+    {
+      "name": "Ammonium: physical litmus above mouth confirms colorless gas",
+      "passed": true,
+      "paperPose": {
+        "x": 0,
+        "y": -0.24727762382030535,
+        "z": 0.3500000014901161
+      },
+      "paperRoll": 0,
+      "mouth": {
+        "x": 0,
+        "y": -0.5096776238203049,
+        "z": 0.3500000014901161
+      },
+      "complete": true,
+      "contacts": {
+        "immersed": false,
+        "litmusAbove": "lesson-ammonium",
+        "sealed": {}
+      },
+      "litmus": true,
+      "gas": 0.00019321301120650607
+    },
+    {
+      "name": "Fe: hollow vessel collider, immersion reacts, lifting out stops reaction",
+      "passed": true,
+      "before": 0,
+      "reacted": 0.0013708333333333344,
+      "removed": 0.001400000000000001,
+      "after": 0.001400000000000001,
+      "contacts": {
+        "immersed": true,
+        "litmusAbove": null,
+        "sealed": {}
+      },
+      "complete": true,
+      "colliders": 17,
+      "capBlocked": true
+    },
+    {
+      "name": "Restoring iron inside hollow beaker preserves its position and matter",
+      "passed": true,
+      "displacement": 2.8610228741676735e-8,
+      "immersed": true,
+      "matter": true
+    },
+    {
+      "name": "Production animation loop automatically pours after hold/tilt dwell (no direct chemistry call)",
+      "passed": true
+    },
+    {
+      "name": "Projection pages expose preparation, conditions, explanation, application and safety",
+      "passed": true
+    },
+    {
+      "name": "Leaving lesson clears its bodies and restores free lab",
+      "passed": true
+    },
+    {
+      "name": "Starting a lesson from Orbit view restores interaction mode",
+      "passed": true
+    },
+    {
+      "name": "No JavaScript exceptions",
+      "passed": true
+    }
+  ],
+  "errors": []
+}

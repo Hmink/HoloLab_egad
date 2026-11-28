@@ -1,0 +1,71 @@
+{
+  "passed": true,
+  "physicalWebcam": false,
+  "simulation": true,
+  "checks": [
+    {
+      "name": "30 drops, regrab, varied FPS, repeated release idempotent",
+      "passed": true,
+      "cycles": 30,
+      "regrabJump": 0,
+      "maxPen": 0,
+      "outside": 0,
+      "recoveries": 0
+    },
+    {
+      "name": "20 light throws remain bounded",
+      "passed": true,
+      "cycles": 20,
+      "peakRelease": 0.230815589427948,
+      "minimumMoving": 0.230815589427948,
+      "maxPen": 0,
+      "outside": 0,
+      "recoveries": 0
+    },
+    {
+      "name": "30 gentle vessel contacts",
+      "passed": true,
+      "cycles": 30,
+      "peak": 0.08010045026251805,
+      "moved": 0.5341775331377147,
+      "maxPen": 0,
+      "outside": 0,
+      "recoveries": 0
+    },
+    {
+      "name": "four edges and ceiling held then dynamic",
+      "passed": true,
+      "maxPen": 0,
+      "outside": 0,
+      "recoveries": 0
+    },
+    {
+      "name": "six vessels rest for 60 simulated seconds",
+      "passed": true,
+      "seconds": 60,
+      "drift": 0,
+      "sleeping": true,
+      "maxPen": 0,
+      "outside": 0,
+      "recoveries": 0
+    },
+    {
+      "name": "tracking interruption freezes; reacquire and stall do not throw",
+      "passed": true,
+      "drift": 0,
+      "frozen": 0,
+      "maxPen": 0,
+      "outside": 0,
+      "recoveries": 0
+    },
+    {
+      "name": "new overlapping spawns separated before solver; existing held body unchanged",
+      "passed": true,
+      "initialPenetration": 0,
+      "heldJump": 0,
+      "maxPen": 0,
+      "outside": 0,
+      "recoveries": 0
+    }
+  ]
+}

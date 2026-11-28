@@ -1,0 +1,8 @@
+{
+  "cleanExtraction": true,
+  "withoutNodeModules": true,
+  "normalStartup": true,
+  "lessonObjects": 3,
+  "errors": [],
+  "remote": []
+}

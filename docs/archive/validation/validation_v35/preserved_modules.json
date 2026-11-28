@@ -1,0 +1,58 @@
+{
+  "web/src/capture.js": {
+    "sha256": "b79fc515a947707aeed86ea4622ec655dd350b7cd5b2049a7360ce98ced7a6d4",
+    "unchanged": true
+  },
+  "web/src/camera-quality.js": {
+    "sha256": "07eafbc17ce982032c13d926838995f04d420d14c64e7ec5c0cb6ef7102165fd",
+    "unchanged": true
+  },
+  "web/src/hand-worker.js": {
+    "sha256": "e519874b3ecfe934f1995d02c5f510f249c28008d58c28c7ac36dcc8ece22cf3",
+    "unchanged": true
+  },
+  "web/src/tracks.js": {
+    "sha256": "1fa8e995ee2bb0c57e4c614707e7d43a9b256de1fc7f0c4e2c4c21d384c2c52c",
+    "unchanged": true
+  },
+  "web/src/coordinates.js": {
+    "sha256": "ed6c6424203c0df3b66c93c63354c566643c913ffc883ff84fcf7dfb8e51cf53",
+    "unchanged": true
+  },
+  "web/src/filters.js": {
+    "sha256": "e0fc3c1c0c0858210939f556f2d82e6a888bf2bf166b9bb678cf890c4a95c3bf",
+    "unchanged": true
+  },
+  "web/src/physics.js": {
+    "sha256": "2fbc2fa661cbee1c8e8e33329bf027008e6533860411c31b09e1d9dae89e7654",
+    "unchanged": true
+  },
+  "web/src/lesson-geometry.js": {
+    "sha256": "bd6cee1102878f2056976be12b582382f010bfa7397c54c0213ff638f5f508ce",
+    "unchanged": true
+  },
+  "web/src/titration.js": {
+    "sha256": "afe288356ee6607efb9b507bab1092e4cfc7d6671f801f796fdddb326aaff3bc",
+    "unchanged": true
+  },
+  "web/src/bench.js": {
+    "sha256": "d85cb3065be72d89087ee1b7b5bdff1194566c49382c657033055da878d1e6d3",
+    "unchanged": true
+  },
+  "web/src/reaction-engine.js": {
+    "sha256": "496cf54e12b3340f439234e61298ae7f41734edbb8783dd2e834ba386d5e5dd1",
+    "unchanged": true
+  },
+  "web/src/reaction-ui.js": {
+    "sha256": "1efa4f70631537e464fa781cf481786b0a2908c2e3857b6d2f3b492c877f843a",
+    "unchanged": true
+  },
+  "web/src/metrics.js": {
+    "sha256": "cdc91a2897091e21d0b5118bef06a1d560720244d5bca26ebc7127b4b8001bfe",
+    "unchanged": true
+  },
+  "web/src/vessel-details.js": {
+    "sha256": "d50aa888c61acd5fc921614b3374bf2165f34d26c1bf0b99e77cc58425f52ddf",
+    "unchanged": true
+  }
+}

@@ -1,0 +1,2060 @@
+{
+  "schema": "hololab-reactions-1",
+  "temperature_model": null,
+  "reactions": [
+    {
+      "id": "R001",
+      "category": "Axit–bazơ",
+      "equation": "HCl + NaOH -> NaCl + H2O",
+      "reactants": {
+        "HCl": 1,
+        "NaOH": 1
+      },
+      "products": {
+        "NaCl": 1,
+        "H2O": 1
+      },
+      "condition": "aqueous_dilute_full_neutralization",
+      "phenomenon": "Trung hòa; có thể tỏa nhiệt. Không tự đổi màu nếu thiếu chỉ thị.",
+      "hazard": "corrosive",
+      "model": "stoichiometric_upper_bound",
+      "source": "https://openstax.org/books/chemistry-2e/pages/4-2-classifying-chemical-reactions",
+      "review": "atom balance automated; classroom validation still required",
+      "precipitate_colors": {}
+    },
+    {
+      "id": "R002",
+      "category": "Axit–bazơ",
+      "equation": "HCl + KOH -> KCl + H2O",
+      "reactants": {
+        "HCl": 1,
+        "KOH": 1
+      },
+      "products": {
+        "KCl": 1,
+        "H2O": 1
+      },
+      "condition": "aqueous_dilute_full_neutralization",
+      "phenomenon": "Trung hòa; có thể tỏa nhiệt. Không tự đổi màu nếu thiếu chỉ thị.",
+      "hazard": "corrosive",
+      "model": "stoichiometric_upper_bound",
+      "source": "https://openstax.org/books/chemistry-2e/pages/4-2-classifying-chemical-reactions",
+      "review": "atom balance automated; classroom validation still required",
+      "precipitate_colors": {}
+    },
+    {
+      "id": "R003",
+      "category": "Axit–bazơ",
+      "equation": "2 HCl + Ca(OH)2 -> CaCl2 + 2 H2O",
+      "reactants": {
+        "HCl": 2,
+        "Ca(OH)2": 1
+      },
+      "products": {
+        "CaCl2": 1,
+        "H2O": 2
+      },
+      "condition": "aqueous_dilute_full_neutralization",
+      "phenomenon": "Trung hòa; có thể tỏa nhiệt. Không tự đổi màu nếu thiếu chỉ thị.",
+      "hazard": "corrosive",
+      "model": "stoichiometric_upper_bound",
+      "source": "https://openstax.org/books/chemistry-2e/pages/4-2-classifying-chemical-reactions",
+      "review": "atom balance automated; classroom validation still required",
+      "precipitate_colors": {}
+    },
+    {
+      "id": "R004",
+      "category": "Axit–bazơ",
+      "equation": "2 HCl + Mg(OH)2 -> MgCl2 + 2 H2O",
+      "reactants": {
+        "HCl": 2,
+        "Mg(OH)2": 1
+      },
+      "products": {
+        "MgCl2": 1,
+        "H2O": 2
+      },
+      "condition": "aqueous_dilute_full_neutralization",
+      "phenomenon": "Trung hòa; có thể tỏa nhiệt. Không tự đổi màu nếu thiếu chỉ thị.",
+      "hazard": "corrosive",
+      "model": "stoichiometric_upper_bound",
+      "source": "https://openstax.org/books/chemistry-2e/pages/4-2-classifying-chemical-reactions",
+      "review": "atom balance automated; classroom validation still required",
+      "precipitate_colors": {}
+    },
+    {
+      "id": "R005",
+      "category": "Axit–bazơ",
+      "equation": "HNO3 + NaOH -> NaNO3 + H2O",
+      "reactants": {
+        "HNO3": 1,
+        "NaOH": 1
+      },
+      "products": {
+        "NaNO3": 1,
+        "H2O": 1
+      },
+      "condition": "aqueous_dilute_full_neutralization",
+      "phenomenon": "Trung hòa; có thể tỏa nhiệt. Không tự đổi màu nếu thiếu chỉ thị.",
+      "hazard": "corrosive",
+      "model": "stoichiometric_upper_bound",
+      "source": "https://openstax.org/books/chemistry-2e/pages/4-2-classifying-chemical-reactions",
+      "review": "atom balance automated; classroom validation still required",
+      "precipitate_colors": {}
+    },
+    {
+      "id": "R006",
+      "category": "Axit–bazơ",
+      "equation": "HNO3 + KOH -> KNO3 + H2O",
+      "reactants": {
+        "HNO3": 1,
+        "KOH": 1
+      },
+      "products": {
+        "KNO3": 1,
+        "H2O": 1
+      },
+      "condition": "aqueous_dilute_full_neutralization",
+      "phenomenon": "Trung hòa; có thể tỏa nhiệt. Không tự đổi màu nếu thiếu chỉ thị.",
+      "hazard": "corrosive",
+      "model": "stoichiometric_upper_bound",
+      "source": "https://openstax.org/books/chemistry-2e/pages/4-2-classifying-chemical-reactions",
+      "review": "atom balance automated; classroom validation still required",
+      "precipitate_colors": {}
+    },
+    {
+      "id": "R007",
+      "category": "Axit–bazơ",
+      "equation": "2 HNO3 + Ca(OH)2 -> Ca(NO3)2 + 2 H2O",
+      "reactants": {
+        "HNO3": 2,
+        "Ca(OH)2": 1
+      },
+      "products": {
+        "Ca(NO3)2": 1,
+        "H2O": 2
+      },
+      "condition": "aqueous_dilute_full_neutralization",
+      "phenomenon": "Trung hòa; có thể tỏa nhiệt. Không tự đổi màu nếu thiếu chỉ thị.",
+      "hazard": "corrosive",
+      "model": "stoichiometric_upper_bound",
+      "source": "https://openstax.org/books/chemistry-2e/pages/4-2-classifying-chemical-reactions",
+      "review": "atom balance automated; classroom validation still required",
+      "precipitate_colors": {}
+    },
+    {
+      "id": "R008",
+      "category": "Axit–bazơ",
+      "equation": "2 HNO3 + Mg(OH)2 -> Mg(NO3)2 + 2 H2O",
+      "reactants": {
+        "HNO3": 2,
+        "Mg(OH)2": 1
+      },
+      "products": {
+        "Mg(NO3)2": 1,
+        "H2O": 2
+      },
+      "condition": "aqueous_dilute_full_neutralization",
+      "phenomenon": "Trung hòa; có thể tỏa nhiệt. Không tự đổi màu nếu thiếu chỉ thị.",
+      "hazard": "corrosive",
+      "model": "stoichiometric_upper_bound",
+      "source": "https://openstax.org/books/chemistry-2e/pages/4-2-classifying-chemical-reactions",
+      "review": "atom balance automated; classroom validation still required",
+      "precipitate_colors": {}
+    },
+    {
+      "id": "R009",
+      "category": "Axit–bazơ",
+      "equation": "H2SO4 + 2 NaOH -> Na2SO4 + 2 H2O",
+      "reactants": {
+        "H2SO4": 1,
+        "NaOH": 2
+      },
+      "products": {
+        "Na2SO4": 1,
+        "H2O": 2
+      },
+      "condition": "aqueous_dilute_full_neutralization",
+      "phenomenon": "Trung hòa; có thể tỏa nhiệt. Không tự đổi màu nếu thiếu chỉ thị.",
+      "hazard": "corrosive",
+      "model": "stoichiometric_upper_bound",
+      "source": "https://openstax.org/books/chemistry-2e/pages/4-2-classifying-chemical-reactions",
+      "review": "atom balance automated; classroom validation still required",
+      "precipitate_colors": {}
+    },
+    {
+      "id": "R010",
+      "category": "Axit–bazơ",
+      "equation": "H2SO4 + 2 KOH -> K2SO4 + 2 H2O",
+      "reactants": {
+        "H2SO4": 1,
+        "KOH": 2
+      },
+      "products": {
+        "K2SO4": 1,
+        "H2O": 2
+      },
+      "condition": "aqueous_dilute_full_neutralization",
+      "phenomenon": "Trung hòa; có thể tỏa nhiệt. Không tự đổi màu nếu thiếu chỉ thị.",
+      "hazard": "corrosive",
+      "model": "stoichiometric_upper_bound",
+      "source": "https://openstax.org/books/chemistry-2e/pages/4-2-classifying-chemical-reactions",
+      "review": "atom balance automated; classroom validation still required",
+      "precipitate_colors": {}
+    },
+    {
+      "id": "R011",
+      "category": "Axit–bazơ",
+      "equation": "H2SO4 + Mg(OH)2 -> MgSO4 + 2 H2O",
+      "reactants": {
+        "H2SO4": 1,
+        "Mg(OH)2": 1
+      },
+      "products": {
+        "MgSO4": 1,
+        "H2O": 2
+      },
+      "condition": "aqueous_dilute_full_neutralization",
+      "phenomenon": "Trung hòa; có thể tỏa nhiệt. Không tự đổi màu nếu thiếu chỉ thị.",
+      "hazard": "corrosive",
+      "model": "stoichiometric_upper_bound",
+      "source": "https://openstax.org/books/chemistry-2e/pages/4-2-classifying-chemical-reactions",
+      "review": "atom balance automated; classroom validation still required",
+      "precipitate_colors": {}
+    },
+    {
+      "id": "R012",
+      "category": "Axit–bazơ",
+      "equation": "CH3COOH + NaOH -> CH3COONa + H2O",
+      "reactants": {
+        "CH3COOH": 1,
+        "NaOH": 1
+      },
+      "products": {
+        "CH3COONa": 1,
+        "H2O": 1
+      },
+      "condition": "aqueous_dilute_full_neutralization",
+      "phenomenon": "Trung hòa; có thể tỏa nhiệt. Không tự đổi màu nếu thiếu chỉ thị.",
+      "hazard": "corrosive",
+      "model": "stoichiometric_upper_bound",
+      "source": "https://openstax.org/books/chemistry-2e/pages/4-2-classifying-chemical-reactions",
+      "review": "atom balance automated; classroom validation still required",
+      "precipitate_colors": {}
+    },
+    {
+      "id": "R013",
+      "category": "Axit–bazơ",
+      "equation": "CH3COOH + KOH -> CH3COOK + H2O",
+      "reactants": {
+        "CH3COOH": 1,
+        "KOH": 1
+      },
+      "products": {
+        "CH3COOK": 1,
+        "H2O": 1
+      },
+      "condition": "aqueous_dilute_full_neutralization",
+      "phenomenon": "Trung hòa; có thể tỏa nhiệt. Không tự đổi màu nếu thiếu chỉ thị.",
+      "hazard": "corrosive",
+      "model": "stoichiometric_upper_bound",
+      "source": "https://openstax.org/books/chemistry-2e/pages/4-2-classifying-chemical-reactions",
+      "review": "atom balance automated; classroom validation still required",
+      "precipitate_colors": {}
+    },
+    {
+      "id": "R014",
+      "category": "Axit–bazơ",
+      "equation": "2 CH3COOH + Ca(OH)2 -> Ca(CH3COO)2 + 2 H2O",
+      "reactants": {
+        "CH3COOH": 2,
+        "Ca(OH)2": 1
+      },
+      "products": {
+        "Ca(CH3COO)2": 1,
+        "H2O": 2
+      },
+      "condition": "aqueous_dilute_full_neutralization",
+      "phenomenon": "Trung hòa; có thể tỏa nhiệt. Không tự đổi màu nếu thiếu chỉ thị.",
+      "hazard": "corrosive",
+      "model": "stoichiometric_upper_bound",
+      "source": "https://openstax.org/books/chemistry-2e/pages/4-2-classifying-chemical-reactions",
+      "review": "atom balance automated; classroom validation still required",
+      "precipitate_colors": {}
+    },
+    {
+      "id": "R015",
+      "category": "Axit–bazơ",
+      "equation": "2 CH3COOH + Mg(OH)2 -> Mg(CH3COO)2 + 2 H2O",
+      "reactants": {
+        "CH3COOH": 2,
+        "Mg(OH)2": 1
+      },
+      "products": {
+        "Mg(CH3COO)2": 1,
+        "H2O": 2
+      },
+      "condition": "aqueous_dilute_full_neutralization",
+      "phenomenon": "Trung hòa; có thể tỏa nhiệt. Không tự đổi màu nếu thiếu chỉ thị.",
+      "hazard": "corrosive",
+      "model": "stoichiometric_upper_bound",
+      "source": "https://openstax.org/books/chemistry-2e/pages/4-2-classifying-chemical-reactions",
+      "review": "atom balance automated; classroom validation still required",
+      "precipitate_colors": {}
+    },
+    {
+      "id": "R016",
+      "category": "Axit–bazơ",
+      "equation": "H3PO4 + 3 NaOH -> Na3PO4 + 3 H2O",
+      "reactants": {
+        "H3PO4": 1,
+        "NaOH": 3
+      },
+      "products": {
+        "Na3PO4": 1,
+        "H2O": 3
+      },
+      "condition": "aqueous_dilute_full_neutralization",
+      "phenomenon": "Trung hòa; có thể tỏa nhiệt. Không tự đổi màu nếu thiếu chỉ thị.",
+      "hazard": "corrosive",
+      "model": "stoichiometric_upper_bound",
+      "source": "https://openstax.org/books/chemistry-2e/pages/4-2-classifying-chemical-reactions",
+      "review": "atom balance automated; classroom validation still required",
+      "precipitate_colors": {},
+      "limitation": "Chỉ biểu diễn trung hòa hoàn toàn; nếu thiếu bazơ có thể tạo muối axit, không dự đoán phân bố dạng ion."
+    },
+    {
+      "id": "R017",
+      "category": "Axit–bazơ",
+      "equation": "H3PO4 + 3 KOH -> K3PO4 + 3 H2O",
+      "reactants": {
+        "H3PO4": 1,
+        "KOH": 3
+      },
+      "products": {
+        "K3PO4": 1,
+        "H2O": 3
+      },
+      "condition": "aqueous_dilute_full_neutralization",
+      "phenomenon": "Trung hòa; có thể tỏa nhiệt. Không tự đổi màu nếu thiếu chỉ thị.",
+      "hazard": "corrosive",
+      "model": "stoichiometric_upper_bound",
+      "source": "https://openstax.org/books/chemistry-2e/pages/4-2-classifying-chemical-reactions",
+      "review": "atom balance automated; classroom validation still required",
+      "precipitate_colors": {},
+      "limitation": "Chỉ biểu diễn trung hòa hoàn toàn; nếu thiếu bazơ có thể tạo muối axit, không dự đoán phân bố dạng ion."
+    },
+    {
+      "id": "R018",
+      "category": "Axit–bazơ",
+      "equation": "HCl + NH3 -> NH4Cl",
+      "reactants": {
+        "HCl": 1,
+        "NH3": 1
+      },
+      "products": {
+        "NH4Cl": 1
+      },
+      "condition": "aqueous_dilute_full_neutralization",
+      "phenomenon": "Trung hòa; có thể tỏa nhiệt. Không tự đổi màu nếu thiếu chỉ thị.",
+      "hazard": "corrosive",
+      "model": "stoichiometric_upper_bound",
+      "source": "https://openstax.org/books/chemistry-2e/pages/4-2-classifying-chemical-reactions",
+      "review": "atom balance automated; classroom validation still required",
+      "precipitate_colors": {}
+    },
+    {
+      "id": "R019",
+      "category": "Axit–bazơ",
+      "equation": "HNO3 + NH3 -> NH4NO3",
+      "reactants": {
+        "HNO3": 1,
+        "NH3": 1
+      },
+      "products": {
+        "NH4NO3": 1
+      },
+      "condition": "aqueous_dilute_full_neutralization",
+      "phenomenon": "Trung hòa; có thể tỏa nhiệt. Không tự đổi màu nếu thiếu chỉ thị.",
+      "hazard": "corrosive",
+      "model": "stoichiometric_upper_bound",
+      "source": "https://openstax.org/books/chemistry-2e/pages/4-2-classifying-chemical-reactions",
+      "review": "atom balance automated; classroom validation still required",
+      "precipitate_colors": {}
+    },
+    {
+      "id": "R020",
+      "category": "Axit–bazơ",
+      "equation": "H2SO4 + 2 NH3 -> (NH4)2SO4",
+      "reactants": {
+        "H2SO4": 1,
+        "NH3": 2
+      },
+      "products": {
+        "(NH4)2SO4": 1
+      },
+      "condition": "aqueous_dilute_full_neutralization",
+      "phenomenon": "Trung hòa; có thể tỏa nhiệt. Không tự đổi màu nếu thiếu chỉ thị.",
+      "hazard": "corrosive",
+      "model": "stoichiometric_upper_bound",
+      "source": "https://openstax.org/books/chemistry-2e/pages/4-2-classifying-chemical-reactions",
+      "review": "atom balance automated; classroom validation still required",
+      "precipitate_colors": {}
+    },
+    {
+      "id": "R021",
+      "category": "Kết tủa",
+      "equation": "AgNO3 + NaCl -> AgCl + NaNO3",
+      "reactants": {
+        "AgNO3": 1,
+        "NaCl": 1
+      },
+      "products": {
+        "AgCl": 1,
+        "NaNO3": 1
+      },
+      "condition": "aqueous_no_excess_complexing_reagent",
+      "phenomenon": "Tạo kết tủa; màu được xác định theo sản phẩm.",
+      "hazard": "irritant_or_toxic_salts",
+      "model": "stoichiometric_upper_bound",
+      "source": "https://openstax.org/books/chemistry-2e/pages/4-2-classifying-chemical-reactions",
+      "review": "atom balance automated; classroom validation still required",
+      "precipitate_colors": {
+        "AgCl": "trắng"
+      }
+    },
+    {
+      "id": "R022",
+      "category": "Kết tủa",
+      "equation": "AgNO3 + KCl -> AgCl + KNO3",
+      "reactants": {
+        "AgNO3": 1,
+        "KCl": 1
+      },
+      "products": {
+        "AgCl": 1,
+        "KNO3": 1
+      },
+      "condition": "aqueous_no_excess_complexing_reagent",
+      "phenomenon": "Tạo kết tủa; màu được xác định theo sản phẩm.",
+      "hazard": "irritant_or_toxic_salts",
+      "model": "stoichiometric_upper_bound",
+      "source": "https://openstax.org/books/chemistry-2e/pages/4-2-classifying-chemical-reactions",
+      "review": "atom balance automated; classroom validation still required",
+      "precipitate_colors": {
+        "AgCl": "trắng"
+      }
+    },
+    {
+      "id": "R023",
+      "category": "Kết tủa",
+      "equation": "AgNO3 + NaBr -> AgBr + NaNO3",
+      "reactants": {
+        "AgNO3": 1,
+        "NaBr": 1
+      },
+      "products": {
+        "AgBr": 1,
+        "NaNO3": 1
+      },
+      "condition": "aqueous_no_excess_complexing_reagent",
+      "phenomenon": "Tạo kết tủa; màu được xác định theo sản phẩm.",
+      "hazard": "irritant_or_toxic_salts",
+      "model": "stoichiometric_upper_bound",
+      "source": "https://openstax.org/books/chemistry-2e/pages/4-2-classifying-chemical-reactions",
+      "review": "atom balance automated; classroom validation still required",
+      "precipitate_colors": {
+        "AgBr": "vàng nhạt"
+      }
+    },
+    {
+      "id": "R024",
+      "category": "Kết tủa",
+      "equation": "AgNO3 + KBr -> AgBr + KNO3",
+      "reactants": {
+        "AgNO3": 1,
+        "KBr": 1
+      },
+      "products": {
+        "AgBr": 1,
+        "KNO3": 1
+      },
+      "condition": "aqueous_no_excess_complexing_reagent",
+      "phenomenon": "Tạo kết tủa; màu được xác định theo sản phẩm.",
+      "hazard": "irritant_or_toxic_salts",
+      "model": "stoichiometric_upper_bound",
+      "source": "https://openstax.org/books/chemistry-2e/pages/4-2-classifying-chemical-reactions",
+      "review": "atom balance automated; classroom validation still required",
+      "precipitate_colors": {
+        "AgBr": "vàng nhạt"
+      }
+    },
+    {
+      "id": "R025",
+      "category": "Kết tủa",
+      "equation": "AgNO3 + NaI -> AgI + NaNO3",
+      "reactants": {
+        "AgNO3": 1,
+        "NaI": 1
+      },
+      "products": {
+        "AgI": 1,
+        "NaNO3": 1
+      },
+      "condition": "aqueous_no_excess_complexing_reagent",
+      "phenomenon": "Tạo kết tủa; màu được xác định theo sản phẩm.",
+      "hazard": "irritant_or_toxic_salts",
+      "model": "stoichiometric_upper_bound",
+      "source": "https://openstax.org/books/chemistry-2e/pages/4-2-classifying-chemical-reactions",
+      "review": "atom balance automated; classroom validation still required",
+      "precipitate_colors": {
+        "AgI": "vàng"
+      }
+    },
+    {
+      "id": "R026",
+      "category": "Kết tủa",
+      "equation": "AgNO3 + KI -> AgI + KNO3",
+      "reactants": {
+        "AgNO3": 1,
+        "KI": 1
+      },
+      "products": {
+        "AgI": 1,
+        "KNO3": 1
+      },
+      "condition": "aqueous_no_excess_complexing_reagent",
+      "phenomenon": "Tạo kết tủa; màu được xác định theo sản phẩm.",
+      "hazard": "irritant_or_toxic_salts",
+      "model": "stoichiometric_upper_bound",
+      "source": "https://openstax.org/books/chemistry-2e/pages/4-2-classifying-chemical-reactions",
+      "review": "atom balance automated; classroom validation still required",
+      "precipitate_colors": {
+        "AgI": "vàng"
+      }
+    },
+    {
+      "id": "R027",
+      "category": "Kết tủa",
+      "equation": "BaCl2 + Na2SO4 -> BaSO4 + 2 NaCl",
+      "reactants": {
+        "BaCl2": 1,
+        "Na2SO4": 1
+      },
+      "products": {
+        "BaSO4": 1,
+        "NaCl": 2
+      },
+      "condition": "aqueous_no_excess_complexing_reagent",
+      "phenomenon": "Tạo kết tủa; màu được xác định theo sản phẩm.",
+      "hazard": "irritant_or_toxic_salts",
+      "model": "stoichiometric_upper_bound",
+      "source": "https://openstax.org/books/chemistry-2e/pages/4-2-classifying-chemical-reactions",
+      "review": "atom balance automated; classroom validation still required",
+      "precipitate_colors": {
+        "BaSO4": "trắng"
+      }
+    },
+    {
+      "id": "R028",
+      "category": "Kết tủa",
+      "equation": "BaCl2 + K2SO4 -> BaSO4 + 2 KCl",
+      "reactants": {
+        "BaCl2": 1,
+        "K2SO4": 1
+      },
+      "products": {
+        "BaSO4": 1,
+        "KCl": 2
+      },
+      "condition": "aqueous_no_excess_complexing_reagent",
+      "phenomenon": "Tạo kết tủa; màu được xác định theo sản phẩm.",
+      "hazard": "irritant_or_toxic_salts",
+      "model": "stoichiometric_upper_bound",
+      "source": "https://openstax.org/books/chemistry-2e/pages/4-2-classifying-chemical-reactions",
+      "review": "atom balance automated; classroom validation still required",
+      "precipitate_colors": {
+        "BaSO4": "trắng"
+      }
+    },
+    {
+      "id": "R029",
+      "category": "Kết tủa",
+      "equation": "Ba(NO3)2 + Na2SO4 -> BaSO4 + 2 NaNO3",
+      "reactants": {
+        "Ba(NO3)2": 1,
+        "Na2SO4": 1
+      },
+      "products": {
+        "BaSO4": 1,
+        "NaNO3": 2
+      },
+      "condition": "aqueous_no_excess_complexing_reagent",
+      "phenomenon": "Tạo kết tủa; màu được xác định theo sản phẩm.",
+      "hazard": "irritant_or_toxic_salts",
+      "model": "stoichiometric_upper_bound",
+      "source": "https://openstax.org/books/chemistry-2e/pages/4-2-classifying-chemical-reactions",
+      "review": "atom balance automated; classroom validation still required",
+      "precipitate_colors": {
+        "BaSO4": "trắng"
+      }
+    },
+    {
+      "id": "R030",
+      "category": "Kết tủa",
+      "equation": "CaCl2 + Na2CO3 -> CaCO3 + 2 NaCl",
+      "reactants": {
+        "CaCl2": 1,
+        "Na2CO3": 1
+      },
+      "products": {
+        "CaCO3": 1,
+        "NaCl": 2
+      },
+      "condition": "aqueous_no_excess_complexing_reagent",
+      "phenomenon": "Tạo kết tủa; màu được xác định theo sản phẩm.",
+      "hazard": "irritant_or_toxic_salts",
+      "model": "stoichiometric_upper_bound",
+      "source": "https://openstax.org/books/chemistry-2e/pages/4-2-classifying-chemical-reactions",
+      "review": "atom balance automated; classroom validation still required",
+      "precipitate_colors": {
+        "CaCO3": "trắng"
+      }
+    },
+    {
+      "id": "R031",
+      "category": "Kết tủa",
+      "equation": "CaCl2 + K2CO3 -> CaCO3 + 2 KCl",
+      "reactants": {
+        "CaCl2": 1,
+        "K2CO3": 1
+      },
+      "products": {
+        "CaCO3": 1,
+        "KCl": 2
+      },
+      "condition": "aqueous_no_excess_complexing_reagent",
+      "phenomenon": "Tạo kết tủa; màu được xác định theo sản phẩm.",
+      "hazard": "irritant_or_toxic_salts",
+      "model": "stoichiometric_upper_bound",
+      "source": "https://openstax.org/books/chemistry-2e/pages/4-2-classifying-chemical-reactions",
+      "review": "atom balance automated; classroom validation still required",
+      "precipitate_colors": {
+        "CaCO3": "trắng"
+      }
+    },
+    {
+      "id": "R032",
+      "category": "Kết tủa",
+      "equation": "Ca(NO3)2 + Na2CO3 -> CaCO3 + 2 NaNO3",
+      "reactants": {
+        "Ca(NO3)2": 1,
+        "Na2CO3": 1
+      },
+      "products": {
+        "CaCO3": 1,
+        "NaNO3": 2
+      },
+      "condition": "aqueous_no_excess_complexing_reagent",
+      "phenomenon": "Tạo kết tủa; màu được xác định theo sản phẩm.",
+      "hazard": "irritant_or_toxic_salts",
+      "model": "stoichiometric_upper_bound",
+      "source": "https://openstax.org/books/chemistry-2e/pages/4-2-classifying-chemical-reactions",
+      "review": "atom balance automated; classroom validation still required",
+      "precipitate_colors": {
+        "CaCO3": "trắng"
+      }
+    },
+    {
+      "id": "R033",
+      "category": "Kết tủa",
+      "equation": "CuSO4 + 2 NaOH -> Cu(OH)2 + Na2SO4",
+      "reactants": {
+        "CuSO4": 1,
+        "NaOH": 2
+      },
+      "products": {
+        "Cu(OH)2": 1,
+        "Na2SO4": 1
+      },
+      "condition": "aqueous_no_excess_complexing_reagent",
+      "phenomenon": "Tạo kết tủa; màu được xác định theo sản phẩm.",
+      "hazard": "irritant_or_toxic_salts",
+      "model": "stoichiometric_upper_bound",
+      "source": "https://openstax.org/books/chemistry-2e/pages/4-2-classifying-chemical-reactions",
+      "review": "atom balance automated; classroom validation still required",
+      "precipitate_colors": {
+        "Cu(OH)2": "xanh lam"
+      }
+    },
+    {
+      "id": "R034",
+      "category": "Kết tủa",
+      "equation": "CuSO4 + 2 KOH -> Cu(OH)2 + K2SO4",
+      "reactants": {
+        "CuSO4": 1,
+        "KOH": 2
+      },
+      "products": {
+        "Cu(OH)2": 1,
+        "K2SO4": 1
+      },
+      "condition": "aqueous_no_excess_complexing_reagent",
+      "phenomenon": "Tạo kết tủa; màu được xác định theo sản phẩm.",
+      "hazard": "irritant_or_toxic_salts",
+      "model": "stoichiometric_upper_bound",
+      "source": "https://openstax.org/books/chemistry-2e/pages/4-2-classifying-chemical-reactions",
+      "review": "atom balance automated; classroom validation still required",
+      "precipitate_colors": {
+        "Cu(OH)2": "xanh lam"
+      }
+    },
+    {
+      "id": "R035",
+      "category": "Kết tủa",
+      "equation": "CuCl2 + 2 NaOH -> Cu(OH)2 + 2 NaCl",
+      "reactants": {
+        "CuCl2": 1,
+        "NaOH": 2
+      },
+      "products": {
+        "Cu(OH)2": 1,
+        "NaCl": 2
+      },
+      "condition": "aqueous_no_excess_complexing_reagent",
+      "phenomenon": "Tạo kết tủa; màu được xác định theo sản phẩm.",
+      "hazard": "irritant_or_toxic_salts",
+      "model": "stoichiometric_upper_bound",
+      "source": "https://openstax.org/books/chemistry-2e/pages/4-2-classifying-chemical-reactions",
+      "review": "atom balance automated; classroom validation still required",
+      "precipitate_colors": {
+        "Cu(OH)2": "xanh lam"
+      }
+    },
+    {
+      "id": "R036",
+      "category": "Kết tủa",
+      "equation": "FeCl3 + 3 NaOH -> Fe(OH)3 + 3 NaCl",
+      "reactants": {
+        "FeCl3": 1,
+        "NaOH": 3
+      },
+      "products": {
+        "Fe(OH)3": 1,
+        "NaCl": 3
+      },
+      "condition": "aqueous_no_excess_complexing_reagent",
+      "phenomenon": "Tạo kết tủa; màu được xác định theo sản phẩm.",
+      "hazard": "irritant_or_toxic_salts",
+      "model": "stoichiometric_upper_bound",
+      "source": "https://openstax.org/books/chemistry-2e/pages/4-2-classifying-chemical-reactions",
+      "review": "atom balance automated; classroom validation still required",
+      "precipitate_colors": {
+        "Fe(OH)3": "nâu đỏ"
+      }
+    },
+    {
+      "id": "R037",
+      "category": "Kết tủa",
+      "equation": "FeCl3 + 3 KOH -> Fe(OH)3 + 3 KCl",
+      "reactants": {
+        "FeCl3": 1,
+        "KOH": 3
+      },
+      "products": {
+        "Fe(OH)3": 1,
+        "KCl": 3
+      },
+      "condition": "aqueous_no_excess_complexing_reagent",
+      "phenomenon": "Tạo kết tủa; màu được xác định theo sản phẩm.",
+      "hazard": "irritant_or_toxic_salts",
+      "model": "stoichiometric_upper_bound",
+      "source": "https://openstax.org/books/chemistry-2e/pages/4-2-classifying-chemical-reactions",
+      "review": "atom balance automated; classroom validation still required",
+      "precipitate_colors": {
+        "Fe(OH)3": "nâu đỏ"
+      }
+    },
+    {
+      "id": "R038",
+      "category": "Kết tủa",
+      "equation": "FeSO4 + 2 NaOH -> Fe(OH)2 + Na2SO4",
+      "reactants": {
+        "FeSO4": 1,
+        "NaOH": 2
+      },
+      "products": {
+        "Fe(OH)2": 1,
+        "Na2SO4": 1
+      },
+      "condition": "aqueous_no_excess_complexing_reagent",
+      "phenomenon": "Tạo kết tủa; màu được xác định theo sản phẩm.",
+      "hazard": "irritant_or_toxic_salts",
+      "model": "stoichiometric_upper_bound",
+      "source": "https://openstax.org/books/chemistry-2e/pages/4-2-classifying-chemical-reactions",
+      "review": "atom balance automated; classroom validation still required",
+      "precipitate_colors": {
+        "Fe(OH)2": "lục nhạt, có thể oxi hóa trong không khí"
+      }
+    },
+    {
+      "id": "R039",
+      "category": "Kết tủa",
+      "equation": "MgCl2 + 2 NaOH -> Mg(OH)2 + 2 NaCl",
+      "reactants": {
+        "MgCl2": 1,
+        "NaOH": 2
+      },
+      "products": {
+        "Mg(OH)2": 1,
+        "NaCl": 2
+      },
+      "condition": "aqueous_no_excess_complexing_reagent",
+      "phenomenon": "Tạo kết tủa; màu được xác định theo sản phẩm.",
+      "hazard": "irritant_or_toxic_salts",
+      "model": "stoichiometric_upper_bound",
+      "source": "https://openstax.org/books/chemistry-2e/pages/4-2-classifying-chemical-reactions",
+      "review": "atom balance automated; classroom validation still required",
+      "precipitate_colors": {
+        "Mg(OH)2": "trắng"
+      }
+    },
+    {
+      "id": "R040",
+      "category": "Kết tủa",
+      "equation": "MgSO4 + 2 NaOH -> Mg(OH)2 + Na2SO4",
+      "reactants": {
+        "MgSO4": 1,
+        "NaOH": 2
+      },
+      "products": {
+        "Mg(OH)2": 1,
+        "Na2SO4": 1
+      },
+      "condition": "aqueous_no_excess_complexing_reagent",
+      "phenomenon": "Tạo kết tủa; màu được xác định theo sản phẩm.",
+      "hazard": "irritant_or_toxic_salts",
+      "model": "stoichiometric_upper_bound",
+      "source": "https://openstax.org/books/chemistry-2e/pages/4-2-classifying-chemical-reactions",
+      "review": "atom balance automated; classroom validation still required",
+      "precipitate_colors": {
+        "Mg(OH)2": "trắng"
+      }
+    },
+    {
+      "id": "R041",
+      "category": "Kết tủa",
+      "equation": "MgSO4 + 2 KOH -> Mg(OH)2 + K2SO4",
+      "reactants": {
+        "MgSO4": 1,
+        "KOH": 2
+      },
+      "products": {
+        "Mg(OH)2": 1,
+        "K2SO4": 1
+      },
+      "condition": "aqueous_no_excess_complexing_reagent",
+      "phenomenon": "Tạo kết tủa; màu được xác định theo sản phẩm.",
+      "hazard": "irritant_or_toxic_salts",
+      "model": "stoichiometric_upper_bound",
+      "source": "https://openstax.org/books/chemistry-2e/pages/4-2-classifying-chemical-reactions",
+      "review": "atom balance automated; classroom validation still required",
+      "precipitate_colors": {
+        "Mg(OH)2": "trắng"
+      }
+    },
+    {
+      "id": "R042",
+      "category": "Kết tủa",
+      "equation": "ZnSO4 + 2 NaOH -> Zn(OH)2 + Na2SO4",
+      "reactants": {
+        "ZnSO4": 1,
+        "NaOH": 2
+      },
+      "products": {
+        "Zn(OH)2": 1,
+        "Na2SO4": 1
+      },
+      "condition": "aqueous_no_excess_complexing_reagent",
+      "phenomenon": "Tạo kết tủa; màu được xác định theo sản phẩm.",
+      "hazard": "irritant_or_toxic_salts",
+      "model": "stoichiometric_upper_bound",
+      "source": "https://openstax.org/books/chemistry-2e/pages/4-2-classifying-chemical-reactions",
+      "review": "atom balance automated; classroom validation still required",
+      "precipitate_colors": {
+        "Zn(OH)2": "trắng"
+      },
+      "limitation": "Kết tủa có thể tan trong kiềm dư; engine chỉ tính giai đoạn kết tủa, không dự đoán lượng rắn cuối khi kiềm dư."
+    },
+    {
+      "id": "R043",
+      "category": "Kết tủa",
+      "equation": "ZnCl2 + 2 KOH -> Zn(OH)2 + 2 KCl",
+      "reactants": {
+        "ZnCl2": 1,
+        "KOH": 2
+      },
+      "products": {
+        "Zn(OH)2": 1,
+        "KCl": 2
+      },
+      "condition": "aqueous_no_excess_complexing_reagent",
+      "phenomenon": "Tạo kết tủa; màu được xác định theo sản phẩm.",
+      "hazard": "irritant_or_toxic_salts",
+      "model": "stoichiometric_upper_bound",
+      "source": "https://openstax.org/books/chemistry-2e/pages/4-2-classifying-chemical-reactions",
+      "review": "atom balance automated; classroom validation still required",
+      "precipitate_colors": {
+        "Zn(OH)2": "trắng"
+      },
+      "limitation": "Kết tủa có thể tan trong kiềm dư; engine chỉ tính giai đoạn kết tủa, không dự đoán lượng rắn cuối khi kiềm dư."
+    },
+    {
+      "id": "R044",
+      "category": "Kết tủa",
+      "equation": "AlCl3 + 3 NaOH -> Al(OH)3 + 3 NaCl",
+      "reactants": {
+        "AlCl3": 1,
+        "NaOH": 3
+      },
+      "products": {
+        "Al(OH)3": 1,
+        "NaCl": 3
+      },
+      "condition": "aqueous_no_excess_complexing_reagent",
+      "phenomenon": "Tạo kết tủa; màu được xác định theo sản phẩm.",
+      "hazard": "irritant_or_toxic_salts",
+      "model": "stoichiometric_upper_bound",
+      "source": "https://openstax.org/books/chemistry-2e/pages/4-2-classifying-chemical-reactions",
+      "review": "atom balance automated; classroom validation still required",
+      "precipitate_colors": {
+        "Al(OH)3": "trắng dạng keo"
+      },
+      "limitation": "Kết tủa có thể tan trong kiềm dư; engine chỉ tính giai đoạn kết tủa, không dự đoán lượng rắn cuối khi kiềm dư."
+    },
+    {
+      "id": "R045",
+      "category": "Kết tủa",
+      "equation": "Al2(SO4)3 + 6 NaOH -> 2 Al(OH)3 + 3 Na2SO4",
+      "reactants": {
+        "Al2(SO4)3": 1,
+        "NaOH": 6
+      },
+      "products": {
+        "Al(OH)3": 2,
+        "Na2SO4": 3
+      },
+      "condition": "aqueous_no_excess_complexing_reagent",
+      "phenomenon": "Tạo kết tủa; màu được xác định theo sản phẩm.",
+      "hazard": "irritant_or_toxic_salts",
+      "model": "stoichiometric_upper_bound",
+      "source": "https://openstax.org/books/chemistry-2e/pages/4-2-classifying-chemical-reactions",
+      "review": "atom balance automated; classroom validation still required",
+      "precipitate_colors": {
+        "Al(OH)3": "trắng dạng keo"
+      },
+      "limitation": "Kết tủa có thể tan trong kiềm dư; engine chỉ tính giai đoạn kết tủa, không dự đoán lượng rắn cuối khi kiềm dư."
+    },
+    {
+      "id": "R046",
+      "category": "Thế kim loại / oxi hóa–khử",
+      "equation": "Zn + CuSO4 -> ZnSO4 + Cu",
+      "reactants": {
+        "Zn": 1,
+        "CuSO4": 1
+      },
+      "products": {
+        "ZnSO4": 1,
+        "Cu": 1
+      },
+      "condition": "aqueous_clean_metal_no_excess_oxidant",
+      "phenomenon": "Kim loại mới bám trên bề mặt; dung dịch có thể đổi màu.",
+      "hazard": "metal_salt_waste",
+      "model": "stoichiometric_upper_bound",
+      "source": "https://openstax.org/books/chemistry-2e/pages/4-2-classifying-chemical-reactions",
+      "review": "atom balance automated; classroom validation still required",
+      "precipitate_colors": {}
+    },
+    {
+      "id": "R047",
+      "category": "Thế kim loại / oxi hóa–khử",
+      "equation": "Fe + CuSO4 -> FeSO4 + Cu",
+      "reactants": {
+        "Fe": 1,
+        "CuSO4": 1
+      },
+      "products": {
+        "FeSO4": 1,
+        "Cu": 1
+      },
+      "condition": "aqueous_clean_metal_no_excess_oxidant",
+      "phenomenon": "Kim loại mới bám trên bề mặt; dung dịch có thể đổi màu.",
+      "hazard": "metal_salt_waste",
+      "model": "stoichiometric_upper_bound",
+      "source": "https://openstax.org/books/chemistry-2e/pages/4-2-classifying-chemical-reactions",
+      "review": "atom balance automated; classroom validation still required",
+      "precipitate_colors": {}
+    },
+    {
+      "id": "R048",
+      "category": "Thế kim loại / oxi hóa–khử",
+      "equation": "Mg + CuSO4 -> MgSO4 + Cu",
+      "reactants": {
+        "Mg": 1,
+        "CuSO4": 1
+      },
+      "products": {
+        "MgSO4": 1,
+        "Cu": 1
+      },
+      "condition": "aqueous_clean_metal_no_excess_oxidant",
+      "phenomenon": "Kim loại mới bám trên bề mặt; dung dịch có thể đổi màu.",
+      "hazard": "metal_salt_waste",
+      "model": "stoichiometric_upper_bound",
+      "source": "https://openstax.org/books/chemistry-2e/pages/4-2-classifying-chemical-reactions",
+      "review": "atom balance automated; classroom validation still required",
+      "precipitate_colors": {}
+    },
+    {
+      "id": "R049",
+      "category": "Thế kim loại / oxi hóa–khử",
+      "equation": "Zn + CuCl2 -> ZnCl2 + Cu",
+      "reactants": {
+        "Zn": 1,
+        "CuCl2": 1
+      },
+      "products": {
+        "ZnCl2": 1,
+        "Cu": 1
+      },
+      "condition": "aqueous_clean_metal_no_excess_oxidant",
+      "phenomenon": "Kim loại mới bám trên bề mặt; dung dịch có thể đổi màu.",
+      "hazard": "metal_salt_waste",
+      "model": "stoichiometric_upper_bound",
+      "source": "https://openstax.org/books/chemistry-2e/pages/4-2-classifying-chemical-reactions",
+      "review": "atom balance automated; classroom validation still required",
+      "precipitate_colors": {}
+    },
+    {
+      "id": "R050",
+      "category": "Thế kim loại / oxi hóa–khử",
+      "equation": "Fe + CuCl2 -> FeCl2 + Cu",
+      "reactants": {
+        "Fe": 1,
+        "CuCl2": 1
+      },
+      "products": {
+        "FeCl2": 1,
+        "Cu": 1
+      },
+      "condition": "aqueous_clean_metal_no_excess_oxidant",
+      "phenomenon": "Kim loại mới bám trên bề mặt; dung dịch có thể đổi màu.",
+      "hazard": "metal_salt_waste",
+      "model": "stoichiometric_upper_bound",
+      "source": "https://openstax.org/books/chemistry-2e/pages/4-2-classifying-chemical-reactions",
+      "review": "atom balance automated; classroom validation still required",
+      "precipitate_colors": {}
+    },
+    {
+      "id": "R051",
+      "category": "Thế kim loại / oxi hóa–khử",
+      "equation": "Mg + CuCl2 -> MgCl2 + Cu",
+      "reactants": {
+        "Mg": 1,
+        "CuCl2": 1
+      },
+      "products": {
+        "MgCl2": 1,
+        "Cu": 1
+      },
+      "condition": "aqueous_clean_metal_no_excess_oxidant",
+      "phenomenon": "Kim loại mới bám trên bề mặt; dung dịch có thể đổi màu.",
+      "hazard": "metal_salt_waste",
+      "model": "stoichiometric_upper_bound",
+      "source": "https://openstax.org/books/chemistry-2e/pages/4-2-classifying-chemical-reactions",
+      "review": "atom balance automated; classroom validation still required",
+      "precipitate_colors": {}
+    },
+    {
+      "id": "R052",
+      "category": "Thế kim loại / oxi hóa–khử",
+      "equation": "Cu + 2 AgNO3 -> Cu(NO3)2 + 2 Ag",
+      "reactants": {
+        "Cu": 1,
+        "AgNO3": 2
+      },
+      "products": {
+        "Cu(NO3)2": 1,
+        "Ag": 2
+      },
+      "condition": "aqueous_clean_metal_no_excess_oxidant",
+      "phenomenon": "Kim loại mới bám trên bề mặt; dung dịch có thể đổi màu.",
+      "hazard": "metal_salt_waste",
+      "model": "stoichiometric_upper_bound",
+      "source": "https://openstax.org/books/chemistry-2e/pages/4-2-classifying-chemical-reactions",
+      "review": "atom balance automated; classroom validation still required",
+      "precipitate_colors": {}
+    },
+    {
+      "id": "R053",
+      "category": "Thế kim loại / oxi hóa–khử",
+      "equation": "Zn + 2 AgNO3 -> Zn(NO3)2 + 2 Ag",
+      "reactants": {
+        "Zn": 1,
+        "AgNO3": 2
+      },
+      "products": {
+        "Zn(NO3)2": 1,
+        "Ag": 2
+      },
+      "condition": "aqueous_clean_metal_no_excess_oxidant",
+      "phenomenon": "Kim loại mới bám trên bề mặt; dung dịch có thể đổi màu.",
+      "hazard": "metal_salt_waste",
+      "model": "stoichiometric_upper_bound",
+      "source": "https://openstax.org/books/chemistry-2e/pages/4-2-classifying-chemical-reactions",
+      "review": "atom balance automated; classroom validation still required",
+      "precipitate_colors": {}
+    },
+    {
+      "id": "R054",
+      "category": "Thế kim loại / oxi hóa–khử",
+      "equation": "Fe + 2 AgNO3 -> Fe(NO3)2 + 2 Ag",
+      "reactants": {
+        "Fe": 1,
+        "AgNO3": 2
+      },
+      "products": {
+        "Fe(NO3)2": 1,
+        "Ag": 2
+      },
+      "condition": "aqueous_clean_metal_no_excess_oxidant",
+      "phenomenon": "Kim loại mới bám trên bề mặt; dung dịch có thể đổi màu.",
+      "hazard": "metal_salt_waste",
+      "model": "stoichiometric_upper_bound",
+      "source": "https://openstax.org/books/chemistry-2e/pages/4-2-classifying-chemical-reactions",
+      "review": "atom balance automated; classroom validation still required",
+      "precipitate_colors": {}
+    },
+    {
+      "id": "R055",
+      "category": "Thế kim loại / oxi hóa–khử",
+      "equation": "Mg + 2 AgNO3 -> Mg(NO3)2 + 2 Ag",
+      "reactants": {
+        "Mg": 1,
+        "AgNO3": 2
+      },
+      "products": {
+        "Mg(NO3)2": 1,
+        "Ag": 2
+      },
+      "condition": "aqueous_clean_metal_no_excess_oxidant",
+      "phenomenon": "Kim loại mới bám trên bề mặt; dung dịch có thể đổi màu.",
+      "hazard": "metal_salt_waste",
+      "model": "stoichiometric_upper_bound",
+      "source": "https://openstax.org/books/chemistry-2e/pages/4-2-classifying-chemical-reactions",
+      "review": "atom balance automated; classroom validation still required",
+      "precipitate_colors": {}
+    },
+    {
+      "id": "R056",
+      "category": "Thế kim loại / oxi hóa–khử",
+      "equation": "Zn + FeSO4 -> ZnSO4 + Fe",
+      "reactants": {
+        "Zn": 1,
+        "FeSO4": 1
+      },
+      "products": {
+        "ZnSO4": 1,
+        "Fe": 1
+      },
+      "condition": "aqueous_clean_metal_no_excess_oxidant",
+      "phenomenon": "Kim loại mới bám trên bề mặt; dung dịch có thể đổi màu.",
+      "hazard": "metal_salt_waste",
+      "model": "stoichiometric_upper_bound",
+      "source": "https://openstax.org/books/chemistry-2e/pages/4-2-classifying-chemical-reactions",
+      "review": "atom balance automated; classroom validation still required",
+      "precipitate_colors": {}
+    },
+    {
+      "id": "R057",
+      "category": "Thế kim loại / oxi hóa–khử",
+      "equation": "Mg + FeSO4 -> MgSO4 + Fe",
+      "reactants": {
+        "Mg": 1,
+        "FeSO4": 1
+      },
+      "products": {
+        "MgSO4": 1,
+        "Fe": 1
+      },
+      "condition": "aqueous_clean_metal_no_excess_oxidant",
+      "phenomenon": "Kim loại mới bám trên bề mặt; dung dịch có thể đổi màu.",
+      "hazard": "metal_salt_waste",
+      "model": "stoichiometric_upper_bound",
+      "source": "https://openstax.org/books/chemistry-2e/pages/4-2-classifying-chemical-reactions",
+      "review": "atom balance automated; classroom validation still required",
+      "precipitate_colors": {}
+    },
+    {
+      "id": "R058",
+      "category": "Thế kim loại / oxi hóa–khử",
+      "equation": "Mg + ZnSO4 -> MgSO4 + Zn",
+      "reactants": {
+        "Mg": 1,
+        "ZnSO4": 1
+      },
+      "products": {
+        "MgSO4": 1,
+        "Zn": 1
+      },
+      "condition": "aqueous_clean_metal_no_excess_oxidant",
+      "phenomenon": "Kim loại mới bám trên bề mặt; dung dịch có thể đổi màu.",
+      "hazard": "metal_salt_waste",
+      "model": "stoichiometric_upper_bound",
+      "source": "https://openstax.org/books/chemistry-2e/pages/4-2-classifying-chemical-reactions",
+      "review": "atom balance automated; classroom validation still required",
+      "precipitate_colors": {}
+    },
+    {
+      "id": "R059",
+      "category": "Thế kim loại / oxi hóa–khử",
+      "equation": "Mg + ZnCl2 -> MgCl2 + Zn",
+      "reactants": {
+        "Mg": 1,
+        "ZnCl2": 1
+      },
+      "products": {
+        "MgCl2": 1,
+        "Zn": 1
+      },
+      "condition": "aqueous_clean_metal_no_excess_oxidant",
+      "phenomenon": "Kim loại mới bám trên bề mặt; dung dịch có thể đổi màu.",
+      "hazard": "metal_salt_waste",
+      "model": "stoichiometric_upper_bound",
+      "source": "https://openstax.org/books/chemistry-2e/pages/4-2-classifying-chemical-reactions",
+      "review": "atom balance automated; classroom validation still required",
+      "precipitate_colors": {}
+    },
+    {
+      "id": "R060",
+      "category": "Thế kim loại / oxi hóa–khử",
+      "equation": "Zn + FeCl2 -> ZnCl2 + Fe",
+      "reactants": {
+        "Zn": 1,
+        "FeCl2": 1
+      },
+      "products": {
+        "ZnCl2": 1,
+        "Fe": 1
+      },
+      "condition": "aqueous_clean_metal_no_excess_oxidant",
+      "phenomenon": "Kim loại mới bám trên bề mặt; dung dịch có thể đổi màu.",
+      "hazard": "metal_salt_waste",
+      "model": "stoichiometric_upper_bound",
+      "source": "https://openstax.org/books/chemistry-2e/pages/4-2-classifying-chemical-reactions",
+      "review": "atom balance automated; classroom validation still required",
+      "precipitate_colors": {}
+    },
+    {
+      "id": "R061",
+      "category": "Oxit bazơ",
+      "equation": "CuO + 2 HCl -> CuCl2 + H2O",
+      "reactants": {
+        "CuO": 1,
+        "HCl": 2
+      },
+      "products": {
+        "CuCl2": 1,
+        "H2O": 1
+      },
+      "condition": "aqueous_suitable_contact",
+      "phenomenon": "Oxit phản ứng, có thể hòa tan hoặc tỏa nhiệt; động học không được tính.",
+      "hazard": "corrosive_heat",
+      "model": "stoichiometric_upper_bound",
+      "source": "https://openstax.org/books/chemistry-2e/pages/4-2-classifying-chemical-reactions",
+      "review": "atom balance automated; classroom validation still required",
+      "precipitate_colors": {}
+    },
+    {
+      "id": "R062",
+      "category": "Oxit bazơ",
+      "equation": "CuO + H2SO4 -> CuSO4 + H2O",
+      "reactants": {
+        "CuO": 1,
+        "H2SO4": 1
+      },
+      "products": {
+        "CuSO4": 1,
+        "H2O": 1
+      },
+      "condition": "aqueous_suitable_contact",
+      "phenomenon": "Oxit phản ứng, có thể hòa tan hoặc tỏa nhiệt; động học không được tính.",
+      "hazard": "corrosive_heat",
+      "model": "stoichiometric_upper_bound",
+      "source": "https://openstax.org/books/chemistry-2e/pages/4-2-classifying-chemical-reactions",
+      "review": "atom balance automated; classroom validation still required",
+      "precipitate_colors": {}
+    },
+    {
+      "id": "R063",
+      "category": "Oxit bazơ",
+      "equation": "CuO + 2 HNO3 -> Cu(NO3)2 + H2O",
+      "reactants": {
+        "CuO": 1,
+        "HNO3": 2
+      },
+      "products": {
+        "Cu(NO3)2": 1,
+        "H2O": 1
+      },
+      "condition": "aqueous_suitable_contact",
+      "phenomenon": "Oxit phản ứng, có thể hòa tan hoặc tỏa nhiệt; động học không được tính.",
+      "hazard": "corrosive_heat",
+      "model": "stoichiometric_upper_bound",
+      "source": "https://openstax.org/books/chemistry-2e/pages/4-2-classifying-chemical-reactions",
+      "review": "atom balance automated; classroom validation still required",
+      "precipitate_colors": {}
+    },
+    {
+      "id": "R064",
+      "category": "Oxit bazơ",
+      "equation": "MgO + 2 HCl -> MgCl2 + H2O",
+      "reactants": {
+        "MgO": 1,
+        "HCl": 2
+      },
+      "products": {
+        "MgCl2": 1,
+        "H2O": 1
+      },
+      "condition": "aqueous_suitable_contact",
+      "phenomenon": "Oxit phản ứng, có thể hòa tan hoặc tỏa nhiệt; động học không được tính.",
+      "hazard": "corrosive_heat",
+      "model": "stoichiometric_upper_bound",
+      "source": "https://openstax.org/books/chemistry-2e/pages/4-2-classifying-chemical-reactions",
+      "review": "atom balance automated; classroom validation still required",
+      "precipitate_colors": {}
+    },
+    {
+      "id": "R065",
+      "category": "Oxit bazơ",
+      "equation": "MgO + H2SO4 -> MgSO4 + H2O",
+      "reactants": {
+        "MgO": 1,
+        "H2SO4": 1
+      },
+      "products": {
+        "MgSO4": 1,
+        "H2O": 1
+      },
+      "condition": "aqueous_suitable_contact",
+      "phenomenon": "Oxit phản ứng, có thể hòa tan hoặc tỏa nhiệt; động học không được tính.",
+      "hazard": "corrosive_heat",
+      "model": "stoichiometric_upper_bound",
+      "source": "https://openstax.org/books/chemistry-2e/pages/4-2-classifying-chemical-reactions",
+      "review": "atom balance automated; classroom validation still required",
+      "precipitate_colors": {}
+    },
+    {
+      "id": "R066",
+      "category": "Oxit bazơ",
+      "equation": "MgO + 2 HNO3 -> Mg(NO3)2 + H2O",
+      "reactants": {
+        "MgO": 1,
+        "HNO3": 2
+      },
+      "products": {
+        "Mg(NO3)2": 1,
+        "H2O": 1
+      },
+      "condition": "aqueous_suitable_contact",
+      "phenomenon": "Oxit phản ứng, có thể hòa tan hoặc tỏa nhiệt; động học không được tính.",
+      "hazard": "corrosive_heat",
+      "model": "stoichiometric_upper_bound",
+      "source": "https://openstax.org/books/chemistry-2e/pages/4-2-classifying-chemical-reactions",
+      "review": "atom balance automated; classroom validation still required",
+      "precipitate_colors": {}
+    },
+    {
+      "id": "R067",
+      "category": "Oxit bazơ",
+      "equation": "CaO + 2 HCl -> CaCl2 + H2O",
+      "reactants": {
+        "CaO": 1,
+        "HCl": 2
+      },
+      "products": {
+        "CaCl2": 1,
+        "H2O": 1
+      },
+      "condition": "aqueous_suitable_contact",
+      "phenomenon": "Oxit phản ứng, có thể hòa tan hoặc tỏa nhiệt; động học không được tính.",
+      "hazard": "corrosive_heat",
+      "model": "stoichiometric_upper_bound",
+      "source": "https://openstax.org/books/chemistry-2e/pages/4-2-classifying-chemical-reactions",
+      "review": "atom balance automated; classroom validation still required",
+      "precipitate_colors": {}
+    },
+    {
+      "id": "R068",
+      "category": "Oxit bazơ",
+      "equation": "CaO + 2 HNO3 -> Ca(NO3)2 + H2O",
+      "reactants": {
+        "CaO": 1,
+        "HNO3": 2
+      },
+      "products": {
+        "Ca(NO3)2": 1,
+        "H2O": 1
+      },
+      "condition": "aqueous_suitable_contact",
+      "phenomenon": "Oxit phản ứng, có thể hòa tan hoặc tỏa nhiệt; động học không được tính.",
+      "hazard": "corrosive_heat",
+      "model": "stoichiometric_upper_bound",
+      "source": "https://openstax.org/books/chemistry-2e/pages/4-2-classifying-chemical-reactions",
+      "review": "atom balance automated; classroom validation still required",
+      "precipitate_colors": {}
+    },
+    {
+      "id": "R069",
+      "category": "Oxit bazơ",
+      "equation": "ZnO + 2 HCl -> ZnCl2 + H2O",
+      "reactants": {
+        "ZnO": 1,
+        "HCl": 2
+      },
+      "products": {
+        "ZnCl2": 1,
+        "H2O": 1
+      },
+      "condition": "aqueous_suitable_contact",
+      "phenomenon": "Oxit phản ứng, có thể hòa tan hoặc tỏa nhiệt; động học không được tính.",
+      "hazard": "corrosive_heat",
+      "model": "stoichiometric_upper_bound",
+      "source": "https://openstax.org/books/chemistry-2e/pages/4-2-classifying-chemical-reactions",
+      "review": "atom balance automated; classroom validation still required",
+      "precipitate_colors": {}
+    },
+    {
+      "id": "R070",
+      "category": "Oxit bazơ",
+      "equation": "ZnO + H2SO4 -> ZnSO4 + H2O",
+      "reactants": {
+        "ZnO": 1,
+        "H2SO4": 1
+      },
+      "products": {
+        "ZnSO4": 1,
+        "H2O": 1
+      },
+      "condition": "aqueous_suitable_contact",
+      "phenomenon": "Oxit phản ứng, có thể hòa tan hoặc tỏa nhiệt; động học không được tính.",
+      "hazard": "corrosive_heat",
+      "model": "stoichiometric_upper_bound",
+      "source": "https://openstax.org/books/chemistry-2e/pages/4-2-classifying-chemical-reactions",
+      "review": "atom balance automated; classroom validation still required",
+      "precipitate_colors": {}
+    },
+    {
+      "id": "R071",
+      "category": "Oxit bazơ",
+      "equation": "ZnO + 2 HNO3 -> Zn(NO3)2 + H2O",
+      "reactants": {
+        "ZnO": 1,
+        "HNO3": 2
+      },
+      "products": {
+        "Zn(NO3)2": 1,
+        "H2O": 1
+      },
+      "condition": "aqueous_suitable_contact",
+      "phenomenon": "Oxit phản ứng, có thể hòa tan hoặc tỏa nhiệt; động học không được tính.",
+      "hazard": "corrosive_heat",
+      "model": "stoichiometric_upper_bound",
+      "source": "https://openstax.org/books/chemistry-2e/pages/4-2-classifying-chemical-reactions",
+      "review": "atom balance automated; classroom validation still required",
+      "precipitate_colors": {}
+    },
+    {
+      "id": "R072",
+      "category": "Oxit bazơ",
+      "equation": "Fe2O3 + 6 HCl -> 2 FeCl3 + 3 H2O",
+      "reactants": {
+        "Fe2O3": 1,
+        "HCl": 6
+      },
+      "products": {
+        "FeCl3": 2,
+        "H2O": 3
+      },
+      "condition": "aqueous_suitable_contact",
+      "phenomenon": "Oxit phản ứng, có thể hòa tan hoặc tỏa nhiệt; động học không được tính.",
+      "hazard": "corrosive_heat",
+      "model": "stoichiometric_upper_bound",
+      "source": "https://openstax.org/books/chemistry-2e/pages/4-2-classifying-chemical-reactions",
+      "review": "atom balance automated; classroom validation still required",
+      "precipitate_colors": {}
+    },
+    {
+      "id": "R073",
+      "category": "Oxit bazơ",
+      "equation": "Fe2O3 + 3 H2SO4 -> Fe2(SO4)3 + 3 H2O",
+      "reactants": {
+        "Fe2O3": 1,
+        "H2SO4": 3
+      },
+      "products": {
+        "Fe2(SO4)3": 1,
+        "H2O": 3
+      },
+      "condition": "aqueous_suitable_contact",
+      "phenomenon": "Oxit phản ứng, có thể hòa tan hoặc tỏa nhiệt; động học không được tính.",
+      "hazard": "corrosive_heat",
+      "model": "stoichiometric_upper_bound",
+      "source": "https://openstax.org/books/chemistry-2e/pages/4-2-classifying-chemical-reactions",
+      "review": "atom balance automated; classroom validation still required",
+      "precipitate_colors": {}
+    },
+    {
+      "id": "R074",
+      "category": "Oxit bazơ",
+      "equation": "Fe2O3 + 6 HNO3 -> 2 Fe(NO3)3 + 3 H2O",
+      "reactants": {
+        "Fe2O3": 1,
+        "HNO3": 6
+      },
+      "products": {
+        "Fe(NO3)3": 2,
+        "H2O": 3
+      },
+      "condition": "aqueous_suitable_contact",
+      "phenomenon": "Oxit phản ứng, có thể hòa tan hoặc tỏa nhiệt; động học không được tính.",
+      "hazard": "corrosive_heat",
+      "model": "stoichiometric_upper_bound",
+      "source": "https://openstax.org/books/chemistry-2e/pages/4-2-classifying-chemical-reactions",
+      "review": "atom balance automated; classroom validation still required",
+      "precipitate_colors": {}
+    },
+    {
+      "id": "R075",
+      "category": "Oxit bazơ",
+      "equation": "CaO + H2O -> Ca(OH)2",
+      "reactants": {
+        "CaO": 1,
+        "H2O": 1
+      },
+      "products": {
+        "Ca(OH)2": 1
+      },
+      "condition": "aqueous_suitable_contact",
+      "phenomenon": "Oxit phản ứng, có thể hòa tan hoặc tỏa nhiệt; động học không được tính.",
+      "hazard": "corrosive_heat",
+      "model": "stoichiometric_upper_bound",
+      "source": "https://openstax.org/books/chemistry-2e/pages/4-2-classifying-chemical-reactions",
+      "review": "atom balance automated; classroom validation still required",
+      "precipitate_colors": {}
+    },
+    {
+      "id": "R076",
+      "category": "Phân hủy",
+      "equation": "CaCO3 -> CaO + CO2",
+      "reactants": {
+        "CaCO3": 1
+      },
+      "products": {
+        "CaO": 1,
+        "CO2": 1
+      },
+      "condition": "heating_required",
+      "phenomenon": "Phân hủy khi được cấp nhiệt phù hợp; sinh khí/hơi hoặc đổi màu chất rắn.",
+      "hazard": "heat_gas",
+      "model": "stoichiometric_upper_bound",
+      "source": "https://openstax.org/books/chemistry-2e/pages/4-2-classifying-chemical-reactions",
+      "review": "atom balance automated; classroom validation still required",
+      "precipitate_colors": {}
+    },
+    {
+      "id": "R077",
+      "category": "Phân hủy",
+      "equation": "MgCO3 -> MgO + CO2",
+      "reactants": {
+        "MgCO3": 1
+      },
+      "products": {
+        "MgO": 1,
+        "CO2": 1
+      },
+      "condition": "heating_required",
+      "phenomenon": "Phân hủy khi được cấp nhiệt phù hợp; sinh khí/hơi hoặc đổi màu chất rắn.",
+      "hazard": "heat_gas",
+      "model": "stoichiometric_upper_bound",
+      "source": "https://openstax.org/books/chemistry-2e/pages/4-2-classifying-chemical-reactions",
+      "review": "atom balance automated; classroom validation still required",
+      "precipitate_colors": {}
+    },
+    {
+      "id": "R078",
+      "category": "Phân hủy",
+      "equation": "CuCO3 -> CuO + CO2",
+      "reactants": {
+        "CuCO3": 1
+      },
+      "products": {
+        "CuO": 1,
+        "CO2": 1
+      },
+      "condition": "heating_required",
+      "phenomenon": "Phân hủy khi được cấp nhiệt phù hợp; sinh khí/hơi hoặc đổi màu chất rắn.",
+      "hazard": "heat_gas",
+      "model": "stoichiometric_upper_bound",
+      "source": "https://openstax.org/books/chemistry-2e/pages/4-2-classifying-chemical-reactions",
+      "review": "atom balance automated; classroom validation still required",
+      "precipitate_colors": {}
+    },
+    {
+      "id": "R079",
+      "category": "Phân hủy",
+      "equation": "ZnCO3 -> ZnO + CO2",
+      "reactants": {
+        "ZnCO3": 1
+      },
+      "products": {
+        "ZnO": 1,
+        "CO2": 1
+      },
+      "condition": "heating_required",
+      "phenomenon": "Phân hủy khi được cấp nhiệt phù hợp; sinh khí/hơi hoặc đổi màu chất rắn.",
+      "hazard": "heat_gas",
+      "model": "stoichiometric_upper_bound",
+      "source": "https://openstax.org/books/chemistry-2e/pages/4-2-classifying-chemical-reactions",
+      "review": "atom balance automated; classroom validation still required",
+      "precipitate_colors": {}
+    },
+    {
+      "id": "R080",
+      "category": "Phân hủy",
+      "equation": "2 NaHCO3 -> Na2CO3 + CO2 + H2O",
+      "reactants": {
+        "NaHCO3": 2
+      },
+      "products": {
+        "Na2CO3": 1,
+        "CO2": 1,
+        "H2O": 1
+      },
+      "condition": "heating_required",
+      "phenomenon": "Phân hủy khi được cấp nhiệt phù hợp; sinh khí/hơi hoặc đổi màu chất rắn.",
+      "hazard": "heat_gas",
+      "model": "stoichiometric_upper_bound",
+      "source": "https://openstax.org/books/chemistry-2e/pages/4-2-classifying-chemical-reactions",
+      "review": "atom balance automated; classroom validation still required",
+      "precipitate_colors": {}
+    },
+    {
+      "id": "R081",
+      "category": "Phân hủy",
+      "equation": "2 KHCO3 -> K2CO3 + CO2 + H2O",
+      "reactants": {
+        "KHCO3": 2
+      },
+      "products": {
+        "K2CO3": 1,
+        "CO2": 1,
+        "H2O": 1
+      },
+      "condition": "heating_required",
+      "phenomenon": "Phân hủy khi được cấp nhiệt phù hợp; sinh khí/hơi hoặc đổi màu chất rắn.",
+      "hazard": "heat_gas",
+      "model": "stoichiometric_upper_bound",
+      "source": "https://openstax.org/books/chemistry-2e/pages/4-2-classifying-chemical-reactions",
+      "review": "atom balance automated; classroom validation still required",
+      "precipitate_colors": {}
+    },
+    {
+      "id": "R082",
+      "category": "Phân hủy",
+      "equation": "Cu(OH)2 -> CuO + H2O",
+      "reactants": {
+        "Cu(OH)2": 1
+      },
+      "products": {
+        "CuO": 1,
+        "H2O": 1
+      },
+      "condition": "heating_required",
+      "phenomenon": "Phân hủy khi được cấp nhiệt phù hợp; sinh khí/hơi hoặc đổi màu chất rắn.",
+      "hazard": "heat_gas",
+      "model": "stoichiometric_upper_bound",
+      "source": "https://openstax.org/books/chemistry-2e/pages/4-2-classifying-chemical-reactions",
+      "review": "atom balance automated; classroom validation still required",
+      "precipitate_colors": {}
+    },
+    {
+      "id": "R083",
+      "category": "Phân hủy",
+      "equation": "Mg(OH)2 -> MgO + H2O",
+      "reactants": {
+        "Mg(OH)2": 1
+      },
+      "products": {
+        "MgO": 1,
+        "H2O": 1
+      },
+      "condition": "heating_required",
+      "phenomenon": "Phân hủy khi được cấp nhiệt phù hợp; sinh khí/hơi hoặc đổi màu chất rắn.",
+      "hazard": "heat_gas",
+      "model": "stoichiometric_upper_bound",
+      "source": "https://openstax.org/books/chemistry-2e/pages/4-2-classifying-chemical-reactions",
+      "review": "atom balance automated; classroom validation still required",
+      "precipitate_colors": {}
+    },
+    {
+      "id": "R084",
+      "category": "Phân hủy",
+      "equation": "2 Fe(OH)3 -> Fe2O3 + 3 H2O",
+      "reactants": {
+        "Fe(OH)3": 2
+      },
+      "products": {
+        "Fe2O3": 1,
+        "H2O": 3
+      },
+      "condition": "heating_required",
+      "phenomenon": "Phân hủy khi được cấp nhiệt phù hợp; sinh khí/hơi hoặc đổi màu chất rắn.",
+      "hazard": "heat_gas",
+      "model": "stoichiometric_upper_bound",
+      "source": "https://openstax.org/books/chemistry-2e/pages/4-2-classifying-chemical-reactions",
+      "review": "atom balance automated; classroom validation still required",
+      "precipitate_colors": {}
+    },
+    {
+      "id": "R085",
+      "category": "Phân hủy",
+      "equation": "2 Al(OH)3 -> Al2O3 + 3 H2O",
+      "reactants": {
+        "Al(OH)3": 2
+      },
+      "products": {
+        "Al2O3": 1,
+        "H2O": 3
+      },
+      "condition": "heating_required",
+      "phenomenon": "Phân hủy khi được cấp nhiệt phù hợp; sinh khí/hơi hoặc đổi màu chất rắn.",
+      "hazard": "heat_gas",
+      "model": "stoichiometric_upper_bound",
+      "source": "https://openstax.org/books/chemistry-2e/pages/4-2-classifying-chemical-reactions",
+      "review": "atom balance automated; classroom validation still required",
+      "precipitate_colors": {}
+    },
+    {
+      "id": "R086",
+      "category": "Axit–cacbonat",
+      "equation": "Na2CO3 + 2 HCl -> 2 NaCl + CO2 + H2O",
+      "reactants": {
+        "Na2CO3": 1,
+        "HCl": 2
+      },
+      "products": {
+        "NaCl": 2,
+        "CO2": 1,
+        "H2O": 1
+      },
+      "condition": "aqueous_open_vessel",
+      "phenomenon": "Sủi bọt CO₂; mô hình không tính khí hòa tan hoặc áp suất.",
+      "hazard": "gas_pressure_if_closed",
+      "model": "stoichiometric_upper_bound",
+      "source": "https://openstax.org/books/chemistry-2e/pages/4-2-classifying-chemical-reactions",
+      "review": "atom balance automated; classroom validation still required",
+      "precipitate_colors": {}
+    },
+    {
+      "id": "R087",
+      "category": "Axit–cacbonat",
+      "equation": "K2CO3 + 2 HCl -> 2 KCl + CO2 + H2O",
+      "reactants": {
+        "K2CO3": 1,
+        "HCl": 2
+      },
+      "products": {
+        "KCl": 2,
+        "CO2": 1,
+        "H2O": 1
+      },
+      "condition": "aqueous_open_vessel",
+      "phenomenon": "Sủi bọt CO₂; mô hình không tính khí hòa tan hoặc áp suất.",
+      "hazard": "gas_pressure_if_closed",
+      "model": "stoichiometric_upper_bound",
+      "source": "https://openstax.org/books/chemistry-2e/pages/4-2-classifying-chemical-reactions",
+      "review": "atom balance automated; classroom validation still required",
+      "precipitate_colors": {}
+    },
+    {
+      "id": "R088",
+      "category": "Axit–cacbonat",
+      "equation": "CaCO3 + 2 HCl -> CaCl2 + CO2 + H2O",
+      "reactants": {
+        "CaCO3": 1,
+        "HCl": 2
+      },
+      "products": {
+        "CaCl2": 1,
+        "CO2": 1,
+        "H2O": 1
+      },
+      "condition": "aqueous_open_vessel",
+      "phenomenon": "Sủi bọt CO₂; mô hình không tính khí hòa tan hoặc áp suất.",
+      "hazard": "gas_pressure_if_closed",
+      "model": "stoichiometric_upper_bound",
+      "source": "https://openstax.org/books/chemistry-2e/pages/4-2-classifying-chemical-reactions",
+      "review": "atom balance automated; classroom validation still required",
+      "precipitate_colors": {}
+    },
+    {
+      "id": "R089",
+      "category": "Axit–cacbonat",
+      "equation": "MgCO3 + 2 HCl -> MgCl2 + CO2 + H2O",
+      "reactants": {
+        "MgCO3": 1,
+        "HCl": 2
+      },
+      "products": {
+        "MgCl2": 1,
+        "CO2": 1,
+        "H2O": 1
+      },
+      "condition": "aqueous_open_vessel",
+      "phenomenon": "Sủi bọt CO₂; mô hình không tính khí hòa tan hoặc áp suất.",
+      "hazard": "gas_pressure_if_closed",
+      "model": "stoichiometric_upper_bound",
+      "source": "https://openstax.org/books/chemistry-2e/pages/4-2-classifying-chemical-reactions",
+      "review": "atom balance automated; classroom validation still required",
+      "precipitate_colors": {}
+    },
+    {
+      "id": "R090",
+      "category": "Axit–cacbonat",
+      "equation": "NaHCO3 + HCl -> NaCl + CO2 + H2O",
+      "reactants": {
+        "NaHCO3": 1,
+        "HCl": 1
+      },
+      "products": {
+        "NaCl": 1,
+        "CO2": 1,
+        "H2O": 1
+      },
+      "condition": "aqueous_open_vessel",
+      "phenomenon": "Sủi bọt CO₂; mô hình không tính khí hòa tan hoặc áp suất.",
+      "hazard": "gas_pressure_if_closed",
+      "model": "stoichiometric_upper_bound",
+      "source": "https://openstax.org/books/chemistry-2e/pages/4-2-classifying-chemical-reactions",
+      "review": "atom balance automated; classroom validation still required",
+      "precipitate_colors": {}
+    },
+    {
+      "id": "R091",
+      "category": "Axit–cacbonat",
+      "equation": "KHCO3 + HCl -> KCl + CO2 + H2O",
+      "reactants": {
+        "KHCO3": 1,
+        "HCl": 1
+      },
+      "products": {
+        "KCl": 1,
+        "CO2": 1,
+        "H2O": 1
+      },
+      "condition": "aqueous_open_vessel",
+      "phenomenon": "Sủi bọt CO₂; mô hình không tính khí hòa tan hoặc áp suất.",
+      "hazard": "gas_pressure_if_closed",
+      "model": "stoichiometric_upper_bound",
+      "source": "https://openstax.org/books/chemistry-2e/pages/4-2-classifying-chemical-reactions",
+      "review": "atom balance automated; classroom validation still required",
+      "precipitate_colors": {}
+    },
+    {
+      "id": "R092",
+      "category": "Axit–cacbonat",
+      "equation": "Na2CO3 + 2 HNO3 -> 2 NaNO3 + CO2 + H2O",
+      "reactants": {
+        "Na2CO3": 1,
+        "HNO3": 2
+      },
+      "products": {
+        "NaNO3": 2,
+        "CO2": 1,
+        "H2O": 1
+      },
+      "condition": "aqueous_open_vessel",
+      "phenomenon": "Sủi bọt CO₂; mô hình không tính khí hòa tan hoặc áp suất.",
+      "hazard": "gas_pressure_if_closed",
+      "model": "stoichiometric_upper_bound",
+      "source": "https://openstax.org/books/chemistry-2e/pages/4-2-classifying-chemical-reactions",
+      "review": "atom balance automated; classroom validation still required",
+      "precipitate_colors": {}
+    },
+    {
+      "id": "R093",
+      "category": "Axit–cacbonat",
+      "equation": "CaCO3 + 2 HNO3 -> Ca(NO3)2 + CO2 + H2O",
+      "reactants": {
+        "CaCO3": 1,
+        "HNO3": 2
+      },
+      "products": {
+        "Ca(NO3)2": 1,
+        "CO2": 1,
+        "H2O": 1
+      },
+      "condition": "aqueous_open_vessel",
+      "phenomenon": "Sủi bọt CO₂; mô hình không tính khí hòa tan hoặc áp suất.",
+      "hazard": "gas_pressure_if_closed",
+      "model": "stoichiometric_upper_bound",
+      "source": "https://openstax.org/books/chemistry-2e/pages/4-2-classifying-chemical-reactions",
+      "review": "atom balance automated; classroom validation still required",
+      "precipitate_colors": {}
+    },
+    {
+      "id": "R094",
+      "category": "Axit–cacbonat",
+      "equation": "NaHCO3 + CH3COOH -> CH3COONa + CO2 + H2O",
+      "reactants": {
+        "NaHCO3": 1,
+        "CH3COOH": 1
+      },
+      "products": {
+        "CH3COONa": 1,
+        "CO2": 1,
+        "H2O": 1
+      },
+      "condition": "aqueous_open_vessel",
+      "phenomenon": "Sủi bọt CO₂; mô hình không tính khí hòa tan hoặc áp suất.",
+      "hazard": "gas_pressure_if_closed",
+      "model": "stoichiometric_upper_bound",
+      "source": "https://openstax.org/books/chemistry-2e/pages/4-2-classifying-chemical-reactions",
+      "review": "atom balance automated; classroom validation still required",
+      "precipitate_colors": {}
+    },
+    {
+      "id": "R095",
+      "category": "Axit–cacbonat",
+      "equation": "Na2CO3 + 2 CH3COOH -> 2 CH3COONa + CO2 + H2O",
+      "reactants": {
+        "Na2CO3": 1,
+        "CH3COOH": 2
+      },
+      "products": {
+        "CH3COONa": 2,
+        "CO2": 1,
+        "H2O": 1
+      },
+      "condition": "aqueous_open_vessel",
+      "phenomenon": "Sủi bọt CO₂; mô hình không tính khí hòa tan hoặc áp suất.",
+      "hazard": "gas_pressure_if_closed",
+      "model": "stoichiometric_upper_bound",
+      "source": "https://openstax.org/books/chemistry-2e/pages/4-2-classifying-chemical-reactions",
+      "review": "atom balance automated; classroom validation still required",
+      "precipitate_colors": {}
+    },
+    {
+      "id": "R096",
+      "category": "Oxit axit",
+      "equation": "CO2 + 2 NaOH -> Na2CO3 + H2O",
+      "reactants": {
+        "CO2": 1,
+        "NaOH": 2
+      },
+      "products": {
+        "Na2CO3": 1,
+        "H2O": 1
+      },
+      "condition": "aqueous_specified_reagent_ratio",
+      "phenomenon": "Sản phẩm phụ thuộc tỉ lệ CO₂/bazơ; nước vôi có thể đục rồi trong khi CO₂ dư.",
+      "hazard": "irritant",
+      "model": "stoichiometric_upper_bound",
+      "source": "https://openstax.org/books/chemistry-2e/pages/4-2-classifying-chemical-reactions",
+      "review": "atom balance automated; classroom validation still required",
+      "precipitate_colors": {}
+    },
+    {
+      "id": "R097",
+      "category": "Oxit axit",
+      "equation": "CO2 + 2 KOH -> K2CO3 + H2O",
+      "reactants": {
+        "CO2": 1,
+        "KOH": 2
+      },
+      "products": {
+        "K2CO3": 1,
+        "H2O": 1
+      },
+      "condition": "aqueous_specified_reagent_ratio",
+      "phenomenon": "Sản phẩm phụ thuộc tỉ lệ CO₂/bazơ; nước vôi có thể đục rồi trong khi CO₂ dư.",
+      "hazard": "irritant",
+      "model": "stoichiometric_upper_bound",
+      "source": "https://openstax.org/books/chemistry-2e/pages/4-2-classifying-chemical-reactions",
+      "review": "atom balance automated; classroom validation still required",
+      "precipitate_colors": {}
+    },
+    {
+      "id": "R098",
+      "category": "Oxit axit",
+      "equation": "CO2 + Ca(OH)2 -> CaCO3 + H2O",
+      "reactants": {
+        "CO2": 1,
+        "Ca(OH)2": 1
+      },
+      "products": {
+        "CaCO3": 1,
+        "H2O": 1
+      },
+      "condition": "aqueous_specified_reagent_ratio",
+      "phenomenon": "Sản phẩm phụ thuộc tỉ lệ CO₂/bazơ; nước vôi có thể đục rồi trong khi CO₂ dư.",
+      "hazard": "irritant",
+      "model": "stoichiometric_upper_bound",
+      "source": "https://openstax.org/books/chemistry-2e/pages/4-2-classifying-chemical-reactions",
+      "review": "atom balance automated; classroom validation still required",
+      "precipitate_colors": {}
+    },
+    {
+      "id": "R099",
+      "category": "Oxit axit",
+      "equation": "Na2CO3 + CO2 + H2O -> 2 NaHCO3",
+      "reactants": {
+        "Na2CO3": 1,
+        "CO2": 1,
+        "H2O": 1
+      },
+      "products": {
+        "NaHCO3": 2
+      },
+      "condition": "aqueous_specified_reagent_ratio",
+      "phenomenon": "Sản phẩm phụ thuộc tỉ lệ CO₂/bazơ; nước vôi có thể đục rồi trong khi CO₂ dư.",
+      "hazard": "irritant",
+      "model": "stoichiometric_upper_bound",
+      "source": "https://openstax.org/books/chemistry-2e/pages/4-2-classifying-chemical-reactions",
+      "review": "atom balance automated; classroom validation still required",
+      "precipitate_colors": {}
+    },
+    {
+      "id": "R100",
+      "category": "Oxit axit",
+      "equation": "CaCO3 + CO2 + H2O -> Ca(HCO3)2",
+      "reactants": {
+        "CaCO3": 1,
+        "CO2": 1,
+        "H2O": 1
+      },
+      "products": {
+        "Ca(HCO3)2": 1
+      },
+      "condition": "aqueous_specified_reagent_ratio",
+      "phenomenon": "Sản phẩm phụ thuộc tỉ lệ CO₂/bazơ; nước vôi có thể đục rồi trong khi CO₂ dư.",
+      "hazard": "irritant",
+      "model": "stoichiometric_upper_bound",
+      "source": "https://openstax.org/books/chemistry-2e/pages/4-2-classifying-chemical-reactions",
+      "review": "atom balance automated; classroom validation still required",
+      "precipitate_colors": {}
+    }
+  ]
+}

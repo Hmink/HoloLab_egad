@@ -1,0 +1,130 @@
+{
+  "schema": "hololab-benchmark-1",
+  "version": "HoloLab AR \u00b7 ChemLab V3.3",
+  "input_source": "Y4M 1280x720@30 still-photo loop; not physical gestures",
+  "physical_camera_tested": false,
+  "environment": "Chromium 134 headless / SwiftShader / WebCPU",
+  "backend": "CPU",
+  "camera": {
+    "requested": "HD",
+    "applied": "HD",
+    "auto": false,
+    "settings": {
+      "width": 1280,
+      "height": 720,
+      "frameRate": 30,
+      "aspectRatio": 1.7777777777777777,
+      "resizeMode": "none"
+    },
+    "video_width": 1280,
+    "video_height": 720,
+    "inference_width": 640,
+    "note": ""
+  },
+  "viewport": {
+    "width": 1366,
+    "height": 900
+  },
+  "render_surface": {
+    "width": 1022,
+    "height": 418
+  },
+  "dpr": 1,
+  "objects": 5,
+  "moving_body": "one programmatic target; four untouched dynamic bodies",
+  "duration_s": 60.003899999997024,
+  "complete": true,
+  "abort_reason": null,
+  "render_frames": 1859,
+  "render_fps": 30.98131954756428,
+  "render_interval_p95_ms": 183.29999999999563,
+  "render_cpu_mean_ms": 2.5591715975129006,
+  "physics_cpu_mean_ms": 1.1790747713135288,
+  "physics_cpu_p95_ms": 3.3000000044703484,
+  "tracking_samples": 180,
+  "tracking_hz": 2.999805012674325,
+  "detected_samples": 180,
+  "inference_mean_ms": 137.36222222190764,
+  "transport_mean_ms": null,
+  "sample_age_p95_ms": 378.7998046875,
+  "target_render_50": false,
+  "target_tracking_50": false,
+  "target_render_45": false,
+  "note": "Render FPS is not tracking Hz. Sample age is not end-to-end motion latency. No images saved.",
+  "untouched_bodies_60s": [
+    {
+      "id": 1,
+      "drift_scene": 0,
+      "sleeping": true
+    },
+    {
+      "id": 2,
+      "drift_scene": 0,
+      "sleeping": true
+    },
+    {
+      "id": 3,
+      "drift_scene": 0,
+      "sleeping": true
+    },
+    {
+      "id": 4,
+      "drift_scene": 0,
+      "sleeping": true
+    }
+  ],
+  "recovery_count": 0,
+  "camera_final": {
+    "requested": "HD",
+    "applied": "HD",
+    "auto": false,
+    "settings": {
+      "width": 1280,
+      "height": 720,
+      "frameRate": 30,
+      "aspectRatio": 1.7777777777777777,
+      "resizeMode": "none"
+    },
+    "video_width": 1280,
+    "video_height": 720,
+    "inference_width": 640,
+    "note": ""
+  },
+  "page_errors": [],
+  "source_sha256_manifest": {
+    "server.py": "fc2f42692d886a6d3fd9456c751c2e7225e6ea1fdc3ee0176d89fa496fef9f08",
+    "web/index.html": "acae89bc22ce9752e2dec2b21a7835663e3611825960009afa0a27ef002d81fa",
+    "web/profiles.json": "fcff402b55739628f27626ba1c02e041fa1aed40c36b2c92bf0b1f4f9f18d851",
+    "web/src/bench.js": "d85cb3065be72d89087ee1b7b5bdff1194566c49382c657033055da878d1e6d3",
+    "web/src/camera-quality.js": "07eafbc17ce982032c13d926838995f04d420d14c64e7ec5c0cb6ef7102165fd",
+    "web/src/capture.js": "b79fc515a947707aeed86ea4622ec655dd350b7cd5b2049a7360ce98ced7a6d4",
+    "web/src/coordinates.js": "ed6c6424203c0df3b66c93c63354c566643c913ffc883ff84fcf7dfb8e51cf53",
+    "web/src/environment.js": "430e9af0012d17470ef315b8b7ea178a48f4e436846358dab56d14612c9ddc4e",
+    "web/src/filters.js": "e0fc3c1c0c0858210939f556f2d82e6a888bf2bf166b9bb678cf890c4a95c3bf",
+    "web/src/hand-worker.js": "e519874b3ecfe934f1995d02c5f510f249c28008d58c28c7ac36dcc8ece22cf3",
+    "web/src/interaction.js": "10d2140abf302561b5517ccf0692bcceaadfcedf1707443f106884d7bd44caa2",
+    "web/src/main.js": "4c041ff4fdea5c3eee85f018e78866cadaef6fab31e6bde1e2c40c3255183de5",
+    "web/src/metrics.js": "cdc91a2897091e21d0b5118bef06a1d560720244d5bca26ebc7127b4b8001bfe",
+    "web/src/physics.js": "f673d679abedd08c2129799f156a40813aaf7236f4889fd24d2100f15d7496e0",
+    "web/src/reaction-engine.js": "496cf54e12b3340f439234e61298ae7f41734edbb8783dd2e834ba386d5e5dd1",
+    "web/src/reaction-ui.js": "1efa4f70631537e464fa781cf481786b0a2908c2e3857b6d2f3b492c877f843a",
+    "web/src/render3d.js": "3823d4a1d3daab9a9d3fbd5a6b9b645867ced49d2a19717a4a3a21b2b479e136",
+    "web/src/titration.js": "afe288356ee6607efb9b507bab1092e4cfc7d6671f801f796fdddb326aaff3bc",
+    "web/src/tracks.js": "1fa8e995ee2bb0c57e4c614707e7d43a9b256de1fc7f0c4e2c4c21d384c2c52c",
+    "web/src/vessel-details.js": "d50aa888c61acd5fc921614b3374bf2165f34d26c1bf0b99e77cc58425f52ddf",
+    "web/styles.css": "ca2766117354c2f3ea1f41eebabc963d948024c6fb1ec7d6d01d4b209d969b5b",
+    "web/vendor/fonts/be-vietnam-pro-latin-400-normal.woff2": "03d1b589cff172e1a670b3573e731d3380bc326f80cf83b0d3504e3188e2e074",
+    "web/vendor/fonts/be-vietnam-pro-latin-500-normal.woff2": "b621f77d35f777023aa11ca524462d511b4b28a813adbc0e9d15a10fc61dfe4e",
+    "web/vendor/fonts/be-vietnam-pro-latin-600-normal.woff2": "9503dec2a7c532c8331e9600bcafea287a4fd208573b8668d85ab8d8de1863c7",
+    "web/vendor/fonts/be-vietnam-pro-latin-700-normal.woff2": "a193dd87699bd2e18ddf72dc271493ea82a23dad9f5c334d9f2a257b1e05fc30",
+    "web/vendor/fonts/be-vietnam-pro-latin-ext-400-normal.woff2": "f7a2811e471c2973a1179ce39da3ad6bb8082381aa8d1535ccfcbc3d6d78a052",
+    "web/vendor/fonts/be-vietnam-pro-latin-ext-500-normal.woff2": "947d592eb7676914507ff68fc11fcf2cfdecd6ebaf0fa2af6047f66a63ea7d0f",
+    "web/vendor/fonts/be-vietnam-pro-latin-ext-600-normal.woff2": "20cc75daeaaaa0fa8af2b616b2de2b2900f0ce14ae8e9faa47d272cedd93827f",
+    "web/vendor/fonts/be-vietnam-pro-latin-ext-700-normal.woff2": "33d57e5bd840b03921568e08d2be1082d453e55f1ba55f421e41a1aa54e12601",
+    "web/vendor/fonts/be-vietnam-pro-vietnamese-400-normal.woff2": "dc085e2fba3414e5c5bf1e6172f921a9f81c5859946a4ed3d63c1e470d96a9e2",
+    "web/vendor/fonts/be-vietnam-pro-vietnamese-500-normal.woff2": "86341610cbe907eecf461c9159c168d5efb52bb1a33963813a08f520555d8e66",
+    "web/vendor/fonts/be-vietnam-pro-vietnamese-600-normal.woff2": "97658c6f9a384f29a3005c3d96e2a0d1c810192cf68979071c290f5a377a9f99",
+    "web/vendor/fonts/be-vietnam-pro-vietnamese-700-normal.woff2": "4f58af2d1c3e28a9ba14c51c82db2751d78344b75bdcb34de24a1031ebe59da6",
+    "web/vendor/rapier/rapier.mjs": "e0f7783dae9d3d175ec62c0cafdad84261d8c64c5f7da6ae5b24e858cf9ab759"
+  }
+}

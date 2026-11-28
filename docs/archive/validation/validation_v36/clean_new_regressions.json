@@ -1,0 +1,68 @@
+{
+  "environment": "Chromium headless SwiftShader; synthetic hand observations and fake camera",
+  "checks": [
+    {
+      "name": "25 pinch-release cycles with folded fingers, five real vessel meshes/angles: dynamic, falls, rests, regrabs",
+      "passed": true,
+      "cycles": 25,
+      "maxPenetrationScene": 0,
+      "maxFloorGapScene": 0.0031225383281707764
+    },
+    {
+      "name": "Brief loss retained; long loss, isolated reacquisition and camera stall release through production park",
+      "passed": true,
+      "briefGapMs": 238,
+      "watchdogMs": 700
+    },
+    {
+      "name": "Nine production settings controls preserve hold or defer component changes until release",
+      "passed": true,
+      "settings": 9
+    },
+    {
+      "name": "Backend restarts worker without replacing live video track; actual capture and input dimensions reported",
+      "passed": true,
+      "requested": "LOW",
+      "applied": "LOW",
+      "auto": true,
+      "settings": {
+        "width": 640,
+        "height": 480,
+        "frameRate": 20,
+        "aspectRatio": 1.3333333333333333,
+        "resizeMode": "none",
+        "focusMode": "manual"
+      },
+      "video_width": 640,
+      "video_height": 480,
+      "inference_width": 960,
+      "input_width": 640,
+      "input_height": 480,
+      "note": ""
+    },
+    {
+      "name": "Right-hand hints show verified chloride equation, white precipitate and safety sources",
+      "passed": true
+    },
+    {
+      "name": "Engine fire produces bounded sparks/flash/smoke, reset disposes them; Cu(OH)2 never gets fire",
+      "passed": true,
+      "sparks": 16,
+      "instanceBuffersDisposed": 2,
+      "precipitateMol": 0.0002
+    },
+    {
+      "name": "Stock panel stays to right without canvas overlap or page overflow at four viewport sizes",
+      "passed": true
+    },
+    {
+      "name": "No JavaScript/WebGL runtime errors",
+      "passed": true
+    }
+  ],
+  "errors": [],
+  "diagnostics": [
+    "INFO: Created TensorFlow Lite XNNPACK delegate for CPU.",
+    "INFO: Created TensorFlow Lite XNNPACK delegate for CPU."
+  ]
+}

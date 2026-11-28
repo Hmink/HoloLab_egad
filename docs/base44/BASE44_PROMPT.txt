@@ -1,0 +1,7 @@
+Tích hợp HoloLab đang có; không viết lại engine thí nghiệm.
+1. Dùng component HoloLabEmbed.jsx trong gói này, cấu hình labUrl là HTTPS origin đã host toàn bộ thư mục web/ ở gốc domain. Không dùng địa chỉ localhost cho người dùng từ xa.
+2. Tạo hai trang: Thực hành (showModel=false) và EGAD thử nghiệm (showModel=true).
+3. Đây là iframe integration, không phải nhập ZIP tự động. Đừng bỏ các vendor WASM, models, assets, data, ui. Host phải cho phép nhúng từ domain Base44. Webcam cần HTTPS và quyền camera; thử trên trang published.
+4. Chưa có tự động đồng bộ tài khoản/kết quả giữa iframe và Base44. Phiên EGAD xuất JSON thủ công. Không tuyên bố đã kết nối dữ liệu thao tác vào mô hình.
+5. Hiển thị mô hình chỉ thử nghiệm, huấn luyện trên 45 câu AI mô phỏng với nhãn trợ lý; chưa dùng chấm điểm. Không bỏ cảnh báo. Không đưa API secret vào client.
+6. Kiểm thử chọn bài, kéo, xoay/rót, thả, tải mô hình, phân loại, xuất JSON; không yêu cầu bật webcam để dùng chuột.

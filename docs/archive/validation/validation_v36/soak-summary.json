@@ -1,0 +1,24 @@
+{
+  "duration_s": 1807.579,
+  "completed_30min": true,
+  "render_fps_mean": 30.876880844184942,
+  "minute_fps_min": 12.878155308626102,
+  "minute_fps_max": 41.56625504828061,
+  "tracking_hz_mean": 3.322700249949379,
+  "geometries": [
+    70,
+    74
+  ],
+  "textures": [
+    7
+  ],
+  "programs": [
+    12
+  ],
+  "heap_MB_min": 10.93214,
+  "heap_MB_max": 22.2284,
+  "max_pen_scene": 0,
+  "recoveries": 0,
+  "last_sleeping": 5,
+  "errors": []
+}

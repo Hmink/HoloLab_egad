@@ -1,0 +1,57 @@
+{
+  "archive_crc": "passed",
+  "extracted_api_tests_without_site_packages": "5 passed",
+  "extracted_javascript_tests": "26 passed",
+  "extracted_browser_startup": "passed: catalog, API, local Three.js, 5 meshes, no JS page errors",
+  "physical_camera_test": false,
+  "render_repeat_checks": [
+    {
+      "frame": 0,
+      "blue_liquid_pixels": 1494
+    },
+    {
+      "frame": 1,
+      "blue_liquid_pixels": 1494
+    },
+    {
+      "frame": 2,
+      "blue_liquid_pixels": 1494
+    },
+    {
+      "frame": 3,
+      "blue_liquid_pixels": 1494
+    },
+    {
+      "frame": 4,
+      "blue_liquid_pixels": 1494
+    },
+    {
+      "frame": 5,
+      "blue_liquid_pixels": 1494
+    },
+    {
+      "frame": 6,
+      "blue_liquid_pixels": 1494
+    },
+    {
+      "frame": 7,
+      "blue_liquid_pixels": 1494
+    },
+    {
+      "frame": 8,
+      "blue_liquid_pixels": 1494
+    },
+    {
+      "frame": 9,
+      "blue_liquid_pixels": 1494
+    },
+    {
+      "frame": 10,
+      "blue_liquid_pixels": 1494
+    },
+    {
+      "frame": 11,
+      "blue_liquid_pixels": 1494
+    }
+  ]
+}

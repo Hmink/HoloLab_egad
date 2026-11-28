@@ -1,0 +1,170 @@
+[
+  {
+    "file": "CHANGELOG.md",
+    "action": "modified",
+    "before_sha256": "2e2c5e536848b7be5a4c343ffb6d8aa3fbb93d3482342e4dd78164f353ef5e38",
+    "after_sha256": "01dccb1ff3c0b44d74e3d5b04faaf5f2b363694e379467a4157de91c3be8a758"
+  },
+  {
+    "file": "README.md",
+    "action": "modified",
+    "before_sha256": "34f38f8d7ddb3fba388d05a29178ff75c4603a7124d380672b13eb70a24f1dca",
+    "after_sha256": "a315a1db6e6035daa2ce151a24b309784dda8706b635c2c2c079764a0d055c46"
+  },
+  {
+    "file": "START_WINDOWS.bat",
+    "action": "modified",
+    "before_sha256": "01b516f34d8e702870ba6458b37504c503f973b5d32b8f4b6727b84047f37cde",
+    "after_sha256": "2a7100e3c50d49d994ed219a151cfb3a78f9a256251a9ddd102b931414e5073a"
+  },
+  {
+    "file": "VALIDATION_V34.md",
+    "action": "added",
+    "before_sha256": null,
+    "after_sha256": "41e7885a1bb7b955afeb8eeae8837820e82314c383045f4cdf55ec39fe6b19c8"
+  },
+  {
+    "file": "docs/CURRICULUM_THPT.md",
+    "action": "added",
+    "before_sha256": null,
+    "after_sha256": "42b0d7aee176e9ed5c263452deaebe10ced17262b7bae2f4fce10035f673cf47"
+  },
+  {
+    "file": "docs/V34_IMPLEMENTATION.md",
+    "action": "added",
+    "before_sha256": null,
+    "after_sha256": "ad1d10af4267f106960262325a37c91f6ccb045b552adac942a766c52c2273a4"
+  },
+  {
+    "file": "package-lock.json",
+    "action": "modified",
+    "before_sha256": "f2b4b292bb0e700640d27646b99479c371b822f34b5aa3f5698ac84b4165ef94",
+    "after_sha256": "cca930e429ddb5590734b978306185d5d92dc36567639ff46546c5b4d99b0e3a"
+  },
+  {
+    "file": "package.json",
+    "action": "modified",
+    "before_sha256": "aee01e68b451e46ea2e64dd73d33f5422f7417b6601cba4e740f141da30a1245",
+    "after_sha256": "93ff3e02b8131b0390be22d5010001394952b2fd2bce2eeaf89f8a18abd46c87"
+  },
+  {
+    "file": "server.py",
+    "action": "modified",
+    "before_sha256": "fc2f42692d886a6d3fd9456c751c2e7225e6ea1fdc3ee0176d89fa496fef9f08",
+    "after_sha256": "e1c843ffa44c4c49fb1ea88fc6b0420b75ab450716953a28c8955624d0bc5ef5"
+  },
+  {
+    "file": "tests_js/lessons.test.mjs",
+    "action": "added",
+    "before_sha256": null,
+    "after_sha256": "6d1cd1c721b9fd9b815d36e47b72d00e8a04f6b02660413c049137cbb2e3afd5"
+  },
+  {
+    "file": "tests_js/physics_lesson.test.mjs",
+    "action": "added",
+    "before_sha256": null,
+    "after_sha256": "c153a126e6623d287017c863d450a15377ffb00add3943f047aa74df6f7e8809"
+  },
+  {
+    "file": "tools/benchmark_v34.mjs",
+    "action": "added",
+    "before_sha256": null,
+    "after_sha256": "d82bc68f54173f75e8e159dec18c33228d33a3b033ce3e565f30a8f25e645934"
+  },
+  {
+    "file": "tools/package_project.py",
+    "action": "modified",
+    "before_sha256": "8cdc934dc5af7b0c3cabbe036511fd9e0ab3ee9552e47aaecaaa3ec16633f0b8",
+    "after_sha256": "f9176145234ac38938475c31f5b85066cf749e22f60e6b366897bf4590269f84"
+  },
+  {
+    "file": "tools/physics_acceptance_v34.mjs",
+    "action": "added",
+    "before_sha256": null,
+    "after_sha256": "fd4225ef989f921bd1800d6fe8ac96c29cea7b499b35f76799009a07744d575f"
+  },
+  {
+    "file": "tools/qa_core_v34.mjs",
+    "action": "added",
+    "before_sha256": null,
+    "after_sha256": "0ec1872e104e44d6625c58f718dd7fa5595fa21d6fd6b323fa624de2e190ac89"
+  },
+  {
+    "file": "tools/qa_lessons_v34.mjs",
+    "action": "added",
+    "before_sha256": null,
+    "after_sha256": "ee3b0c95f2806d842eff67dba0d4a53be45ff0f513c0ba0356ea19c8705b9f9f"
+  },
+  {
+    "file": "tools/qa_regression_v34.mjs",
+    "action": "added",
+    "before_sha256": null,
+    "after_sha256": "b9da04c20b80181fa0ff483ece28a3e76d97ed57594330e2114276ad1218e40f"
+  },
+  {
+    "file": "web/data/lessons-thpt.json",
+    "action": "added",
+    "before_sha256": null,
+    "after_sha256": "38e792d745c06cf94117ed76f9dedd7c648fea2e71da5e7a630ebaa4b3848ce6"
+  },
+  {
+    "file": "web/index.html",
+    "action": "modified",
+    "before_sha256": "acae89bc22ce9752e2dec2b21a7835663e3611825960009afa0a27ef002d81fa",
+    "after_sha256": "957d1e946df5b10f82f08feefc223bf010a839a997e48e53cd026c47d05c8533"
+  },
+  {
+    "file": "web/src/lesson-chemistry.js",
+    "action": "added",
+    "before_sha256": null,
+    "after_sha256": "577bb5d5d7acd6ccfab12890d19897a17f4156e99d1bc76c3496f3867661d781"
+  },
+  {
+    "file": "web/src/lesson-geometry.js",
+    "action": "added",
+    "before_sha256": null,
+    "after_sha256": "bd6cee1102878f2056976be12b582382f010bfa7397c54c0213ff638f5f508ce"
+  },
+  {
+    "file": "web/src/lesson-visuals.js",
+    "action": "added",
+    "before_sha256": null,
+    "after_sha256": "87a2ae3479b6fefb738d9127fac5b974de73cb75509f13b6980603c928656750"
+  },
+  {
+    "file": "web/src/lessons.js",
+    "action": "added",
+    "before_sha256": null,
+    "after_sha256": "eeca0d27e373edbfd8294e319da435f367067f2616b717985bb87aefdc8c7fb0"
+  },
+  {
+    "file": "web/src/main.js",
+    "action": "modified",
+    "before_sha256": "4c041ff4fdea5c3eee85f018e78866cadaef6fab31e6bde1e2c40c3255183de5",
+    "after_sha256": "911aeb62cfefe04d68572d03cc1c781301233ae585e9fc49872629905a43f7fb"
+  },
+  {
+    "file": "web/src/physics.js",
+    "action": "modified",
+    "before_sha256": "f673d679abedd08c2129799f156a40813aaf7236f4889fd24d2100f15d7496e0",
+    "after_sha256": "2fbc2fa661cbee1c8e8e33329bf027008e6533860411c31b09e1d9dae89e7654"
+  },
+  {
+    "file": "web/src/render3d.js",
+    "action": "modified",
+    "before_sha256": "3823d4a1d3daab9a9d3fbd5a6b9b645867ced49d2a19717a4a3a21b2b479e136",
+    "after_sha256": "f8ba6d5faaa268775f405b890db9a5505cb290c94c434bc8c7dfede9249413fe"
+  },
+  {
+    "file": "web/styles.css",
+    "action": "modified",
+    "before_sha256": "ca2766117354c2f3ea1f41eebabc963d948024c6fb1ec7d6d01d4b209d969b5b",
+    "after_sha256": "f363aa7280d0c9863319e54c9c067ee4f61c3da46bf815458a93f0597ea4dd8b"
+  },
+  {
+    "file": "web/vendor/wasm/.vision_wasm_nosimd_internal.wasm.9kjOU9",
+    "action": "added",
+    "before_sha256": null,
+    "after_sha256": "bb44e898dd2af75418b27a86df28931b1df57a8a6956558949b8274e8ed4ab45"
+  }
+]

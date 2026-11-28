@@ -1,0 +1,82 @@
+[
+  {
+    "path": "chemlab/scene.py",
+    "unchanged": true
+  },
+  {
+    "path": "chemlab/gestures.py",
+    "unchanged": true
+  },
+  {
+    "path": "chemlab/safety.py",
+    "unchanged": true
+  },
+  {
+    "path": "chemlab/__init__.py",
+    "unchanged": true
+  },
+  {
+    "path": "chemlab/render.py",
+    "unchanged": true
+  },
+  {
+    "path": "chemlab/tracking.py",
+    "unchanged": true
+  },
+  {
+    "path": "chemlab/config.py",
+    "unchanged": true
+  },
+  {
+    "path": "chemlab/selection.py",
+    "unchanged": true
+  },
+  {
+    "path": "chemlab/chemistry.py",
+    "unchanged": true
+  },
+  {
+    "path": "lab3d/ui.py",
+    "unchanged": true
+  },
+  {
+    "path": "lab3d/catalog.py",
+    "unchanged": true
+  },
+  {
+    "path": "lab3d/scene.py",
+    "unchanged": true
+  },
+  {
+    "path": "lab3d/hand_input.py",
+    "unchanged": true
+  },
+  {
+    "path": "lab3d/__init__.py",
+    "unchanged": true
+  },
+  {
+    "path": "lab3d/gl_renderer.py",
+    "unchanged": true
+  },
+  {
+    "path": "lab3d/camera.py",
+    "unchanged": true
+  },
+  {
+    "path": "lab3d/mixture.py",
+    "unchanged": true
+  },
+  {
+    "path": "lab3d/geometry.py",
+    "unchanged": true
+  },
+  {
+    "path": "data/hazards.json",
+    "unchanged": true
+  },
+  {
+    "path": "data/chemistry.json",
+    "unchanged": true
+  }
+]

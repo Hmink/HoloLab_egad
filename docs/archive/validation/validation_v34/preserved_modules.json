@@ -1,0 +1,167 @@
+[
+  {
+    "file": "web/src/interaction.js",
+    "sha256": "10d2140abf302561b5517ccf0692bcceaadfcedf1707443f106884d7bd44caa2",
+    "unchanged_from": "V3.3"
+  },
+  {
+    "file": "web/src/tracks.js",
+    "sha256": "1fa8e995ee2bb0c57e4c614707e7d43a9b256de1fc7f0c4e2c4c21d384c2c52c",
+    "unchanged_from": "V3.3"
+  },
+  {
+    "file": "web/src/filters.js",
+    "sha256": "e0fc3c1c0c0858210939f556f2d82e6a888bf2bf166b9bb678cf890c4a95c3bf",
+    "unchanged_from": "V3.3"
+  },
+  {
+    "file": "web/src/capture.js",
+    "sha256": "b79fc515a947707aeed86ea4622ec655dd350b7cd5b2049a7360ce98ced7a6d4",
+    "unchanged_from": "V3.3"
+  },
+  {
+    "file": "web/src/hand-worker.js",
+    "sha256": "e519874b3ecfe934f1995d02c5f510f249c28008d58c28c7ac36dcc8ece22cf3",
+    "unchanged_from": "V3.3"
+  },
+  {
+    "file": "web/src/camera-quality.js",
+    "sha256": "07eafbc17ce982032c13d926838995f04d420d14c64e7ec5c0cb6ef7102165fd",
+    "unchanged_from": "V3.3"
+  },
+  {
+    "file": "web/src/coordinates.js",
+    "sha256": "ed6c6424203c0df3b66c93c63354c566643c913ffc883ff84fcf7dfb8e51cf53",
+    "unchanged_from": "V3.3"
+  },
+  {
+    "file": "web/src/bench.js",
+    "sha256": "d85cb3065be72d89087ee1b7b5bdff1194566c49382c657033055da878d1e6d3",
+    "unchanged_from": "V3.3"
+  },
+  {
+    "file": "web/src/titration.js",
+    "sha256": "afe288356ee6607efb9b507bab1092e4cfc7d6671f801f796fdddb326aaff3bc",
+    "unchanged_from": "V3.3"
+  },
+  {
+    "file": "web/src/reaction-engine.js",
+    "sha256": "496cf54e12b3340f439234e61298ae7f41734edbb8783dd2e834ba386d5e5dd1",
+    "unchanged_from": "V3.3"
+  },
+  {
+    "file": "web/src/reaction-ui.js",
+    "sha256": "1efa4f70631537e464fa781cf481786b0a2908c2e3857b6d2f3b492c877f843a",
+    "unchanged_from": "V3.3"
+  },
+  {
+    "file": "web/profiles.json",
+    "sha256": "fcff402b55739628f27626ba1c02e041fa1aed40c36b2c92bf0b1f4f9f18d851",
+    "unchanged_from": "V3.3"
+  },
+  {
+    "file": "chemlab/scene.py",
+    "sha256": "2b4efcb56faf255382f6873ddf7e08d11f121299031d180dbe48cddb485ef760",
+    "unchanged_from": "V3.3"
+  },
+  {
+    "file": "chemlab/gestures.py",
+    "sha256": "9c5119da71aca9d02a798e881b1d2489ed0445fc42e11199ec7704283ef91159",
+    "unchanged_from": "V3.3"
+  },
+  {
+    "file": "chemlab/safety.py",
+    "sha256": "cd3da58553cfa6736684fded79898832018480beb8b06600fad11040dfde20ee",
+    "unchanged_from": "V3.3"
+  },
+  {
+    "file": "chemlab/__init__.py",
+    "sha256": "b2f942b37db04ed29472dce2e6284f4d805f7387134788831ff991dad84d999b",
+    "unchanged_from": "V3.3"
+  },
+  {
+    "file": "chemlab/render.py",
+    "sha256": "ff063ab7d37157160cd16e4d87bf2c9f6ac32a4f1dc07c906f9f1baebaeb40d2",
+    "unchanged_from": "V3.3"
+  },
+  {
+    "file": "chemlab/tracking.py",
+    "sha256": "9ba308db61d2255e272906206b604a862bbe336c5ea462e0eb28b273e7278ad4",
+    "unchanged_from": "V3.3"
+  },
+  {
+    "file": "chemlab/config.py",
+    "sha256": "ee7a2ae2c093cf30840247c5ec7b4ab795758686900a919edff0d11bff32e4c6",
+    "unchanged_from": "V3.3"
+  },
+  {
+    "file": "chemlab/selection.py",
+    "sha256": "737d56d1ceb6c9f6114da9af1a231dd0d78826e754a19e45fdb33899ddc81b85",
+    "unchanged_from": "V3.3"
+  },
+  {
+    "file": "chemlab/chemistry.py",
+    "sha256": "aff580441bec6b3c6612b0bf8a69ba9f988646f7a53e934c81d7e3db4066ddde",
+    "unchanged_from": "V3.3"
+  },
+  {
+    "file": "lab3d/ui.py",
+    "sha256": "954c62fe531803c11a276696319ad942ba91b1553de82693afe9a9e5f07bef0c",
+    "unchanged_from": "V3.3"
+  },
+  {
+    "file": "lab3d/catalog.py",
+    "sha256": "c42fac2757ed2680862b9c68d1c500e6b601f4dba6caf922f92d784d95ed0f40",
+    "unchanged_from": "V3.3"
+  },
+  {
+    "file": "lab3d/scene.py",
+    "sha256": "7f4820512346df7f3c357fc35e49c75df2944c50242739a35e0f9ea9e3b754f5",
+    "unchanged_from": "V3.3"
+  },
+  {
+    "file": "lab3d/hand_input.py",
+    "sha256": "dc4cf55399678d68d8df3b4a7825bb5cddda215e84c1a307bbf910f46165164c",
+    "unchanged_from": "V3.3"
+  },
+  {
+    "file": "lab3d/__init__.py",
+    "sha256": "884630f71a78f7953e5b8f9a45e3cd59866800b0b9d0b2642e6e387b65cd310e",
+    "unchanged_from": "V3.3"
+  },
+  {
+    "file": "lab3d/gl_renderer.py",
+    "sha256": "35c7ec41229e91b54021f85250cf1f03866fb79c9cb88b20d8867813c912e09d",
+    "unchanged_from": "V3.3"
+  },
+  {
+    "file": "lab3d/camera.py",
+    "sha256": "41d435b8ed07db89c2918b934bef2d3f366b49c5adeddd8a2021a490247e7b39",
+    "unchanged_from": "V3.3"
+  },
+  {
+    "file": "lab3d/mixture.py",
+    "sha256": "dcfd524f7818c66ba3688be028564d287b36059d0002a39899b1ae78be20ed94",
+    "unchanged_from": "V3.3"
+  },
+  {
+    "file": "lab3d/geometry.py",
+    "sha256": "be66de87889930e0edbae560681f9b209a40e46722b927b3185c4cb24cb4f1bf",
+    "unchanged_from": "V3.3"
+  },
+  {
+    "file": "data/hazards.json",
+    "sha256": "faf4d17301da151ad1c2af9a87bdf7dfb5c13ca942113b76dec6039556c6a4ac",
+    "unchanged_from": "V3.3"
+  },
+  {
+    "file": "data/chemistry.json",
+    "sha256": "de4a36bd457d09888e9070c2b819b4cae6f575a15958b847516e28b3ea4ee2d4",
+    "unchanged_from": "V3.3"
+  },
+  {
+    "file": "web/data/reactions100.json",
+    "sha256": "002bdbe84324ba7ddbc9833e886cfcf84c168baf44917194d6191a9c5184ee52",
+    "unchanged_from": "V3.3"
+  }
+]

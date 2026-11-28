@@ -1,0 +1,4802 @@
+--- a/CHANGELOG.md
++++ b/CHANGELOG.md
+@@ -1,3 +1,15 @@
++# V3.4 — 27/10/2026
++
++- Kiểm tra chỗ trống trước khi sinh body; không để collider mới chồng vật đang có, không di chuyển vật đang cầm. Giữ thông số giới hạn vận tốc/va chạm V3.3.
++- Thư viện THPT 5 bài, chọn lớp → chủ đề → bài → bắt đầu, tự dọn/nạp đúng hóa chất và lượng ban đầu.
++- Engine bài học độc lập: lượng chất hữu hạn, chất giới hạn, pH, kết tủa AgCl, khí NH3/quỳ ẩm, Cu bám Fe, màu biuret định tính. Không phản ứng chỉ vì va chạm.
++- Màn chiếu 3D 4 trang, hướng dẫn, nguồn chương trình và 4 câu hỏi có gợi ý mỗi bài.
++- Collider cốc rỗng cho bài nhúng Fe, kiểm tra nắp trước khi đóng, lưu/mở phiên bài học gồm lượng chất và pose.
++- Không thay CV, pinch/FSM, hai tay, One Euro, camera, chuẩn độ hoặc hóa học cũ. Không thêm dependency.
++- Kiểm chứng và giới hạn: VALIDATION_V34.md. Chưa nghiệm thu webcam thực hoặc 50 FPS trên máy người dùng.
++
++---
++
+ # V3.3 — 27/10/2026
+ 
+ - Giới hạn tốc độ tịnh tiến/góc của body đang gắp; giảm tốc và dùng shape cast/contact khi gần vật khác.
+--- a/README.md
++++ b/README.md
+@@ -1,61 +1,60 @@
+-# HoloLab AR — ChemLab V3.3
++# HoloLab AR — ChemLab V3.4
+ 
+-Bản vá tăng độ ổn định vật lý và hoàn thiện hiển thị trên nền V3.2. Giữ MediaPipe, cử chỉ, bộ lọc One Euro, điều khiển hai tay, hóa học và chuẩn độ hiện có. Engine vẫn là Rapier 0.17.3; không thêm engine hay thư viện render nặng.
++Nâng cấp từ V3.3: bổ sung 5 bài Hóa học THPT có thể thao tác trong 3D, màn chiếu kiến thức, lượng chất, hiện tượng và 4 câu hỏi mỗi bài. Sửa khởi tạo collider chồng nhau; giữ các giới hạn vận tốc, trọng lực, va chạm, điều khiển hai tay và camera đang có.
+ 
+ ## Chạy trên Windows
+ 
+-1. Giải nén toàn bộ ZIP vào một thư mục mới, chẳng hạn `D:\HoloLab_AR_V3_3`.
+-2. Nhấp đúp **START_WINDOWS.bat**, hoặc mở PowerShell trong thư mục có **server.py** và chạy:
++1. Giải nén **toàn bộ** ZIP vào thư mục mới, ví dụ `D:\HoloLab_AR_V3_4`. File `server.py` và `START_WINDOWS.bat` nằm ngay ở gốc ZIP.
++2. Nhấp đúp **START_WINDOWS.bat**, hoặc mở PowerShell ngay tại thư mục chứa `server.py`:
+ 
+    ```powershell
+    py -3.13 server.py
+    ```
+ 
+-3. Mở **http://127.0.0.1:8765** trong Chrome/Edge và cho phép camera.
+-4. Giữ cửa sổ server mở; Ctrl+C để dừng. Không mở trực tiếp `index.html`, không chạy `app.py` (bản desktop cũ).
++3. Mở **http://127.0.0.1:8765** bằng Chrome/Edge. Giữ cửa sổ server mở. Bấm **Bật camera** và cấp quyền nếu muốn dùng tay; có thể dùng chuột trước.
++4. Dừng server cũ và nhấn **Ctrl+F5** nếu vẫn thấy V3.3/V3.2. Tiêu đề tab bản này ghi **V3.4**.
+ 
+-Linux/macOS: `python3 server.py`. Cần Python ≥3.10 và trình duyệt hỗ trợ WebGL2/WebAssembly. Gói chứa thư viện/model cần cho bản web cơ bản; không cần npm hoặc pip để chạy đường Web. Python interpreter/trình duyệt do máy người dùng cung cấp.
++Linux/macOS: `python3 server.py`. Cần Python ≥3.10, trình duyệt hỗ trợ WebGL2/WebAssembly. Thư viện JavaScript, Rapier, font và mô hình MediaPipe cho đường Web được đóng gói sẵn; không cần npm/pip để chạy bản web cơ bản. Backend Python native là tùy chọn cũ. Có thể ép đường Web bằng `py -3.13 server.py --browser-tracking`.
+ 
+-Nếu máy vẫn mở V3.2: dừng server cũ, chạy đúng thư mục mới, nhấn Ctrl+F5. Kiểm tra tiêu đề trang ghi **V3.3**. ZIP có `server.py` ngay ở gốc, không lồng thêm một thư mục dự án.
++Nếu báo không tìm thấy `server.py`: chạy `Get-ChildItem -Recurse -Filter server.py`, rồi `cd` vào **thư mục chứa file**, không `cd server.py`. Không mở `index.html` trực tiếp, không chạy `app.py` của bản desktop cũ.
+ 
+-## Những thay đổi chính
++## Chọn và thực hành bài học
+ 
+-- Giới hạn tốc độ vật đang gắp; làm mượt vận tốc thả bằng thời gian frame thực, giảm mức ném tối đa và loại bỏ quán tính sau mất tracking/frame bị treo.
+-- Shape cast và kiểm tra tiếp xúc Rapier hạn chế việc vật kinematic đi sâu vào bình khác. Va chạm vẫn được bật, vẫn có thể đẩy nhẹ và làm nghiêng.
+-- Ma sát tăng vừa phải, đàn hồi giảm, damping tăng; ngủ khi chuyển động đủ nhỏ. Không dán vật vào bàn.
+-- Bốn thành chắn vô hình và trần giới hạn vùng tương tác trong góc camera thao tác mặc định. Kiểm tra theo toàn bộ collider đã xoay, không chỉ tâm vật. Có phục hồi khi lỗi số học/thoát vùng; không đưa vật đang gắp về giữa bàn.
+-- Be Vietnam Pro đóng gói sẵn, chữ lớn hơn, màu trung tính; thông số kỹ thuật nằm trong bảng thu gọn. Nhãn chi tiết tập trung vào dụng cụ đang chọn.
+-- Thủy tinh PBR, miệng rót beaker, vạch chia/nhãn chai, giá ống nghiệm và chi tiết thiết bị; bóng tiếp xúc nhẹ không cần shadow map. Hình học sinh từ code, không tải mô hình GLB từ bên ngoài.
++Ở cột trái: **Khối lớp → Chủ đề → Thí nghiệm → Bắt đầu thực hành**. Bàn cũ được dọn và nạp đúng bộ hóa chất của bài. Trong bài, chọn thẻ hóa chất sẽ lấy lại vật đang có, không sinh thêm chai vô hạn.
+ 
+-Mô hình, thông số và kết quả kiểm thử: **VALIDATION_V33.md**, **docs/V33_STABILITY.md**. Các thư mục `validation_v32`, `validation_v31`, `validation` và tài liệu V3.2/V3.1 là lịch sử, không phải kết quả bản mới.
++| Lớp | Bài | Thao tác chính |
++|---|---|---|
++| 10 | Nhận biết chloride | Rót AgNO₃ vào mẫu NaCl đã acid hóa; so sánh với nước đối chứng. |
++| 11 | Màu chỉ thị acid–base | Rót NaOH vào nước có phenolphthalein, sau đó HCl để mất màu. |
++| 11 | Nhận biết ammonium | Thêm NaOH; giữ quỳ đỏ ẩm phía trên miệng bình, không nhúng vào dung dịch. |
++| 12 | Fe + CuSO₄ | Đưa thanh sắt qua miệng cốc, hạ vào lớp chất lỏng; nhấc ra để dừng. |
++| 12 | Màu biuret của protein | Thêm thuốc thử biuret pha sẵn vào protein, so sánh nước đối chứng. |
+ 
+-## Camera và đo hiệu năng
++Chụm cái–trỏ để gắp, giữ để kéo, mở để thả. Hai tay vẫn hoạt động. Mất tracking ngắn giữ vật; timeout cũ thả không có vận tốc ném. Chuột: kéo vật, con lăn đổi chiều sâu. Khi giữ vật, phím **A/D** chỉnh góc nghiêng, **W** dựng thẳng, **J/L** xoay. Mục **Hướng dẫn** có cử chỉ đầy đủ.
+ 
+-- Mặc định HD 1280×720. Có Low 640×480, Full HD 1920×1080 nếu thiết bị hỗ trợ, và tự giảm khi tải cao.
+-- Dòng Camera cho biết độ phân giải stream thực tế. Ảnh CV mặc định rộng tối đa **640 px**, giữ tỷ lệ; không ép model chạy Full HD chỉ vì webcam đang Full HD.
+-- **Thông số kỹ thuật và hiệu chỉnh → Đo 60 giây → Xuất kết quả** công bố riêng FPS render, tracking Hz, thời gian inference, độ tuổi mẫu và CPU vật lý.
+-- FPS render không phải tracking Hz; độ tuổi mẫu không phải độ trễ tay–vật đầu-cuối. Không cam kết 50 FPS trên mọi thiết bị.
+-- Để bắt đầu trên máy yếu: HD, ảnh CV 640 px, chất lượng tự động. Lau kính, chiếu sáng phía trước, tránh ngược sáng; phần mềm không khắc phục hoàn toàn mất nét quang học.
++**Để rót:** nâng chai lên trước, đưa miệng chai trên miệng bình nhận rồi nghiêng ít nhất 45°. Giữ khoảng 0,3 giây; mỗi lần chuyển 2 mL, lặp khi vẫn giữ đúng tư thế. Rót xong dựng chai thẳng, đặt về chỗ trống rồi thả. Nếu thả cả chai ngay phía trên mẫu, chai sẽ rơi và có thể làm đổ mẫu như một vật có va chạm.
+ 
+-## Thao tác và các chức năng giữ lại
++**Màn chiếu** có các trang Thực hành, Chuẩn bị, Giải thích và Ứng dụng. Có thể mở **Hướng dẫn thao tác & kiến thức hóa học** để đọc toàn bộ nội dung chữ lớn. Phương trình trước thao tác là dự đoán; quan sát chỉ cập nhật khi có phản ứng.
+ 
+-Chụm cái–trỏ để gắp, giữ để kéo, mở để thả. Hai tay có thể giữ riêng hoặc phối hợp. Mất tracking ngắn giữ trạng thái; timeout cũ 1,8 giây ngừng giữ và thả không có vận tốc ném. Chuột: kéo dụng cụ từ kho hoặc gắp lại trên bàn; con lăn đổi độ sâu. **Hướng dẫn** liệt kê cử chỉ/phím tắt.
++**Củng cố kiến thức** mở khi đã quan sát hiện tượng chính; trả lời sai nhận gợi ý để thử lại. **Làm lại bài** nạp lượng chất ban đầu. **Lưu phiên / Mở JSON** hỗ trợ cả bài học và bàn tự do. **Về bàn tự do** giữ các chức năng cũ, bao gồm trạm chuẩn độ và thư viện 100 phương trình; thư viện đó không đồng nghĩa 100 bài 3D đã triển khai.
+ 
+-**Chuẩn độ** hoặc **Buret 50 mL** mở trạm cố định. Chụm tại nhãn van rồi xoay cổ tay, hoặc dùng thanh van và nút +0,05 mL. Trạm giữ mô hình pH lý tưởng 25 °C; không bổ sung chức năng rót tự do từ kho vào buret.
++## Nội dung khoa học và giới hạn
+ 
+-**100 phản ứng** là thư viện tính tỉ lượng theo phương trình và điều kiện, chưa phải 100 thí nghiệm rót 3D tự do. Hiệu ứng nguy hiểm là hoạt họa định tính. Lưu/Mở JSON và các mẫu thí nghiệm hiện có vẫn hoạt động.
++Đối chiếu lớp/chủ đề, nguồn và điều chỉnh so với đề xuất: [docs/CURRICULUM_THPT.md](docs/CURRICULUM_THPT.md).
+ 
+-## Tự kiểm tra sau khi cài
++- Fe–CuSO₄ đặt ở lớp 12; không nhân đôi bài ở lớp 10 để tăng số lượng.
++- NH₄⁺ được nhận biết qua NH₃ và quỳ ẩm, **không tạo kết tủa giả**. NH₃ không màu; bọt là ký hiệu trực quan. Không mô phỏng quy trình gia nhiệt, thông khí hay phát thải thật.
++- Biuret dùng thuốc thử pha sẵn có chất ổn định trong kiềm. Phức protein có màu tím được mô tả định tính; không bịa công thức phân tử hay tỉ lượng chung cho protein.
++- Lượng chất và chuyển mẫu được theo dõi hữu hạn. pH dùng dung dịch lý tưởng 25 °C. Màu, tốc độ lớp phủ, thoát khí và lắng là minh họa giáo dục; không thay thế đo lường/động học thực. Chất lỏng chưa có mô phỏng dòng chảy, tràn và mặt thoáng đầy đủ.
++- Chỉ cốc của bài nhúng sắt có collider rỗng; các bình khác vẫn dùng proxy va chạm hiện có. Không mô phỏng thủy tinh vỡ.
+ 
+-1. Nâng bình rồi thả; thả sát bàn; gắp lại.
+-2. Di chuyển nhanh rồi thả; bình vẫn có quán tính nhẹ nhưng nằm trong vùng bàn.
+-3. Dùng một bình chạm nhẹ bình khác; bình kia có thể nhích/nghiêng, không bị bắn xa.
+-4. Thử kéo về bốn mép và xuống mặt bàn.
+-5. Lặp gắp–thả ≥20 lần mỗi tay; để yên 60 giây.
+-6. Thử mất tracking ngắn và hai tay chéo nhau; đối chiếu kết quả với V3.2 trên cùng máy.
+-7. Đo 60 giây khi camera, MediaPipe, Three.js và vật lý cùng chạy, xuất JSON để báo lỗi.
++## Kiểm chứng và báo lỗi
+ 
+-Báo lỗi kèm cấu hình, trình duyệt, camera thực tế/CV px, chế độ chất lượng, thao tác tái hiện và file đo. Chưa dùng số đo từ máy khác để khẳng định máy của mình đạt FPS mục tiêu.
++Kết quả đã chạy nằm trong **VALIDATION_V34.md** và **validation_v34/**. Nhật ký V3.3 trở về trước là lịch sử. Phân tích nguyên nhân, file sửa, thông số giữ lại và kiến trúc mới: **docs/V34_IMPLEMENTATION.md**.
++
++Camera giữ mặc định HD; dòng Camera báo kích thước stream thực. Ảnh CV mặc định rộng tối đa 640 px, giữ tỷ lệ. Không tăng độ phân giải CV chỉ vì webcam là Full HD.
++
++Để nghiệm thu trên máy của bạn: chạy 30 lần gắp–thả, 20 lần ném nhẹ, 30 lần chạm bình khác; thử bốn mép, mất tracking ngắn và để yên 60 giây. Sau đó **Thông số kỹ thuật và hiệu chỉnh → Đo 60 giây → Xuất kết quả** khi đồng thời bật camera, MediaPipe và bài học. Gửi JSON cùng cấu hình, trình duyệt và thao tác tái hiện. FPS render, tracking Hz và độ tuổi mẫu là các đại lượng khác nhau. Chưa xác nhận 50 FPS hay độ trễ tay–vật thực trên máy người dùng.
+ 
+ ## Kiểm thử cho người phát triển
+ 
+@@ -63,14 +62,7 @@
+ node --test tests_js/*.test.mjs
+ ```
+ 
+-Python Linux/macOS: `PYTHONPATH=python_vendor python3 -m unittest discover -s tests`.
++Python: `PYTHONPATH=python_vendor python3 -m unittest discover -s tests`.
+ PowerShell: `$env:PYTHONPATH="python_vendor"; py -3.13 -m unittest discover -s tests`.
+ 
+-Kiểm thử trình duyệt cần Playwright (phụ thuộc chỉ dùng phát triển, không đóng node_modules): `tools/qa_v33.mjs`, `tools/qa_regression_physics_v33.mjs`. Xem hướng dẫn chi tiết trong `docs/V33_STABILITY.md` và log trong `validation_v33/`.
+-
+-## Giới hạn cần biết
+-
+-- Collider convex là vỏ bao va chạm đặc, chưa phải mô phỏng lòng bình rỗng để lồng dụng cụ/đổ hạt rắn; chất lỏng vẫn là mô hình giáo dục hiện có.
+-- Vùng chắn được xác định theo góc thao tác mặc định. Chế độ Orbit là chế độ quan sát, không bảo đảm giữ mọi vật trong khung nếu người dùng tự xoay/zoom camera.
+-- Giá ống nghiệm/thiết bị trang trí là môi trường tĩnh, chưa có thao tác chèn ống hay chức năng khuấy mới. Máy đo pH tương tác nằm ở trạm chuẩn độ hiện có.
+-- Có giới hạn tốc độ khi di chuyển rất nhanh hoặc khi chạm vật khác; cảm giác cầm ở những tình huống này cần thử trên thiết bị thật.
++Các script trong `tools/` không cần để chạy ứng dụng. `qa_lessons_v34.mjs` kiểm tra bài học, `qa_core_v34.mjs` kiểm tra camera/CV/physics, `qa_regression_v34.mjs` kiểm tra tính năng cũ. Cần Playwright khi chạy những script phát triển này. Có thể chỉ định module qua `PLAYWRIGHT_PACKAGE`; `CAMERA_FIXTURE` là video Y4M đầu vào giả lập, không phải webcam thật. `physics_acceptance_v34.mjs` chạy các chuỗi vật lý lặp. `benchmark_v34.mjs` đo 60 giây, với `BENCH_PROJECT`, `BENCH_OUTPUT`, `CAMERA_FIXTURE` và tùy chọn `BENCH_LESSON=iron-copper`.
+--- a/START_WINDOWS.bat
++++ b/START_WINDOWS.bat
+@@ -1,7 +1,7 @@
+ @echo off
+ setlocal
+ cd /d "%~dp0"
+-title HoloLab AR V3.3
++title HoloLab AR V3.4
+ if exist .venv\Scripts\python.exe (
+   .venv\Scripts\python.exe server.py
+   goto done
+--- /dev/null
++++ b/VALIDATION_V34.md
+@@ -0,0 +1,78 @@
++# Kiểm chứng HoloLab AR V3.4 — 27/10/2026
++
++Đã kiểm thử mã nguồn và trình duyệt tự động. **Chưa thử webcam vật lý, chưa nghiệm thu 50 FPS hoặc độ trễ đầu-cuối trên máy i5/RTX của người dùng.** “Đạt” bên dưới chỉ áp dụng đúng tình huống, dữ liệu và môi trường ghi trong log.
++
++## Kết quả tự động
++
++| Nhóm | Kết quả | Bằng chứng |
++|---|---|---|
++| Unit/integration JavaScript | 78/78 | `validation_v34/unit_tests.tap` |
++| Python hóa học và chức năng cũ | 90/90 | `validation_v34/python_tests.txt` |
++| Physics P0 mở rộng | 7/7 nhóm | `validation_v34/physics.json` |
++| Bài học trong trình duyệt | 15/15 | `validation_v34/lessons_browser.json` |
++| CV/camera/physics/chuẩn độ trong trình duyệt | 12/12 | `validation_v34/browser_checks.json` |
++| Hồi quy phiên làm việc/an toàn/thư viện cũ | 5/5 | `validation_v34/regression_checks.json` |
++
++JS gồm 63 kiểm thử trước đây và 15 kiểm thử mới (13 engine/nội dung, 2 collider bài học). Unit kiểm tra phương trình bảo toàn nguyên tố, chất giới hạn, moles/thể tích qua 100 lần chuyển mẫu, mẫu đối chứng, điều kiện sai, pH, dừng phản ứng khi nhấc Fe và lượng NH₃ hữu hạn. Đây là tính nhất quán của mô hình đã định nghĩa, không phải xác thực thực nghiệm mọi màu sắc/động học.
++
++Kiểm thử browser sử dụng mô hình Three.js/Rapier thật và gọi các đường điều khiển của ứng dụng. Bộ bài học thử selector bằng UI, rót theo miệng/độ nghiêng, nhúng Fe, quỳ ở vùng khí, hoàn thành câu hỏi và gợi ý, đổi bài, khôi phục lượng chất và pose Fe trong lòng cốc. Có kiểm tra **vòng animation sản phẩm tự rót sau dwell**, không gọi thẳng engine cho tình huống đó. Phần tay dùng chuỗi landmarks tổng hợp; riêng MediaPipe inference chạy thật với video lặp từ một ảnh tĩnh. Không xem đây là 15 người dùng gắp thành công hoặc nhận diện tay thật khi chuyển động.
++
++## Vật lý P0
++
++| Tình huống | Kết quả quan sát trong log |
++|---|---|
++| 30 lần nâng/thả, varied FPS, gắp lại, release lặp | Không nhảy khi gắp lại; không xuyên bàn hoặc vượt biên. |
++| 20 lần ném nhẹ | Vận tốc thả lớn nhất 0,230816 m/s; vẫn có quán tính; không vượt vùng hợp lệ. |
++| 30 lần chạm nhẹ hai bình | Vận tốc lớn nhất bình bị chạm 0,080100 m/s; bình dịch chuyển khoảng 0,0534 m trong tình huống tổng hợp; không phóng khỏi bàn. |
++| Bốn mép và trần, cả held/dynamic | Không vượt giới hạn collider trong chuỗi thử. |
++| 6 bình đứng yên 60 giây mô phỏng | Độ dời đo được 0; cả 6 sleeping. |
++| Mất tracking/freeze rồi hồi phục, frame stall | Giữ vị trí; không truyền vận tốc ném cũ. |
++| Spawn cùng chỗ khi một vật đang cầm | Độ xuyên ban đầu 0; vị trí vật đang cầm không đổi. |
++
++Các nhóm trên có `recoveryCount=0`, nghĩa là không cần teleport để che các lỗi thường gặp trong thử nghiệm. Ngoài ra có test riêng cố ý tạo lỗi ra ngoài biên để xác nhận recovery hoạt động; không gộp nó vào số 0 trên.
++
++Test browser với mesh sản phẩm thêm 20 lần thả: min gap đáy 0,003122 scene unit (~0,312 mm), không xuyên bàn; bài chuyển động nhanh có max throw ~0,400 m/s, tiếp xúc peak ~0,1455 m/s, không ra khỏi khung camera thao tác. Unit cốc rỗng thêm 30 drop/regrab, không xuyên, không cần recovery. Test nắp kiểm tra thanh sắt chắn miệng dù chưa ngập chất lỏng.
++
++**Đối chiếu chính xác:** V3.3 cùng script P0 đạt 6/7, V3.4 đạt 7/7. V3.3 spawn chồng có initial penetration 0,102250732 m, V3.4 bằng 0. Những bài thả/va chạm/biên còn lại đều đã đạt trên V3.3. Không lấy cải thiện một trường hợp này để nói mọi chuyển động của V3.4 đã mượt hơn hoặc tất cả lỗi trong video đã được tái hiện.
++
++## Benchmark 60 giây
++
++Cùng host, chạy nối tiếp, Chromium 134 headless, **SwiftShader (GPU phần mềm) + MediaPipe CPU**. Video giả lập 1280×720@30 lặp ảnh tĩnh; ảnh infer 640×360. Viewport 1366×900, canvas 1022×418, DPR1, auto camera quality tắt để so cùng tải. Một mục tiêu cầm được điều khiển bằng code; các vật còn lại không tác động. Không ghi nhận camera vật lý.
++
++| Cảnh | Thời gian s | Render FPS | Tracking Hz | CPU physics trung bình ms/frame | Độ tuổi mẫu p95 ms |
++|---|---:|---:|---:|---:|---:|
++| V3.3 — 5 vật, bàn tự do | 60.00 | 27.40 | 2.58 | 1.32 | 461.1 |
++| V3.4 — cùng 5 vật | 60.08 | 30.06 | 2.83 | 1.21 | 410.8 |
++| V3.4 — bài Fe, 2 vật + màn chiếu | 60.08 | 28.33 | 2.58 | 0.34 | 486.9 |
++
++Nguồn: `benchmark_before.json`, `benchmark_after.json`, `benchmark_lesson.json` trong `validation_v34/`. Không xuất hiện lỗi JS. Các bình không tác động giữ độ dời 0 và sleeping trong 60 giây thật của cả ba lượt. Lượt bài Fe có một cốc rỗng đứng yên và một thanh sắt di chuyển bên cạnh, kèm màn chiếu; đây **không phải** đo tiếp xúc liên tục hay phản ứng cả 60 giây. Bộ thử thao tác riêng đã kiểm tra nhúng/rút/hiện tượng.
++
++Render FPS khác tracking Hz. Độ tuổi mẫu không phải motion-to-photon latency. Thời gian CPU physics không bao gồm toàn bộ GPU render/MediaPipe. Lượt bài học khác số vật, nên không dùng để kết luận nhanh/chậm hơn bàn tự do. Mỗi cấu hình mới đo một lượt; khác biệt trước/sau có thể chịu nhiễu môi trường, chưa có kiểm định thống kê. **Mục tiêu 50 FPS chưa đạt trong môi trường đo này.** Không suy rộng số đo cho i5-5200U, HD5500 hoặc máy RTX.
++
++## Camera và giữ nguyên CV
++
++- Fixture HD: `getSettings` và video intrinsic đều 1280×720@30; Worker báo input 640×360. `object-fit:contain`, mirror giữ đúng.
++- Low được cấp 640×480; Full HD không có trong fixture nên ứng dụng fallback HD và thông báo. Chưa xác nhận webcam thật hỗ trợ 1920×1080.
++- MediaPipe thật phát hiện 2 tay trên ảnh tĩnh. Hai tay tổng hợp đi qua FSM, giữ khi mất tracking ngắn, handoff/release đúng. Không đo tỷ lệ gắp 9/10 của người thật.
++- Các tệp capture, worker, tọa độ, quality, filter, tracking, interaction được so hash giữ nguyên V3.3; xem `preserved_modules.json`.
++
++## Chạy lại và kiểm tra trên máy thật
++
++README có lệnh cài/chạy. Để lặp kiểm thử Node:
++
++```bash
++node --test --test-reporter=tap tests_js/*.test.mjs
++node tools/physics_acceptance_v34.mjs . validation_v34/physics_local.json
++```
++
++Browser QA cần Playwright dành cho phát triển, không cần khi dùng app. Đặt `PLAYWRIGHT_PACKAGE` tới module `playwright/index.mjs`, `CAMERA_FIXTURE` tới video Y4M nếu chạy core/benchmark. Sau đó `node tools/qa_lessons_v34.mjs`, `node tools/qa_core_v34.mjs`, `node tools/qa_regression_v34.mjs`. Các script mặc định dùng python3 trên Linux; benchmark hỗ trợ biến `PYTHON` để chọn Python. `BENCH_PROJECT`, `BENCH_OUTPUT` và tùy chọn `BENCH_LESSON=iron-copper` chọn cảnh/đích của `tools/benchmark_v34.mjs`.
++
++Trên máy người dùng, thử từng tay và hai tay, 30 thả, 20 ném nhẹ, 30 chạm, bốn mép, mất tracking ngắn, đứng yên 60 giây. Thử rót và nhúng trong 5 bài; xuất JSON qua **Thông số kỹ thuật và hiệu chỉnh → Đo 60 giây → Xuất kết quả**. Ghi CPU/GPU/RAM, trình duyệt, chất lượng camera thực, độ phân giải CV, thao tác và số lần lỗi. Chỉ sau dữ liệu này mới nghiệm thu FPS/độ trễ/cảm giác gắp thực.
++
++## Hạn chế còn lại
++
++Chưa thử phần cứng/webcam Windows của người dùng, camera thiếu sáng/lấy nét, chuyển động nhanh, che khuất lâu hoặc tải nền. Giới hạn vùng theo camera thao tác tiêu chuẩn; Orbit là chế độ xem riêng, không cam kết mọi vật nằm trong khung khi người dùng tự xoay nhìn ra nơi khác. Nhãn/liquid là hiển thị giáo dục; chưa có vỡ kính/tràn/CFD/động học/hoạt độ chính xác. Chỉ cốc bài Fe có lòng rỗng, các proxy dụng cụ cũ giữ nguyên. Nội dung biuret định tính, phép NH₄⁺ dùng mẫu chuẩn, chloride chưa bao trùm mọi halide. Chưa nghiên cứu thực nghiệm hiệu quả học tập.
++
++## Gói bàn giao
++
++`SOURCE_SHA256.json` ghi hash nguồn runtime; `changed_files.json` và `patches/V33_to_V34.patch` đối chiếu V3.3; `package_check.json` ghi kiểm tra ZIP/giải nén/chạy server. Ảnh kiểm thử, video người dùng, fixture và node_modules không đóng gói. Các báo cáo `validation_v33/` và cũ hơn là lịch sử, không phải số đo V3.4.
+--- /dev/null
++++ b/docs/CURRICULUM_THPT.md
+@@ -0,0 +1,32 @@
++# Đối chiếu nội dung Hóa học THPT — V3.4
++
++Phạm vi thư viện mới: Hóa học lớp 10–12, 5 bài. Ngày rà soát nguồn: 27/10/2026. Bảng dưới dùng số trang in của Chương trình môn Hóa học ban hành kèm TT 32/2018; không suy diễn số tiết hay bài sách giáo khoa khi chưa biết bộ sách trường dùng.
++
++| Bài triển khai | Lớp, mục chương trình | Căn cứ và phạm vi đáp ứng |
++|---|---|---|
++| NaCl + AgNO₃ | 10, Hydrogen halide và muối halide, tr.16 | Trường hợp chloride trong yêu cầu phân biệt halide với AgNO₃; chưa thay thế toàn bộ bài phân biệt F⁻/Cl⁻/Br⁻/I⁻. |
++| Phenolphthalein, acid–base | 11, Cân bằng trong dung dịch nước, tr.21 | Sử dụng chỉ thị liên hệ pH và môi trường; chỉ xét acid/base mạnh loãng. |
++| NH₄Cl + NaOH, quỳ ẩm | 11, Ammonia và muối ammonium, tr.22 | Nhận biết NH₄⁺ qua chuyển hóa trong kiềm. Mẫu NH₄Cl là mẫu chuẩn; chưa mô phỏng chuẩn bị/phân tích hỗn hợp phân bón có chất gây nhiễu. |
++| Fe + CuSO₄ | 12, Tính chất hóa học của kim loại, tr.39 | Một thí nghiệm kim loại tác dụng dung dịch muối. |
++| Màu biuret của protein | 12, Peptide và protein, tr.36 | Liên hệ phản ứng màu với liên kết peptide. Dùng albumin và thuốc thử biuret ổn định, không tuyên bố mô phỏng tất cả tính chất protein. |
++
++Các yêu cầu này đã được đối chiếu với [Chương trình môn Hóa học của Bộ GD&ĐT, bản đăng tại trường An Đồng](https://thcsandong.haiphong.edu.vn/van-ban-nganh/chuong-trinh-giao-duc-pho-thong-mon-hoa-hoc-ban-hanh-kem-theo-thong-tu-so-32201/ctmb/20405/91190). File PDF có 56 trang; trang in tương ứng PDF index 15, 20, 21, 38 và 35.
++
++Học liệu đang sử dụng được tham khảo thêm: [THPT Tôn Thất Tùng, Hóa 11, 2025–2026](https://thpttonthattung-danang.edu.vn/wp-content/uploads/2025/12/Huong-dan-on-tap-KTCK1-Hoa-11-25-26.pdf), phần cân bằng dung dịch và muối ammonium; [THPT Lê Quý Đôn, Hóa 12, 2025–2026](https://thpt-lequydon-hcm.edu.vn/ckeditor/plugins/fileman/Uploads/Documents/HD%20CHUYEN%20MON/2025-2026/HOA_NOI%20DUNG%20ON%20TAP%20KT%20HK12526.pdf), phần peptide/protein. Đây là đối chiếu nội dung, không phải giấy chứng nhận của Bộ hoặc kết quả thẩm định sư phạm.
++
++## Điều chỉnh có chủ đích
++
++1. Không tạo thêm bản sao Fe–CuSO₄ ở lớp 10. Trong đợt này chọn mục thực hành kim loại ở lớp 12, giữ thư viện 5 bài khác nhau.
++2. Thay đề xuất “kết tủa nhận biết ammonium” bằng NH₃ làm quỳ đỏ ẩm hóa xanh. Mẫu dùng NH₄Cl và NaOH không tạo kết tủa. Không dùng thuốc thử chứa thủy ngân.
++3. Phản ứng biuret là tạo phức màu. Protein là nhóm phân tử, nên hiển thị **sơ đồ**, không tự đặt một phương trình phân tử cân bằng giả. Thuốc thử pha sẵn có tartrate hạn chế kết tủa Cu(OH)₂; mô hình theo dõi Cu tổng và khối lượng protein, không dự báo hằng số tạo phức.
++4. Câu hỏi được biên soạn riêng, mỗi bài 4 câu; có gợi ý khi sai. Nội dung an toàn gắn với chính hóa chất đang dùng.
++
++## Nguồn kiểm tra hóa học
++
++- [RSC — Testing salts for anions and cations](https://edu.rsc.org/experiments/testing-salts-for-anions-and-cations/464.article): phép thử chloride và ammonium.
++- [RSC — Microscale reactions of positive ions with sodium hydroxide](https://edu.rsc.org/experiments/microscale-reactions-of-positive-ions-with-sodium-hydroxide/757.article): quỳ đỏ ẩm phía trên mẫu ammonium. Nhận diện qua khí, tránh chạm giấy vào base lỏng.
++- [University of Wisconsin–Madison — Indicator selection](https://www2.chem.wisc.edu/deptfiles/genchem/lab/labdocs/modules/titrate/titrqind.htm): khoảng phenolphthalein xấp xỉ 8,3–10. Cách quy ước 8,2–10 trong mô hình được nêu như khoảng chuyển màu xấp xỉ, không là phép đo tuyệt đối.
++- [Purdue University — Displacement reactions](https://chemed.chem.purdue.edu/genchem/demosheets/9.11.html): Fe/CuSO₄ và lớp Cu trên Fe.
++- [Rice University — Biuret protein assay](https://www.ruf.rice.edu/~bioslabs/methods/protein/biuret.html): phức tím trong kiềm, vai trò thuốc thử ổn định và yêu cầu đường chuẩn khi định lượng.
++
++Bản phân phối không sao chép SGK hoặc toàn văn học liệu. Chưa có đánh giá thực nghiệm với học sinh, chưa đo hiệu quả học tập hay khẳng định sản phẩm là mới đầu tiên trên thế giới. Những đánh giá đó cần thiết kế nghiên cứu và dữ liệu riêng.
+--- /dev/null
++++ b/docs/V34_IMPLEMENTATION.md
+@@ -0,0 +1,67 @@
++# V3.4 — Phạm vi sửa và kiến trúc bài học
++
++Bản này phát triển trên nguồn V3.3 đã bàn giao, không viết lại ứng dụng. Video người dùng gửi hiển thị tiêu đề V3.2; vì vậy không dùng video đó làm bằng chứng rằng V3.3/V3.4 đã lỗi hoặc đã đạt. Các nguyên nhân V3.2 và bản sửa trước nằm trong `V33_STABILITY.md`; dưới đây phân biệt rõ phần giữ lại và phần mới được kiểm chứng.
++
++## Nguyên nhân và thay đổi vật lý
++
++| Phát hiện | Bằng chứng trong mã / kiểm thử | Xử lý |
++|---|---|---|
++| Hai dụng cụ mới có thể sinh chồng nhau | V3.3 `web/src/physics.js:249` chỉ `constrain` với bàn/biên trước `setTranslation`, không kiểm tra dụng cụ khác. Cùng bài thử spawn: độ xuyên collider ban đầu 0,102250732 m. | V3.4 `physics.js:271`, `initialPosition`: broadphase AABB rồi Rapier `contactShape`; thử chỗ trống gần vị trí yêu cầu, cập nhật query từ body thực. Không di chuyển vật đang cầm hoặc đã có trên bàn. Hết chỗ thì hủy body mới và báo lý do. |
++| Một convex hull kín không biểu diễn lòng cốc | `geometry` cũ dựng hull từ các đỉnh thành bình, hull lấp luôn miệng; thanh sắt không thể thực sự nhúng vào dung dịch. Đây là giới hạn khi thêm bài mới. | `physics.js:172` và `lesson-geometry.js`: riêng cốc CuSO₄ dùng 16 phần thành + đáy, có va chạm và cùng scale/pivot. Các bình khác giữ collider cũ. |
++| Thêm nắp khi thanh sắt còn ngang miệng tạo collider chồng lấn | Đổi `sealed` làm tạo thêm collider nắp; kiểm tra “đang phản ứng” thôi sẽ bỏ sót thanh sắt ở trên lớp chất lỏng. | `physics.js:353`, `canSeal`, cùng handler K trong `main.js`: query hình nắp dự kiến trước khi đóng. Báo nhấc thanh sắt ra; không tắt va chạm. Có unit test trường hợp thanh chưa ngập dung dịch. |
++
++Bài so sánh V3.3 đạt 6/7 nhóm P0, V3.4 đạt 7/7. Lỗi mới được chứng minh là **khởi tạo chồng collider**; phép thử không quan sát V3.3 bay khỏi biên, nên không suy diễn rằng lỗi này chắc chắn gây mọi hiện tượng trong video. Dữ liệu gốc: `validation_v34/physics_before_v33.json` và `physics.json`.
++
++Các cơ chế đã sửa ở V3.3 được giữ: vận tốc thả lấy từ dịch chuyển body thực / thời gian frame thực, EMA tau 40 ms; không lấy quãng đường tracking mất dấu chia dt nhỏ; freeze và frame >150 ms xóa quán tính. Release idempotent, chuyển kinematic→dynamic đúng một lần, không cộng impulse nhiều lần. Body động điều khiển mesh. Kinematic dùng `setNextKinematicTranslation/Rotation`, giới hạn tốc độ và shape cast để tránh xuyên vào bình khác. Khi gần vật khác vẫn được chạm/đẩy nhẹ; không vô hiệu collision.
++
++### Thông số giữ nguyên từ V3.3
++
++| Tham số | Giá trị |
++|---|---:|
++| Đơn vị | 1 scene unit = 0,1 m; Rapier dùng SI |
++| Gravity / fixed timestep | −9,81 m/s² / 1/120 s |
++| Catch-up / CCD | tối đa 12 substep; 4 CCD substep |
++| Tốc độ cầm / gần va chạm | ≤0,75 / ≤0,14 m/s |
++| Vận tốc thả | EMA 40 ms × 0,55; cap 0,40 m/s |
++| Cap ngang dynamic bất thường / góc | 0,65 m/s / 8 rad/s |
++| Friction bàn / dụng cụ | 0,82 / 0,75 |
++| Restitution / thành biên | 0,02 / 0 |
++| Linear / angular damping | 1,1 / 2,4 |
++| Ổn định liên tục trước sleeping bổ sung | 0,65 s |
++
++Không tăng friction hoặc thêm thư viện để che lỗi. Bốn thành biên, trần, full-collider support với bàn và recovery cũ còn nguyên. Vùng x phụ thuộc camera thao tác; resize khi cầm được hoãn, không đẩy vật đang cầm về giữa. Rapier 0.17.3, Three.js 0.180.0, MediaPipe Tasks Vision 0.10.32 giữ phiên bản đóng gói cũ.
++
++## Các module của thư viện THPT
++
++| Tệp | Trách nhiệm |
++|---|---|
++| `web/data/lessons-thpt.json` | 5 bài, nguồn/chương trình, stock và lượng ban đầu, điều kiện, 4 câu/bài có gợi ý, quy tắc tỉ lượng máy đọc được. Chỉ lớp 10–12, Hóa học. |
++| `web/src/lesson-chemistry.js` | Engine thuần dữ liệu, độc lập DOM/Three/MediaPipe. Mol, mL, khối lượng, pH lý tưởng, tỉ lượng chất giới hạn, tín hiệu quan sát, bảo toàn khi rót, kiểm tra snapshot. Không nhận callback va chạm để tự phản ứng. |
++| `web/src/lessons.js` | Điều phối chọn lớp/chủ đề/bài, nạp/dọn bàn, rót qua miệng bình, cập nhật lượng chất, inspector/nhãn, câu hỏi, lưu/mở bài. |
++| `web/src/lesson-visuals.js` | Màn chiếu 3D bốn trang, thanh Fe và lớp Cu, quỳ ẩm, AgCl, kiểm tra vị trí trong chất lỏng hoặc vùng khí. |
++| `web/src/lesson-geometry.js` | Collider cốc rỗng riêng cho bài nhúng sắt. |
++| `web/src/main.js` | Adapter vào create/pour/tick/session hiện hữu; chặn hóa chất ngoài bài, giữ các lối vào bàn tự do và chuẩn độ. |
++| `web/src/render3d.js` | Thêm hai loại dụng cụ bài học vào cùng đường dựng mesh/body; dọn mesh khi spawn thất bại. |
++| `web/index.html`, `web/styles.css` | Bộ chọn, bảng hướng dẫn thu gọn, trang màn chiếu, câu hỏi, nhãn rõ. Giữ font local, camera gương và bố cục chính. |
++
++Luồng thao tác: MediaPipe/cử chỉ cũ → mục tiêu vật lý cũ → vị trí mesh/body thực → kiểm tra miệng rót/độ ngập/vùng khí → chuyển lượng chất và phản ứng → hiện tượng, màn chiếu, câu hỏi. Va chạm hai vỏ chai không thỏa điều kiện hóa học.
++
++### Chuẩn bị bàn và phiên làm việc
++
++`Lessons.start` kiểm tra model và pose nhập trước khi dọn bàn. Thoát Orbit/chuẩn độ nếu đang dùng; dọn owner, mesh và body cũ rồi chỉ tạo vật thuộc bài. Khi chọn lại thẻ kho trong bài, lấy chính vật hiện có, không sinh hóa chất vô hạn. Snapshot có lượng chất, pose và trạng thái nắp; đã thử lưu/mở khi Fe ở trong cốc mà không bị dịch ra ngoài vì AABB coi lòng cốc là đặc. Bản đồ nhãn vẫn giữ danh tính và công thức ban đầu; số mol/thể tích hiện tại ở inspector. Nồng độ trên nhãn được ghi rõ **ban đầu**.
++
++### Điều kiện và mô hình của năm bài
++
++- **Chloride:** mẫu NaCl acid hóa HNO₃ + AgNO₃, Ag⁺ + Cl⁻ → AgCl trắng. Rót đúng hình học, bình mở và còn chỗ. Nước đối chứng không kết tủa. Lượng kết tủa theo chất giới hạn; 18 hạt hiển thị là ký hiệu, không phải từng phân tử.
++- **Chỉ thị:** NaOH làm mẫu có phenolphthalein hồng; HCl trung hòa làm mất màu. Phải quan sát hồng rồi mất màu mới hoàn thành. pH xét tự ion hóa của nước; màu chuyển khoảng 8,2–10, không thay đổi ngẫu nhiên.
++- **Ammonium:** NH₄⁺ + OH⁻ → NH₃ + H₂O. Lượng NH₃ hữu hạn, thoát ở bình mở; quỳ đỏ ẩm phải ở phía trên đúng miệng bình khi đang có khí. Không nhúng quỳ vào base rồi gọi đó là phép nhận biết khí, không tạo kết tủa sai.
++- **Fe–CuSO₄:** chỉ khi thanh Fe ngập chất lỏng đúng mẫu, chưa bị nắp chặn, còn Fe/Cu²⁺. Lượng Cu bám và Fe²⁺ tăng 1:1, Cu²⁺ giảm; nhấc ra dừng. Tốc độ phản ứng đã gia tốc để học, không phải mô hình động học thực.
++- **Biuret:** protein + thuốc thử Cu(II) pha sẵn trong kiềm có tartrate → phức tím định tính; nước đối chứng không tím. Không tự tạo phương trình phân tử giả cho mọi protein. Cu tổng, protein và thể tích được bảo toàn khi chuyển mẫu, không suy ra định lượng protein nếu chưa có đường chuẩn.
++
++Giới hạn: chất lỏng chưa có CFD/tràn/mặt thoáng động đầy đủ; khi rót đang giả định phần kết tủa ở lại; không mô phỏng vỡ thủy tinh; chưa mô phỏng thủy phân Fe/Cu, hoạt độ, động học nhiệt hoặc khí thải thực. Mô hình chỉ chạy các quy tắc của bài chọn; không suy đoán tùy ý cho mọi hỗn hợp. Lớp phủ kim loại là hiển thị, không thay đổi hình dạng thanh hay collider theo hao hụt khối lượng.
++
++## Những phần giữ nguyên
++
++So sánh SHA256 với V3.3 nằm ở `validation_v34/preserved_modules.json`: CV worker/capture, tọa độ gương, HandTrack ID, One Euro, pinch/FSM/quyền hai tay, chất lượng webcam, chuẩn độ, engine 100 phương trình và backend Python cũ. `server.py` chỉ đổi số phiên bản; bản vá không thay giao thức camera hay thuật toán cử chỉ. Tệp thay đổi đầy đủ ở `validation_v34/changed_files.json`, diff ở `patches/V33_to_V34.patch`.
++
++Màn chiếu dùng một CanvasTexture, chỉ vẽ lại khi nội dung thay đổi; nhãn DOM chỉ ghi khi giá trị/biến đổi khác. Chemistry update khoảng 80 ms, physics vẫn fixed timestep riêng. Không tăng độ phân giải CV hay bật shader nặng. Đọc `VALIDATION_V34.md` để phân biệt kiểm thử tự động, benchmark môi trường phần mềm và các tiêu chí cần đo trên máy thật.
+--- a/package-lock.json
++++ b/package-lock.json
+@@ -1,12 +1,12 @@
+ {
+   "name": "hololab-ar-v3",
+-  "version": "3.3.0",
++  "version": "3.4.0",
+   "lockfileVersion": 3,
+   "requires": true,
+   "packages": {
+     "": {
+       "name": "hololab-ar-v3",
+-      "version": "3.3.0",
++      "version": "3.4.0",
+       "dependencies": {
+         "@dimforge/rapier3d-compat": "0.17.3",
+         "@mediapipe/tasks-vision": "0.10.32",
+--- a/package.json
++++ b/package.json
+@@ -1,6 +1,6 @@
+ {
+   "name": "hololab-ar-v3",
+-  "version": "3.3.0",
++  "version": "3.4.0",
+   "private": true,
+   "type": "module",
+   "scripts": {
+--- a/server.py
++++ b/server.py
+@@ -200,7 +200,7 @@
+         if self.path == "/api/catalog":
+             self.json(
+                 {
+-                    "version": "3.3.0",
++                    "version": "3.4.0",
+                     "native_tracking": bool(NATIVE.available),
+                     "stocks": [
+                         {**asdict(x), "mixture": mix_payload(Mixture.stock(x))}
+@@ -212,7 +212,7 @@
+             )
+             return
+         if self.path == "/api/health":
+-            self.json({"ok": True, "version": "3.3.0"})
++            self.json({"ok": True, "version": "3.4.0"})
+             return
+         if self.path.startswith("/api/experiment/"):
+             name = self.path.rsplit("/", 1)[-1]
+@@ -287,7 +287,7 @@
+         ("127.0.0.1", args.port), partial(Handler, directory=str(ROOT / "web"))
+     )
+     url = f"http://127.0.0.1:{server.server_port}"
+-    print(f"HoloLab AR V3.3: {url}\nGiu cua so nay mo. Ctrl+C de dung.", flush=True)
++    print(f"HoloLab AR V3.4: {url}\nGiu cua so nay mo. Ctrl+C de dung.", flush=True)
+     if not args.no_browser:
+         threading.Timer(0.5, lambda: webbrowser.open(url)).start()
+     try:
+--- /dev/null
++++ b/tests_js/lessons.test.mjs
+@@ -0,0 +1,202 @@
++import test from "node:test";
++import assert from "node:assert/strict";
++import fs from "node:fs";
++import {
++  LessonChemistry,
++  appearance,
++  ph,
++} from "../web/src/lesson-chemistry.js";
++const data = JSON.parse(
++  fs.readFileSync(new URL("../web/data/lessons-thpt.json", import.meta.url)),
++);
++const pour = { kind: "pour", aligned: true, sealed: false };
++const model = (id) => new LessonChemistry(data, id);
++const almost = (a, b, tol = 1e-10) =>
++  assert.ok(Math.abs(a - b) < tol, `${a} != ${b}`);
++test("First exemplar: chloride precipitates stoichiometrically only after valid pour", () => {
++  const m = model("chloride");
++  assert.equal(m.complete, false);
++  const initial = structuredClone(m.snapshot());
++  assert.equal(
++    m.transfer("lesson-silver", "lesson-chloride", 2, {
++      kind: "collision",
++      aligned: true,
++    }).ok,
++    false,
++  );
++  assert.deepEqual(m.snapshot(), initial);
++  m.transfer("lesson-silver", "lesson-chloride", 2, pour);
++  almost(m.get("lesson-chloride").mol.AgCl, 0.0001);
++  assert.equal(m.complete, true);
++  assert.equal(appearance(m.get("lesson-chloride")).solid.species, "AgCl");
++});
++test("Chloride negative water control; reagent limitation and transfer volume conservation", () => {
++  const m = model("chloride");
++  m.transfer("lesson-silver", "lesson-control", 2, pour);
++  assert.equal(m.get("lesson-control").mol.AgCl, undefined);
++  m.transfer("lesson-silver", "lesson-chloride", 30, pour);
++  almost(m.get("lesson-chloride").volume_ml, 20);
++  almost(m.get("lesson-silver").volume_ml, 16);
++  almost(m.get("lesson-chloride").mol.AgCl, 0.0006);
++  m.transfer("lesson-chloride", "lesson-control", 3, pour);
++  almost(m.get("lesson-chloride").mol.AgCl, 0.0006);
++});
++test("Second exemplar: indicator turns pink, then colorless only after acid; pH has water equilibrium", () => {
++  const m = model("indicator");
++  almost(ph(m.get("lesson-indicator")), 7);
++  m.transfer("lesson-base", "lesson-indicator", 2, pour);
++  assert.ok(ph(m.get("lesson-indicator")) > 11);
++  assert.equal(m.seenPink, true);
++  assert.equal(m.complete, false);
++  m.transfer("lesson-acid", "lesson-indicator", 2, pour);
++  almost(ph(m.get("lesson-indicator")), 7, 1e-7);
++  assert.equal(m.complete, true);
++  almost(m.get("lesson-indicator").mol.H2O, 0.0002);
++});
++test("Acid-first indicator does not mark lesson complete without observing pink", () => {
++  const m = model("indicator");
++  m.transfer("lesson-acid", "lesson-indicator", 2, pour);
++  assert.equal(m.complete, false);
++  m.transfer("lesson-base", "lesson-indicator", 2, pour);
++  assert.equal(m.complete, false);
++});
++test("Biuret water control stays blue; protein with alkaline reagent becomes purple, no fictional stoichiometric protein", () => {
++  const m = model("biuret");
++  m.transfer("lesson-biuret", "lesson-control", 2, pour);
++  assert.equal(appearance(m.get("lesson-control")).purple, false);
++  m.transfer("lesson-biuret", "lesson-protein", 2, pour);
++  assert.equal(appearance(m.get("lesson-protein")).purple, true);
++  assert.equal(m.complete, true);
++  almost(m.get("lesson-protein").protein_g, 0.05);
++  assert.equal(m.get("lesson-protein").mol.protein, undefined);
++});
++test("Fe/Cu has no reaction outside liquid; extent bounded, stops on removal; atoms conserved", () => {
++  const m = model("iron-copper");
++  m.step(0.1, { immersed: false });
++  assert.equal(m.get("lesson-iron").mol.Cu, undefined);
++  for (let i = 0; i < 500; i++) m.step(0.1, { immersed: true });
++  almost(m.get("lesson-iron").mol.Cu, 0.005);
++  almost(m.get("lesson-copper").mol.Cu_2plus, 0);
++  almost(m.get("lesson-copper").mol.Fe_2plus, 0.005);
++  const before = structuredClone(m.get("lesson-iron"));
++  m.step(0.1, { immersed: false });
++  assert.deepEqual(m.get("lesson-iron"), before);
++  assert.equal(m.complete, true);
++});
++test("Ammonium generates NH3, no precipitate; moist litmus must sample gas above correct vessel", () => {
++  const m = model("ammonium");
++  m.transfer("lesson-base", "lesson-ammonium", 2, pour);
++  almost(m.get("lesson-ammonium").mol.NH3, 0.0002);
++  assert.equal(m.complete, false);
++  m.step(0.1, { litmusAbove: "lesson-base" });
++  assert.equal(m.complete, false);
++  assert.equal(appearance(m.get("lesson-ammonium")).solid, null);
++  m.step(0.1, { litmusAbove: "lesson-ammonium" });
++  assert.equal(m.complete, true);
++  assert.equal(m.get("lesson-litmus").litmusBlue, true);
++  const s = m.get("lesson-ammonium");
++  almost(s.mol.NH4_plus + s.mol.NH3 + s.escaped_mol.NH3, 0.001);
++});
++test("Sealed ammonia vessel does not emit gas; empty, full, wrong receiver and closed pours rejected", () => {
++  const m = model("ammonium");
++  m.transfer("lesson-base", "lesson-ammonium", 2, pour);
++  m.step(0.1, {
++    sealed: new Set(["lesson-ammonium"]),
++    litmusAbove: "lesson-ammonium",
++  });
++  assert.equal(m.complete, false);
++  assert.equal(m.get("lesson-ammonium").escaped_mol.NH3, undefined);
++  assert.equal(m.transfer("lesson-base", "lesson-litmus", 2, pour).ok, false);
++  assert.equal(
++    m.transfer("lesson-base", "lesson-ammonium", 2, { ...pour, sealed: true })
++      .ok,
++    false,
++  );
++});
++test("All five lessons have curriculum pages, at least 3 questions and hints; no THCS or unrelated grade", () => {
++  assert.equal(data.lessons.length, 5);
++  for (const l of data.lessons) {
++    assert.ok([10, 11, 12].includes(l.grade));
++    assert.ok(l.curriculum.pages.length);
++    assert.ok(l.questions.length >= 3 && l.questions.length <= 5);
++    const m = model(l.id);
++    for (let i = 0; i < l.questions.length; i++) {
++      const q = l.questions[i];
++      assert.equal(m.answer(i, q.correct).correct, true);
++      assert.ok(
++        m.answer(i, (q.correct + 1) % q.options.length).text.length > 15,
++      );
++    }
++  }
++});
++test("Snapshots round trip; invalid imported amounts do not change current state", () => {
++  const m = model("indicator");
++  m.transfer("lesson-base", "lesson-indicator", 2, pour);
++  const n = model("indicator");
++  n.restore(m.snapshot());
++  assert.deepEqual(n.get("lesson-indicator"), m.get("lesson-indicator"));
++  const raw = m.snapshot();
++  raw.vessels = structuredClone(raw.vessels);
++  raw.vessels["lesson-base"].mol.Na_plus = -1;
++  const before = structuredClone(n.snapshot());
++  assert.throws(() => n.restore(raw));
++  assert.deepEqual(n.snapshot(), before);
++});
++test("Near-neutral indicator responds continuously and preserves charge under dilution", () => {
++  const m = model("indicator");
++  m.transfer("lesson-base", "lesson-indicator", 2, pour);
++  m.transfer("lesson-acid", "lesson-indicator", 1.9, pour);
++  assert.ok(ph(m.get("lesson-indicator")) > 9);
++  m.transfer("lesson-acid", "lesson-indicator", 0.2, pour);
++  assert.ok(ph(m.get("lesson-indicator")) < 5);
++});
++import { balanced, atoms } from "../web/src/reaction-engine.js";
++test("All quantitative lesson equations are atom-balanced; biuret intentionally has no fabricated molecular equation", () => {
++  for (const r of data.reactionRules)
++    assert.equal(balanced(r.molecular), true, r.id);
++  assert.equal(
++    data.lessons.find((l) => l.id === "biuret").modelType,
++    "qualitative-complex",
++  );
++});
++const formula = {
++  H_plus: "H",
++  OH_minus: "OH",
++  Na_plus: "Na",
++  Cl_minus: "Cl",
++  NO3_minus: "NO3",
++  Ag_plus: "Ag",
++  AgCl: "AgCl",
++  Cu_2plus: "Cu",
++  SO4_2minus: "SO4",
++  Fe_2plus: "Fe",
++  Fe: "Fe",
++  Cu: "Cu",
++  NH4_plus: "NH4",
++  NH3: "NH3",
++  H2O: "H2O",
++  biuret_Cu: "Cu",
++};
++function inventory(m) {
++  const result = {};
++  for (const s of m.vessels.values())
++    for (const map of [s.mol, s.escaped_mol])
++      for (const [k, n] of Object.entries(map))
++        for (const [a, c] of Object.entries(atoms(formula[k])))
++          result[a] = (result[a] || 0) + c * n;
++  return result;
++}
++test("Matter is conserved globally over 100 transfers, precipitation and gas escape", () => {
++  for (const id of ["chloride", "indicator", "ammonium", "biuret"]) {
++    const m = model(id),
++      before = inventory(m),
++      keys = [...m.vessels.keys()].filter((k) => !k.includes("litmus"));
++    for (let i = 0; i < 100; i++) {
++      m.transfer(keys[i % keys.length], keys[(i + 1) % keys.length], 0.7, pour);
++      m.step(0.1, {});
++    }
++    const after = inventory(m);
++    for (const key of new Set([...Object.keys(before), ...Object.keys(after)]))
++      almost(before[key] || 0, after[key] || 0, 1e-9);
++  }
++});
+--- /dev/null
++++ b/tests_js/physics_lesson.test.mjs
+@@ -0,0 +1,92 @@
++import test from "node:test";
++import assert from "node:assert/strict";
++import * as T from "../web/vendor/three/three.module.js";
++import { LabPhysics, initPhysics, FIXED_DT } from "../web/src/physics.js";
++await initPhysics();
++test("Closing a hollow beaker lid is blocked by a strip at the mouth, not only in the liquid", () => {
++  const table = new T.Mesh(new T.BoxGeometry(30, 0.14, 9));
++  table.position.set(0, -1.7, -1.5);
++  const p = new LabPhysics(table);
++  const make = (id, stock, y, shape) => {
++    const group = new T.Group();
++    group.scale.setScalar(0.67);
++    group.add(new T.Mesh(shape));
++    return {
++      id,
++      stock,
++      group,
++      target: { x: 0, y, z: 0 },
++      mixture: { volume_ml: 0 },
++      roll: 0,
++      pitch: 0,
++      yaw: 0,
++      sealed: false,
++    };
++  };
++  try {
++    const cup = make(
++      1,
++      { kind: "beaker", openVessel: true },
++      0,
++      new T.CylinderGeometry(0.72, 0.72, 1.66, 24),
++    );
++    p.add(cup);
++    assert.equal(p.canSeal(cup), true);
++    const rod = make(
++      2,
++      { kind: "iron-strip" },
++      0.95,
++      new T.BoxGeometry(0.13, 1.5, 0.09),
++    );
++    p.add(rod);
++    // Its lower tip y=.4475 is above the 100 mL liquid level, but crosses the lid.
++    assert.equal(p.canSeal(cup), false);
++    p.remove(rod);
++    assert.equal(p.canSeal(cup), true);
++  } finally {
++    p.dispose();
++  }
++});
++test("Open lesson beaker keeps physical bottom and walls through 30 drop/regrab cycles", () => {
++  const table = new T.Mesh(new T.BoxGeometry(30, 0.14, 9));
++  table.position.set(0, -1.7, -1.5);
++  table.updateMatrixWorld();
++  const p = new LabPhysics(table);
++  const group = new T.Group();
++  group.scale.setScalar(0.67);
++  group.add(new T.Mesh(new T.CylinderGeometry(0.72, 0.72, 1.66, 24)));
++  const item = {
++    id: 1,
++    stock: { kind: "beaker", openVessel: true },
++    mixture: { volume_ml: 100 },
++    group,
++    target: { x: 0, y: 1, z: 0 },
++    roll: 0,
++    pitch: 0,
++    yaw: 0,
++    sealed: false,
++  };
++  const e = p.add(item);
++  assert.equal(e.colliders.length, 17);
++  let pen = 0;
++  try {
++    for (let n = 0; n < 30; n++) {
++      p.beginGrab(item);
++      p.setTarget(item, { x: 0, y: 0.7, z: 0 }, (n % 2) * 0.7, 0, 0);
++      for (let i = 0; i < 130; i++) p.step(FIXED_DT);
++      p.release(item, true);
++      for (let i = 0; i < 400; i++) {
++        p.step(FIXED_DT);
++        pen = Math.max(
++          pen,
++          p.table.top - p.bounds(e, e.body.rotation(), p.position(e)).min.y,
++        );
++      }
++    }
++    assert.ok(pen < 0.005);
++    assert.equal(p.recoveryCount, 0);
++    console.log("Hollow vessel 30 drops penetration", pen);
++  } finally {
++    p.dispose();
++  }
++});
+--- /dev/null
++++ b/tools/benchmark_v34.mjs
+@@ -0,0 +1,160 @@
++/** Same-host before/after benchmark. Software GL + prerecorded still-frame loop, NOT physical webcam. */
++import { spawn } from "node:child_process";
++import { writeFile, mkdir } from "node:fs/promises";
++import path from "node:path";
++import assert from "node:assert/strict";
++const { chromium } = await import(
++  process.env.PLAYWRIGHT_PACKAGE || "playwright"
++);
++const root = path.resolve(process.env.BENCH_PROJECT || "."),
++  out = process.env.BENCH_OUTPUT;
++if (!out || !process.env.CAMERA_FIXTURE)
++  throw Error("Set BENCH_OUTPUT and CAMERA_FIXTURE");
++const server = spawn(
++  process.env.PYTHON || (process.platform === "win32" ? "python" : "python3"),
++  ["-S", "server.py", "--no-browser", "--browser-tracking", "--port", "8774"],
++  { cwd: root },
++);
++server.stderr.on("data", () => {});
++await new Promise((r, j) => {
++  server.stdout.on("data", (b) => b.toString().includes("http://") && r());
++  server.on("exit", (c) => j(Error("server " + c)));
++});
++let browser;
++const errors = [];
++try {
++  browser = await chromium.launch({
++    headless: true,
++    args: [
++      "--no-sandbox",
++      "--enable-unsafe-swiftshader",
++      "--use-gl=angle",
++      "--use-angle=swiftshader",
++      "--use-fake-ui-for-media-stream",
++      "--use-fake-device-for-media-stream",
++      "--use-file-for-fake-video-capture=" + process.env.CAMERA_FIXTURE,
++    ],
++  });
++  const page = await browser.newPage({
++    viewport: { width: 1366, height: 900 },
++  });
++  page.on("pageerror", (e) => errors.push(e.message));
++  await page.goto("http://127.0.0.1:8774/?test");
++  await page.waitForFunction(() => window.__lab);
++  await page.addStyleTag({
++    content:
++      "#workspace{width:1024px!important;height:420px!important;min-height:420px!important;flex:0 0 420px!important}",
++  });
++  await page.evaluate(() => {
++    const el = document.querySelector("#quality");
++    el.value = "1";
++    el.dispatchEvent(new Event("change"));
++    document.querySelector("#camera-auto").checked = false;
++    __lab.capture.autoCameraQuality = false;
++  });
++  await page.locator("#start-camera").click();
++  await page.waitForFunction(() => __lab.metrics.tracking.length > 5, null, {
++    timeout: 60000,
++  });
++  await page.evaluate(async (lessonId) => {
++    await __lab.capture.applyCameraQuality("HD");
++    __lab.clearDesk();
++    if (lessonId) {
++      __lab.lessons.start(lessonId);
++      return;
++    }
++    for (const [i, id] of [
++      "beaker",
++      "flask",
++      "cuso4",
++      "naoh",
++      "tube",
++    ].entries())
++      __lab.createObject(id, { x: (i - 2) * 1.1, y: -1.0, z: 0 });
++  }, process.env.BENCH_LESSON || null);
++  await page.waitForTimeout(3000);
++  await page.evaluate(() => {
++    const p = __lab.view.physics;
++    __lab.benchStable = __lab.view.objects
++      .slice(0, -1)
++      .map((o) => ({ id: o.id, pos: { ...o.target } }));
++    const o = __lab.view.objects.at(-1);
++    __lab.beginMouse(o, __lab.view.toScreen(o.target));
++    const start = performance.now();
++    __lab.metrics.begin(start, {
++      version: document.title,
++      input_source: "Y4M 1280x720@30 still-photo loop; not physical gestures",
++      physical_camera_tested: false,
++      environment: "Chromium 134 headless / SwiftShader / WebCPU",
++      backend: __lab.capture.delegate,
++      camera: __lab.capture.cameraReport(),
++      viewport: { width: innerWidth, height: innerHeight },
++      render_surface: {
++        width: __lab.view.rect.width,
++        height: __lab.view.rect.height,
++      },
++      dpr: __lab.view.pixelRatio,
++      objects: __lab.view.objects.length,
++      lesson: __lab.lessons?.model?.lesson.id || null,
++      moving_body: "one programmatic target; other bodies untouched",
++    });
++    const animate = (t) => {
++      if (!__lab.metrics.current) return;
++      __lab.move(
++        o,
++        {
++          x:
++            (__lab.lessons?.active ? -2.2 : 2.2) +
++            Math.sin((t - start) / 1200) * 0.18,
++          y: 0.3,
++          z: 0,
++        },
++        0,
++        0,
++        0,
++      );
++      requestAnimationFrame(animate);
++    };
++    requestAnimationFrame(animate);
++  });
++  await page.waitForFunction(() => __lab.metrics.lastReport?.complete, null, {
++    timeout: 70000,
++  });
++  const report = await page.evaluate(() => {
++    const stable = __lab.benchStable.map(({ id, pos }) => {
++      const o = __lab.view.objects.find((o) => o.id === id),
++        e = __lab.view.physics.entries.get(id);
++      return {
++        id,
++        drift_scene: Math.hypot(
++          o.target.x - pos.x,
++          o.target.y - pos.y,
++          o.target.z - pos.z,
++        ),
++        sleeping: e.body.isSleeping(),
++      };
++    });
++    return {
++      ...__lab.metrics.lastReport,
++      untouched_bodies_60s: stable,
++      recovery_count: __lab.view.physics.recoveryCount ?? null,
++      camera_final: __lab.capture.cameraReport(),
++      physical_camera_tested: false,
++    };
++  });
++  report.page_errors = errors;
++  assert.deepEqual(errors, []);
++  await writeFile(out, JSON.stringify(report, null, 2));
++  console.log(
++    JSON.stringify({
++      output: out,
++      render_fps: report.render_fps,
++      tracking_hz: report.tracking_hz,
++      physics_cpu_ms: report.physics_cpu_mean_ms,
++      rest: report.untouched_bodies_60s,
++    }),
++  );
++} finally {
++  await browser?.close();
++  server.kill();
++}
+--- a/tools/package_project.py
++++ b/tools/package_project.py
+@@ -1,14 +1,14 @@
+-"""Package V3.3 with offline runtimes; flat ZIP root for Windows extraction."""
++"""Package V3.4 with offline runtimes; flat ZIP root for Windows extraction."""
+ from pathlib import Path
+ import hashlib
+ import json
+ import zipfile
+ 
+ root = Path(__file__).resolve().parents[1]
+-dest = root.parent / 'HoloLab_AR_V3_3.zip'
++dest = root.parent / 'HoloLab_AR_V3_4.zip'
+ exclude = {'node_modules', '.venv', '__pycache__', '.git', '.pytest_cache'}
+ exclude_files = {'browser_failure.json', 'physics_trials.tap', 'p0_trials.tap', 'unit_tests_p0.tap', 'browser_legacy_regression.json'}
+-manifest = json.loads((root / 'validation_v33/SOURCE_SHA256.json').read_text())
++manifest = json.loads((root / 'validation_v34/SOURCE_SHA256.json').read_text())
+ for name, expected in manifest.items():
+     assert hashlib.sha256((root / name).read_bytes()).hexdigest() == expected, name
+ with zipfile.ZipFile(dest, 'w', zipfile.ZIP_DEFLATED, compresslevel=6) as z:
+@@ -22,7 +22,10 @@
+ with zipfile.ZipFile(dest) as z:
+     assert z.testzip() is None
+     required=['server.py','START_WINDOWS.bat','web/vendor/rapier/rapier.mjs',
+-              'web/vendor/fonts/LICENSE','web/src/vessel-details.js','VALIDATION_V33.md']
++              'web/vendor/fonts/LICENSE','web/src/vessel-details.js','VALIDATION_V34.md',
++              'web/src/lessons.js','web/src/lesson-chemistry.js','web/src/lesson-visuals.js',
++              'web/src/lesson-geometry.js','web/data/lessons-thpt.json',
++              'docs/CURRICULUM_THPT.md','docs/V34_IMPLEMENTATION.md']
+     assert all(name in z.namelist() for name in required)
+ print(json.dumps({'path':str(dest),'bytes':dest.stat().st_size,
+                   'sha256':hashlib.sha256(dest.read_bytes()).hexdigest()}))
+--- /dev/null
++++ b/tools/physics_acceptance_v34.mjs
+@@ -0,0 +1,271 @@
++import fs from "node:fs";
++import path from "node:path";
++import { pathToFileURL } from "node:url";
++export async function acceptance(root) {
++  const T = await import(
++    pathToFileURL(path.join(root, "web/vendor/three/three.module.js"))
++  );
++  const { LabPhysics, initPhysics, FIXED_DT } = await import(
++    pathToFileURL(path.join(root, "web/src/physics.js"))
++  );
++  await initPhysics();
++  const profiles = JSON.parse(
++    fs.readFileSync(path.join(root, "web/profiles.json")),
++  );
++  const checks = [];
++  function fixture() {
++    const t = new T.Mesh(new T.BoxGeometry(30, 0.14, 9));
++    t.position.set(0, -1.7, -1.5);
++    t.updateMatrixWorld();
++    const p = new LabPhysics(t);
++    let id = 0;
++    function add(x = 0, y = 1, z = 0, kind = "beaker") {
++      const g = new T.Group();
++      g.scale.setScalar(0.67);
++      g.add(
++        new T.Mesh(
++          new T.LatheGeometry(
++            profiles.profiles[kind].map(([y, r]) => new T.Vector2(r, y)),
++            32,
++          ),
++        ),
++      );
++      const o = {
++        id: ++id,
++        stock: { kind },
++        mixture: { volume_ml: 50 },
++        group: g,
++        target: { x, y, z },
++        roll: 0,
++        pitch: 0,
++        yaw: 0,
++        sealed: false,
++      };
++      g.position.copy(o.target);
++      return { o, e: p.add(o) };
++    }
++    let maxPen = 0,
++      outside = 0;
++    const step = (n = 1, dt = FIXED_DT) => {
++      for (let i = 0; i < n; i++) {
++        p.step(dt);
++        for (const e of p.entries.values()) {
++          const b = p.bounds(e, e.body.rotation(), p.position(e)),
++            l = p.limits;
++          maxPen = Math.max(maxPen, p.table.top - b.min.y);
++          outside = Math.max(
++            outside,
++            l.xMin - b.min.x,
++            b.max.x - l.xMax,
++            l.zMin - b.min.z,
++            b.max.z - l.zMax,
++            b.max.y - l.top,
++          );
++        }
++      }
++    };
++    return {
++      p,
++      add,
++      step,
++      measure: () => ({ maxPen, outside, recoveries: p.recoveryCount }),
++    };
++  }
++  async function run(name, fn) {
++    const f = fixture();
++    try {
++      const data = await fn(f),
++        m = f.measure();
++      checks.push({
++        name,
++        ...data,
++        ...m,
++        passed: data.passed && m.maxPen < 0.005 && m.outside < 0.005,
++      });
++    } catch (e) {
++      checks.push({ name, passed: false, error: String(e) });
++    } finally {
++      f.p.dispose();
++    }
++  }
++  await run(
++    "30 drops, regrab, varied FPS, repeated release idempotent",
++    ({ p, add, step }) => {
++      const a = add();
++      let jump = 0;
++      for (let n = 0; n < 30; n++) {
++        const before = p.position(a.e);
++        p.beginGrab(a.o);
++        jump = Math.max(
++          jump,
++          new T.Vector3().copy(before).distanceTo(p.position(a.e)),
++        );
++        p.setTarget(a.o, { x: Math.sin(n), y: 1, z: 0 }, (n % 3) * 0.4);
++        step(60, [1 / 30, 1 / 60, 1 / 144][n % 3]);
++        p.release(a.o, false);
++        const v = { ...a.e.body.linvel() };
++        p.release(a.o, true);
++        if (JSON.stringify(v) !== JSON.stringify(a.e.body.linvel()))
++          throw Error("duplicate release");
++        step(400);
++      }
++      return { passed: jump < 1e-6, cycles: 30, regrabJump: jump };
++    },
++  );
++  await run("20 light throws remain bounded", ({ p, add, step }) => {
++    const a = add();
++    let peakRelease = 0,
++      minimumMoving = Infinity;
++    for (let n = 0; n < 20; n++) {
++      p.beginGrab(a.o);
++      p.setTarget(a.o, { x: -1, y: 0.8, z: 0 }, 0, 0, 0);
++      step(140);
++      for (let i = 0; i < 20; i++) {
++        p.setTarget(a.o, { x: -1 + i * 0.07, y: 0.8, z: 0 });
++        step(1, 1 / 60);
++      }
++      p.release(a.o, true);
++      const v = a.e.body.linvel(),
++        speed = Math.hypot(v.x, v.y, v.z);
++      peakRelease = Math.max(peakRelease, speed);
++      minimumMoving = Math.min(minimumMoving, speed);
++      step(450);
++    }
++    return {
++      passed: peakRelease <= 0.401 && minimumMoving > 0.01,
++      cycles: 20,
++      peakRelease,
++      minimumMoving,
++    };
++  });
++  await run("30 gentle vessel contacts", ({ p, add, step }) => {
++    let peak = 0,
++      moved = 0;
++    for (let n = 0; n < 30; n++) {
++      for (const e of [...p.entries.values()]) p.remove(e.item);
++      const a = add(-1.5, -1.05),
++        b = add(0, -1.05);
++      step(300);
++      const before = p.position(b.e);
++      p.beginGrab(a.o);
++      for (let i = 0; i < 200; i++) {
++        p.setTarget(a.o, { x: -1.5 + i * 0.007, y: -1.05, z: 0 });
++        step();
++        const v = b.e.body.linvel();
++        peak = Math.max(peak, Math.hypot(v.x, v.y, v.z));
++      }
++      moved = Math.max(
++        moved,
++        new T.Vector3().copy(before).distanceTo(p.position(b.e)),
++      );
++      p.release(a.o, false);
++      step(300);
++    }
++    return {
++      passed: peak < 0.5 && moved > 0.001 && moved < 2,
++      cycles: 30,
++      peak,
++      moved,
++    };
++  });
++  await run("four edges and ceiling held then dynamic", ({ p, add, step }) => {
++    const a = add();
++    for (const target of [
++      { x: -30, y: 0, z: 0 },
++      { x: 30, y: 0, z: 0 },
++      { x: 0, y: 0, z: -30 },
++      { x: 0, y: 0, z: 30 },
++      { x: 0, y: 30, z: 0 },
++    ]) {
++      p.beginGrab(a.o);
++      p.setTarget(a.o, target, 0.8, 0.2, 0.3);
++      step(250);
++      p.release(a.o, true);
++      step(400);
++    }
++    return { passed: true };
++  });
++  await run("six vessels rest for 60 simulated seconds", ({ p, add, step }) => {
++    const a = [];
++    for (let i = 0; i < 6; i++)
++      a.push(add(-3 + i * 1.2, -1, 0, i % 2 ? "flask" : "beaker"));
++    step(600);
++    const before = a.map((x) => p.position(x.e));
++    step(7200);
++    const drift = Math.max(
++      ...a.map((x, i) =>
++        new T.Vector3().copy(before[i]).distanceTo(p.position(x.e)),
++      ),
++    );
++    return {
++      passed: drift < 0.005 && a.every((x) => x.e.body.isSleeping()),
++      seconds: 60,
++      drift,
++      sleeping: a.every((x) => x.e.body.isSleeping()),
++    };
++  });
++  await run(
++    "tracking interruption freezes; reacquire and stall do not throw",
++    ({ p, add, step }) => {
++      const a = add();
++      p.beginGrab(a.o);
++      p.setTarget(a.o, { x: 2, y: 1, z: 0 });
++      step(10);
++      p.freezeHeld(a.o);
++      const before = p.position(a.e);
++      step(30);
++      const drift = new T.Vector3().copy(before).distanceTo(p.position(a.e));
++      const held = a.e.body.isKinematic();
++      p.release(a.o, true);
++      const frozen = Math.hypot(...Object.values(a.e.body.linvel()));
++      p.beginGrab(a.o);
++      p.setTarget(a.o, { x: -2, y: 1, z: 0 });
++      step(1, 0.6);
++      p.release(a.o, true);
++      return {
++        passed:
++          held &&
++          drift < 1e-6 &&
++          frozen < 1e-6 &&
++          Math.hypot(...Object.values(a.e.body.linvel())) < 1e-6,
++        drift,
++        frozen,
++      };
++    },
++  );
++  await run(
++    "new overlapping spawns separated before solver; existing held body unchanged",
++    ({ p, add, step }) => {
++      const a = add(0, -1);
++      p.beginGrab(a.o);
++      const before = p.position(a.e);
++      const b = add(0, -1);
++      p.world.propagateModifiedBodyPositionsToColliders();
++      let penetration = 0;
++      for (const c of a.e.colliders)
++        for (const d of b.e.colliders) {
++          const hit = c.contactCollider(d, 10);
++          if (hit) penetration = Math.max(penetration, -hit.distance);
++        }
++      const jump = new T.Vector3().copy(before).distanceTo(p.position(a.e));
++      step(500);
++      return {
++        passed: penetration === 0 && jump === 0,
++        initialPenetration: penetration,
++        heldJump: jump,
++      };
++    },
++  );
++  return {
++    passed: checks.every((c) => c.passed),
++    physicalWebcam: false,
++    simulation: true,
++    checks,
++  };
++}
++if (process.argv[2]) {
++  const r = await acceptance(path.resolve(process.argv[2]));
++  fs.writeFileSync(process.argv[3], JSON.stringify(r, null, 2));
++  console.log(JSON.stringify(r, null, 2));
++  if (!r.passed) process.exitCode = 1;
++}
+--- /dev/null
++++ b/tools/qa_core_v34.mjs
+@@ -0,0 +1,572 @@
++import { spawn } from "node:child_process";
++import { mkdir, writeFile } from "node:fs/promises";
++import { fileURLToPath } from "node:url";
++import path from "node:path";
++import assert from "node:assert/strict";
++const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), ".."),
++  out = path.join(root, "validation_v34");
++await mkdir(out, { recursive: true });
++const { chromium } = await import(
++  process.env.PLAYWRIGHT_PACKAGE || "playwright"
++);
++const server = spawn(
++  process.env.PYTHON || (process.platform === "win32" ? "python" : "python3"),
++  ["-S", "server.py", "--no-browser", "--browser-tracking", "--port", "8768"],
++  { cwd: root },
++);
++server.stderr.on("data", () => {});
++await new Promise((r, j) => {
++  server.stdout.on("data", (b) => b.toString().includes("http://") && r());
++  server.on("exit", (c) => j(Error("server " + c)));
++});
++let browser;
++const errors = [],
++  checks = [],
++  requests = new Set();
++const check = (name, data = {}) => {
++  checks.push({ name, passed: true, ...data });
++  console.log("PASS", name);
++};
++try {
++  browser = await chromium.launch({
++    headless: true,
++    args: [
++      "--no-sandbox",
++      "--enable-unsafe-swiftshader",
++      "--use-gl=angle",
++      "--use-angle=swiftshader",
++      "--use-fake-ui-for-media-stream",
++      "--use-fake-device-for-media-stream",
++      ...(process.env.CAMERA_FIXTURE
++        ? ["--use-file-for-fake-video-capture=" + process.env.CAMERA_FIXTURE]
++        : []),
++    ],
++  });
++  const page = await browser.newPage({
++    viewport: { width: 1366, height: 900 },
++  });
++  page.on("pageerror", (e) => errors.push(e.message));
++  page.on("request", (r) => requests.add(r.url()));
++  await page.goto("http://127.0.0.1:8768/?test");
++  await page.waitForFunction(() => window.__lab, null, { timeout: 30000 });
++  check("Startup: local Rapier WASM, Three.js, chemistry API");
++  // Mouse grab/release exercises the production event handlers, not a mocked physics body.
++  const card = await page.locator('[data-stock="beaker"]').boundingBox(),
++    work = await page.locator("#workspace").boundingBox();
++  await page.mouse.move(card.x + 35, card.y + 25);
++  await page.mouse.down();
++  await page.mouse.move(work.x + work.width * 0.4, work.y + work.height * 0.3, {
++    steps: 15,
++  });
++  await page.waitForTimeout(150);
++  assert.equal(
++    await page.evaluate(() =>
++      __lab.view.physics.entries.get(1).body.isKinematic(),
++    ),
++    true,
++  );
++  const before = await page.evaluate(
++    () => __lab.view.objects[0].group.position.y,
++  );
++  await page.mouse.up();
++  assert.equal(
++    await page.evaluate(() =>
++      __lab.view.physics.entries.get(1).body.isDynamic(),
++    ),
++    true,
++  );
++  await page.waitForTimeout(100);
++  assert.ok(
++    await page.evaluate(
++      (y) => __lab.view.objects[0].group.position.y < y - 0.05,
++      before,
++    ),
++  );
++  await page.waitForTimeout(1000);
++  check("Mouse grab → kinematic; release → dynamic and visible falling");
++  const drops = await page.evaluate(() => {
++    const p = __lab.view.physics,
++      o = __lab.view.objects[0];
++    let maxPen = 0,
++      minFloorGap = Infinity;
++    for (let n = 0; n < 20; n++) {
++      __lab.beginMouse(o, __lab.view.toScreen(o.target));
++      __lab.move(
++        o,
++        { x: 0, y: n % 2 ? -0.9 : 1.2, z: 0 },
++        (n % 3) * 0.25,
++        0,
++        0,
++      );
++      for (let i = 0; i < 100; i++) p.step(1 / 120);
++      if (!p.entries.get(o.id).body.isKinematic()) throw Error("not held");
++      __lab.endMouse();
++      if (!p.entries.get(o.id).body.isDynamic()) throw Error("not released");
++      const e = p.entries.get(o.id);
++      for (let i = 0; i < 320; i++) {
++        p.step(1 / 120);
++        const gap =
++          p.bounds(e, e.body.rotation(), p.position(e)).min.y - p.table.top;
++        maxPen = Math.max(maxPen, -gap);
++        minFloorGap = Math.min(minFloorGap, gap);
++        if (gap < -0.005) throw Error("table penetrated " + gap);
++      }
++    }
++    __lab.beginMouse(o, __lab.view.toScreen(o.target));
++    __lab.move(o, { x: 0, y: -10, z: 0 }, 1.2, 0.4, 0.3);
++    for (let i = 0; i < 120; i++) p.step(1 / 120);
++    const e = p.entries.get(o.id),
++      heldGap =
++        p.bounds(e, e.body.rotation(), p.position(e)).min.y - p.table.top;
++    if (heldGap < -0.001) throw Error("held below table");
++    __lab.endMouse();
++    // Regrab/release during a short deliberate horizontal movement.
++    __lab.beginMouse(o, __lab.view.toScreen(o.target));
++    for (let i = 0; i < 30; i++) {
++      __lab.move(o, { x: i * 0.02, y: 0.8, z: 0 }, 0, 0, 0);
++      p.step(1 / 120);
++    }
++    __lab.endMouse();
++    const velocity = e.body.linvel();
++    if (velocity.x <= 0.05) throw Error("no throw inertia");
++    return {
++      cycles: 20,
++      max_penetration_scene_units: maxPen,
++      min_gap: minFloorGap,
++      held_gap: heldGap,
++      throw_velocity_m_per_s: { x: velocity.x, y: velocity.y, z: velocity.z },
++    };
++  });
++  check(
++    "20 real-mesh drop/regrab cycles, tabletop block, rotated collider support, inertia",
++    drops,
++  );
++  const physicsAcceptance = await page.evaluate(() => {
++    __lab.clearDesk();
++    const p = __lab.view.physics,
++      dt = 1 / 120;
++    const step = (n = 1) => {
++      for (let i = 0; i < n; i++) p.step(dt);
++    };
++    const gap = (e) =>
++      p.bounds(e, e.body.rotation(), p.position(e)).min.y - p.table.top;
++    const a = __lab.createObject("beaker", { x: -1.5, y: -1.0, z: 0 });
++    const b = __lab.createObject("flask", { x: 0, y: -1.0, z: 0 });
++    step(600);
++    __lab.beginMouse(a, __lab.view.toScreen(a.target));
++    let peak = 0,
++      penetration = 0;
++    for (let i = 0; i < 240; i++) {
++      p.setTarget(a, { x: 2.2, y: -1.0, z: 0 });
++      step();
++      const e = p.entries.get(b.id),
++        v = e.body.linvel();
++      peak = Math.max(peak, Math.hypot(v.x, v.z));
++      penetration = Math.max(penetration, -gap(e));
++    }
++    __lab.endMouse();
++    if (peak > 0.66 || penetration > 0.005)
++      throw Error(
++        "real-model collision unsafe " + JSON.stringify({ peak, penetration }),
++      );
++    step(600);
++    __lab.clearDesk();
++    const o = __lab.createObject("beaker", { x: 0, y: 1, z: 0 }),
++      e = p.entries.get(o.id);
++    let outside = 0,
++      maxThrow = 0,
++      maxGapBelow = 0,
++      screenOutside = 0;
++    const l = p.limits;
++    for (const target of [
++      { x: -30, y: 1, z: 0 },
++      { x: 30, y: 1, z: 0 },
++      { x: 0, y: 1, z: -30 },
++      { x: 0, y: 1, z: 30 },
++    ]) {
++      __lab.beginMouse(o, __lab.view.toScreen(o.target));
++      p.setTarget(o, target, 0.8, 0.3, 0.2);
++      step(160);
++      __lab.endMouse();
++      const v = e.body.linvel();
++      maxThrow = Math.max(maxThrow, Math.hypot(v.x, v.y, v.z));
++      for (let i = 0; i < 360; i++) {
++        step();
++        const bound = p.bounds(e, e.body.rotation(), p.position(e));
++        outside = Math.max(
++          outside,
++          l.xMin - bound.min.x,
++          bound.max.x - l.xMax,
++          l.zMin - bound.min.z,
++          bound.max.z - l.zMax,
++          bound.max.y - l.top,
++        );
++        maxGapBelow = Math.max(maxGapBelow, -gap(e));
++        if (i % 60 === 0)
++          for (const x of [bound.min.x, bound.max.x])
++            for (const y of [bound.min.y, bound.max.y])
++              for (const z of [bound.min.z, bound.max.z]) {
++                const s = __lab.view.toScreen({ x, y, z }),
++                  r = __lab.view.rect;
++                screenOutside = Math.max(
++                  screenOutside,
++                  r.left - s.x,
++                  s.x - r.right,
++                  r.top - s.y,
++                  s.y - r.bottom,
++                );
++              }
++      }
++    }
++    if (
++      outside > 0.005 ||
++      maxGapBelow > 0.005 ||
++      maxThrow > 0.401 ||
++      screenOutside > 1
++    )
++      throw Error(
++        "boundary failure " +
++          JSON.stringify({ outside, maxGapBelow, maxThrow, screenOutside }),
++      );
++    const ordinaryRecoveries = p.recoveryCount;
++    // Fault injection is deliberately separated from normal interaction evidence.
++    e.body.setTranslation({ x: 5, y: 0, z: 0 }, true);
++    p.recover(e);
++    const recovery = p.position(e),
++      faultRecovered =
++        p.recoveryCount === ordinaryRecoveries + 1 && recovery.x < l.xMax;
++    if (!faultRecovered) throw Error("fault recovery failed");
++    __lab.beginMouse(o, __lab.view.toScreen(o.target));
++    const before = p.position(e);
++    p.setWorkspace({ ...l, xMin: l.xMin + 0.3, xMax: l.xMax - 0.3 });
++    const after = p.position(e);
++    const resizeJump = Math.hypot(
++      before.x - after.x,
++      before.y - after.y,
++      before.z - after.z,
++    );
++    if (resizeJump > 1e-6) throw Error("resize teleported held tool");
++    __lab.endMouse();
++    step(1);
++    return {
++      peak_contact_horizontal_m_s: peak,
++      max_penetration_scene: Math.max(penetration, maxGapBelow),
++      max_throw_m_s: maxThrow,
++      max_outside_scene: outside,
++      max_projected_outside_px: screenOutside,
++      ordinary_recoveries: ordinaryRecoveries,
++      fault_recovered: faultRecovered,
++      held_resize_jump: resizeJump,
++    };
++  });
++  check(
++    "V3.3 production mesh: fast contact, four physical boundaries, projection, safe fault recovery, no held resize teleport",
++    physicsAcceptance,
++  );
++  const design = await page.evaluate(async () => {
++    await document.fonts.ready;
++    const bad = [];
++    __lab.clearDesk();
++    const snapshots = [];
++    for (const [i, id] of [
++      "beaker",
++      "flask",
++      "tube",
++      "hcl",
++      "dropper",
++      "balance",
++    ].entries()) {
++      const o = __lab.createObject(id, { x: (i - 2.5) * 0.95, y: -0.8, z: 0 }),
++        e = __lab.view.physics.entries.get(o.id);
++      snapshots.push({
++        id: stockId(o),
++        scale: o.group.scale.x,
++        colliders: e.colliders.length,
++        physical: !!e.body,
++        mouth_y: o.mouthY ?? null,
++        liquid: !!o.liquid,
++      });
++      const grad = o.group.children.find(
++        (n) => n.name === "vessel-visual-details",
++      )?.userData.graduations;
++      if (grad)
++        for (const mark of grad) {
++          const g = __lab.view.liquidGeometry(
++            o.stock.kind,
++            mark.ml / o.stock.capacity_ml,
++          );
++          g.computeBoundingBox();
++          if (Math.abs(g.boundingBox.max.y - mark.level) > 0.001)
++            bad.push(id + ":graduation");
++          g.dispose();
++        }
++      function stockId(o) {
++        return o.stock.id;
++      }
++      if (o.group.scale.x !== 0.67 || !e.colliders.length) bad.push(id);
++    }
++    for (let i = 0; i < 600; i++) __lab.view.physics.step(1 / 120);
++    const selected = __lab.view.objects.at(-1);
++    const glass = __lab.view.glass.type;
++    return {
++      font: getComputedStyle(document.body).fontFamily,
++      fontLoaded: document.fonts.check('400 14px "Be Vietnam Pro"'),
++      glass,
++      cameraFit: getComputedStyle(document.querySelector("#camera")).objectFit,
++      technicalClosed: !document.querySelector("#settings").open,
++      snapshots,
++      bad,
++      renderCalls: __lab.view.renderer.info.render.calls,
++      triangles: __lab.view.renderer.info.render.triangles,
++    };
++  });
++  assert.ok(design.fontLoaded);
++  assert.equal(design.glass, "MeshPhysicalMaterial");
++  assert.deepEqual(design.bad, []);
++  assert.ok(design.technicalClosed);
++  check(
++    "Bundled Vietnamese fonts, collapsed diagnostics, PBR glass, tool IDs/pivots/colliders retained",
++    design,
++  );
++  await page.screenshot({ path: path.join(out, "internal_design_v33.png") });
++
++  // Actual Interaction FSM with two pose streams; this is synthetic gesture evidence.
++  const gestures = await page.evaluate(async () => {
++    __lab.clearDesk();
++    const p = __lab.view.physics;
++    const a = __lab.createObject("beaker", { x: -1.2, y: 1, z: 0 }),
++      b = __lab.createObject("flask", { x: 1.2, y: 1, z: 0 });
++    const pose = (o, label, palm) => {
++      const at = __lab.view.toScreen(o.target);
++      const x = 0.035 + (at.x / innerWidth) * 0.93,
++        y = 0.035 + (at.y / innerHeight) * 0.93;
++      return {
++        x,
++        y,
++        center: { x, y },
++        ratio: 0.9,
++        palm,
++        angle: 0,
++        label,
++        score: 0.99,
++        fist: false,
++        points: Array.from({ length: 21 }, () => ({ x, y, z: 0 })),
++      };
++    };
++    // Freeze as though just touched while preparing the open-hand acquisition samples.
++    p.beginGrab(a);
++    p.beginGrab(b);
++    const pa = pose(a, "Left", 0.15),
++      pb = pose(b, "Right", 0.06);
++    let clock = performance.now();
++    const send = (rows, n = 1) => {
++      for (let i = 0; i < n; i++) {
++        clock += 34;
++        __lab.replay(structuredClone(rows), clock);
++      }
++    };
++    send([pa, pb], 6);
++    pa.ratio = pb.ratio = 0.2;
++    send([pa, pb], 6);
++    if (
++      __lab.interaction.owners(a).length !== 1 ||
++      __lab.interaction.owners(b).length !== 1
++    )
++      throw Error("two-hand grab failed");
++    const held = __lab.state().hands.map((h) => h.object);
++    const t = __lab.tracks.lastFrame + 34;
++    __lab.replay([], t);
++    __lab.view.physics.ownership(a, true, false);
++    __lab.view.physics.ownership(b, true, false);
++    const frozen = p.position(p.entries.get(a.id));
++    for (let i = 0; i < 20; i++) p.step(1 / 120);
++    if (
++      !p.entries.get(a.id).body.isKinematic() ||
++      __lab.interaction.owners(a).length !== 1
++    )
++      throw Error("tracking gap dropped object");
++    const after = p.position(p.entries.get(a.id));
++    if (
++      Math.hypot(after.x - frozen.x, after.y - frozen.y, after.z - frozen.z) >
++      1e-5
++    )
++      throw Error("gap moved object");
++    let time = t + 34;
++    pa.ratio = pb.ratio = 0.9;
++    for (let i = 0; i < 8; i++) {
++      __lab.replay([pa, pb], time);
++      time += 34;
++    }
++    if (
++      __lab.interaction.owners(a).length ||
++      !p.entries.get(a.id).body.isDynamic()
++    )
++      throw Error("release FSM did not detach");
++    __lab.interaction.reset();
++    __lab.tracks.reset();
++    return { held, tracking_gap_froze: true, release_dynamic: true };
++  });
++  check(
++    "Synthetic two-hand FSM, temporary tracking loss, valid release handoff",
++    gestures,
++  );
++  await page.evaluate(async () => {
++    __lab.clearDesk();
++    const a = __lab.createObject("hcl", { x: -1, y: 0, z: 0 }),
++      b = __lab.createObject("naoh", { x: 1, y: 0, z: 0 });
++    await __lab.pour(a, b, true);
++    if (a.mixture.volume_ml !== 90 || b.mixture.volume_ml !== 110)
++      throw Error("chem regression");
++  });
++  check("Preserved chemical transfer quantities");
++  await page.locator("#titration-mode").click();
++  await page.locator("#t-drop").click();
++  assert.equal(await page.locator("#t-used").textContent(), "0.05 mL");
++  await page.locator("#titration-mode").click();
++  check("Preserved titration scene and microdose");
++  await page.locator("#camera-auto").uncheck();
++  await page.locator("#start-camera").click();
++  await page.waitForFunction(
++    () => __lab.capture.running && __lab.metrics.tracking.length > 5,
++    null,
++    { timeout: 60000 },
++  );
++  const modes = [];
++  for (const mode of ["HD", "FHD", "LOW", "HD"]) {
++    await page.locator("#camera-quality").selectOption(mode);
++    await page.waitForFunction(() => !__lab.capture.qualityBusy);
++    await page.waitForTimeout(200);
++    const report = await page.evaluate(() => __lab.capture.cameraReport());
++    modes.push(report);
++    assert.ok(report.settings.width > 0 && report.video_width > 0);
++    assert.equal(report.requested, mode);
++  }
++  check(
++    "HD default and Low/HD/Full-HD camera modes report actual track and video sizes",
++    { modes },
++  );
++  await page.evaluate(() => {
++    const receive = __lab.capture.onResult;
++    __lab.capture.onResult = (data) => {
++      __lab.testInputShape = { width: data.width, height: data.height };
++      receive(data);
++    };
++  });
++  await page.waitForFunction(
++    () =>
++      __lab.testInputShape?.width === 640 &&
++      __lab.testInputShape?.height === 360,
++    null,
++    { timeout: 30000 },
++  );
++  await page.waitForFunction(
++    () => __lab.metrics.tracking.some((t) => t.hands > 0),
++    null,
++    { timeout: 30000 },
++  );
++  const preview = await page.evaluate(() => ({
++    cv_input: __lab.testInputShape,
++    fit: getComputedStyle(document.querySelector("#camera")).objectFit,
++    mirror: getComputedStyle(document.querySelector("#camera")).transform,
++    tracking: __lab.metrics.tracking.find((t) => t.hands > 0),
++  }));
++  assert.equal(preview.fit, "contain");
++  assert.ok(preview.mirror.includes("-1"));
++  assert.ok(preview.tracking.hands > 0);
++  check(
++    "Mirror/aspect preserved and real MediaPipe inference detects hands from fixture",
++    preview,
++  );
++  await page.evaluate(() => {
++    const q = document.querySelector("#quality");
++    q.value = "1";
++    q.dispatchEvent(new Event("change"));
++  });
++  await page.evaluate(() => {
++    __lab.clearDesk();
++    for (const [i, id] of [
++      "beaker",
++      "flask",
++      "cuso4",
++      "naoh",
++      "tube",
++    ].entries())
++      __lab.createObject(id, { x: (i - 2) * 1.1, y: 0.5, z: 0 });
++  });
++  await page.waitForTimeout(2000);
++  await page.screenshot({ path: path.join(out, "internal_interface.png") });
++  if (process.env.BENCHMARK === "1") {
++    await page.evaluate(() => {
++      const o = __lab.view.objects.at(-1);
++      __lab.beginMouse(o, __lab.view.toScreen(o.target));
++      let start = performance.now();
++      function animate(t) {
++        if (!__lab.metrics.current) return;
++        __lab.move(
++          o,
++          { x: 2.2 + Math.sin((t - start) / 1200) * 0.18, y: 0.3, z: 0 },
++          0,
++          0,
++          0,
++        );
++        requestAnimationFrame(animate);
++      }
++      requestAnimationFrame(animate);
++      __lab.metrics.begin(performance.now(), {
++        version: "3.4.0",
++        input_source:
++          "Y4M loop of static reference hands; not physical gestures",
++        physical_camera_tested: false,
++        backend: __lab.capture.delegate,
++        camera: __lab.capture.cameraReport(),
++        physics: "Rapier 0.17.3 / 120 Hz / 5 bodies",
++        viewport: { width: innerWidth, height: innerHeight },
++        environment: "Chromium headless / SwiftShader",
++        moving_body: "programmatic hand target; other four bodies dynamic",
++      });
++    });
++    await page.waitForFunction(() => __lab.metrics.lastReport?.complete, null, {
++      timeout: 70000,
++    });
++    const result = await page.evaluate(() => ({
++      ...__lab.metrics.lastReport,
++      physics_last_frame_ms: __lab.view.physics.lastStepCost,
++      physics_steps: __lab.view.physics.totalSteps,
++    }));
++    await writeFile(
++      path.join(out, "benchmark.json"),
++      JSON.stringify(result, null, 2),
++    );
++    check(
++      "60-second webcam-fixture + MediaPipe + Three.js + Rapier measurement",
++      result,
++    );
++  }
++  await page.locator("#stop-camera").click();
++  await page.waitForTimeout(100);
++  assert.equal(await page.evaluate(() => __lab.capture.running), false);
++  check("Camera stop");
++  assert.deepEqual(errors, []);
++  const remote = [...requests].filter(
++    (u) => !u.startsWith("http://127.0.0.1:8768/") && !u.startsWith("blob:"),
++  );
++  assert.deepEqual(remote, []);
++  check("No page errors and no remote runtime dependencies");
++} catch (e) {
++  await writeFile(
++    path.join(out, "browser_failure.json"),
++    JSON.stringify({ error: String(e), errors, checks }, null, 2),
++  );
++  throw e;
++} finally {
++  await writeFile(
++    path.join(out, "browser_checks.json"),
++    JSON.stringify(
++      { checks, page_errors: errors, physical_camera_tested: false },
++      null,
++      2,
++    ),
++  );
++  await browser?.close();
++  server.kill();
++}
+--- /dev/null
++++ b/tools/qa_lessons_v34.mjs
+@@ -0,0 +1,395 @@
++import { spawn } from "node:child_process";
++import fs from "node:fs/promises";
++import path from "node:path";
++import { fileURLToPath } from "node:url";
++import assert from "node:assert/strict";
++const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), ".."),
++  out = path.join(root, "validation_v34");
++await fs.mkdir(out, { recursive: true });
++const { chromium } = await import(
++  process.env.PLAYWRIGHT_PACKAGE || "playwright"
++);
++const server = spawn(
++  "python3",
++  ["-S", "server.py", "--no-browser", "--browser-tracking", "--port", "8784"],
++  { cwd: root },
++);
++server.stderr.on("data", () => {});
++await new Promise((r, j) => {
++  server.stdout.on("data", (b) => b.toString().includes("http://") && r());
++  server.on("exit", (c) => j(Error("server " + c)));
++});
++let browser;
++const checks = [],
++  errors = [];
++const check = (name, detail = {}) => {
++  checks.push({ name, passed: true, ...detail });
++  console.log("PASS", name);
++};
++try {
++  browser = await chromium.launch({
++    headless: true,
++    args: [
++      "--no-sandbox",
++      "--enable-unsafe-swiftshader",
++      "--use-gl=angle",
++      "--use-angle=swiftshader",
++    ],
++  });
++  const page = await browser.newPage({
++    viewport: { width: 1440, height: 1000 },
++  });
++  page.on("pageerror", (e) => errors.push(e.message));
++  await page.goto("http://localhost:8784/?test");
++  await page.waitForFunction(() => window.__lab, null, { timeout: 30000 });
++  await page.selectOption("#lesson-grade", "10");
++  await page.click("#lesson-start");
++  await page.waitForTimeout(800);
++  assert.equal(
++    await page.evaluate(() => __lab.lessons.model?.lesson.id),
++    "chloride",
++    await page.locator("#message").innerText(),
++  );
++  check("Grade → topic → experiment → start uses UI");
++  await page.screenshot({
++    path: path.join(out, "internal_chloride_before.png"),
++  });
++  await page.evaluate(() => {
++    window.advanceLab = (n = 120) => {
++      for (let i = 0; i < n; i++) {
++        __lab.view.physics.step(1 / 120);
++        __lab.lessons.tick(1 / 120, performance.now() + (i * 1000) / 120);
++      }
++      __lab.view.scene.updateMatrixWorld(true);
++    };
++    window.lessonPour = (key, to) => {
++      const a = __lab.lessons.objects.get(key),
++        b = __lab.lessons.objects.get(to),
++        home = { ...a.target };
++      __lab.beginMouse(a, __lab.view.toScreen(a.target));
++      __lab.move(a, { x: a.target.x, y: 1.25, z: a.target.z }, 0, 0, 0);
++      advanceLab(180);
++      __lab.view.scene.updateMatrixWorld(true);
++      const mouth = __lab.view.mouth(b),
++        roll = 1.05,
++        offset = 0.67 * a.mouthY;
++      __lab.move(
++        a,
++        {
++          x: mouth.x + Math.sin(roll) * offset,
++          y: mouth.y + 1.25 - Math.cos(roll) * offset,
++          z: mouth.z,
++        },
++        roll,
++        0,
++        0,
++      );
++      advanceLab(360);
++      const r = __lab.lessons.pour(a, b);
++      __lab.move(a, { x: a.target.x, y: 1.25, z: a.target.z }, 0, 0, 0);
++      advanceLab(180);
++      __lab.move(a, { ...home, y: 1.25 }, 0, 0, 0);
++      advanceLab(240);
++      __lab.move(a, home, 0, 0, 0);
++      advanceLab(180);
++      __lab.endMouse();
++      return {
++        ...r,
++        pose: { ...a.target },
++        mouth: __lab.view.mouth(a),
++        targetMouth: __lab.view.mouth(b),
++      };
++    };
++  });
++  const neg = await page.evaluate(() =>
++    lessonPour("lesson-silver", "lesson-control"),
++  );
++  assert.equal(neg.ok, true, JSON.stringify(neg));
++  assert.equal(
++    await page.evaluate(
++      () => __lab.lessons.model.get("lesson-control").mol.AgCl || 0,
++    ),
++    0,
++  );
++  const chloride = await page.evaluate(() =>
++    lessonPour("lesson-silver", "lesson-chloride"),
++  );
++  assert.equal(chloride.ok, true, JSON.stringify(chloride));
++  assert.equal(await page.evaluate(() => __lab.lessons.model.complete), true);
++  const solids = await page.evaluate(() => ({
++    mol: __lab.lessons.model.get("lesson-chloride").mol.AgCl,
++    particles: __lab.lessons.objects
++      .get("lesson-chloride")
++      .group.getObjectByName("lesson-precipitate")?.children.length,
++    foreign: __lab.createObject("acid_risk", { x: 0, y: 1, z: 0 }) === null,
++  }));
++  assert.ok(solids.particles > 0);
++  assert.ok(solids.foreign);
++  check(
++    "AgCl: geometric pour, negative control, precipitate, foreign reagent blocked",
++    solids,
++  );
++  await page.click("#lesson-quiz");
++  await page.locator("#lesson-answers button").nth(1).click();
++  assert.ok(
++    (await page.locator("#lesson-answer-feedback").innerText()).includes(
++      "Gợi ý",
++    ),
++  );
++  await page.locator("#lesson-answers button").nth(0).click();
++  assert.ok(
++    (await page.locator("#lesson-answer-feedback").innerText()).startsWith(
++      "Đúng",
++    ),
++  );
++  await page.click("#lesson-quiz-close");
++  check("Quiz unlocks after reaction; wrong answer gives hint");
++  await page.evaluate(() => __lab.lessons.start("indicator"));
++  await page.waitForTimeout(800);
++  assert.equal(
++    (await page.evaluate(() => lessonPour("lesson-base", "lesson-indicator")))
++      .ok,
++    true,
++  );
++  assert.equal(await page.evaluate(() => __lab.lessons.model.seenPink), true);
++  const acid = await page.evaluate(() =>
++    lessonPour("lesson-acid", "lesson-indicator"),
++  );
++  assert.equal(acid.ok, true, JSON.stringify(acid));
++  assert.equal(await page.evaluate(() => __lab.lessons.model.complete), true);
++  check(
++    "Indicator: physical pours produce pink then colorless with quantitative pH",
++  );
++  const roundtrip = await page.evaluate(async () => {
++    const s = __lab.session();
++    const before = JSON.stringify(s.model.vessels);
++    await __lab.loadSession(s);
++    return before === JSON.stringify(__lab.session().model.vessels);
++  });
++  assert.ok(roundtrip);
++  check("Guided session save/load retains matter");
++  const invalidImport = await page.evaluate(async () => {
++    const before = JSON.stringify(__lab.session().model);
++    const bad = structuredClone(__lab.session());
++    bad.poses.foreign = { x: 0, y: 0, z: 0, roll: 0, pitch: 0, yaw: 0 };
++    let rejected = false;
++    try {
++      await __lab.loadSession(bad);
++    } catch {
++      rejected = true;
++    }
++    return rejected && before === JSON.stringify(__lab.session().model);
++  });
++  assert.ok(invalidImport);
++  check("Invalid lesson import is rejected before clearing current work");
++  await page.evaluate(() => __lab.lessons.start("biuret"));
++  await page.waitForTimeout(800);
++  const bio = await page.evaluate(() =>
++    lessonPour("lesson-biuret", "lesson-protein"),
++  );
++  assert.equal(bio.ok, true, JSON.stringify(bio));
++  assert.equal(await page.evaluate(() => __lab.lessons.model.complete), true);
++  check("Protein: alkaline biuret reagent gives purple");
++  await page.evaluate(() => __lab.lessons.start("ammonium"));
++  await page.waitForTimeout(800);
++  assert.equal(
++    (await page.evaluate(() => lessonPour("lesson-base", "lesson-ammonium")))
++      .ok,
++    true,
++  );
++  const ammonia = await page.evaluate(() => {
++    const a = __lab.lessons.objects.get("lesson-litmus"),
++      b = __lab.lessons.objects.get("lesson-ammonium");
++    __lab.view.scene.updateMatrixWorld(true);
++    __lab.beginMouse(a, __lab.view.toScreen(a.target));
++    __lab.move(a, { x: a.target.x, y: 1.2, z: a.target.z }, 0, 0, 0);
++    advanceLab(200);
++    __lab.view.scene.updateMatrixWorld(true);
++    const m = __lab.view.mouth(b);
++    __lab.move(a, { x: m.x, y: m.y + 0.45 - 0.28 * 0.67, z: m.z }, 0, 0, 0);
++    advanceLab(360);
++    const contacts = __lab.lessons.visuals.contacts(
++      __lab.lessons.objects,
++      __lab.lessons.model,
++    );
++    return {
++      paperPose: { ...a.target },
++      paperRoll: a.roll,
++      mouth: __lab.view.mouth(b),
++      complete: __lab.lessons.model.complete,
++      contacts,
++      litmus: __lab.lessons.model.get("lesson-litmus").litmusBlue,
++      gas: __lab.lessons.model.get("lesson-ammonium").escaped_mol.NH3,
++    };
++  });
++  assert.ok(ammonia.complete, JSON.stringify(ammonia));
++  check(
++    "Ammonium: physical litmus above mouth confirms colorless gas",
++    ammonia,
++  );
++  await page.evaluate(() => __lab.lessons.start("iron-copper"));
++  await page.waitForTimeout(800);
++  const iron = await page.evaluate(() => {
++    const a = __lab.lessons.objects.get("lesson-iron"),
++      b = __lab.lessons.objects.get("lesson-copper"),
++      p = __lab.view.physics;
++    const before = __lab.lessons.model.get("lesson-iron").mol.Cu || 0;
++    __lab.beginMouse(a, __lab.view.toScreen(a.target));
++    __lab.move(a, { x: b.target.x, y: 1, z: b.target.z }, 0, 0, 0);
++    advanceLab(180);
++    __lab.move(
++      a,
++      { x: b.target.x, y: b.target.y + 0.28, z: b.target.z },
++      0,
++      0,
++      0,
++    );
++    advanceLab(500);
++    const contacts = __lab.lessons.visuals.contacts(
++      __lab.lessons.objects,
++      __lab.lessons.model,
++    );
++    __lab.select(b);
++    document.activeElement?.blur();
++    window.dispatchEvent(new KeyboardEvent("keydown", { key: "k" }));
++    const capBlocked = !b.sealed;
++    const reacted = __lab.lessons.model.get("lesson-iron").mol.Cu || 0;
++    __lab.move(a, { x: b.target.x, y: 1.2, z: b.target.z }, 0, 0, 0);
++    advanceLab(200);
++    const removed = __lab.lessons.model.get("lesson-iron").mol.Cu || 0;
++    advanceLab(120);
++    return {
++      before,
++      reacted,
++      removed,
++      after: __lab.lessons.model.get("lesson-iron").mol.Cu || 0,
++      contacts,
++      complete: __lab.lessons.model.complete,
++      colliders: p.entries.get(b.id).colliders.length,
++      capBlocked,
++    };
++  });
++  assert.equal(iron.before, 0);
++  assert.ok(iron.reacted > 0, JSON.stringify(iron));
++  assert.equal(iron.removed, iron.after);
++  assert.ok(iron.complete);
++  assert.ok(iron.capBlocked);
++  check(
++    "Fe: hollow vessel collider, immersion reacts, lifting out stops reaction",
++    iron,
++  );
++  const immersedRestore = await page.evaluate(async () => {
++    const a = __lab.lessons.objects.get("lesson-iron"),
++      b = __lab.lessons.objects.get("lesson-copper");
++    __lab.move(
++      a,
++      { x: b.target.x, y: b.target.y + 0.28, z: b.target.z },
++      0,
++      0,
++      0,
++    );
++    advanceLab(300);
++    const saved = __lab.session(),
++      oldPose = saved.poses["lesson-iron"];
++    await __lab.loadSession(saved);
++    const loaded = __lab.lessons.objects.get("lesson-iron");
++    return {
++      displacement: Math.hypot(
++        loaded.target.x - oldPose.x,
++        loaded.target.y - oldPose.y,
++        loaded.target.z - oldPose.z,
++      ),
++      immersed: __lab.lessons.visuals.contacts(
++        __lab.lessons.objects,
++        __lab.lessons.model,
++      ).immersed,
++      matter:
++        JSON.stringify(saved.model.vessels) ===
++        JSON.stringify(__lab.session().model.vessels),
++    };
++  });
++  assert.ok(
++    immersedRestore.displacement < 0.001,
++    JSON.stringify(immersedRestore),
++  );
++  assert.ok(
++    immersedRestore.immersed && immersedRestore.matter,
++    JSON.stringify(immersedRestore),
++  );
++  check(
++    "Restoring iron inside hollow beaker preserves its position and matter",
++    immersedRestore,
++  );
++  await page.evaluate(() => __lab.endMouse());
++  await page.waitForTimeout(200);
++  await page.screenshot({ path: path.join(out, "internal_iron.png") });
++  await page.click("#lesson-knowledge summary");
++  await page.screenshot({ path: path.join(out, "internal_knowledge.png") });
++  await page.evaluate(() => __lab.lessons.start("chloride"));
++  await page.waitForTimeout(800);
++  await page.evaluate(() => {
++    const a = __lab.lessons.objects.get("lesson-silver"),
++      b = __lab.lessons.objects.get("lesson-chloride");
++    __lab.beginMouse(a, __lab.view.toScreen(a.target));
++    __lab.move(a, { x: a.target.x, y: 1.25, z: a.target.z }, 0, 0, 0);
++    advanceLab(200);
++    const mouth = __lab.view.mouth(b),
++      roll = 1.05,
++      offset = 0.67 * a.mouthY;
++    __lab.move(
++      a,
++      {
++        x: mouth.x + Math.sin(roll) * offset,
++        y: mouth.y + 1.25 - Math.cos(roll) * offset,
++        z: mouth.z,
++      },
++      roll,
++      0,
++      0,
++    );
++    advanceLab(300);
++  });
++  await page.waitForFunction(() => __lab.lessons.model.complete, null, {
++    timeout: 4000,
++  });
++  await page.evaluate(() => __lab.endMouse());
++  check(
++    "Production animation loop automatically pours after hold/tilt dwell (no direct chemistry call)",
++  );
++  await page.selectOption("#projection-page", "1");
++  assert.equal(await page.evaluate(() => __lab.lessons.visuals.page), 1);
++  await page.selectOption("#projection-page", "3");
++  assert.equal(await page.evaluate(() => __lab.lessons.visuals.page), 3);
++  check(
++    "Projection pages expose preparation, conditions, explanation, application and safety",
++  );
++  await page.click("#lesson-exit");
++  assert.equal(await page.evaluate(() => __lab.lessons.active), false);
++  assert.equal(await page.evaluate(() => __lab.view.objects.length), 0);
++  check("Leaving lesson clears its bodies and restores free lab");
++  await page.click("#settings > summary");
++  await page.click("#view-mode");
++  assert.ok(await page.evaluate(() => __lab.view.controls.enabled));
++  await page.click("#lesson-start");
++  assert.equal(await page.evaluate(() => __lab.view.controls.enabled), false);
++  assert.ok(await page.evaluate(() => __lab.lessons.active));
++  check("Starting a lesson from Orbit view restores interaction mode");
++  assert.deepEqual(errors, []);
++  check("No JavaScript exceptions");
++} catch (e) {
++  checks.push({
++    name: "failure",
++    passed: false,
++    error: String(e),
++    stack: e.stack,
++  });
++  console.error(e);
++  process.exitCode = 1;
++} finally {
++  await fs.writeFile(
++    path.join(out, "lessons_browser.json"),
++    JSON.stringify({ physicalWebcam: false, checks, errors }, null, 2),
++  );
++  await browser?.close();
++  server.kill();
++}
+--- /dev/null
++++ b/tools/qa_regression_v34.mjs
+@@ -0,0 +1,109 @@
++import { spawn } from "node:child_process";
++import { writeFile } from "node:fs/promises";
++import path from "node:path";
++import { fileURLToPath } from "node:url";
++import assert from "node:assert/strict";
++const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
++const { chromium } = await import(
++  process.env.PLAYWRIGHT_PACKAGE || "playwright"
++);
++const server = spawn(
++  process.env.PYTHON || (process.platform === "win32" ? "python" : "python3"),
++  ["-S", "server.py", "--no-browser", "--browser-tracking", "--port", "8772"],
++  { cwd: root },
++);
++server.stderr.on("data", () => {});
++await new Promise((r) =>
++  server.stdout.on("data", (b) => b.toString().includes("http://") && r()),
++);
++let browser;
++const errors = [],
++  checks = [];
++const check = (name) => {
++  checks.push({ name, passed: true });
++  console.log("PASS", name);
++};
++try {
++  browser = await chromium.launch({
++    headless: true,
++    args: [
++      "--no-sandbox",
++      "--enable-unsafe-swiftshader",
++      "--use-gl=angle",
++      "--use-angle=swiftshader",
++    ],
++  });
++  const page = await browser.newPage({
++    viewport: { width: 1280, height: 800 },
++  });
++  page.on("pageerror", (e) => errors.push(e.message));
++  await page.goto("http://127.0.0.1:8772/?test");
++  await page.waitForFunction(() => window.__lab);
++  const saved = await page.evaluate(async () => {
++    __lab.createObject("beaker", { x: 0, y: 0, z: 0 });
++    const s = __lab.session();
++    await __lab.loadSession(s);
++    const a = __lab.session();
++    const before = JSON.stringify(
++      a.objects.map((o) => ({ id: o.id, stock: o.stock, mixture: o.mixture })),
++    );
++    let rejected = false;
++    try {
++      await __lab.loadSession({
++        schema: "hololab3-session-1",
++        objects: [{ stock: "invalid" }],
++      });
++    } catch {
++      rejected = true;
++    }
++    const after = JSON.stringify(
++      __lab
++        .session()
++        .objects.map((o) => ({ id: o.id, stock: o.stock, mixture: o.mixture })),
++    );
++    return { stock: a.objects[0].stock, rejected, unchanged: before === after };
++  });
++  assert.equal(saved.stock, "beaker");
++  assert.ok(saved.rejected && saved.unchanged);
++  check(
++    "Save/load and invalid import preserve IDs/stocks/quantities while physics remains active",
++  );
++  await page.locator("#risk-mode").click();
++  const risk = await page.evaluate(async () => {
++    __lab.clearDesk();
++    const a = __lab.createObject("water", { x: -1, y: 0, z: 0 }),
++      b = __lab.createObject("acid_risk", { x: 1, y: 0, z: 0 });
++    const before = JSON.stringify([a.mixture, b.mixture]);
++    await __lab.pour(a, b, true);
++    return before === JSON.stringify([a.mixture, b.mixture]);
++  });
++  assert.ok(risk);
++  check(
++    "Guided hazardous transfer remains blocked without changing quantities",
++  );
++  await page.locator("#risk-mode").click();
++  const effects = await page.evaluate(async () => {
++    const [a, b] = __lab.view.objects;
++    await __lab.pour(a, b, true);
++    return { qual: b.mixture.qualitative, effects: __lab.view.effects.length };
++  });
++  assert.ok(effects.qual && effects.effects > 0);
++  check("Free-mode qualitative hazard effects retained");
++  await page.evaluate(() => document.querySelector("#view-mode").click());
++  assert.equal(await page.evaluate(() => __lab.view.controls.enabled), true);
++  await page.evaluate(() => document.querySelector("#view-mode").click());
++  assert.equal(await page.evaluate(() => __lab.view.controls.enabled), false);
++  check("OrbitControls exclusive interaction mode retained");
++  await page.locator("#reaction-library").click();
++  assert.equal(await page.locator("#reaction-select option").count(), 100);
++  await page.locator("#reactions-close").click();
++  check("100-reaction library retained");
++  assert.deepEqual(errors, []);
++} finally {
++  await writeFile(
++    path.join(root, "validation_v34/regression_checks.json"),
++    JSON.stringify({ checks, page_errors: errors }, null, 2),
++  );
++  await browser?.close();
++  server.kill();
++}
+--- /dev/null
++++ b/web/data/lessons-thpt.json
+@@ -0,0 +1,802 @@
++{
++  "schema": "hololab-thpt-1",
++  "reviewed": "2026-10-27",
++  "sources": {
++    "curriculum": {
++      "title": "Bộ GD&ĐT — Chương trình môn Hóa học 2018 (bản đăng tại trường An Đồng)",
++      "url": "https://thcsandong.haiphong.edu.vn/van-ban-nganh/chuong-trinh-giao-duc-pho-thong-mon-hoa-hoc-ban-hanh-kem-theo-thong-tu-so-32201/ctmb/20405/91190"
++    },
++    "ions": {
++      "title": "Royal Society of Chemistry — Testing salts for anions and cations",
++      "url": "https://edu.rsc.org/experiments/testing-salts-for-anions-and-cations/464.article"
++    },
++    "indicator": {
++      "title": "University of Wisconsin–Madison — Choosing an indicator",
++      "url": "https://www2.chem.wisc.edu/deptfiles/genchem/lab/labdocs/modules/titrate/titrqind.htm"
++    },
++    "ammonium": {
++      "title": "Royal Society of Chemistry — Microscale reactions of positive ions with sodium hydroxide",
++      "url": "https://edu.rsc.org/experiments/microscale-reactions-of-positive-ions-with-sodium-hydroxide/757.article"
++    },
++    "displacement": {
++      "title": "Purdue University — Displacement reactions",
++      "url": "https://chemed.chem.purdue.edu/genchem/demosheets/9.11.html"
++    },
++    "biuret": {
++      "title": "Rice University — Biuret protein assay",
++      "url": "https://www.ruf.rice.edu/~bioslabs/methods/protein/biuret.html"
++    },
++    "school11": {
++      "title": "THPT Tôn Thất Tùng — Hóa 11, học liệu 2025–2026",
++      "url": "https://thpttonthattung-danang.edu.vn/wp-content/uploads/2025/12/Huong-dan-on-tap-KTCK1-Hoa-11-25-26.pdf"
++    },
++    "school12": {
++      "title": "THPT Lê Quý Đôn — Hóa 12, học liệu 2025–2026",
++      "url": "https://thpt-lequydon-hcm.edu.vn/ckeditor/plugins/fileman/Uploads/Documents/HD%20CHUYEN%20MON/2025-2026/HOA_NOI%20DUNG%20ON%20TAP%20KT%20HK12526.pdf"
++    }
++  },
++  "stocks": [
++    {
++      "id": "lesson-chloride",
++      "name": "Mẫu sodium chloride",
++      "formula": "NaCl · ban đầu 0,10 M · acid hóa HNO₃",
++      "kind": "tube",
++      "group": "chemical",
++      "capacity_ml": 20,
++      "initial": {
++        "volume_ml": 8,
++        "mol": {
++          "Na_plus": 0.0008,
++          "Cl_minus": 0.0008,
++          "H_plus": 8e-05,
++          "NO3_minus": 8e-05
++        }
++      }
++    },
++    {
++      "id": "lesson-silver",
++      "name": "Silver nitrate",
++      "formula": "AgNO₃ · ban đầu 0,05 M",
++      "kind": "bottle",
++      "group": "chemical",
++      "capacity_ml": 100,
++      "initial": {
++        "volume_ml": 30,
++        "mol": {
++          "Ag_plus": 0.0015,
++          "NO3_minus": 0.0015
++        }
++      }
++    },
++    {
++      "id": "lesson-control",
++      "name": "Nước đối chứng",
++      "formula": "H₂O",
++      "kind": "tube",
++      "group": "chemical",
++      "capacity_ml": 20,
++      "initial": {
++        "volume_ml": 8,
++        "mol": {}
++      }
++    },
++    {
++      "id": "lesson-indicator",
++      "name": "Nước + phenolphthalein",
++      "formula": "H₂O · chỉ thị PP",
++      "kind": "beaker",
++      "group": "chemical",
++      "capacity_ml": 250,
++      "initial": {
++        "volume_ml": 40,
++        "mol": {},
++        "indicator_g": 0.0004
++      }
++    },
++    {
++      "id": "lesson-base",
++      "name": "Sodium hydroxide",
++      "formula": "NaOH · ban đầu 0,10 M",
++      "kind": "bottle",
++      "group": "chemical",
++      "capacity_ml": 100,
++      "initial": {
++        "volume_ml": 40,
++        "mol": {
++          "Na_plus": 0.004,
++          "OH_minus": 0.004
++        }
++      }
++    },
++    {
++      "id": "lesson-acid",
++      "name": "Hydrochloric acid",
++      "formula": "HCl · ban đầu 0,10 M",
++      "kind": "bottle",
++      "group": "chemical",
++      "capacity_ml": 100,
++      "initial": {
++        "volume_ml": 40,
++        "mol": {
++          "H_plus": 0.004,
++          "Cl_minus": 0.004
++        }
++      }
++    },
++    {
++      "id": "lesson-ammonium",
++      "name": "Ammonium chloride",
++      "formula": "NH₄Cl · ban đầu 0,10 M",
++      "kind": "beaker",
++      "group": "chemical",
++      "capacity_ml": 250,
++      "initial": {
++        "volume_ml": 10,
++        "mol": {
++          "NH4_plus": 0.001,
++          "Cl_minus": 0.001
++        }
++      }
++    },
++    {
++      "id": "lesson-litmus",
++      "name": "Giấy quỳ đỏ ẩm",
++      "formula": "Chỉ thị khí · giữ trên miệng bình",
++      "kind": "litmus",
++      "group": "tool",
++      "capacity_ml": 250,
++      "initial": {
++        "volume_ml": 0,
++        "mol": {}
++      }
++    },
++    {
++      "id": "lesson-copper",
++      "name": "Copper(II) sulfate",
++      "formula": "CuSO₄ · ban đầu 0,05 M",
++      "kind": "beaker",
++      "group": "chemical",
++      "capacity_ml": 250,
++      "initial": {
++        "volume_ml": 100,
++        "mol": {
++          "Cu_2plus": 0.005,
++          "SO4_2minus": 0.005
++        }
++      }
++    },
++    {
++      "id": "lesson-iron",
++      "name": "Thanh sắt sạch",
++      "formula": "Fe · ban đầu 0,28 g",
++      "kind": "iron-strip",
++      "group": "chemical",
++      "capacity_ml": 250,
++      "initial": {
++        "volume_ml": 0,
++        "mol": {
++          "Fe": 0.005
++        }
++      }
++    },
++    {
++      "id": "lesson-protein",
++      "name": "Dung dịch protein",
++      "formula": "Albumin · ban đầu 10 mg/mL",
++      "kind": "tube",
++      "group": "chemical",
++      "capacity_ml": 20,
++      "initial": {
++        "volume_ml": 5,
++        "mol": {},
++        "protein_g": 0.05
++      }
++    },
++    {
++      "id": "lesson-biuret",
++      "name": "Thuốc thử biuret pha sẵn",
++      "formula": "Cu(II) · kiềm · tartrate",
++      "kind": "bottle",
++      "group": "chemical",
++      "capacity_ml": 100,
++      "initial": {
++        "volume_ml": 30,
++        "mol": {
++          "Na_plus": 0.003,
++          "OH_minus": 0.003,
++          "SO4_2minus": 0.00015,
++          "biuret_Cu": 0.00015
++        }
++      }
++    }
++  ],
++  "lessons": [
++    {
++      "id": "chloride",
++      "grade": 10,
++      "topic": "Nhóm VIIA — Hydrogen halide và muối halide",
++      "title": "Nhận biết ion chloride",
++      "status": "ready",
++      "curriculum": {
++        "document": "CTGDPT 2018 môn Hóa học, TT 32/2018",
++        "pages": [
++          16
++        ],
++        "alignment": "Dùng AgNO₃ để nhận biết chloride; đây là một trường hợp trong yêu cầu phân biệt ion halide.",
++        "source": "curriculum"
++      },
++      "objective": "Dùng AgNO₃ để nhận biết chloride; đây là một trường hợp trong yêu cầu phân biệt ion halide.",
++      "equations": [
++        "AgNO₃(aq) + NaCl(aq) → AgCl(s)↓ + NaNO₃(aq)",
++        "Ag⁺(aq) + Cl⁻(aq) → AgCl(s)↓"
++      ],
++      "setup": [
++        {
++          "stock": "lesson-chloride",
++          "role": "sample"
++        },
++        {
++          "stock": "lesson-silver",
++          "role": "reagent"
++        },
++        {
++          "stock": "lesson-control",
++          "role": "control"
++        }
++      ],
++      "steps": [
++        "Mẫu NaCl đã được acid hóa loãng bằng HNO₃; nước là mẫu đối chứng.",
++        "Gắp chai AgNO₃, đưa miệng chai lên trên mẫu rồi nghiêng ≥45° để rót.",
++        "Quan sát kết tủa; thử AgNO₃ với nước đối chứng và so sánh.",
++        "Sau khi rót, dựng chai thẳng rồi đặt lại chỗ trống trước khi thả tay."
++      ],
++      "phenomenon": "AgCl trắng làm dung dịch vẩn đục rồi lắng; mẫu nước đối chứng không có kết tủa.",
++      "explanation": "Ion Ag⁺ kết hợp với Cl⁻ thành muối ít tan. Na⁺ và NO₃⁻ là ion đi kèm. Lượng AgCl bị giới hạn bởi ion thiếu.",
++      "application": "Kiểm tra sự có mặt của chloride trong mẫu đã xử lý phù hợp; thử định tính không thay thế phép đo nồng độ.",
++      "safety": "AgNO₃ gây tổn thương mắt và nhuộm da; thu gom chất thải chứa bạc riêng.",
++      "questions": [
++        {
++          "prompt": "Chất rắn màu trắng là gì?",
++          "options": [
++            "AgCl",
++            "NaNO₃",
++            "Ag kim loại"
++          ],
++          "correct": 0,
++          "hint": "Tìm cặp ion tạo muối ít tan.",
++          "explanation": "Ag⁺ và Cl⁻ tạo AgCl rắn màu trắng."
++        },
++        {
++          "prompt": "Thêm AgNO₃ vào nước đối chứng có tạo AgCl không?",
++          "options": [
++            "Có, vì bạc luôn kết tủa",
++            "Không, vì thiếu Cl⁻",
++            "Có, do có nước"
++          ],
++          "correct": 1,
++          "hint": "Kiểm tra đủ hai ion của phương trình.",
++          "explanation": "Không có Cl⁻ thì không thể tạo AgCl."
++        },
++        {
++          "prompt": "Khi Cl⁻ đã hết, thêm tiếp AgNO₃ thì sao?",
++          "options": [
++            "AgCl tăng không giới hạn",
++            "Không tạo thêm AgCl",
++            "AgCl biến thành khí"
++          ],
++          "correct": 1,
++          "hint": "Chất giới hạn quyết định lượng sản phẩm.",
++          "explanation": "Mỗi mol AgCl cần một mol Cl⁻; Ag⁺ dư còn trong dung dịch."
++        },
++        {
++          "prompt": "Chất thải sau thử bạc nên được xử lý thế nào?",
++          "options": [
++            "Đổ trực tiếp xuống bồn",
++            "Thu gom theo hướng dẫn của giáo viên",
++            "Trộn với mọi chất thải khác"
++          ],
++          "correct": 1,
++          "hint": "Bạc cần được thu gom riêng.",
++          "explanation": "Thu gom riêng giúp hạn chế ô nhiễm và tiếp xúc nguy hiểm."
++        }
++      ],
++      "sources": [
++        "curriculum",
++        "ions"
++      ],
++      "limits": "Dung dịch đơn giản, bỏ qua hoạt độ và độ tan rất nhỏ của AgCl; không mô phỏng phân hủy quang hóa.",
++      "conditions": "Dung dịch nước; mẫu NaCl acid hóa bằng HNO₃ loãng. Không có ion gây nhiễu trong bộ mẫu.",
++      "reactionIds": [
++        "silver-chloride",
++        "neutralization"
++      ],
++      "modelType": "bounded-stoichiometry"
++    },
++    {
++      "id": "indicator",
++      "grade": 11,
++      "topic": "Cân bằng trong dung dịch nước",
++      "title": "Màu chỉ thị và môi trường acid–base",
++      "status": "ready",
++      "curriculum": {
++        "document": "CTGDPT 2018 môn Hóa học, TT 32/2018",
++        "pages": [
++          21
++        ],
++        "alignment": "Liên hệ pH với màu phenolphthalein và giải thích trung hòa acid–base.",
++        "source": "curriculum"
++      },
++      "objective": "Liên hệ pH với màu phenolphthalein và giải thích trung hòa acid–base.",
++      "equations": [
++        "HCl(aq) + NaOH(aq) → NaCl(aq) + H₂O(l)",
++        "H⁺(aq) + OH⁻(aq) → H₂O(l)"
++      ],
++      "setup": [
++        {
++          "stock": "lesson-indicator",
++          "role": "sample"
++        },
++        {
++          "stock": "lesson-base",
++          "role": "reagent"
++        },
++        {
++          "stock": "lesson-acid",
++          "role": "reagent"
++        }
++      ],
++      "steps": [
++        "Bình mẫu chứa nước và một lượng vết phenolphthalein.",
++        "Rót một ít NaOH vào bình mẫu để quan sát màu hồng.",
++        "Rót HCl vào chính bình đó đến khi màu hồng mất; theo dõi pH.",
++        "Sau khi rót, dựng chai thẳng rồi đặt lại chỗ trống trước khi thả tay."
++      ],
++      "phenomenon": "Chỉ thị từ không màu sang hồng trong môi trường kiềm; màu mất khi thêm đủ acid.",
++      "explanation": "H⁺ trung hòa OH⁻ làm pH giảm. Phenolphthalein chuyển màu khoảng pH 8,2–10; không màu không đồng nghĩa pH luôn bằng 7.",
++      "application": "Chọn chỉ thị phù hợp cho chuẩn độ và nhận biết môi trường của dung dịch.",
++      "safety": "Tránh để acid, base và chỉ thị tiếp xúc mắt; không nếm dung dịch.",
++      "questions": [
++        {
++          "prompt": "Màu hồng cho biết điều gì?",
++          "options": [
++            "Dung dịch có tính kiềm đủ mạnh",
++            "Dung dịch luôn trung tính",
++            "Dung dịch chứa kết tủa"
++          ],
++          "correct": 0,
++          "hint": "Xem khoảng chuyển màu của chỉ thị.",
++          "explanation": "Phenolphthalein hồng trong khoảng pH kiềm phù hợp."
++        },
++        {
++          "prompt": "Sau khi mất màu, có chắc pH bằng 7 không?",
++          "options": [
++            "Có",
++            "Không",
++            "pH luôn bằng 0"
++          ],
++          "correct": 1,
++          "hint": "Khoảng không màu rộng hơn một giá trị pH.",
++          "explanation": "Chỉ thị có thể không màu trong môi trường acid, trung tính hoặc kiềm yếu."
++        },
++        {
++          "prompt": "Sản phẩm ion rút gọn của trung hòa là gì?",
++          "options": [
++            "H₂",
++            "H₂O",
++            "Cl₂"
++          ],
++          "correct": 1,
++          "hint": "H⁺ kết hợp với OH⁻.",
++          "explanation": "Phương trình H⁺ + OH⁻ → H₂O bảo toàn nguyên tử và điện tích."
++        },
++        {
++          "prompt": "Chỉ thị được dùng vào việc gì?",
++          "options": [
++            "Thay mọi máy đo pH chính xác",
++            "Nhận biết vùng pH và điểm kết thúc phù hợp",
++            "Đo khối lượng kim loại"
++          ],
++          "correct": 1,
++          "hint": "Màu chỉ thị phản ánh một khoảng pH.",
++          "explanation": "Cần chọn chỉ thị có khoảng chuyển màu phù hợp phản ứng chuẩn độ."
++        }
++      ],
++      "sources": [
++        "curriculum",
++        "indicator",
++        "school11"
++      ],
++      "limits": "Dung dịch lý tưởng 25 °C, thể tích cộng được; bỏ qua hoạt độ, động học trộn và lượng acid–base của chỉ thị vết.",
++      "conditions": "Dung dịch loãng ở 25 °C, có lượng vết phenolphthalein; cho acid và base vào cùng bình.",
++      "reactionIds": [
++        "neutralization"
++      ],
++      "modelType": "bounded-stoichiometry"
++    },
++    {
++      "id": "ammonium",
++      "grade": 11,
++      "topic": "Nitrogen và sulfur — Ammonia, muối ammonium",
++      "title": "Nhận biết ion ammonium",
++      "status": "ready",
++      "curriculum": {
++        "document": "CTGDPT 2018 môn Hóa học, TT 32/2018",
++        "pages": [
++          22
++        ],
++        "alignment": "Chuyển ammonium thành ammonia trong kiềm và kiểm chứng khí bằng giấy quỳ đỏ ẩm.",
++        "source": "curriculum"
++      },
++      "objective": "Chuyển ammonium thành ammonia trong kiềm và kiểm chứng khí bằng giấy quỳ đỏ ẩm.",
++      "equations": [
++        "NH₄Cl(aq) + NaOH(aq) → NaCl(aq) + NH₃(g)↑ + H₂O(l)",
++        "NH₄⁺(aq) + OH⁻(aq) → NH₃(aq/g) + H₂O(l)"
++      ],
++      "setup": [
++        {
++          "stock": "lesson-ammonium",
++          "role": "sample"
++        },
++        {
++          "stock": "lesson-base",
++          "role": "reagent"
++        },
++        {
++          "stock": "lesson-litmus",
++          "role": "probe"
++        }
++      ],
++      "steps": [
++        "Rót NaOH vào mẫu NH₄Cl.",
++        "Gắp giấy quỳ đỏ ẩm, giữ ngay phía trên miệng bình; không nhúng vào dung dịch.",
++        "Quan sát giấy đổi xanh. Vòng bọt chỉ là ký hiệu khí NH₃ không màu.",
++        "Sau khi rót, dựng chai thẳng rồi đặt lại chỗ trống trước khi thả tay."
++      ],
++      "phenomenon": "NH₃ thoát ra làm quỳ đỏ ẩm hóa xanh; không tạo kết tủa.",
++      "explanation": "Kiềm chuyển NH₄⁺ sang NH₃. NH₃ hòa tan vào lớp nước trên giấy tạo môi trường base. Nhúng giấy vào NaOH cũng đổi màu nhưng không chứng minh khí NH₃.",
++      "application": "Nhận biết ammonium trong mẫu phân đạm được chuẩn bị phù hợp.",
++      "safety": "Không ngửi trực tiếp NH₃; thao tác thật cần thông khí và giám sát. Gia nhiệt nhẹ có thể hỗ trợ phép thử thật, mô phỏng này gia tốc trao đổi khí ở 25 °C.",
++      "questions": [
++        {
++          "prompt": "Khí được tạo ra là gì?",
++          "options": [
++            "NH₃",
++            "Cl₂",
++            "H₂"
++          ],
++          "correct": 0,
++          "hint": "NH₄⁺ mất proton trong môi trường kiềm.",
++          "explanation": "Sản phẩm nitrogen là ammonia NH₃."
++        },
++        {
++          "prompt": "Phải đặt giấy quỳ ở đâu?",
++          "options": [
++            "Nhúng vào NaOH",
++            "Ngay trên miệng bình, không chạm dung dịch",
++            "Dưới đáy bình"
++          ],
++          "correct": 1,
++          "hint": "Cần thử khí, tránh kết quả dương tính do base lỏng.",
++          "explanation": "Quỳ đỏ ẩm trên miệng bình kiểm chứng khí có tính base."
++        },
++        {
++          "prompt": "Có kết tủa trong phép thử này không?",
++          "options": [
++            "Có kết tủa trắng",
++            "Không; dấu hiệu là khí và quỳ đổi xanh",
++            "Có kim loại đồng"
++          ],
++          "correct": 1,
++          "hint": "Đối chiếu phương trình đã cân bằng.",
++          "explanation": "Không có chất rắn ít tan trong phương trình này."
++        },
++        {
++          "prompt": "Vì sao không ngửi trực tiếp?",
++          "options": [
++            "NH₃ gây kích ứng",
++            "NH₃ luôn phát nổ",
++            "Khí màu xanh che mắt"
++          ],
++          "correct": 0,
++          "hint": "Phân biệt kích ứng với cháy nổ.",
++          "explanation": "NH₃ là khí không màu gây kích ứng, cần tránh hít trực tiếp."
++        }
++      ],
++      "sources": [
++        "curriculum",
++        "ammonium",
++        "school11"
++      ],
++      "limits": "Mô hình chuyển hóa giới hạn bởi lượng chất; tốc độ thoát NH₃ được gia tốc để quan sát, không dự báo phát thải hay nhiệt độ thực.",
++      "conditions": "NH₄⁺ tiếp xúc OH⁻ trong bình mở. Giấy quỳ đỏ phải ẩm và đặt trong vùng khí, không chạm dung dịch.",
++      "reactionIds": [
++        "ammonium-base",
++        "neutralization"
++      ],
++      "modelType": "bounded-stoichiometry"
++    },
++    {
++      "id": "iron-copper",
++      "grade": 12,
++      "topic": "Đại cương về kim loại — Tính chất hóa học",
++      "title": "Sắt đẩy đồng khỏi dung dịch muối",
++      "status": "ready",
++      "curriculum": {
++        "document": "CTGDPT 2018 môn Hóa học, TT 32/2018",
++        "pages": [
++          39
++        ],
++        "alignment": "Giải thích phản ứng kim loại với dung dịch muối bằng sự nhường–nhận electron.",
++        "source": "curriculum"
++      },
++      "objective": "Giải thích phản ứng kim loại với dung dịch muối bằng sự nhường–nhận electron.",
++      "equations": [
++        "Fe(s) + CuSO₄(aq) → FeSO₄(aq) + Cu(s)",
++        "Fe(s) + Cu²⁺(aq) → Fe²⁺(aq) + Cu(s)"
++      ],
++      "setup": [
++        {
++          "stock": "lesson-copper",
++          "role": "sample"
++        },
++        {
++          "stock": "lesson-iron",
++          "role": "metal"
++        }
++      ],
++      "steps": [
++        "Bình chứa CuSO₄ màu xanh; thanh sắt có bề mặt sạch.",
++        "Gắp thanh sắt, đưa qua miệng bình và hạ đầu thanh vào lớp chất lỏng.",
++        "Giữ ngập để quan sát lớp đồng đỏ nâu và lượng Cu²⁺ giảm. Nhấc ra thì phản ứng dừng."
++      ],
++      "phenomenon": "Đồng đỏ nâu bám trên phần sắt ngập; màu xanh của Cu²⁺ nhạt dần, Fe²⁺ tạo sắc xanh lục nhạt.",
++      "explanation": "Fe nhường 2 electron thành Fe²⁺; Cu²⁺ nhận 2 electron tạo Cu. Phải có sắt tiếp xúc dung dịch, không phản ứng qua thành bình.",
++      "application": "Minh họa phản ứng thế và nguyên tắc thu hồi kim loại từ dung dịch phù hợp.",
++      "safety": "CuSO₄ cần được thu gom đúng cách; không chạm tay hoặc uống dung dịch.",
++      "questions": [
++        {
++          "prompt": "Lớp đỏ nâu bám trên sắt là gì?",
++          "options": [
++            "Gỉ sắt",
++            "Đồng kim loại",
++            "Muối NaCl"
++          ],
++          "correct": 1,
++          "hint": "Xác định chất nhận electron.",
++          "explanation": "Cu²⁺ nhận electron tạo Cu rắn màu đỏ nâu."
++        },
++        {
++          "prompt": "Chất khử là chất nào?",
++          "options": [
++            "Fe",
++            "Cu²⁺",
++            "SO₄²⁻"
++          ],
++          "correct": 0,
++          "hint": "Chất khử nhường electron.",
++          "explanation": "Fe → Fe²⁺ + 2e⁻, nên Fe là chất khử."
++        },
++        {
++          "prompt": "1 mmol Fe phản ứng tạo tối đa bao nhiêu mmol Cu?",
++          "options": [
++            "0,5",
++            "1",
++            "2"
++          ],
++          "correct": 1,
++          "hint": "Đọc hệ số phương trình.",
++          "explanation": "Tỉ lệ mol Fe : Cu là 1 : 1 khi Cu²⁺ đủ."
++        },
++        {
++          "prompt": "Chạm thanh sắt vào phía ngoài bình có gây phản ứng không?",
++          "options": [
++            "Có, vì hai vật chạm nhau",
++            "Không, sắt phải tiếp xúc dung dịch",
++            "Có, do trọng lực"
++          ],
++          "correct": 1,
++          "hint": "Thành thủy tinh ngăn tiếp xúc giữa chất tham gia.",
++          "explanation": "Va chạm hình học ngoài bình không tạo tiếp xúc hóa học."
++        }
++      ],
++      "sources": [
++        "curriculum",
++        "displacement"
++      ],
++      "limits": "Thanh sắt sạch; tốc độ lớp phủ được gia tốc, bỏ qua thụ động hóa, khuếch tán và oxi hóa Fe²⁺ bởi không khí.",
++      "conditions": "Bề mặt Fe sạch phải ngập dung dịch CuSO₄ ở nhiệt độ phòng; tiếp xúc ngoài thành bình không đủ.",
++      "reactionIds": [
++        "iron-displacement"
++      ],
++      "modelType": "bounded-stoichiometry"
++    },
++    {
++      "id": "biuret",
++      "grade": 12,
++      "topic": "Hợp chất chứa nitrogen — Peptide, protein",
++      "title": "Phản ứng màu biuret của protein",
++      "status": "ready",
++      "curriculum": {
++        "document": "CTGDPT 2018 môn Hóa học, TT 32/2018",
++        "pages": [
++          36
++        ],
++        "alignment": "Quan sát phản ứng màu biuret và liên hệ sự có mặt của nhiều liên kết peptide.",
++        "source": "curriculum"
++      },
++      "objective": "Quan sát phản ứng màu biuret và liên hệ sự có mặt của nhiều liên kết peptide.",
++      "equations": [
++        "Protein/peptide + Cu(II) — môi trường kiềm → phức màu tím (sơ đồ)",
++        "Không có một phương trình phân tử duy nhất cho hỗn hợp protein."
++      ],
++      "setup": [
++        {
++          "stock": "lesson-protein",
++          "role": "sample"
++        },
++        {
++          "stock": "lesson-biuret",
++          "role": "reagent"
++        },
++        {
++          "stock": "lesson-control",
++          "role": "control"
++        }
++      ],
++      "steps": [
++        "Ống mẫu chứa protein; ống nước là đối chứng âm.",
++        "Rót ít thuốc thử biuret pha sẵn vào protein. Thuốc thử chứa Cu(II), kiềm và chất ổn định tartrate.",
++        "Làm tương tự với nước đối chứng và so sánh màu.",
++        "Sau khi rót, dựng chai thẳng rồi đặt lại chỗ trống trước khi thả tay."
++      ],
++      "phenomenon": "Mẫu protein xuất hiện màu tím; nước đối chứng giữ màu xanh nhạt của thuốc thử.",
++      "explanation": "Các liên kết peptide phối trí Cu(II) trong môi trường kiềm tạo phức tím. Đây là phép thử màu định tính, không phải kết tủa tím hay phản ứng tạo Cu kim loại.",
++      "application": "Sàng lọc protein; định lượng thật cần máy quang phổ và đường chuẩn.",
++      "safety": "Thuốc thử có tính kiềm và chứa đồng; tránh tiếp xúc da, mắt và thu gom riêng.",
++      "questions": [
++        {
++          "prompt": "Màu tím chủ yếu gắn với đặc điểm nào?",
++          "options": [
++            "Nhiều liên kết peptide",
++            "Mọi phân tử chứa nitrogen",
++            "Mọi loại muối"
++          ],
++          "correct": 0,
++          "hint": "Xem nhóm có khả năng phối trí Cu(II).",
++          "explanation": "Nhiều liên kết peptide trong protein tạo điều kiện hình thành phức tím."
++        },
++        {
++          "prompt": "Điều kiện cần của phép thử là gì?",
++          "options": [
++            "Môi trường kiềm và Cu(II)",
++            "Chỉ có nước",
++            "Môi trường acid mạnh"
++          ],
++          "correct": 0,
++          "hint": "Kiểm tra thành phần thuốc thử.",
++          "explanation": "Thuốc thử cung cấp Cu(II) trong môi trường kiềm thích hợp."
++        },
++        {
++          "prompt": "Màu tím có phải kết tủa không?",
++          "options": [
++            "Có",
++            "Không; đó là phức trong dung dịch",
++            "Là khí tím"
++          ],
++          "correct": 1,
++          "hint": "Phân biệt màu dung dịch với chất rắn lắng.",
++          "explanation": "Phản ứng biuret tạo phức màu tím, không phải kết tủa tím."
++        },
++        {
++          "prompt": "Muốn định lượng protein thực tế cần thêm gì?",
++          "options": [
++            "Chỉ nhìn bằng mắt là đủ",
++            "Đường chuẩn và phép đo quang phù hợp",
++            "Cân khối lượng bình rỗng"
++          ],
++          "correct": 1,
++          "hint": "Cường độ màu cần được hiệu chuẩn.",
++          "explanation": "Phép đo quang và đường chuẩn mới cho phép ước lượng nồng độ đáng tin cậy."
++        }
++      ],
++      "sources": [
++        "curriculum",
++        "biuret",
++        "school12"
++      ],
++      "limits": "Phức protein được mô tả định tính, bảo toàn lượng protein và Cu tổng; không giả định công thức hay số mol của protein, không dùng màu để suy ra nồng độ đo thực.",
++      "conditions": "Mẫu có nhiều liên kết peptide; thuốc thử cung cấp Cu(II) trong kiềm, có tartrate giữ ổn định.",
++      "reactionIds": [],
++      "modelType": "qualitative-complex"
++    }
++  ],
++  "reactionRules": [
++    {
++      "id": "neutralization",
++      "phase": "pour",
++      "reactants": {
++        "H_plus": 1,
++        "OH_minus": 1
++      },
++      "products": {
++        "H2O": 1
++      },
++      "molecular": {
++        "reactants": {
++          "HCl": 1,
++          "NaOH": 1
++        },
++        "products": {
++          "NaCl": 1,
++          "H2O": 1
++        }
++      }
++    },
++    {
++      "id": "silver-chloride",
++      "phase": "pour",
++      "reactants": {
++        "Ag_plus": 1,
++        "Cl_minus": 1
++      },
++      "products": {
++        "AgCl": 1
++      },
++      "molecular": {
++        "reactants": {
++          "AgNO3": 1,
++          "NaCl": 1
++        },
++        "products": {
++          "AgCl": 1,
++          "NaNO3": 1
++        }
++      }
++    },
++    {
++      "id": "ammonium-base",
++      "phase": "pour",
++      "reactants": {
++        "NH4_plus": 1,
++        "OH_minus": 1
++      },
++      "products": {
++        "NH3": 1,
++        "H2O": 1
++      },
++      "molecular": {
++        "reactants": {
++          "NH4Cl": 1,
++          "NaOH": 1
++        },
++        "products": {
++          "NH3": 1,
++          "NaCl": 1,
++          "H2O": 1
++        }
++      }
++    },
++    {
++      "id": "iron-displacement",
++      "phase": "immersion",
++      "reactants": {
++        "Fe": 1,
++        "Cu_2plus": 1
++      },
++      "products": {
++        "Fe_2plus": 1,
++        "Cu": 1
++      },
++      "molecular": {
++        "reactants": {
++          "Fe": 1,
++          "CuSO4": 1
++        },
++        "products": {
++          "FeSO4": 1,
++          "Cu": 1
++        }
++      }
++    }
++  ]
++}
+--- a/web/index.html
++++ b/web/index.html
+@@ -3,7 +3,7 @@
+   <head>
+     <meta charset="utf-8" />
+     <meta name="viewport" content="width=device-width,initial-scale=1" />
+-    <title>HoloLab AR · ChemLab V3.3</title>
++    <title>HoloLab AR · ChemLab V3.4</title>
+     <link rel="stylesheet" href="styles.css" />
+     <script type="importmap">
+       { "imports": { "three": "/vendor/three/three.module.js" } }
+@@ -14,8 +14,22 @@
+       <header>
+         <div class="eyebrow">Phòng thí nghiệm ảo</div>
+         <h1>HoloLab <span>AR</span></h1>
+-        <div class="version">Phiên bản 3.3 · Điều khiển hai tay</div>
++        <div class="version">Phiên bản 3.4 · Điều khiển hai tay</div>
+       </header>
++      <section
++        class="lesson-picker"
++        aria-label="Chọn bài thực hành Hóa học THPT"
++      >
++        <h2>Thư viện thí nghiệm</h2>
++        <label>1. Khối lớp<select id="lesson-grade"></select></label>
++        <label>2. Chủ đề<select id="lesson-topic"></select></label>
++        <label>3. Thí nghiệm<select id="lesson-select"></select></label>
++        <p id="lesson-preview"></p>
++        <button id="lesson-start" class="primary wide">
++          Bắt đầu thực hành
++        </button>
++        <button id="lesson-exit" class="wide">Về bàn tự do</button>
++      </section>
+       <nav id="tabs">
+         <button data-group="tool" class="active">Dụng cụ</button
+         ><button data-group="chemical">Hóa chất</button
+@@ -96,6 +110,48 @@
+           >
+         </div>
+         <div id="alert" hidden></div>
++      </section>
++      <section id="lesson-panel" hidden>
++        <div class="lesson-summary">
++          <div>
++            <span id="lesson-step"></span>
++            <p id="lesson-status" role="status"></p>
++          </div>
++          <label class="projection-control"
++            >Màn chiếu<select id="projection-page">
++              <option value="0">Thực hành</option>
++              <option value="1">Chuẩn bị</option>
++              <option value="2">Giải thích</option>
++              <option value="3">Ứng dụng</option>
++            </select></label
++          ><button id="lesson-quiz" disabled>Củng cố kiến thức</button
++          ><button id="lesson-restart">Làm lại bài</button>
++        </div>
++        <details id="lesson-knowledge">
++          <summary>Hướng dẫn thao tác &amp; kiến thức hóa học</summary>
++          <div class="lesson-knowledge-grid">
++            <div>
++              <h3>Mục tiêu</h3>
++              <p id="lesson-objective"></p>
++              <ol id="lesson-steps"></ol>
++              <h3>Phương trình / sơ đồ dự đoán</h3>
++              <p id="lesson-equation"></p>
++              <h3>Quan sát hiện tại</h3>
++              <p id="lesson-observed"></p>
++            </div>
++            <div>
++              <h3>Giải thích</h3>
++              <p id="lesson-explanation"></p>
++              <h3>Ứng dụng</h3>
++              <p id="lesson-application"></p>
++              <h3>An toàn</h3>
++              <p id="lesson-safety"></p>
++              <h3>Giới hạn mô hình</h3>
++              <p id="lesson-limits"></p>
++              <div id="lesson-sources"></div>
++            </div>
++          </div>
++        </details>
+       </section>
+       <section id="titration-panel" hidden>
+         <div class="t-readings">
+@@ -329,5 +385,14 @@
+       <button id="close-help" class="primary">Đã hiểu</button>
+     </dialog>
+     <script type="module" src="/src/main.js"></script>
++    <dialog id="lesson-quiz-dialog" aria-labelledby="lesson-question">
++      <button id="lesson-quiz-close" class="dialog-close">Đóng</button>
++      <p id="lesson-question-count"></p>
++      <h2 id="lesson-question"></h2>
++      <div id="lesson-answers"></div>
++      <p id="lesson-answer-feedback" role="status"></p>
++      <p id="lesson-score"></p>
++      <button id="lesson-quiz-next">Câu tiếp theo →</button>
++    </dialog>
+   </body>
+ </html>
+--- /dev/null
++++ b/web/src/lesson-chemistry.js
+@@ -0,0 +1,318 @@
++/** Pure lesson chemistry. No Three.js, DOM, MediaPipe, randomness or collision hooks.
++ * Amounts in mol, mL and g. Time constants are educational animation scales.
++ */
++export const SPECIES = Object.freeze({
++  H_plus: { formula: "H⁺", charge: 1 },
++  OH_minus: { formula: "OH⁻", charge: -1 },
++  Na_plus: { formula: "Na⁺", charge: 1 },
++  Cl_minus: { formula: "Cl⁻", charge: -1 },
++  NO3_minus: { formula: "NO₃⁻", charge: -1 },
++  Ag_plus: { formula: "Ag⁺", charge: 1 },
++  AgCl: { formula: "AgCl", solid: true },
++  Cu_2plus: { formula: "Cu²⁺", charge: 2 },
++  SO4_2minus: { formula: "SO₄²⁻", charge: -2 },
++  Fe_2plus: { formula: "Fe²⁺", charge: 2 },
++  Fe: { formula: "Fe", solid: true },
++  Cu: { formula: "Cu", solid: true },
++  NH4_plus: { formula: "NH₄⁺", charge: 1 },
++  NH3: { formula: "NH₃" },
++  H2O: { formula: "H₂O" },
++  biuret_Cu: { formula: "Cu(II) trong thuốc thử", charge: 2 },
++});
++const EPS = 1e-12;
++const clamp = (x, a, b) => Math.max(a, Math.min(b, x));
++export function initialMixture(initial = {}) {
++  return {
++    volume_ml: 0,
++    mol: {},
++    escaped_mol: {},
++    origins: {},
++    temperature_K: 298.15,
++    unknown: false,
++    solid_copper_g: 0,
++    protein_g: 0,
++    indicator_g: 0,
++    note: "Mô hình bài học.",
++    ...structuredClone(initial),
++    escaped_mol: { ...(initial.escaped_mol || {}) },
++    mol: { ...(initial.mol || {}) },
++  };
++}
++export function ph(m) {
++  if (m.volume_ml <= EPS) return null;
++  // Charge balance; NH4+/NH3 is a weak-base family. Hydrolysis of metal ions is not modeled.
++  const L = m.volume_ml / 1000,
++    totalN = ((m.mol.NH4_plus || 0) + (m.mol.NH3 || 0)) / L;
++  let fixed = 0;
++  for (const [key, n] of Object.entries(m.mol))
++    if (!["H_plus", "OH_minus", "NH4_plus"].includes(key))
++      fixed += ((SPECIES[key]?.charge || 0) * n) / L;
++  let low = -14,
++    high = 0;
++  for (let i = 0; i < 64; i++) {
++    const mid = (low + high) / 2,
++      h = 10 ** mid,
++      f = h + fixed + (totalN * h) / (5.62e-10 + h) - 1e-14 / h;
++    if (f > 0) high = mid;
++    else low = mid;
++  }
++  return -(low + high) / 2;
++}
++export function appearance(m) {
++  let color = [0.79, 0.91, 0.96],
++    phenomenon = "Chưa có hiện tượng phản ứng.",
++    solid = null;
++  const blend = (target, t) => {
++    color = color.map((c, i) => c + (target[i] - c) * clamp(t, 0, 1));
++  };
++  const L = Math.max(m.volume_ml / 1000, 1e-9);
++  if (m.mol.Fe_2plus) blend([0.5, 0.78, 0.58], m.mol.Fe_2plus / L / 0.05);
++  if (m.mol.Cu_2plus) blend([0.06, 0.43, 0.94], m.mol.Cu_2plus / L / 0.05);
++  if (m.mol.biuret_Cu) blend([0.2, 0.55, 0.91], m.mol.biuret_Cu / L / 0.005);
++  const pH = ph(m);
++  if (m.indicator_g > EPS) {
++    const strength = clamp((pH - 8.2) / 1.8, 0, 1);
++    blend([0.92, 0.12, 0.56], strength);
++    phenomenon =
++      strength > 0.02
++        ? "Phenolphthalein màu hồng."
++        : "Phenolphthalein không màu.";
++  }
++  if (m.protein_g > EPS && m.mol.biuret_Cu > EPS && pH >= 10.5) {
++    blend([0.53, 0.15, 0.75], clamp(m.protein_g / L / 1, 0, 1));
++    phenomenon = "Phức Cu(II)–peptide màu tím.";
++  }
++  if ((m.mol.AgCl || 0) > EPS) {
++    solid = { species: "AgCl", mol: m.mol.AgCl, color: [0.98, 0.98, 0.92] };
++    phenomenon = "Kết tủa AgCl trắng; dung dịch vẩn đục rồi lắng.";
++  }
++  return {
++    color,
++    solid,
++    pH,
++    phenomenon,
++    purple: m.protein_g > EPS && m.mol.biuret_Cu > EPS && pH >= 10.5,
++  };
++}
++export class LessonChemistry {
++  constructor(data, id) {
++    this.data = data;
++    this.lesson = data.lessons.find((l) => l.id === id && l.status === "ready");
++    if (!this.lesson) throw Error("Bài học chưa sẵn sàng.");
++    this.vessels = new Map();
++    this.roles = new Map();
++    this.events = [];
++    this.complete = false;
++    this.seenPink = false;
++    this.observed = false;
++    this.time = 0;
++    this.revision = 0;
++    for (const row of this.lesson.setup) {
++      const s = data.stocks.find((s) => s.id === row.stock);
++      this.vessels.set(row.stock, initialMixture(s.initial));
++      this.roles.set(row.stock, row.role);
++    }
++  }
++  get(key) {
++    const m = this.vessels.get(key);
++    if (!m) throw Error("Dụng cụ không thuộc bài học.");
++    return m;
++  }
++  record(event) {
++    this.events.push({ t: this.time, ...event });
++    if (this.events.length > 2000) this.events.shift();
++    this.revision++;
++  }
++  reaction(m, id, reactants, products) {
++    const extent = Math.min(
++      ...Object.entries(reactants).map(([key, c]) => (m.mol[key] || 0) / c),
++    );
++    if (extent <= EPS) return 0;
++    for (const [k, c] of Object.entries(reactants))
++      m.mol[k] = Math.max(0, (m.mol[k] || 0) - c * extent);
++    for (const [k, c] of Object.entries(products))
++      m.mol[k] = (m.mol[k] || 0) + c * extent;
++    this.record({ type: "reaction", id, extent_mol: extent });
++    return extent;
++  }
++  transfer(from, to, requested, action = {}) {
++    if (
++      from === to ||
++      action.kind !== "pour" ||
++      !action.aligned ||
++      action.sealed ||
++      !Number.isFinite(requested) ||
++      requested <= 0
++    )
++      return {
++        ok: false,
++        message: "Cần nghiêng bình mở và rót đúng vào miệng bình nhận.",
++      };
++    const a = this.get(from),
++      b = this.get(to),
++      target = this.data.stocks.find((s) => s.id === to);
++    if (!["beaker", "flask", "tube", "bottle", "dropper"].includes(target.kind))
++      return { ok: false, message: "Dụng cụ này không chứa được dung dịch." };
++    const ml = Math.min(
++      requested,
++      a.volume_ml,
++      target.capacity_ml - b.volume_ml,
++    );
++    if (ml <= EPS)
++      return {
++        ok: false,
++        message:
++          a.volume_ml <= EPS
++            ? "Bình nguồn đã hết dung dịch."
++            : "Bình nhận đã đầy.",
++      };
++    const fraction = ml / a.volume_ml;
++    for (const [key, n] of Object.entries(a.mol))
++      if (!SPECIES[key]?.solid) {
++        const dn = n * fraction;
++        a.mol[key] -= dn;
++        b.mol[key] = (b.mol[key] || 0) + dn;
++      }
++    for (const key of ["protein_g", "indicator_g"]) {
++      const d = (a[key] || 0) * fraction;
++      a[key] -= d;
++      b[key] = (b[key] || 0) + d;
++    }
++    a.volume_ml -= ml;
++    b.volume_ml += ml;
++    this.record({ type: "pour", from, to, amount_ml: ml });
++    for (const rule of this.data.reactionRules)
++      if (rule.phase === "pour" && this.lesson.reactionIds.includes(rule.id))
++        this.reaction(b, rule.id, rule.reactants, rule.products);
++    this.observe(to);
++    const visual = appearance(b);
++    return { ok: true, amount_ml: ml, message: visual.phenomenon };
++  }
++  observe(key) {
++    const m = this.get(key),
++      a = appearance(m);
++    if (this.roles.get(key) !== "sample") return;
++    if (this.lesson.id === "chloride" && (m.mol.AgCl || 0) > 1e-8)
++      this.complete = this.observed = true;
++    if (this.lesson.id === "indicator") {
++      if (m.indicator_g > EPS && a.pH > 8.4)
++        this.seenPink = this.observed = true;
++      if (this.seenPink && a.pH < 8.2) this.complete = true;
++    }
++    if (this.lesson.id === "biuret" && a.purple)
++      this.complete = this.observed = true;
++  }
++  step(dt, contacts = {}) {
++    if (!Number.isFinite(dt) || dt <= 0) return;
++    dt = Math.min(0.2, dt);
++    this.time += dt;
++    if (this.lesson.id === "iron-copper" && contacts.immersed) {
++      const metal = this.get("lesson-iron"),
++        solution = this.get("lesson-copper");
++      const extent = Math.min(
++        metal.mol.Fe || 0,
++        solution.mol.Cu_2plus || 0,
++        0.00035 * dt,
++      );
++      if (extent > EPS) {
++        metal.mol.Fe -= extent;
++        metal.mol.Cu = (metal.mol.Cu || 0) + extent;
++        solution.mol.Cu_2plus -= extent;
++        solution.mol.Fe_2plus = (solution.mol.Fe_2plus || 0) + extent;
++        this.observed = true;
++        this.complete = (metal.mol.Cu || 0) > 0.00015;
++        this.record({ type: "immersion-reaction", extent_mol: extent });
++      }
++    }
++    if (this.lesson.id === "ammonium")
++      for (const [key, m] of this.vessels) {
++        const escape = (m.mol.NH3 || 0) * (1 - Math.exp(-dt * 0.35));
++        m.lastGasRate = 0;
++        if (escape > EPS && !contacts.sealed?.has(key)) {
++          m.mol.NH3 -= escape;
++          m.escaped_mol.NH3 = (m.escaped_mol.NH3 || 0) + escape;
++          m.lastGasRate = escape / dt;
++          this.observed = true;
++          this.revision++;
++        }
++        if (
++          key === "lesson-ammonium" &&
++          contacts.litmusAbove === key &&
++          m.lastGasRate > 1e-8
++        ) {
++          this.complete = true;
++          this.get("lesson-litmus").litmusBlue = true;
++          this.revision++;
++        }
++      }
++  }
++  answer(index, choice) {
++    const q = this.lesson.questions[index];
++    if (
++      !q ||
++      !Number.isInteger(choice) ||
++      choice < 0 ||
++      choice >= q.options.length
++    )
++      throw Error("Lựa chọn không hợp lệ.");
++    return {
++      correct: choice === q.correct,
++      text: choice === q.correct ? q.explanation : q.hint,
++    };
++  }
++  snapshot() {
++    return {
++      lesson: this.lesson.id,
++      vessels: Object.fromEntries(this.vessels),
++      events: this.events,
++      complete: this.complete,
++      observed: this.observed,
++      seenPink: this.seenPink,
++      time: this.time,
++    };
++  }
++  restore(raw) {
++    if (raw.lesson !== this.lesson.id) throw Error("Sai bài học.");
++    const entries = Object.entries(raw.vessels || {});
++    if (entries.length !== this.vessels.size)
++      throw Error("Thiếu dụng cụ bài học.");
++    const allowed = new Set(
++      [...this.vessels.values()]
++        .flatMap((m) => Object.keys(m.mol))
++        .concat(
++          this.data.reactionRules
++            .filter((r) => this.lesson.reactionIds.includes(r.id))
++            .flatMap((r) => Object.keys(r.products)),
++        ),
++    );
++    const next = new Map();
++    for (const [key, value] of entries) {
++      if (!this.vessels.has(key)) throw Error("Hóa chất ngoài bài học.");
++      const cap = this.data.stocks.find((s) => s.id === key).capacity_ml;
++      if (
++        !Number.isFinite(value.volume_ml) ||
++        value.volume_ml < 0 ||
++        value.volume_ml > cap
++      )
++        throw Error("Thể tích không hợp lệ.");
++      const m = initialMixture(value);
++      for (const [k, n] of Object.entries(m.mol))
++        if (!allowed.has(k) || !Number.isFinite(n) || n < 0 || n > 1)
++          throw Error("Lượng chất không hợp lệ.");
++      for (const [k, n] of Object.entries(m.escaped_mol))
++        if (k !== "NH3" || !Number.isFinite(n) || n < 0 || n > 1)
++          throw Error("Lượng khí không hợp lệ.");
++      for (const key of ["protein_g", "indicator_g"])
++        if (!Number.isFinite(m[key]) || m[key] < 0 || m[key] > 10)
++          throw Error("Khối lượng không hợp lệ.");
++      next.set(key, m);
++    }
++    this.vessels = next;
++    this.complete = !!raw.complete;
++    this.observed = !!raw.observed;
++    this.seenPink = !!raw.seenPink;
++    this.time = Number.isFinite(raw.time) ? Math.max(0, raw.time) : 0;
++    this.events = Array.isArray(raw.events) ? raw.events.slice(-2000) : [];
++    this.revision++;
++  }
++}
+--- /dev/null
++++ b/web/src/lesson-geometry.js
+@@ -0,0 +1,39 @@
++/** Hollow compound collider for the Fe immersion lesson only, in scene units.
++ * Closed convex hulls fill a vessel's mouth and cannot represent immersion.
++ * Sixteen wall sectors + a bottom preserve an opening without disabling contact.
++ */
++export function hollowBeakerHulls(scale, sealed = false) {
++  const hulls = [],
++    point = (r, a, y) => [
++      Math.sin(a) * r * scale.x,
++      y * scale.y,
++      Math.cos(a) * r * scale.z,
++    ];
++  for (let i = 0; i < 16; i++) {
++    const a = (i * Math.PI) / 8,
++      b = ((i + 1) * Math.PI) / 8,
++      points = [];
++    for (const y of [-0.76, 0.84])
++      for (const [r, t] of [
++        [0.65, a],
++        [0.735, a],
++        [0.735, b],
++        [0.65, b],
++      ])
++        points.push(...point(r, t, y));
++    hulls.push(new Float32Array(points));
++  }
++  for (const [bottom, top] of sealed
++    ? [
++        [-0.82, -0.71],
++        [0.85, 0.99],
++      ]
++    : [[-0.82, -0.71]]) {
++    const points = [];
++    for (const y of [bottom, top])
++      for (let i = 0; i < 16; i++)
++        points.push(...point(0.72, (i * Math.PI) / 8, y));
++    hulls.push(new Float32Array(points));
++  }
++  return hulls;
++}
+--- /dev/null
++++ b/web/src/lesson-visuals.js
+@@ -0,0 +1,256 @@
++import * as THREE from "three";
++import { appearance } from "./lesson-chemistry.js";
++export function buildLessonTool(view, item) {
++  if (item.stock.kind === "iron-strip") {
++    item.ironMesh = view.box(0.13, 1.5, 0.09, 0x79858b);
++    item.group.add(item.ironMesh);
++    const coating = new THREE.Mesh(
++      new THREE.BoxGeometry(0.137, 0.82, 0.098),
++      new THREE.MeshStandardMaterial({
++        color: 0xb46b3d,
++        roughness: 0.64,
++        metalness: 0.6,
++        transparent: true,
++        opacity: 0,
++      }),
++    );
++    coating.position.y = -0.28;
++    coating.userData.noPhysics = true;
++    item.group.add(coating);
++    item.copperCoating = coating;
++    return true;
++  }
++  if (item.stock.kind === "litmus") {
++    item.litmusMesh = view.box(0.65, 0.2, 0.025, 0xcd435d, 0, 0.28, 0.025);
++    item.group.add(item.litmusMesh);
++    item.group.add(view.box(0.055, 0.5, 0.055, 0x46535a, 0, -0.02, 0));
++    return true;
++  }
++  return false;
++}
++export class LessonVisuals {
++  constructor(view) {
++    this.view = view;
++    this.board = null;
++    this.points = new Map();
++    this.lastText = "";
++  }
++  start(lesson) {
++    this.stop();
++    this.lesson = lesson;
++    const canvas = document.createElement("canvas");
++    canvas.width = 1536;
++    canvas.height = 512;
++    const texture = new THREE.CanvasTexture(canvas);
++    texture.colorSpace = THREE.SRGBColorSpace;
++    texture.anisotropy = 2;
++    this.canvas = canvas;
++    this.context = canvas.getContext("2d");
++    this.texture = texture;
++    this.board = new THREE.Mesh(
++      new THREE.PlaneGeometry(15, 5),
++      new THREE.MeshBasicMaterial({ map: texture }),
++    );
++    this.board.position.set(0, 1.3, -3.2);
++    this.view.scene.add(this.board);
++    this.resize();
++  }
++  resize() {
++    if (!this.board) return;
++    const visibleWidth =
++      2 * 10.2 * Math.tan((24 * Math.PI) / 180) * this.view.camera.aspect;
++    this.board.scale.setScalar(Math.min(1, (visibleWidth * 0.88) / 15));
++  }
++  updateScreen(model, status) {
++    if (!this.board) return;
++    const l = model.lesson,
++      page = this.page || 0;
++    const chemicals = l.setup
++      .map((row) => {
++        const s = model.data.stocks.find((s) => s.id === row.stock);
++        return `${s.name}: ${s.formula}`;
++      })
++      .join(" · ");
++    const pages = [
++      [
++        ["Mục tiêu", l.objective],
++        ["Phương trình / sơ đồ dự đoán", l.equations[0]],
++        ["Thao tác và quan sát", status],
++      ],
++      [
++        ["Hóa chất và dụng cụ", chemicals],
++        ["Điều kiện", l.conditions],
++        ["Bắt đầu", l.steps[0]],
++      ],
++      [
++        [
++          "Quan sát",
++          model.observed ? status : "Chưa có phản ứng được ghi nhận.",
++        ],
++        ["Giải thích bản chất", l.explanation],
++        ["Dự đoán cần kiểm chứng", l.phenomenon],
++      ],
++      [
++        ["Ứng dụng", l.application],
++        ["An toàn", l.safety],
++        ["Giới hạn", l.limits],
++      ],
++    ];
++    const blocks = pages[page],
++      key = JSON.stringify([l.title, page, blocks]);
++    if (key === this.lastText) return;
++    this.lastText = key;
++    const c = this.context;
++    c.fillStyle = "#112f3c";
++    c.fillRect(0, 0, 1536, 512);
++    c.fillStyle = "#66d8b4";
++    c.fillRect(0, 0, 12, 512);
++    c.font = '600 43px "Be Vietnam Pro",sans-serif';
++    c.fillStyle = "#f2fcfa";
++    c.fillText(`Lớp ${l.grade} · ${l.title}`, 48, 60, 1440);
++    const paragraph = (text, y, height) => {
++      let size = 32,
++        lines;
++      do {
++        c.font = `400 ${size}px "Be Vietnam Pro",sans-serif`;
++        lines = [];
++        let line = "";
++        for (const w of text.split(" ")) {
++          if (c.measureText(line + w).width > 1440) {
++            lines.push(line);
++            line = "";
++          }
++          line += w + " ";
++        }
++        lines.push(line);
++        if (lines.length * (size + 7) <= height || size <= 22) break;
++        size -= 2;
++      } while (true);
++      c.fillStyle = "#e0eff1";
++      lines.forEach((line, i) => c.fillText(line, 48, y + i * (size + 7)));
++    };
++    blocks.forEach(([label, content], i) => {
++      const top = 101 + i * 137;
++      c.font = '500 24px "Be Vietnam Pro",sans-serif';
++      c.fillStyle = "#79d6bc";
++      c.fillText(label, 48, top);
++      paragraph(content, top + 38, 88);
++    });
++    this.texture.needsUpdate = true;
++  }
++
++  update(item, m, dt = 0.1) {
++    const a = appearance(m);
++    if (item.liquid) {
++      item.liquid.material.color.fromArray(a.color);
++      item.liquid.material.opacity = a.solid?.mol > 0 ? 0.84 : 0.65;
++    }
++    if (item.copperCoating) {
++      item.copperCoating.material.opacity = Math.min(
++        1,
++        (m.mol.Cu || 0) / 0.001,
++      );
++      item.copperCoating.visible = (m.mol.Cu || 0) > 1e-9;
++    }
++    if (item.litmusMesh)
++      item.litmusMesh.material.color.set(m.litmusBlue ? 0x456cdf : 0xcd435d);
++    if (a.solid) {
++      let entry = this.points.get(item.id);
++      if (!entry) {
++        const group = new THREE.Group();
++        group.userData.noPhysics = true;
++        group.name = "lesson-precipitate";
++        item.group.add(group);
++        entry = { group, age: 0 };
++        this.points.set(item.id, entry);
++        for (let i = 0; i < 18; i++) {
++          const p = new THREE.Mesh(
++            new THREE.SphereGeometry(0.045, 6, 4),
++            new THREE.MeshBasicMaterial({
++              color: 0xf7f6ec,
++              transparent: true,
++              opacity: 0.86,
++            }),
++          );
++          group.add(p);
++        }
++      }
++      entry.age += dt;
++      const profile = this.view.profiles.interiors[item.stock.kind];
++      const floor = profile?.[0][0] ?? -0.7;
++      const radius = item.stock.kind === "tube" ? 0.17 : 0.42;
++      entry.group.children.forEach((p, i) => {
++        const phase = i * 2.39996,
++          r = radius * Math.sqrt((i + 0.5) / 18);
++        p.position.set(
++          Math.sin(phase) * r,
++          floor + 0.06 + Math.max(0, 0.65 - entry.age * 0.12) * (i / 18),
++          Math.cos(phase) * r,
++        );
++        p.scale.setScalar(Math.min(1.7, 0.6 + a.solid.mol / 0.0003));
++      });
++    }
++  }
++  contacts(objects, model) {
++    const answer = { immersed: false, litmusAbove: null, sealed: new Set() };
++    for (const [key, o] of objects) if (o.sealed) answer.sealed.add(key);
++    if (model.lesson.id === "iron-copper") {
++      const iron = objects.get("lesson-iron"),
++        vessel = objects.get("lesson-copper");
++      if (iron && vessel && !vessel.sealed && vessel.liquid?.visible) {
++        iron.group.updateWorldMatrix(true, false);
++        vessel.group.updateWorldMatrix(true, false);
++        vessel.liquid.geometry.computeBoundingBox();
++        const level = vessel.liquid.geometry.boundingBox.max.y;
++        for (const y of [-0.72, -0.35, 0, 0.35, 0.7]) {
++          const tip = new THREE.Vector3(0, y, 0).applyMatrix4(
++            iron.group.matrixWorld,
++          );
++          vessel.group.worldToLocal(tip);
++          if (
++            tip.y > -0.68 &&
++            tip.y < level &&
++            Math.hypot(tip.x, tip.z) < 0.6
++          ) {
++            answer.immersed = true;
++            break;
++          }
++        }
++      }
++    }
++    if (model.lesson.id === "ammonium") {
++      const paper = objects.get("lesson-litmus"),
++        vessel = objects.get("lesson-ammonium");
++      if (paper && vessel && !vessel.sealed) {
++        paper.group.updateWorldMatrix(true, false);
++        vessel.group.updateWorldMatrix(true, false);
++        const tip = new THREE.Vector3(0, 0.28, 0).applyMatrix4(
++            paper.group.matrixWorld,
++          ),
++          mouth = this.view.mouth(vessel);
++        const up = new THREE.Vector3(0, 1, 0).applyQuaternion(
++          vessel.group.quaternion,
++        );
++        if (
++          up.y > 0.85 &&
++          tip.y - mouth.y > 0.03 &&
++          tip.y - mouth.y < 0.55 &&
++          Math.hypot(tip.x - mouth.x, tip.z - mouth.z) < 0.4
++        )
++          answer.litmusAbove = "lesson-ammonium";
++      }
++    }
++    return answer;
++  }
++  stop() {
++    if (this.board) {
++      this.view.scene.remove(this.board);
++      this.board.geometry.dispose();
++      this.board.material.dispose();
++      this.texture.dispose();
++      this.board = null;
++    }
++    this.points.clear();
++    this.lastText = "";
++  }
++}
+--- /dev/null
++++ b/web/src/lessons.js
+@@ -0,0 +1,445 @@
++import {
++  LessonChemistry,
++  initialMixture,
++  appearance,
++  SPECIES,
++} from "./lesson-chemistry.js";
++import { LessonVisuals } from "./lesson-visuals.js";
++const $ = (id) => document.getElementById(id);
++const text = (el, value) => {
++  if (el.textContent !== value) el.textContent = value;
++};
++const option = (value, label) => {
++  const o = document.createElement("option");
++  o.value = value;
++  o.textContent = label;
++  return o;
++};
++export class Lessons {
++  constructor(data, adapter) {
++    this.data = data;
++    this.a = adapter;
++    this.model = null;
++    this.objects = new Map();
++    this.visuals = new LessonVisuals(adapter.view);
++    this.elapsed = 0;
++    this.quizAnswers = new Map();
++    this.bind();
++  }
++  get active() {
++    return !!this.model;
++  }
++  get allowed() {
++    return this.model?.lesson.setup.map((row) => row.stock) || [];
++  }
++  bind() {
++    for (const grade of [10, 11, 12])
++      $("lesson-grade").append(option(grade, `Lớp ${grade}`));
++    $("lesson-grade").onchange = () => this.topics();
++    $("lesson-topic").onchange = () => this.experiments();
++    $("lesson-select").onchange = () => this.preview();
++    $("lesson-start").onclick = () => {
++      try {
++        this.start($("lesson-select").value);
++      } catch (e) {
++        this.a.message(e.message);
++      }
++    };
++    $("lesson-exit").onclick = () => {
++      this.a.clear();
++      this.a.message("Đã trở lại bàn tự do.");
++    };
++    $("lesson-restart").onclick = () => {
++      if (this.model) this.start(this.model.lesson.id);
++    };
++    $("lesson-quiz").onclick = () => {
++      if (this.model?.complete) {
++        this.quizIndex = 0;
++        this.drawQuestion();
++        $("lesson-quiz-dialog").showModal();
++      }
++    };
++    $("lesson-quiz-close").onclick = () => $("lesson-quiz-dialog").close();
++    $("lesson-quiz-next").onclick = () => {
++      this.quizIndex =
++        (this.quizIndex + 1) % this.model.lesson.questions.length;
++      this.drawQuestion();
++    };
++    $("projection-page").onchange = () => {
++      this.visuals.page = +$("projection-page").value;
++      if (this.model) this.update();
++    };
++    this.topics();
++  }
++  topics() {
++    const grade = +$("lesson-grade").value,
++      topics = [
++        ...new Set(
++          this.data.lessons
++            .filter((l) => l.grade === grade)
++            .map((l) => l.topic),
++        ),
++      ];
++    $("lesson-topic").replaceChildren(...topics.map((t) => option(t, t)));
++    this.experiments();
++  }
++  experiments() {
++    const matches = this.data.lessons.filter(
++      (l) =>
++        l.grade === +$("lesson-grade").value &&
++        l.topic === $("lesson-topic").value,
++    );
++    $("lesson-select").replaceChildren(
++      ...matches.map((l) => {
++        const o = option(
++          l.id,
++          l.title + (l.status === "ready" ? "" : " · đang phát triển"),
++        );
++        o.disabled = l.status !== "ready";
++        return o;
++      }),
++    );
++    this.preview();
++  }
++  preview() {
++    const l = this.data.lessons.find((l) => l.id === $("lesson-select").value);
++    $("lesson-start").disabled = l?.status !== "ready";
++    text($("lesson-preview"), l ? l.objective : "Chưa có bài thực hành.");
++  }
++  start(id, restored = null) {
++    const model = new LessonChemistry(this.data, id);
++    if (restored) model.restore(restored.model);
++    // Validate imported poses before clearing any existing work.
++    const poses = restored?.poses || {};
++    for (const [k, p] of Object.entries(poses))
++      if (
++        !model.vessels.has(k) ||
++        !p ||
++        ![p.x, p.y, p.z, p.roll, p.yaw, p.pitch].every(Number.isFinite) ||
++        (p.sealed !== undefined && typeof p.sealed !== "boolean")
++      )
++        throw Error("Vị trí nhập không hợp lệ.");
++    if (this.a.bench.active) this.a.bench.toggle();
++    if (this.a.view.controls.enabled) $("view-mode").click();
++    this.a.clear();
++    this.model = model;
++    this.objects.clear();
++    this.quizAnswers.clear();
++    document.body.classList.add("lesson-active");
++    $("lesson-panel").hidden = false;
++    this.visuals.start(model.lesson);
++    this.visuals.page = 0;
++    $("projection-page").value = "0";
++    const available = this.a.view.physics.limits;
++    let other = 0;
++    const spacing = Math.min(3.1, (available.xMax - available.xMin) / 3.6);
++    try {
++      for (const row of model.lesson.setup) {
++        const x = row.role === "sample" ? 0 : ++other % 2 ? -spacing : spacing;
++        const pose = poses[row.stock] || {
++          x,
++          y: -0.9,
++          z: 0.35,
++          roll: 0,
++          yaw: 0,
++          pitch: 0,
++        };
++        const m = model.get(row.stock);
++        m.color = appearance(m).color;
++        const o = this.a.create(row.stock, pose, {
++          mixture: m,
++          sealed: !!pose.sealed,
++          roll: pose.roll,
++          yaw: pose.yaw,
++          pitch: pose.pitch,
++        });
++        if (!o) throw Error("Không đủ chỗ bố trí bài học.");
++        o.lessonKey = row.stock;
++        o.mixture = m;
++        o.label.classList.add("lesson-label");
++        o.label.querySelector("b").textContent = o.stock.name;
++        this.objects.set(row.stock, o);
++        this.refresh(o);
++      }
++    } catch (e) {
++      this.a.clear();
++      throw e;
++    }
++    text($("lab-title"), model.lesson.title);
++    $("lesson-grade").value = String(model.lesson.grade);
++    this.topics();
++    $("lesson-topic").value = model.lesson.topic;
++    this.experiments();
++    $("lesson-select").value = id;
++    this.preview();
++    this.a.cards();
++    this.a.resize();
++    this.renderKnowledge();
++    this.update();
++    this.a.message(model.lesson.steps[0]);
++  }
++  detach() {
++    this.visuals.stop();
++    this.model = null;
++    this.objects.clear();
++    $("lesson-panel").hidden = true;
++    $("lesson-quiz-dialog").close();
++    document.body.classList.remove("lesson-active");
++    text($("lab-title"), "Bàn thí nghiệm 3D");
++    this.a.cards();
++  }
++  canSpawn(stock) {
++    return !this.active || this.allowed.includes(stock);
++  }
++  refresh(o) {
++    const m = this.model.get(o.lessonKey),
++      a = appearance(m);
++    m.color = a.color;
++    if (o.lessonVolume !== m.volume_ml) {
++      o.mixture = m;
++      this.a.view.updateMixture(o);
++      o.lessonVolume = m.volume_ml;
++    }
++    this.visuals.update(o, m, 0.1);
++    const quantity =
++      o.stock.kind === "iron-strip"
++        ? `${((m.mol.Fe || 0) * 55.845).toFixed(3)} g Fe`
++        : o.stock.kind === "litmus"
++          ? m.litmusBlue
++            ? "Đã hóa xanh"
++            : "Quỳ đỏ ẩm"
++          : `${m.volume_ml.toFixed(1)} mL`;
++    text(o.label.querySelector("span"), `${o.stock.formula} · ${quantity}`);
++  }
++  pour(source, target) {
++    if (!source.lessonKey || !target.lessonKey)
++      return { ok: false, message: "Chỉ sử dụng hóa chất của bài học." };
++    this.a.view.scene.updateMatrixWorld(true);
++    const aligned =
++      this.a.view.pourTarget(source) === target &&
++      Math.abs(source.roll) >= Math.PI / 4;
++    const response = this.model.transfer(
++      source.lessonKey,
++      target.lessonKey,
++      2,
++      { kind: "pour", aligned, sealed: source.sealed || target.sealed },
++    );
++    if (response.ok) {
++      source.version++;
++      target.version++;
++      this.refresh(source);
++      this.refresh(target);
++      this.a.view.stream(source, target, performance.now() + 300);
++      this.update();
++    }
++    this.a.message(response.message);
++    return response;
++  }
++  tick(dt, now) {
++    if (!this.model || this.a.bench.active) return;
++    this.elapsed += dt;
++    if (this.elapsed < 0.08) return;
++    const elapsed = Math.min(this.elapsed, 0.2);
++    this.elapsed = 0;
++    const contacts = this.visuals.contacts(this.objects, this.model);
++    this.model.step(elapsed, contacts);
++    for (const [key, o] of this.objects) {
++      const m = this.model.get(key);
++      this.refresh(o);
++      if (m.lastGasRate > 1e-8 && now - (o.lastLessonGas || 0) > 900) {
++        this.a.view.effect(o, "bubbles", now);
++        o.lastLessonGas = now;
++      }
++    }
++    this.update();
++  }
++  status() {
++    const m = this.model;
++    if (!m) return "";
++    if (m.lesson.id === "iron-copper") {
++      const n = m.get("lesson-iron").mol.Cu || 0;
++      return n > 0
++        ? `Cu đã bám: ${(n * 1000).toFixed(2)} mmol · ${(n * 63.546).toFixed(3)} g. Nhấc sắt khỏi dung dịch để dừng.`
++        : "Đưa thanh sắt qua miệng bình, ngập vào chất lỏng.";
++    }
++    if (m.lesson.id === "ammonium")
++      return m.complete
++        ? "Quỳ đỏ ẩm đã hóa xanh do khí NH₃."
++        : m.observed
++          ? "NH₃ không màu đang thoát (bọt là ký hiệu). Giữ giấy quỳ ẩm trên miệng bình."
++          : "Rót NaOH vào NH₄Cl, sau đó thử khí bằng quỳ đỏ ẩm.";
++    const sample = [...m.roles].find(([, r]) => r === "sample")[0],
++      state = m.get(sample),
++      a = appearance(state);
++    if (m.lesson.id === "chloride")
++      return a.solid
++        ? `AgCl trắng: ${(a.solid.mol * 1000).toFixed(2)} mmol · ${(a.solid.mol * 143.32 * 1000).toFixed(1)} mg.`
++        : "Chưa có kết tủa. Rót AgNO₃ vào mẫu NaCl.";
++    if (m.lesson.id === "indicator")
++      return `pH ≈ ${a.pH.toFixed(2)} · ${a.phenomenon} ${m.seenPink ? "Thêm HCl đến khi mất màu." : "Thêm NaOH để quan sát."}`;
++    return m.observed
++      ? a.phenomenon
++      : "Thêm thuốc thử biuret vào protein; so sánh với nước đối chứng.";
++  }
++  update() {
++    const m = this.model,
++      status = this.status();
++    text($("lesson-status"), status);
++    text(
++      $("lesson-step"),
++      m.complete ? "Đã quan sát đủ hiện tượng chính" : "Đang thực hành",
++    );
++    $("lesson-quiz").disabled = !m.complete;
++    text(
++      $("lesson-observed"),
++      m.observed
++        ? `${status} ${m.lesson.phenomenon}`
++        : "Chưa ghi nhận phản ứng. Phương trình bên dưới là dự đoán cần kiểm chứng.",
++    );
++    this.visuals.updateScreen(m, status);
++    this.a.inspect();
++  }
++  renderKnowledge() {
++    const l = this.model.lesson;
++    const list = (id, rows) => {
++      $(id).replaceChildren(
++        ...rows.map((s) => {
++          const p = document.createElement("li");
++          p.textContent = s;
++          return p;
++        }),
++      );
++    };
++    text($("lesson-objective"), l.objective);
++    text($("lesson-equation"), l.equations.join("\n"));
++    list("lesson-steps", l.steps);
++    text($("lesson-explanation"), l.explanation);
++    text($("lesson-application"), l.application);
++    text($("lesson-safety"), l.safety);
++    text($("lesson-limits"), l.limits);
++    $("lesson-sources").replaceChildren(
++      ...l.sources.map((key) => {
++        const s = this.data.sources[key],
++          a = document.createElement("a");
++        a.href = s.url;
++        a.target = "_blank";
++        a.rel = "noopener noreferrer";
++        a.textContent =
++          s.title +
++          (key === "curriculum"
++            ? ` · trang ${l.curriculum.pages.join(", ")}`
++            : "");
++        return a;
++      }),
++    );
++  }
++  positionLabels() {
++    const view = this.a.view,
++      r = view.rect;
++    const entries = [...this.objects.values()]
++      .map((o) => ({ o, p: view.toScreen(o.group.position) }))
++      .sort((a, b) => a.p.x - b.p.x || a.o.id - b.o.id);
++    const gap = Math.min(190, (r.width - 24) / Math.max(entries.length, 1)),
++      half = gap / 2;
++    let last = -Infinity;
++    for (const row of entries) {
++      row.x = Math.max(row.p.x - r.left, last + gap);
++      last = row.x;
++    }
++    const overflow = Math.max(
++      0,
++      (entries.at(-1)?.x || 0) - (r.width - half - 12),
++    );
++    for (const row of entries) {
++      const x = Math.max(half + 12, row.x - overflow),
++        y = Math.max(70, Math.min(r.height - 8, row.p.y - r.top + 80));
++      const transform = `translate(${x.toFixed(1)}px,${y.toFixed(1)}px) translate(-50%,-100%)`;
++      if (row.o.labelTransform !== transform) {
++        row.o.label.style.transform = transform;
++        row.o.label.style.maxWidth = `${gap - 8}px`;
++        row.o.labelTransform = transform;
++      }
++    }
++  }
++  describe(o) {
++    if (!o?.lessonKey || !this.model) return null;
++    const m = this.model.get(o.lessonKey);
++    const amount = Object.entries(m.mol)
++      .filter(([k, n]) => n > 1e-9 && k !== "H2O")
++      .map(
++        ([k, n]) =>
++          `${SPECIES[k]?.formula || k}: ${(n * 1000).toFixed(3)} mmol`,
++      )
++      .join(" · ");
++    return {
++      name: o.stock.name,
++      metrics: `${o.stock.formula}${["iron-strip", "litmus"].includes(o.stock.kind) ? "" : ` · ${m.volume_ml.toFixed(1)} mL`}${m.protein_g ? ` · protein ${(m.protein_g * 1000).toFixed(1)} mg` : ""}`,
++      species: amount || m.note,
++    };
++  }
++  drawQuestion() {
++    text(
++      $("lesson-score"),
++      `Đã giải thích đúng ${this.quizAnswers.size}/${this.model.lesson.questions.length} câu.`,
++    );
++    const l = this.model.lesson,
++      q = l.questions[this.quizIndex];
++    text(
++      $("lesson-question-count"),
++      `Câu ${this.quizIndex + 1}/${l.questions.length} · ${l.title}`,
++    );
++    text($("lesson-question"), q.prompt);
++    text(
++      $("lesson-answer-feedback"),
++      "Chọn câu trả lời; nếu chưa đúng, hãy dùng gợi ý để thử lại.",
++    );
++    $("lesson-answers").replaceChildren(
++      ...q.options.map((label, i) => {
++        const b = document.createElement("button");
++        b.textContent = label;
++        b.onclick = () => {
++          const r = this.model.answer(this.quizIndex, i);
++          text(
++            $("lesson-answer-feedback"),
++            (r.correct ? "Đúng. " : "Gợi ý: ") + r.text,
++          );
++          b.classList.toggle("correct", r.correct);
++          if (r.correct) this.quizAnswers.set(this.quizIndex, i);
++          text(
++            $("lesson-score"),
++            `Đã giải thích đúng ${this.quizAnswers.size}/${l.questions.length} câu.`,
++          );
++        };
++        return b;
++      }),
++    );
++  }
++  snapshot() {
++    return {
++      schema: "hololab-lesson-1",
++      model: this.model.snapshot(),
++      poses: Object.fromEntries(
++        [...this.objects].map(([k, o]) => [
++          k,
++          {
++            ...o.target,
++            roll: o.roll,
++            yaw: o.yaw,
++            pitch: o.pitch,
++            sealed: o.sealed,
++          },
++        ]),
++      ),
++    };
++  }
++}
++export function lessonStocks(data) {
++  return data.stocks.map((stock) => ({
++    ...stock,
++    openVessel: stock.id === "lesson-copper",
++    mixture: {
++      ...initialMixture(stock.initial),
++      color: appearance(initialMixture(stock.initial)).color,
++    },
++  }));
++}
+--- a/web/src/main.js
++++ b/web/src/main.js
+@@ -1,3 +1,4 @@
++import { Lessons, lessonStocks } from "./lessons.js";
+ import { Bench } from "./bench.js";
+ import { setupReactionLibrary } from "./reaction-ui.js";
+ import { LabRenderer } from "./render3d.js";
+@@ -18,7 +19,7 @@
+   context = overlay.getContext("2d");
+ const metrics = new Metrics(),
+   tracks = new HandTracks();
+-let bench;
++let bench, lessons;
+ let catalog,
+   stocks,
+   view,
+@@ -103,8 +104,12 @@
+   return `<svg viewBox="0 0 50 64" aria-hidden="true"><path d="${shape}" fill="#65cdd81c" stroke="#a8dbe5" stroke-width="1.5"/><path d="M15 35H35 M15 43H35 M15 50H35" stroke="#5cbfc6" opacity=".6"/></svg>`;
+ }
+ function renderCards() {
+-  const filtered = catalog.stocks.filter((s) => s.group === group),
+-    pages = Math.ceil(filtered.length / 5);
++  const filtered = catalog.stocks.filter((s) =>
++      lessons?.active
++        ? lessons.allowed.includes(s.id)
++        : !s.id.startsWith("lesson-") && s.group === group,
++    ),
++    pages = Math.max(1, Math.ceil(filtered.length / 5));
+   page = (page + pages) % pages;
+   $("cards").replaceChildren();
+   for (const stock of filtered.slice(page * 5, page * 5 + 5)) {
+@@ -172,6 +177,10 @@
+   return object ? { type: "object", object } : null;
+ }
+ function createObject(stockId, position, options = {}) {
++  if (lessons?.active && !lessons.canSpawn(stockId)) {
++    message("Hóa chất này không thuộc bài học hiện tại.");
++    return null;
++  }
+   if (view.objects.length >= 16) {
+     message("Bàn đã có 16 vật thể. Bỏ mẫu cũ trước khi lấy thêm.");
+     return null;
+@@ -181,6 +190,7 @@
+   const item = {
+     id: options.id || nextId++,
+     stock,
++    lessonKey: stock.id.startsWith("lesson-") ? stock.id : null,
+     mixture: structuredClone(options.mixture || stock.mixture),
+     target: view.clampPosition(position),
+     roll: options.roll || 0,
+@@ -203,7 +213,14 @@
+   return item;
+ }
+ function spawn(stockId, point) {
+-  const item = createObject(stockId, view.toWorld(point, 0));
++  if (lessons?.active) return lessons.objects.get(stockId) || null;
++  let item;
++  try {
++    item = createObject(stockId, view.toWorld(point, 0));
++  } catch (error) {
++    message(error.message);
++    return null;
++  }
+   if (item)
+     message(`Đã lấy ${item.stock.name}. Giữ chụm để kéo, mở tay để thả.`);
+   return item;
+@@ -226,6 +243,13 @@
+   inspector();
+ }
+ function inspector() {
++  const lessonDescription = lessons?.describe(selected);
++  if (lessonDescription) {
++    setText($("object-name"), lessonDescription.name);
++    setText($("object-metrics"), lessonDescription.metrics);
++    setText($("object-species"), lessonDescription.species);
++    return;
++  }
+   if (!selected) {
+     setText($("object-name"), "Chưa chọn dụng cụ");
+     setText(
+@@ -303,6 +327,7 @@
+   mouse = null;
+ }
+ function clearDesk() {
++  lessons?.detach();
+   epoch++;
+   interaction.reset();
+   tracks.reset();
+@@ -318,6 +343,10 @@
+   $("empty").hidden = false;
+ }
+ function removeSelected() {
++  if (lessons?.active) {
++    message("Dùng Làm lại bài để chuẩn bị lại đúng bộ dụng cụ.");
++    return;
++  }
+   if (!selected || bench.active) return;
+   const item = selected;
+   interaction.owners(item).forEach((h) => interaction.release(h, "delete"));
+@@ -344,6 +373,7 @@
+   alertUntil = now + 6500;
+ }
+ async function pour(source, target, manual = false) {
++  if (lessons?.active) return lessons.pour(source, target);
+   if (pending.has(source.id) || pending.has(target.id)) return;
+   const expectedEpoch = epoch,
+     aVersion = source.version,
+@@ -584,7 +614,9 @@
+   );
+   setText(
+     $("lab-title"),
+-    bench.active ? "Chuẩn độ axit–bazơ" : "Bàn thí nghiệm 3D",
++    bench.active
++      ? "Chuẩn độ axit–bazơ"
++      : lessons?.model?.lesson.title || "Bàn thí nghiệm 3D",
+   );
+   setText($("render-fps"), `${metrics.fps(now).toFixed(0)} FPS render`);
+   setText(
+@@ -644,15 +676,18 @@
+     view.physics.ownership(item, held, valid);
+   }
+   view.physics.step(realDt, bench.active);
++  lessons?.tick(dt, now);
+   view.render(dt, now);
+-  for (const item of view.objects) {
+-    const p = view.toScreen(item.group.position),
+-      transform = `translate(${clamp(p.x - view.rect.left, 125, view.rect.width - 125).toFixed(1)}px,${clamp(p.y - view.rect.top + 65, 40, view.rect.height - 55).toFixed(1)}px) translateX(-50%)`;
+-    if (item.labelTransform !== transform) {
+-      item.label.style.transform = transform;
+-      item.labelTransform = transform;
+-    }
+-  }
++  if (lessons?.active) lessons.positionLabels();
++  else
++    for (const item of view.objects) {
++      const p = view.toScreen(item.group.position),
++        transform = `translate(${clamp(p.x - view.rect.left, 125, view.rect.width - 125).toFixed(1)}px,${clamp(p.y - view.rect.top + 65, 40, view.rect.height - 55).toFixed(1)}px) translateX(-50%)`;
++      if (item.labelTransform !== transform) {
++        item.label.style.transform = transform;
++        item.labelTransform = transform;
++      }
++    }
+   if (overlayDirty) {
+     drawOverlay(now);
+     overlayDirty = false;
+@@ -675,6 +710,7 @@
+ }
+ function resize() {
+   view.resize();
++  lessons?.visuals.resize();
+   overlay.width = innerWidth;
+   overlay.height = innerHeight;
+   interaction.width = innerWidth;
+@@ -687,6 +723,8 @@
+       view.physics.setTarget(item, view.clampPosition(item.target));
+ }
+ async function loadSession(raw) {
++  if (raw?.schema === "hololab-lesson-1")
++    return lessons.start(raw.model?.lesson, raw);
+   const data = await post("/api/session", raw);
+   clearDesk();
+   allowRisk = data.allow_risk;
+@@ -712,6 +750,7 @@
+   message("Đã mở phiên. Vị trí được giữ trong vùng bàn nhìn thấy.");
+ }
+ function session() {
++  if (lessons?.active) return lessons.snapshot();
+   return {
+     schema: "hololab3-session-1",
+     allow_risk: allowRisk,
+@@ -871,7 +910,7 @@
+   $("benchmark").onclick = () => {
+     if (metrics.current) return;
+     metrics.begin(performance.now(), {
+-      version: "3.3.0",
++      version: "3.4.0",
+       input_source: inputSource,
+       delegate: capture.delegate || null,
+       width: innerWidth,
+@@ -979,6 +1018,15 @@
+     if (key === "l") o.yaw -= 0.13;
+     if (["a", "d", "w", "j", "l"].includes(key)) view.physics.editPose(o);
+     if (key === "k") {
++      if (
++        lessons?.active &&
++        !o.sealed &&
++        o.stock.openVessel &&
++        !view.physics.canSeal(o)
++      ) {
++        message("Nhấc thanh sắt khỏi miệng cốc trước khi đậy nắp.");
++        return;
++      }
+       o.sealed = !o.sealed;
+       o.version++;
+       view.updateMixture(o);
+@@ -1067,6 +1115,29 @@
+   $("tracking-rate").onchange = (e) => {
+     capture.maxHz = Number(e.target.value);
+   };
++  const lessonData = await (await fetch("/data/lessons-thpt.json")).json();
++  for (const stock of lessonStocks(lessonData)) {
++    stocks.set(stock.id, stock);
++    catalog.stocks.push(stock);
++  }
++  lessons = new Lessons(lessonData, {
++    view,
++    bench,
++    create: createObject,
++    clear: clearDesk,
++    message,
++    cards: renderCards,
++    inspect: inspector,
++    resize,
++  });
++  $("titration-mode").onclick = () => {
++    if (lessons.active) clearDesk();
++    bench.toggle();
++  };
++  $("buret-tool").onclick = () => {
++    if (lessons.active) clearDesk();
++    if (!bench.active) bench.toggle();
++  };
+   bind();
+   resize();
+   renderCards();
+@@ -1077,6 +1148,7 @@
+     window.__lab = {
+       view,
+       bench,
++      lessons,
+       interaction,
+       tracks,
+       capture,
+--- a/web/src/physics.js
++++ b/web/src/physics.js
+@@ -1,4 +1,5 @@
+ import * as THREE from "../vendor/three/three.module.js";
++import { hollowBeakerHulls } from "./lesson-geometry.js";
+ import RAPIER from "../vendor/rapier/rapier.mjs";
+ 
+ // A 1.1-scene-unit beaker is about 11 cm high. Masses below are kg.
+@@ -169,6 +170,8 @@
+   }
+   /** Hulls use scaled local mesh vertices, including child pivots. Decorative rings/liquid are excluded. */
+   geometry(item) {
++    if (item.stock.openVessel && item.stock.kind === "beaker")
++      return hollowBeakerHulls(item.group.scale, item.sealed);
+     const root = item.group,
+       hulls = [];
+     root.updateWorldMatrix(true, true);
+@@ -246,10 +249,73 @@
+     };
+     this.entries.set(item.id, e);
+     this.buildColliders(e);
+-    const at = this.constrain(e, item.target, item.group.quaternion);
++    let at;
++    try {
++      at = this.initialPosition(e, item.target, item.group.quaternion);
++    } catch (error) {
++      this.world.removeRigidBody(body);
++      this.entries.delete(item.id);
++      throw error;
++    }
+     body.setTranslation(toMetres(at), true);
++    // Queries made before the first step must see the relocated spawn pose.
++    this.world.propagateModifiedBodyPositionsToColliders();
+     this.sync(e, true);
+     return e;
++  }
++  /** Place NEW bodies without overlap. Never moves an existing/held object.
++   * Starting two dynamic hulls inside each other injects solver separation energy.
++   * AABBs reject distant pairs; shape queries preserve the empty space inside
++   * hollow vessels. Queries are synchronized before any candidate is tested.
++   */
++  initialPosition(e, requested, rotation) {
++    const origin = this.constrain(e, requested, rotation);
++    this.world.propagateModifiedBodyPositionsToColliders();
++    const neighbours = [...this.entries.values()]
++      .filter((o) => o !== e)
++      .map((o) => ({
++        entry: o,
++        bounds: this.bounds(o, o.body.rotation(), this.position(o)),
++      }));
++    const free = (p) => {
++      const b = this.bounds(e, rotation, p);
++      return neighbours.every(({ entry, bounds: n }) => {
++        if (
++          ["x", "y", "z"].some(
++            (a) => b.max[a] + 0.02 < n.min[a] || b.min[a] - 0.02 > n.max[a],
++          )
++        )
++          return true;
++        return e.colliders.every((c) =>
++          entry.colliders.every((other) => {
++            const contact = other.contactShape(
++              c.shape,
++              toMetres(p),
++              rotation,
++              0.002,
++            );
++            return !contact || contact.distance >= 0.002;
++          }),
++        );
++      });
++    };
++    if (free(origin)) return origin;
++    for (let ring = 1; ring <= 50; ring++) {
++      for (let i = 0; i < 24; i++) {
++        const angle = (i * Math.PI) / 12;
++        const p = this.constrain(
++          e,
++          {
++            x: origin.x + Math.cos(angle) * ring * 0.2,
++            y: origin.y,
++            z: origin.z + Math.sin(angle) * ring * 0.2,
++          },
++          rotation,
++        );
++        if (free(p)) return p;
++      }
++    }
++    throw Error("Bàn đã kín ở độ cao này. Hãy cất bớt dụng cụ trước khi thêm.");
+   }
+   buildColliders(e) {
+     e.boundsCache = null;
+@@ -278,6 +344,35 @@
+     return (
+       (item.stock.kind === "balance" ? 0.8 : 0.15) +
+       Math.max(0, item.mixture?.volume_ml || 0) / 1000
++    );
++  }
++  /** A newly added lid must not overlap a tool crossing the mouth, including
++   * a strip that is above the liquid and therefore not chemically immersed.
++   * Query only on a lid action; the normal physics/gesture loop is unchanged.
++   */
++  canSeal(item) {
++    if (!item.stock.openVessel || item.sealed) return true;
++    const e = this.entries.get(item.id);
++    if (!e) return false;
++    const points = hollowBeakerHulls(item.group.scale, true).at(-1);
++    const desc = RAPIER.ColliderDesc.roundConvexHull(
++      points.map((n) => n * METRES_PER_UNIT),
++      0.0005,
++    );
++    if (!desc) return false;
++    this.world.propagateModifiedBodyPositionsToColliders();
++    return [...this.entries.values()].every(
++      (other) =>
++        other === e ||
++        other.colliders.every((c) => {
++          const contact = c.contactShape(
++            desc.shape,
++            e.body.translation(),
++            e.body.rotation(),
++            0.001,
++          );
++          return !contact || contact.distance >= 0.001;
++        }),
+     );
+   }
+   updateItem(item) {
+--- a/web/src/render3d.js
++++ b/web/src/render3d.js
+@@ -3,6 +3,7 @@
+ import { buildEnvironment } from "./environment.js";
+ import { LabPhysics, initPhysics } from "./physics.js";
+ import { addVesselDetails, makeContactShadow } from "./vessel-details.js";
++import { buildLessonTool } from "./lesson-visuals.js";
+ import { clamp } from "./filters.js";
+ 
+ /** Meshes use v2's vessel profiles; no GL readback or bitmap compositing per frame. */
+@@ -172,7 +173,9 @@
+     group.rotation.set(item.pitch || 0, item.yaw || 0, item.roll || 0);
+     item.group = group;
+     const kind = item.stock.kind;
+-    if (this.profiles.profiles[kind]) {
++    if (buildLessonTool(this, item)) {
++      // Lesson-specific tools keep the same item/body/grab ownership path.
++    } else if (this.profiles.profiles[kind]) {
+       group.add(new THREE.Mesh(this.lathe(kind), this.glass));
+       item.liquid = new THREE.Mesh(
+         new THREE.BufferGeometry(),
+@@ -248,7 +251,12 @@
+     this.scene.add(group);
+     this.objects.push(item);
+     this.updateMixture(item);
+-    this.physics.add(item);
++    try {
++      this.physics.add(item);
++    } catch (error) {
++      this.remove(item);
++      throw error;
++    }
+     makeContactShadow(this, item);
+   }
+   liquidGeometry(kind, ratio) {
+--- a/web/styles.css
++++ b/web/styles.css
+@@ -805,3 +805,188 @@
+   overflow: hidden;
+   text-overflow: ellipsis;
+ }
++
++/* THPT lessons: retain the existing camera/workspace and collapse optional theory. */
++.lesson-picker {
++  padding: 16px 0;
++  border-bottom: 1px solid var(--line, #d5dfe3);
++  margin-bottom: 12px;
++}
++.lesson-picker h2 {
++  font-size: 18px;
++  margin: 0 0 12px;
++}
++.lesson-picker label {
++  display: block;
++  font-size: 13px;
++  font-weight: 600;
++  margin: 10px 0;
++}
++.lesson-picker select {
++  width: 100%;
++  min-height: 40px;
++  font-size: 13px;
++  white-space: normal;
++}
++#lesson-preview {
++  font-size: 13px;
++  line-height: 1.6;
++  color: #4c626d;
++  margin: 10px 0 14px;
++}
++#lesson-exit {
++  margin-top: 8px;
++}
++#lesson-panel {
++  background: #f6faf9;
++  border: 1px solid #cadbd5;
++  border-radius: 12px;
++  padding: 12px 16px;
++}
++.lesson-summary {
++  display: flex;
++  align-items: center;
++  gap: 12px;
++  flex-wrap: wrap;
++}
++.lesson-summary > div {
++  flex: 1;
++  min-width: 260px;
++}
++#lesson-step {
++  font-size: 12px;
++  font-weight: 600;
++  color: #326c5e;
++}
++#lesson-status {
++  font-size: 14px;
++  line-height: 1.5;
++  margin: 5px 0;
++}
++#lesson-knowledge {
++  margin-top: 10px;
++}
++#lesson-knowledge summary {
++  cursor: pointer;
++  font-size: 14px;
++  color: #315664;
++  font-weight: 600;
++}
++.lesson-knowledge-grid {
++  display: grid;
++  grid-template-columns: 1fr 1fr;
++  gap: 24px;
++  padding: 8px 0;
++  font-size: 14px;
++  line-height: 1.7;
++}
++.lesson-knowledge-grid h3 {
++  font-size: 15px;
++  margin: 16px 0 5px;
++}
++.lesson-knowledge-grid p {
++  margin: 0;
++}
++#lesson-equation {
++  white-space: pre-line;
++  font-weight: 500;
++}
++#lesson-steps {
++  padding-left: 24px;
++}
++#lesson-steps li {
++  margin-bottom: 8px;
++}
++#lesson-sources a {
++  display: block;
++  color: #226b82;
++  font-size: 12px;
++  margin: 8px 0;
++}
++body.lesson-active #tabs,
++body.lesson-active #buret-tool,
++body.lesson-active #risk-mode,
++body.lesson-active label:has(#experiment) {
++  display: none;
++}
++body.lesson-active #cards {
++  margin-top: 12px;
++}
++body.lesson-active .object-label {
++  display: block !important;
++  font-size: 12px;
++  max-width: 220px;
++  padding: 5px 9px;
++  background: #17313dea;
++}
++body.lesson-active .object-label span {
++  font-size: 11px;
++}
++#lesson-quiz-dialog {
++  max-width: 640px;
++  width: 90%;
++  padding: 28px;
++  border: 1px solid #ccd9df;
++  border-radius: 16px;
++  background: #f8fbfc;
++  color: #19333f;
++}
++#lesson-quiz-dialog h2 {
++  font-size: 21px;
++  margin: 20px 0;
++}
++#lesson-answers {
++  display: grid;
++  gap: 10px;
++}
++#lesson-answers button {
++  text-align: left;
++  min-height: 48px;
++  font-size: 15px;
++  white-space: normal;
++}
++#lesson-answers .correct {
++  border-color: #278b69;
++  background: #e3f3eb;
++}
++#lesson-answer-feedback {
++  line-height: 1.7;
++  min-height: 3em;
++}
++.dialog-close {
++  float: right;
++}
++@media (max-width: 800px) {
++  .lesson-knowledge-grid {
++    grid-template-columns: 1fr;
++  }
++  .lesson-summary > div {
++    min-width: 180px;
++  }
++}
++
++body.lesson-active .object-label {
++  color: #effbf8;
++  max-width: 175px;
++  white-space: normal;
++  line-height: 1.4;
++}
++body.lesson-active .object-label span {
++  color: #c5dee4;
++}
++.lesson-picker select {
++  white-space: nowrap;
++  text-overflow: ellipsis;
++}
++
++.projection-control {
++  font-size: 12px;
++  color: #46636d;
++  display: flex;
++  align-items: center;
++  gap: 6px;
++}
++.projection-control select {
++  font-size: 13px;
++  min-height: 36px;
++}
+Binary files differ: web/vendor/wasm/.vision_wasm_nosimd_internal.wasm.9kjOU9

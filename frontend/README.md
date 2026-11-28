@@ -1,20 +1,20 @@
 # Frontend
 
-Giao diện web HoloLab (Three.js, Rapier, React/Vite). **Hiện chưa có mã nguồn** trong repo.
-
-Cấu trúc dự kiến (đặt trong thư mục này):
-
-| Đường dẫn | Vai trò |
-|---|---|
-| `web/` | Static app mà backend phục vụ: `index.html`, `data/` (bài học, rubric), `models/`, `vendor/`, `src/` |
-| `ui/` | Mã nguồn React; `npm run build` xuất ra `web/ui/` |
-| `tests_js/`, `tools/` | Test JavaScript và công cụ QA |
+| Thư mục | Nội dung | Phục vụ tại |
+|---|---|---|
+| `web/` | **Ứng dụng lab 3D** (JS thuần, Three.js, Rapier, MediaPipe): `index.html`, `src/`, `data/`, `vendor/`, `models/`, `styles.css`. Đã đóng kèm đủ để chạy, không cần build | `/` |
+| `ui/` | Khung thư viện bài của lab (React), build ra `web/ui/` (có commit) | `/ui/` |
+| `src/`, `index.html` | **Ứng dụng EGAD** (React + Vite), build ra `web/app/` (không commit) | `/app/` |
+| `tests_js/` | 156 test (`node --test`) | — |
+| `tools/` | Kiểm tra trình duyệt (`qa_mouse_v39.mjs`, `qa_egad_v39.mjs`), `vendor.mjs`; các script `*_v3x` cũ là lịch sử | — |
 
 ```bash
 cd frontend
 npm ci
 npm test
-npm run build
+npm run build        # build:shell -> web/ui, build:app -> web/app
+npm run dev          # EGAD app ở http://localhost:5173 (backend phải chạy ở :8765)
+npm run vendor       # chép lại thư viện từ node_modules vào web/vendor
 ```
 
-Backend đọc `frontend/web/` (đổi bằng biến môi trường `HOLOLAB_WEB_DIR`).
+Hai test đọc dữ liệu của backend (`../backend/data`, `../backend/training`). Hướng dẫn sử dụng lab: `../docs/HUONG_DAN_THI_NGHIEM.md`.

@@ -1,0 +1,1376 @@
+{
+  "schema": "hololab-thpt-1",
+  "reviewed": "2026-10-27",
+  "sources": {
+    "curriculum": {
+      "title": "Bộ GD&ĐT — Chương trình môn Hóa học 2018 (bản đăng tại trường An Đồng)",
+      "url": "https://thcsandong.haiphong.edu.vn/van-ban-nganh/chuong-trinh-giao-duc-pho-thong-mon-hoa-hoc-ban-hanh-kem-theo-thong-tu-so-32201/ctmb/20405/91190"
+    },
+    "ions": {
+      "title": "Royal Society of Chemistry — Testing salts for anions and cations",
+      "url": "https://edu.rsc.org/experiments/testing-salts-for-anions-and-cations/464.article"
+    },
+    "indicator": {
+      "title": "University of Wisconsin–Madison — Choosing an indicator",
+      "url": "https://www2.chem.wisc.edu/deptfiles/genchem/lab/labdocs/modules/titrate/titrqind.htm"
+    },
+    "ammonium": {
+      "title": "Royal Society of Chemistry — Microscale reactions of positive ions with sodium hydroxide",
+      "url": "https://edu.rsc.org/experiments/microscale-reactions-of-positive-ions-with-sodium-hydroxide/757.article"
+    },
+    "displacement": {
+      "title": "Purdue University — Displacement reactions",
+      "url": "https://chemed.chem.purdue.edu/genchem/demosheets/9.11.html"
+    },
+    "biuret": {
+      "title": "Rice University — Biuret protein assay",
+      "url": "https://www.ruf.rice.edu/~bioslabs/methods/protein/biuret.html"
+    },
+    "school11": {
+      "title": "THPT Tôn Thất Tùng — Hóa 11, học liệu 2025–2026",
+      "url": "https://thpttonthattung-danang.edu.vn/wp-content/uploads/2025/12/Huong-dan-on-tap-KTCK1-Hoa-11-25-26.pdf"
+    },
+    "school12": {
+      "title": "THPT Lê Quý Đôn — Hóa 12, học liệu 2025–2026",
+      "url": "https://thpt-lequydon-hcm.edu.vn/ckeditor/plugins/fileman/Uploads/Documents/HD%20CHUYEN%20MON/2025-2026/HOA_NOI%20DUNG%20ON%20TAP%20KT%20HK12526.pdf"
+    },
+    "copper-precip": {
+      "title": "University of Wisconsin — Aqueous reactions of copper sulfate",
+      "url": "https://www2.chem.wisc.edu/deptfiles/genchem/lab/ccaold/main/cuso/page1.htm"
+    },
+    "calcium-precip": {
+      "title": "University of Colorado Boulder — CaCl2 + Na2CO3",
+      "url": "https://www.colorado.edu/lab/lecture-demo-manual/general-reactions/s130-chemical-rxns-precipitation-cacl2-na2co3-caco3/s130-prep-notes"
+    },
+    "acetate": {
+      "title": "ACS — Limiting reactants: vinegar and baking soda",
+      "url": "https://www.acs.org/middleschoolchemistry/lessonplans/chapter6/lesson2.html"
+    }
+  },
+  "stocks": [
+    {
+      "id": "lesson-chloride",
+      "name": "Mẫu sodium chloride",
+      "formula": "NaCl · ban đầu 0,10 M · acid hóa HNO₃",
+      "kind": "tube",
+      "group": "chemical",
+      "capacity_ml": 20,
+      "initial": {
+        "volume_ml": 8,
+        "mol": {
+          "Na_plus": 0.0008,
+          "Cl_minus": 0.0008,
+          "H_plus": 8e-05,
+          "NO3_minus": 8e-05
+        }
+      },
+      "shortLabel": "Mẫu NaCl"
+    },
+    {
+      "id": "lesson-silver",
+      "name": "Silver nitrate",
+      "formula": "AgNO₃ · ban đầu 0,05 M",
+      "kind": "bottle",
+      "group": "chemical",
+      "capacity_ml": 100,
+      "initial": {
+        "volume_ml": 30,
+        "mol": {
+          "Ag_plus": 0.0015,
+          "NO3_minus": 0.0015
+        }
+      },
+      "shortLabel": "AgNO₃"
+    },
+    {
+      "id": "lesson-control",
+      "name": "Nước đối chứng",
+      "formula": "H₂O",
+      "kind": "tube",
+      "group": "chemical",
+      "capacity_ml": 20,
+      "initial": {
+        "volume_ml": 8,
+        "mol": {}
+      },
+      "shortLabel": "Nước đối chứng"
+    },
+    {
+      "id": "lesson-indicator",
+      "name": "Nước + phenolphthalein",
+      "formula": "H₂O · chỉ thị PP",
+      "kind": "beaker",
+      "group": "chemical",
+      "capacity_ml": 250,
+      "initial": {
+        "volume_ml": 40,
+        "mol": {},
+        "indicator_g": 0.0004
+      }
+    },
+    {
+      "id": "lesson-base",
+      "name": "Sodium hydroxide",
+      "formula": "NaOH · ban đầu 0,10 M",
+      "kind": "bottle",
+      "group": "chemical",
+      "capacity_ml": 100,
+      "initial": {
+        "volume_ml": 40,
+        "mol": {
+          "Na_plus": 0.004,
+          "OH_minus": 0.004
+        }
+      },
+      "shortLabel": "NaOH"
+    },
+    {
+      "id": "lesson-acid",
+      "name": "Hydrochloric acid",
+      "formula": "HCl · ban đầu 0,10 M",
+      "kind": "bottle",
+      "group": "chemical",
+      "capacity_ml": 100,
+      "initial": {
+        "volume_ml": 40,
+        "mol": {
+          "H_plus": 0.004,
+          "Cl_minus": 0.004
+        }
+      },
+      "shortLabel": "HCl"
+    },
+    {
+      "id": "lesson-ammonium",
+      "name": "Ammonium chloride",
+      "formula": "NH₄Cl · ban đầu 0,10 M",
+      "kind": "beaker",
+      "group": "chemical",
+      "capacity_ml": 250,
+      "initial": {
+        "volume_ml": 10,
+        "mol": {
+          "NH4_plus": 0.001,
+          "Cl_minus": 0.001
+        }
+      },
+      "shortLabel": "Mẫu NH₄Cl"
+    },
+    {
+      "id": "lesson-litmus",
+      "name": "Giấy quỳ đỏ ẩm",
+      "formula": "Chỉ thị khí · giữ trên miệng bình",
+      "kind": "litmus",
+      "group": "tool",
+      "capacity_ml": 250,
+      "initial": {
+        "volume_ml": 0,
+        "mol": {}
+      }
+    },
+    {
+      "id": "lesson-copper",
+      "name": "Copper(II) sulfate",
+      "formula": "CuSO₄ · ban đầu 0,05 M",
+      "kind": "beaker",
+      "group": "chemical",
+      "capacity_ml": 250,
+      "initial": {
+        "volume_ml": 100,
+        "mol": {
+          "Cu_2plus": 0.005,
+          "SO4_2minus": 0.005
+        }
+      },
+      "shortLabel": "Dung dịch CuSO₄"
+    },
+    {
+      "id": "lesson-iron",
+      "name": "Thanh sắt sạch",
+      "formula": "Fe · ban đầu 0,28 g",
+      "kind": "iron-strip",
+      "group": "chemical",
+      "capacity_ml": 250,
+      "initial": {
+        "volume_ml": 0,
+        "mol": {
+          "Fe": 0.005
+        }
+      },
+      "shortLabel": "Thanh sắt"
+    },
+    {
+      "id": "lesson-protein",
+      "name": "Dung dịch protein",
+      "formula": "Albumin · ban đầu 10 mg/mL",
+      "kind": "tube",
+      "group": "chemical",
+      "capacity_ml": 20,
+      "initial": {
+        "volume_ml": 5,
+        "mol": {},
+        "protein_g": 0.05
+      },
+      "shortLabel": "Mẫu protein"
+    },
+    {
+      "id": "lesson-biuret",
+      "name": "Thuốc thử biuret pha sẵn",
+      "formula": "Cu(II) · kiềm · tartrate",
+      "kind": "bottle",
+      "group": "chemical",
+      "capacity_ml": 100,
+      "initial": {
+        "volume_ml": 30,
+        "mol": {
+          "Na_plus": 0.003,
+          "OH_minus": 0.003,
+          "SO4_2minus": 0.00015,
+          "biuret_Cu": 0.00015
+        }
+      },
+      "shortLabel": "Thuốc thử biuret"
+    },
+    {
+      "id": "lesson-neutral-sample",
+      "name": "Mẫu HCl",
+      "shortLabel": "Mẫu HCl",
+      "formula": "HCl · 0,10 M",
+      "kind": "beaker",
+      "group": "chemical",
+      "capacity_ml": 250,
+      "initial": {
+        "volume_ml": 20,
+        "mol": {
+          "H_plus": 0.002,
+          "Cl_minus": 0.002
+        },
+        "indicator_g": 0.0002
+      }
+    },
+    {
+      "id": "lesson-calcium",
+      "name": "Calcium chloride",
+      "shortLabel": "Calcium chloride",
+      "formula": "CaCl₂ · 0,10 M",
+      "kind": "beaker",
+      "group": "chemical",
+      "capacity_ml": 250,
+      "initial": {
+        "volume_ml": 30,
+        "mol": {
+          "Ca_2plus": 0.003,
+          "Cl_minus": 0.006
+        },
+        "indicator_g": 0
+      }
+    },
+    {
+      "id": "lesson-carbonate",
+      "name": "Sodium carbonate",
+      "shortLabel": "Sodium carbonate",
+      "formula": "Na₂CO₃ · 0,10 M",
+      "kind": "bottle",
+      "group": "chemical",
+      "capacity_ml": 100,
+      "initial": {
+        "volume_ml": 30,
+        "mol": {
+          "Na_plus": 0.006,
+          "CO3_2minus": 0.003
+        },
+        "indicator_g": 0
+      }
+    },
+    {
+      "id": "lesson-bicarbonate",
+      "name": "Sodium hydrogencarbonate",
+      "shortLabel": "Sodium hydrogencarbonate",
+      "formula": "NaHCO₃ · 0,10 M",
+      "kind": "beaker",
+      "group": "chemical",
+      "capacity_ml": 250,
+      "initial": {
+        "volume_ml": 30,
+        "mol": {
+          "Na_plus": 0.003,
+          "HCO3_minus": 0.003
+        },
+        "indicator_g": 0
+      }
+    },
+    {
+      "id": "lesson-acetic",
+      "name": "Acetic acid",
+      "shortLabel": "Acetic acid",
+      "formula": "CH₃COOH · 0,10 M",
+      "kind": "bottle",
+      "group": "chemical",
+      "capacity_ml": 100,
+      "initial": {
+        "volume_ml": 30,
+        "mol": {
+          "CH3COOH": 0.003
+        },
+        "indicator_g": 0
+      }
+    },
+    {
+      "id": "lesson-diluent",
+      "name": "Nước pha loãng",
+      "shortLabel": "Nước pha loãng",
+      "formula": "H₂O",
+      "kind": "bottle",
+      "group": "chemical",
+      "capacity_ml": 100,
+      "initial": {
+        "volume_ml": 80,
+        "mol": {},
+        "indicator_g": 0
+      }
+    }
+  ],
+  "lessons": [
+    {
+      "id": "chloride",
+      "grade": 10,
+      "topic": "Nhóm VIIA — Hydrogen halide và muối halide",
+      "title": "Nhận biết ion chloride",
+      "status": "ready",
+      "curriculum": {
+        "document": "CTGDPT 2018 môn Hóa học, TT 32/2018",
+        "pages": [
+          16
+        ],
+        "alignment": "Dùng AgNO₃ để nhận biết chloride; đây là một trường hợp trong yêu cầu phân biệt ion halide.",
+        "source": "curriculum"
+      },
+      "objective": "Dùng AgNO₃ để nhận biết chloride; đây là một trường hợp trong yêu cầu phân biệt ion halide.",
+      "equations": [
+        "AgNO₃(aq) + NaCl(aq) → AgCl(s)↓ + NaNO₃(aq)",
+        "Ag⁺(aq) + Cl⁻(aq) → AgCl(s)↓"
+      ],
+      "setup": [
+        {
+          "stock": "lesson-chloride",
+          "role": "sample"
+        },
+        {
+          "stock": "lesson-silver",
+          "role": "reagent"
+        },
+        {
+          "stock": "lesson-control",
+          "role": "control"
+        }
+      ],
+      "steps": [
+        "Mẫu NaCl đã được acid hóa loãng bằng HNO₃; nước là mẫu đối chứng.",
+        "Gắp chai AgNO₃, đưa miệng chai lên trên mẫu rồi nghiêng ≥45° để rót.",
+        "Quan sát kết tủa; thử AgNO₃ với nước đối chứng và so sánh.",
+        "Sau khi rót, dựng chai thẳng rồi đặt lại chỗ trống trước khi thả tay."
+      ],
+      "phenomenon": "AgCl trắng làm dung dịch vẩn đục rồi lắng; mẫu nước đối chứng không có kết tủa.",
+      "explanation": "Ion Ag⁺ kết hợp với Cl⁻ thành muối ít tan. Na⁺ và NO₃⁻ là ion đi kèm. Lượng AgCl bị giới hạn bởi ion thiếu.",
+      "application": "Kiểm tra sự có mặt của chloride trong mẫu đã xử lý phù hợp; thử định tính không thay thế phép đo nồng độ.",
+      "safety": "AgNO₃ gây tổn thương mắt và nhuộm da; thu gom chất thải chứa bạc riêng.",
+      "questions": [
+        {
+          "prompt": "Chất rắn màu trắng là gì?",
+          "options": [
+            "AgCl",
+            "NaNO₃",
+            "Ag kim loại"
+          ],
+          "correct": 0,
+          "hint": "Tìm cặp ion tạo muối ít tan.",
+          "explanation": "Ag⁺ và Cl⁻ tạo AgCl rắn màu trắng."
+        },
+        {
+          "prompt": "Thêm AgNO₃ vào nước đối chứng có tạo AgCl không?",
+          "options": [
+            "Có, vì bạc luôn kết tủa",
+            "Không, vì thiếu Cl⁻",
+            "Có, do có nước"
+          ],
+          "correct": 1,
+          "hint": "Kiểm tra đủ hai ion của phương trình.",
+          "explanation": "Không có Cl⁻ thì không thể tạo AgCl."
+        },
+        {
+          "prompt": "Khi Cl⁻ đã hết, thêm tiếp AgNO₃ thì sao?",
+          "options": [
+            "AgCl tăng không giới hạn",
+            "Không tạo thêm AgCl",
+            "AgCl biến thành khí"
+          ],
+          "correct": 1,
+          "hint": "Chất giới hạn quyết định lượng sản phẩm.",
+          "explanation": "Mỗi mol AgCl cần một mol Cl⁻; Ag⁺ dư còn trong dung dịch."
+        },
+        {
+          "prompt": "Chất thải sau thử bạc nên được xử lý thế nào?",
+          "options": [
+            "Đổ trực tiếp xuống bồn",
+            "Thu gom theo hướng dẫn của giáo viên",
+            "Trộn với mọi chất thải khác"
+          ],
+          "correct": 1,
+          "hint": "Bạc cần được thu gom riêng.",
+          "explanation": "Thu gom riêng giúp hạn chế ô nhiễm và tiếp xúc nguy hiểm."
+        }
+      ],
+      "sources": [
+        "curriculum",
+        "ions"
+      ],
+      "limits": "Dung dịch đơn giản, bỏ qua hoạt độ và độ tan rất nhỏ của AgCl; không mô phỏng phân hủy quang hóa.",
+      "conditions": "Dung dịch nước; mẫu NaCl acid hóa bằng HNO₃ loãng. Không có ion gây nhiễu trong bộ mẫu.",
+      "reactionIds": [
+        "silver-chloride",
+        "neutralization"
+      ],
+      "modelType": "bounded-stoichiometry"
+    },
+    {
+      "id": "indicator",
+      "grade": 11,
+      "topic": "Cân bằng trong dung dịch nước",
+      "title": "Màu chỉ thị và môi trường acid–base",
+      "status": "ready",
+      "curriculum": {
+        "document": "CTGDPT 2018 môn Hóa học, TT 32/2018",
+        "pages": [
+          21
+        ],
+        "alignment": "Liên hệ pH với màu phenolphthalein và giải thích trung hòa acid–base.",
+        "source": "curriculum"
+      },
+      "objective": "Liên hệ pH với màu phenolphthalein và giải thích trung hòa acid–base.",
+      "equations": [
+        "HCl(aq) + NaOH(aq) → NaCl(aq) + H₂O(l)",
+        "H⁺(aq) + OH⁻(aq) → H₂O(l)"
+      ],
+      "setup": [
+        {
+          "stock": "lesson-indicator",
+          "role": "sample"
+        },
+        {
+          "stock": "lesson-base",
+          "role": "reagent"
+        },
+        {
+          "stock": "lesson-acid",
+          "role": "reagent"
+        }
+      ],
+      "steps": [
+        "Bình mẫu chứa nước và một lượng vết phenolphthalein.",
+        "Rót một ít NaOH vào bình mẫu để quan sát màu hồng.",
+        "Rót HCl vào chính bình đó đến khi màu hồng mất; theo dõi pH.",
+        "Sau khi rót, dựng chai thẳng rồi đặt lại chỗ trống trước khi thả tay."
+      ],
+      "phenomenon": "Chỉ thị từ không màu sang hồng trong môi trường kiềm; màu mất khi thêm đủ acid.",
+      "explanation": "H⁺ trung hòa OH⁻ làm pH giảm. Phenolphthalein chuyển màu khoảng pH 8,2–10; không màu không đồng nghĩa pH luôn bằng 7.",
+      "application": "Chọn chỉ thị phù hợp cho chuẩn độ và nhận biết môi trường của dung dịch.",
+      "safety": "Tránh để acid, base và chỉ thị tiếp xúc mắt; không nếm dung dịch.",
+      "questions": [
+        {
+          "prompt": "Màu hồng cho biết điều gì?",
+          "options": [
+            "Dung dịch có tính kiềm đủ mạnh",
+            "Dung dịch luôn trung tính",
+            "Dung dịch chứa kết tủa"
+          ],
+          "correct": 0,
+          "hint": "Xem khoảng chuyển màu của chỉ thị.",
+          "explanation": "Phenolphthalein hồng trong khoảng pH kiềm phù hợp."
+        },
+        {
+          "prompt": "Sau khi mất màu, có chắc pH bằng 7 không?",
+          "options": [
+            "Có",
+            "Không",
+            "pH luôn bằng 0"
+          ],
+          "correct": 1,
+          "hint": "Khoảng không màu rộng hơn một giá trị pH.",
+          "explanation": "Chỉ thị có thể không màu trong môi trường acid, trung tính hoặc kiềm yếu."
+        },
+        {
+          "prompt": "Sản phẩm ion rút gọn của trung hòa là gì?",
+          "options": [
+            "H₂",
+            "H₂O",
+            "Cl₂"
+          ],
+          "correct": 1,
+          "hint": "H⁺ kết hợp với OH⁻.",
+          "explanation": "Phương trình H⁺ + OH⁻ → H₂O bảo toàn nguyên tử và điện tích."
+        },
+        {
+          "prompt": "Chỉ thị được dùng vào việc gì?",
+          "options": [
+            "Thay mọi máy đo pH chính xác",
+            "Nhận biết vùng pH và điểm kết thúc phù hợp",
+            "Đo khối lượng kim loại"
+          ],
+          "correct": 1,
+          "hint": "Màu chỉ thị phản ánh một khoảng pH.",
+          "explanation": "Cần chọn chỉ thị có khoảng chuyển màu phù hợp phản ứng chuẩn độ."
+        }
+      ],
+      "sources": [
+        "curriculum",
+        "indicator",
+        "school11"
+      ],
+      "limits": "Dung dịch lý tưởng 25 °C, thể tích cộng được; bỏ qua hoạt độ, động học trộn và lượng acid–base của chỉ thị vết.",
+      "conditions": "Dung dịch loãng ở 25 °C, có lượng vết phenolphthalein; cho acid và base vào cùng bình.",
+      "reactionIds": [
+        "neutralization"
+      ],
+      "modelType": "bounded-stoichiometry"
+    },
+    {
+      "id": "ammonium",
+      "grade": 11,
+      "topic": "Nitrogen và sulfur — Ammonia, muối ammonium",
+      "title": "Nhận biết ion ammonium",
+      "status": "ready",
+      "curriculum": {
+        "document": "CTGDPT 2018 môn Hóa học, TT 32/2018",
+        "pages": [
+          22
+        ],
+        "alignment": "Chuyển ammonium thành ammonia trong kiềm và kiểm chứng khí bằng giấy quỳ đỏ ẩm.",
+        "source": "curriculum"
+      },
+      "objective": "Chuyển ammonium thành ammonia trong kiềm và kiểm chứng khí bằng giấy quỳ đỏ ẩm.",
+      "equations": [
+        "NH₄Cl(aq) + NaOH(aq) → NaCl(aq) + NH₃(g)↑ + H₂O(l)",
+        "NH₄⁺(aq) + OH⁻(aq) → NH₃(aq/g) + H₂O(l)"
+      ],
+      "setup": [
+        {
+          "stock": "lesson-ammonium",
+          "role": "sample"
+        },
+        {
+          "stock": "lesson-base",
+          "role": "reagent"
+        },
+        {
+          "stock": "lesson-litmus",
+          "role": "probe"
+        }
+      ],
+      "steps": [
+        "Rót NaOH vào mẫu NH₄Cl.",
+        "Gắp giấy quỳ đỏ ẩm, giữ ngay phía trên miệng bình; không nhúng vào dung dịch.",
+        "Quan sát giấy đổi xanh. Vòng bọt chỉ là ký hiệu khí NH₃ không màu.",
+        "Sau khi rót, dựng chai thẳng rồi đặt lại chỗ trống trước khi thả tay."
+      ],
+      "phenomenon": "NH₃ thoát ra làm quỳ đỏ ẩm hóa xanh; không tạo kết tủa.",
+      "explanation": "Kiềm chuyển NH₄⁺ sang NH₃. NH₃ hòa tan vào lớp nước trên giấy tạo môi trường base. Nhúng giấy vào NaOH cũng đổi màu nhưng không chứng minh khí NH₃.",
+      "application": "Nhận biết ammonium trong mẫu phân đạm được chuẩn bị phù hợp.",
+      "safety": "Không ngửi trực tiếp NH₃; thao tác thật cần thông khí và giám sát. Gia nhiệt nhẹ có thể hỗ trợ phép thử thật, mô phỏng này gia tốc trao đổi khí ở 25 °C.",
+      "questions": [
+        {
+          "prompt": "Khí được tạo ra là gì?",
+          "options": [
+            "NH₃",
+            "Cl₂",
+            "H₂"
+          ],
+          "correct": 0,
+          "hint": "NH₄⁺ mất proton trong môi trường kiềm.",
+          "explanation": "Sản phẩm nitrogen là ammonia NH₃."
+        },
+        {
+          "prompt": "Phải đặt giấy quỳ ở đâu?",
+          "options": [
+            "Nhúng vào NaOH",
+            "Ngay trên miệng bình, không chạm dung dịch",
+            "Dưới đáy bình"
+          ],
+          "correct": 1,
+          "hint": "Cần thử khí, tránh kết quả dương tính do base lỏng.",
+          "explanation": "Quỳ đỏ ẩm trên miệng bình kiểm chứng khí có tính base."
+        },
+        {
+          "prompt": "Có kết tủa trong phép thử này không?",
+          "options": [
+            "Có kết tủa trắng",
+            "Không; dấu hiệu là khí và quỳ đổi xanh",
+            "Có kim loại đồng"
+          ],
+          "correct": 1,
+          "hint": "Đối chiếu phương trình đã cân bằng.",
+          "explanation": "Không có chất rắn ít tan trong phương trình này."
+        },
+        {
+          "prompt": "Vì sao không ngửi trực tiếp?",
+          "options": [
+            "NH₃ gây kích ứng",
+            "NH₃ luôn phát nổ",
+            "Khí màu xanh che mắt"
+          ],
+          "correct": 0,
+          "hint": "Phân biệt kích ứng với cháy nổ.",
+          "explanation": "NH₃ là khí không màu gây kích ứng, cần tránh hít trực tiếp."
+        }
+      ],
+      "sources": [
+        "curriculum",
+        "ammonium",
+        "school11"
+      ],
+      "limits": "Mô hình chuyển hóa giới hạn bởi lượng chất; tốc độ thoát NH₃ được gia tốc để quan sát, không dự báo phát thải hay nhiệt độ thực.",
+      "conditions": "NH₄⁺ tiếp xúc OH⁻ trong bình mở. Giấy quỳ đỏ phải ẩm và đặt trong vùng khí, không chạm dung dịch.",
+      "reactionIds": [
+        "ammonium-base",
+        "neutralization"
+      ],
+      "modelType": "bounded-stoichiometry"
+    },
+    {
+      "id": "iron-copper",
+      "grade": 12,
+      "topic": "Đại cương về kim loại — Tính chất hóa học",
+      "title": "Sắt đẩy đồng khỏi dung dịch muối",
+      "status": "ready",
+      "curriculum": {
+        "document": "CTGDPT 2018 môn Hóa học, TT 32/2018",
+        "pages": [
+          39
+        ],
+        "alignment": "Giải thích phản ứng kim loại với dung dịch muối bằng sự nhường–nhận electron.",
+        "source": "curriculum"
+      },
+      "objective": "Giải thích phản ứng kim loại với dung dịch muối bằng sự nhường–nhận electron.",
+      "equations": [
+        "Fe(s) + CuSO₄(aq) → FeSO₄(aq) + Cu(s)",
+        "Fe(s) + Cu²⁺(aq) → Fe²⁺(aq) + Cu(s)"
+      ],
+      "setup": [
+        {
+          "stock": "lesson-copper",
+          "role": "sample"
+        },
+        {
+          "stock": "lesson-iron",
+          "role": "metal"
+        }
+      ],
+      "steps": [
+        "Bình chứa CuSO₄ màu xanh; thanh sắt có bề mặt sạch.",
+        "Gắp thanh sắt, đưa qua miệng bình và hạ đầu thanh vào lớp chất lỏng.",
+        "Giữ ngập để quan sát lớp đồng đỏ nâu và lượng Cu²⁺ giảm. Nhấc ra thì phản ứng dừng."
+      ],
+      "phenomenon": "Đồng đỏ nâu bám trên phần sắt ngập; màu xanh của Cu²⁺ nhạt dần, Fe²⁺ tạo sắc xanh lục nhạt.",
+      "explanation": "Fe nhường 2 electron thành Fe²⁺; Cu²⁺ nhận 2 electron tạo Cu. Phải có sắt tiếp xúc dung dịch, không phản ứng qua thành bình.",
+      "application": "Minh họa phản ứng thế và nguyên tắc thu hồi kim loại từ dung dịch phù hợp.",
+      "safety": "CuSO₄ cần được thu gom đúng cách; không chạm tay hoặc uống dung dịch.",
+      "questions": [
+        {
+          "prompt": "Lớp đỏ nâu bám trên sắt là gì?",
+          "options": [
+            "Gỉ sắt",
+            "Đồng kim loại",
+            "Muối NaCl"
+          ],
+          "correct": 1,
+          "hint": "Xác định chất nhận electron.",
+          "explanation": "Cu²⁺ nhận electron tạo Cu rắn màu đỏ nâu."
+        },
+        {
+          "prompt": "Chất khử là chất nào?",
+          "options": [
+            "Fe",
+            "Cu²⁺",
+            "SO₄²⁻"
+          ],
+          "correct": 0,
+          "hint": "Chất khử nhường electron.",
+          "explanation": "Fe → Fe²⁺ + 2e⁻, nên Fe là chất khử."
+        },
+        {
+          "prompt": "1 mmol Fe phản ứng tạo tối đa bao nhiêu mmol Cu?",
+          "options": [
+            "0,5",
+            "1",
+            "2"
+          ],
+          "correct": 1,
+          "hint": "Đọc hệ số phương trình.",
+          "explanation": "Tỉ lệ mol Fe : Cu là 1 : 1 khi Cu²⁺ đủ."
+        },
+        {
+          "prompt": "Chạm thanh sắt vào phía ngoài bình có gây phản ứng không?",
+          "options": [
+            "Có, vì hai vật chạm nhau",
+            "Không, sắt phải tiếp xúc dung dịch",
+            "Có, do trọng lực"
+          ],
+          "correct": 1,
+          "hint": "Thành thủy tinh ngăn tiếp xúc giữa chất tham gia.",
+          "explanation": "Va chạm hình học ngoài bình không tạo tiếp xúc hóa học."
+        }
+      ],
+      "sources": [
+        "curriculum",
+        "displacement"
+      ],
+      "limits": "Thanh sắt sạch; tốc độ lớp phủ được gia tốc, bỏ qua thụ động hóa, khuếch tán và oxi hóa Fe²⁺ bởi không khí.",
+      "conditions": "Bề mặt Fe sạch phải ngập dung dịch CuSO₄ ở nhiệt độ phòng; tiếp xúc ngoài thành bình không đủ.",
+      "reactionIds": [
+        "iron-displacement"
+      ],
+      "modelType": "bounded-stoichiometry"
+    },
+    {
+      "id": "biuret",
+      "grade": 12,
+      "topic": "Hợp chất chứa nitrogen — Peptide, protein",
+      "title": "Phản ứng màu biuret của protein",
+      "status": "ready",
+      "curriculum": {
+        "document": "CTGDPT 2018 môn Hóa học, TT 32/2018",
+        "pages": [
+          36
+        ],
+        "alignment": "Quan sát phản ứng màu biuret và liên hệ sự có mặt của nhiều liên kết peptide.",
+        "source": "curriculum"
+      },
+      "objective": "Quan sát phản ứng màu biuret và liên hệ sự có mặt của nhiều liên kết peptide.",
+      "equations": [
+        "Protein/peptide + Cu(II) — môi trường kiềm → phức màu tím (sơ đồ)",
+        "Không có một phương trình phân tử duy nhất cho hỗn hợp protein."
+      ],
+      "setup": [
+        {
+          "stock": "lesson-protein",
+          "role": "sample"
+        },
+        {
+          "stock": "lesson-biuret",
+          "role": "reagent"
+        },
+        {
+          "stock": "lesson-control",
+          "role": "control"
+        }
+      ],
+      "steps": [
+        "Ống mẫu chứa protein; ống nước là đối chứng âm.",
+        "Rót ít thuốc thử biuret pha sẵn vào protein. Thuốc thử chứa Cu(II), kiềm và chất ổn định tartrate.",
+        "Làm tương tự với nước đối chứng và so sánh màu.",
+        "Sau khi rót, dựng chai thẳng rồi đặt lại chỗ trống trước khi thả tay."
+      ],
+      "phenomenon": "Mẫu protein xuất hiện màu tím; nước đối chứng giữ màu xanh nhạt của thuốc thử.",
+      "explanation": "Các liên kết peptide phối trí Cu(II) trong môi trường kiềm tạo phức tím. Đây là phép thử màu định tính, không phải kết tủa tím hay phản ứng tạo Cu kim loại.",
+      "application": "Sàng lọc protein; định lượng thật cần máy quang phổ và đường chuẩn.",
+      "safety": "Thuốc thử có tính kiềm và chứa đồng; tránh tiếp xúc da, mắt và thu gom riêng.",
+      "questions": [
+        {
+          "prompt": "Màu tím chủ yếu gắn với đặc điểm nào?",
+          "options": [
+            "Nhiều liên kết peptide",
+            "Mọi phân tử chứa nitrogen",
+            "Mọi loại muối"
+          ],
+          "correct": 0,
+          "hint": "Xem nhóm có khả năng phối trí Cu(II).",
+          "explanation": "Nhiều liên kết peptide trong protein tạo điều kiện hình thành phức tím."
+        },
+        {
+          "prompt": "Điều kiện cần của phép thử là gì?",
+          "options": [
+            "Môi trường kiềm và Cu(II)",
+            "Chỉ có nước",
+            "Môi trường acid mạnh"
+          ],
+          "correct": 0,
+          "hint": "Kiểm tra thành phần thuốc thử.",
+          "explanation": "Thuốc thử cung cấp Cu(II) trong môi trường kiềm thích hợp."
+        },
+        {
+          "prompt": "Màu tím có phải kết tủa không?",
+          "options": [
+            "Có",
+            "Không; đó là phức trong dung dịch",
+            "Là khí tím"
+          ],
+          "correct": 1,
+          "hint": "Phân biệt màu dung dịch với chất rắn lắng.",
+          "explanation": "Phản ứng biuret tạo phức màu tím, không phải kết tủa tím."
+        },
+        {
+          "prompt": "Muốn định lượng protein thực tế cần thêm gì?",
+          "options": [
+            "Chỉ nhìn bằng mắt là đủ",
+            "Đường chuẩn và phép đo quang phù hợp",
+            "Cân khối lượng bình rỗng"
+          ],
+          "correct": 1,
+          "hint": "Cường độ màu cần được hiệu chuẩn.",
+          "explanation": "Phép đo quang và đường chuẩn mới cho phép ước lượng nồng độ đáng tin cậy."
+        }
+      ],
+      "sources": [
+        "curriculum",
+        "biuret",
+        "school12"
+      ],
+      "limits": "Phức protein được mô tả định tính, bảo toàn lượng protein và Cu tổng; không giả định công thức hay số mol của protein, không dùng màu để suy ra nồng độ đo thực.",
+      "conditions": "Mẫu có nhiều liên kết peptide; thuốc thử cung cấp Cu(II) trong kiềm, có tartrate giữ ổn định.",
+      "reactionIds": [],
+      "modelType": "qualitative-complex"
+    },
+    {
+      "id": "neutralization",
+      "title": "Trung hòa acid–base",
+      "grade": 11,
+      "topic": "Cân bằng trong dung dịch nước",
+      "status": "ready",
+      "curriculum": {
+        "alignment": "Bài bổ trợ; phân lớp đề xuất, cần giáo viên đối chiếu kế hoạch dạy học trước khi gắn nhãn chính thức.",
+        "verified": false
+      },
+      "objective": "H⁺ và OH⁻ phản ứng theo số mol 1:1. Cùng thể tích chỉ tương đương khi nồng độ phù hợp.",
+      "equations": [
+        "HCl + NaOH → NaCl + H₂O"
+      ],
+      "setup": [
+        {
+          "stock": "lesson-neutral-sample",
+          "role": "sample"
+        },
+        {
+          "stock": "lesson-base",
+          "role": "reagent"
+        }
+      ],
+      "steps": [
+        "Mẫu chứa 20 mL HCl 0,10 M và chỉ thị.",
+        "Rót NaOH vào mẫu, theo dõi pH và thể tích.",
+        "So sánh trước, tại và sau 20 mL NaOH đã thêm."
+      ],
+      "phenomenon": "pH tăng khi thêm NaOH; phenolphthalein hồng khi base dư.",
+      "explanation": "H⁺ và OH⁻ phản ứng theo số mol 1:1. Cùng thể tích chỉ tương đương khi nồng độ phù hợp.",
+      "application": "Vận dụng bảo toàn lượng chất và giải thích hiện tượng.",
+      "safety": "Chỉ thao tác trong mô phỏng; thực hành thật theo hướng dẫn giáo viên, tránh tiếp xúc mắt và thu gom đúng loại chất thải.",
+      "questions": [
+        {
+          "prompt": "20 mL HCl 0,10 M cần bao nhiêu mL NaOH 0,10 M?",
+          "options": [
+            "10",
+            "20",
+            "40"
+          ],
+          "correct": 1,
+          "hint": "Tính n = C × V. Đối chiếu với phương trình và lượng chất ban đầu.",
+          "explanation": "Số mol H⁺ = 0,002 mol; cần 20 mL NaOH."
+        },
+        {
+          "prompt": "NaOH dư làm dung dịch có tính gì?",
+          "options": [
+            "Acid",
+            "Base",
+            "Luôn trung tính"
+          ],
+          "correct": 1,
+          "hint": "Xét ion OH⁻ còn lại.",
+          "explanation": "OH⁻ dư làm pH tăng."
+        },
+        {
+          "prompt": "Sản phẩm ion rút gọn là gì?",
+          "options": [
+            "H₂",
+            "H₂O",
+            "CO₂"
+          ],
+          "correct": 1,
+          "hint": "H⁺ kết hợp OH⁻. Đối chiếu với phương trình và lượng chất ban đầu.",
+          "explanation": "H⁺ + OH⁻ → H₂O."
+        }
+      ],
+      "sources": [
+        "indicator"
+      ],
+      "limits": "Mô hình dung dịch lý tưởng, thể tích cộng được; không mô phỏng đầy đủ cân bằng phụ và động học thực tế.",
+      "conditions": "Dung dịch loãng, bình mở ở 25 °C; đúng chất tham gia và rót vào cùng bình.",
+      "reactionIds": [
+        "neutralization"
+      ],
+      "modelType": "bounded-stoichiometry"
+    },
+    {
+      "id": "copper-hydroxide",
+      "title": "Tạo kết tủa copper(II) hydroxide",
+      "grade": 12,
+      "topic": "Bài bổ trợ — Hợp chất kim loại",
+      "status": "ready",
+      "curriculum": {
+        "alignment": "Bài bổ trợ; phân lớp đề xuất, cần giáo viên đối chiếu kế hoạch dạy học trước khi gắn nhãn chính thức.",
+        "verified": false
+      },
+      "objective": "Một mol Cu²⁺ kết hợp hai mol OH⁻ thành Cu(OH)₂ ít tan.",
+      "equations": [
+        "CuSO₄ + 2NaOH → Cu(OH)₂↓ + Na₂SO₄"
+      ],
+      "setup": [
+        {
+          "stock": "lesson-copper",
+          "role": "sample"
+        },
+        {
+          "stock": "lesson-base",
+          "role": "reagent"
+        }
+      ],
+      "steps": [
+        "Quan sát màu xanh của mẫu CuSO₄.",
+        "Rót NaOH vào mẫu.",
+        "Quan sát chất rắn xanh và lượng kết tủa."
+      ],
+      "phenomenon": "Xuất hiện kết tủa xanh Cu(OH)₂.",
+      "explanation": "Một mol Cu²⁺ kết hợp hai mol OH⁻ thành Cu(OH)₂ ít tan.",
+      "application": "Vận dụng bảo toàn lượng chất và giải thích hiện tượng.",
+      "safety": "Chỉ thao tác trong mô phỏng; thực hành thật theo hướng dẫn giáo viên, tránh tiếp xúc mắt và thu gom đúng loại chất thải.",
+      "questions": [
+        {
+          "prompt": "Kết tủa là gì?",
+          "options": [
+            "Cu",
+            "Cu(OH)₂",
+            "Na₂SO₄"
+          ],
+          "correct": 1,
+          "hint": "Sản phẩm ít tan chứa Cu và OH.",
+          "explanation": "Cu(OH)₂ là kết tủa xanh."
+        },
+        {
+          "prompt": "1 mol Cu²⁺ cần mấy mol OH⁻?",
+          "options": [
+            "1",
+            "2",
+            "3"
+          ],
+          "correct": 1,
+          "hint": "Cân bằng điện tích.",
+          "explanation": "Cu²⁺ + 2OH⁻ → Cu(OH)₂."
+        },
+        {
+          "prompt": "Thiếu NaOH thì sao?",
+          "options": [
+            "Cu²⁺ còn dư",
+            "Mọi chất biến mất",
+            "Không có phản ứng nào"
+          ],
+          "correct": 0,
+          "hint": "Tìm chất giới hạn.",
+          "explanation": "OH⁻ hết trước, Cu²⁺ còn trong dung dịch."
+        }
+      ],
+      "sources": [
+        "copper-precip"
+      ],
+      "limits": "Mô hình dung dịch lý tưởng, thể tích cộng được; không mô phỏng đầy đủ cân bằng phụ và động học thực tế.",
+      "conditions": "Dung dịch loãng, bình mở ở 25 °C; đúng chất tham gia và rót vào cùng bình.",
+      "reactionIds": [
+        "copper-hydroxide"
+      ],
+      "modelType": "bounded-stoichiometry"
+    },
+    {
+      "id": "calcium-carbonate",
+      "title": "Tạo kết tủa calcium carbonate",
+      "grade": 12,
+      "topic": "Bài bổ trợ — Hợp chất kim loại",
+      "status": "ready",
+      "curriculum": {
+        "alignment": "Bài bổ trợ; phân lớp đề xuất, cần giáo viên đối chiếu kế hoạch dạy học trước khi gắn nhãn chính thức.",
+        "verified": false
+      },
+      "objective": "Ca²⁺ và CO₃²⁻ kết hợp theo số mol 1:1 tạo CaCO₃ ít tan.",
+      "equations": [
+        "CaCl₂ + Na₂CO₃ → CaCO₃↓ + 2NaCl"
+      ],
+      "setup": [
+        {
+          "stock": "lesson-calcium",
+          "role": "sample"
+        },
+        {
+          "stock": "lesson-carbonate",
+          "role": "reagent"
+        }
+      ],
+      "steps": [
+        "Hai dung dịch ban đầu không màu.",
+        "Rót Na₂CO₃ vào mẫu CaCl₂.",
+        "Quan sát kết tủa trắng."
+      ],
+      "phenomenon": "Kết tủa trắng CaCO₃.",
+      "explanation": "Ca²⁺ và CO₃²⁻ kết hợp theo số mol 1:1 tạo CaCO₃ ít tan.",
+      "application": "Vận dụng bảo toàn lượng chất và giải thích hiện tượng.",
+      "safety": "Chỉ thao tác trong mô phỏng; thực hành thật theo hướng dẫn giáo viên, tránh tiếp xúc mắt và thu gom đúng loại chất thải.",
+      "questions": [
+        {
+          "prompt": "Chất trắng là gì?",
+          "options": [
+            "NaCl",
+            "CaCO₃",
+            "CO₂"
+          ],
+          "correct": 1,
+          "hint": "Tìm muối ít tan.",
+          "explanation": "CaCO₃ là chất rắn ít tan."
+        },
+        {
+          "prompt": "Tỉ lệ Ca²⁺ : CO₃²⁻?",
+          "options": [
+            "1:1",
+            "1:2",
+            "2:1"
+          ],
+          "correct": 0,
+          "hint": "Cân bằng điện tích.",
+          "explanation": "Hai ion kết hợp 1:1."
+        },
+        {
+          "prompt": "Na⁺ và Cl⁻ có vai trò gì?",
+          "options": [
+            "Ion đi kèm",
+            "Khí sinh ra",
+            "Kết tủa"
+          ],
+          "correct": 0,
+          "hint": "Xét độ tan NaCl.",
+          "explanation": "Na⁺ và Cl⁻ còn trong dung dịch."
+        }
+      ],
+      "sources": [
+        "calcium-precip"
+      ],
+      "limits": "Mô hình dung dịch lý tưởng, thể tích cộng được; không mô phỏng đầy đủ cân bằng phụ và động học thực tế.",
+      "conditions": "Dung dịch loãng, bình mở ở 25 °C; đúng chất tham gia và rót vào cùng bình.",
+      "reactionIds": [
+        "calcium-carbonate"
+      ],
+      "modelType": "bounded-stoichiometry"
+    },
+    {
+      "id": "carbon-dioxide",
+      "title": "Acetic acid và hydrogencarbonate",
+      "grade": 11,
+      "topic": "Bài bổ trợ — Carboxylic acid",
+      "status": "ready",
+      "curriculum": {
+        "alignment": "Bài bổ trợ; phân lớp đề xuất, cần giáo viên đối chiếu kế hoạch dạy học trước khi gắn nhãn chính thức.",
+        "verified": false
+      },
+      "objective": "Acetic acid phản ứng với hydrogencarbonate tạo sodium acetate, nước và CO₂.",
+      "equations": [
+        "CH₃COOH + NaHCO₃ → CH₃COONa + CO₂↑ + H₂O"
+      ],
+      "setup": [
+        {
+          "stock": "lesson-bicarbonate",
+          "role": "sample"
+        },
+        {
+          "stock": "lesson-acetic",
+          "role": "reagent"
+        }
+      ],
+      "steps": [
+        "Mẫu chứa dung dịch NaHCO₃.",
+        "Rót CH₃COOH vào mẫu đang mở nắp.",
+        "Quan sát khí và lượng chất; không coi bọt là kết tủa."
+      ],
+      "phenomenon": "Có bọt khí CO₂ không màu thoát ra.",
+      "explanation": "Acetic acid phản ứng với hydrogencarbonate tạo sodium acetate, nước và CO₂.",
+      "application": "Vận dụng bảo toàn lượng chất và giải thích hiện tượng.",
+      "safety": "Chỉ thao tác trong mô phỏng; thực hành thật theo hướng dẫn giáo viên, tránh tiếp xúc mắt và thu gom đúng loại chất thải.",
+      "questions": [
+        {
+          "prompt": "Khí tạo thành là gì?",
+          "options": [
+            "H₂",
+            "O₂",
+            "CO₂"
+          ],
+          "correct": 2,
+          "hint": "Xét nguyên tố carbon.",
+          "explanation": "CO₂ là khí sinh ra."
+        },
+        {
+          "prompt": "Muối tạo thành là gì?",
+          "options": [
+            "CH₃COONa",
+            "NaCl",
+            "CuSO₄"
+          ],
+          "correct": 0,
+          "hint": "Gốc acid là acetate.",
+          "explanation": "Sản phẩm muối là sodium acetate."
+        },
+        {
+          "prompt": "NaHCO₃ đã hết, thêm acid sẽ thế nào?",
+          "options": [
+            "Khí tăng vô hạn",
+            "Không tạo thêm CO₂ từ phản ứng này",
+            "Tạo Cu"
+          ],
+          "correct": 1,
+          "hint": "Xét chất giới hạn.",
+          "explanation": "Không còn HCO₃⁻ để tạo thêm CO₂."
+        }
+      ],
+      "sources": [
+        "acetate"
+      ],
+      "limits": "Mô hình dung dịch lý tưởng, thể tích cộng được; không mô phỏng đầy đủ cân bằng phụ và động học thực tế.",
+      "conditions": "Dung dịch loãng, bình mở ở 25 °C; đúng chất tham gia và rót vào cùng bình.",
+      "reactionIds": [
+        "acetate-carbon-dioxide"
+      ],
+      "modelType": "bounded-stoichiometry"
+    },
+    {
+      "id": "dilution",
+      "title": "Pha loãng dung dịch",
+      "grade": 11,
+      "topic": "Bài bổ trợ — Nồng độ dung dịch",
+      "status": "ready",
+      "curriculum": {
+        "alignment": "Bài bổ trợ; phân lớp đề xuất, cần giáo viên đối chiếu kế hoạch dạy học trước khi gắn nhãn chính thức.",
+        "verified": false
+      },
+      "objective": "Thêm nước làm tăng thể tích, giảm nồng độ nhưng giữ nguyên số mol chất tan nếu không tràn hoặc rót mất mẫu.",
+      "equations": [
+        "C₁V₁ = C₂V₂ (bảo toàn chất tan; không phải phản ứng hóa học)"
+      ],
+      "setup": [
+        {
+          "stock": "lesson-copper",
+          "role": "sample"
+        },
+        {
+          "stock": "lesson-diluent",
+          "role": "reagent"
+        }
+      ],
+      "steps": [
+        "Quan sát 100 mL CuSO₄ 0,05 M.",
+        "Rót nước vào mẫu.",
+        "Theo dõi nồng độ và số mol; kiểm tra không có sản phẩm mới."
+      ],
+      "phenomenon": "Dung dịch xanh nhạt dần khi nồng độ Cu²⁺ giảm.",
+      "explanation": "Thêm nước làm tăng thể tích, giảm nồng độ nhưng giữ nguyên số mol chất tan nếu không tràn hoặc rót mất mẫu.",
+      "application": "Vận dụng bảo toàn lượng chất và giải thích hiện tượng.",
+      "safety": "Chỉ thao tác trong mô phỏng; thực hành thật theo hướng dẫn giáo viên, tránh tiếp xúc mắt và thu gom đúng loại chất thải.",
+      "questions": [
+        {
+          "prompt": "Đại lượng không đổi khi thêm nước, không tràn?",
+          "options": [
+            "Số mol chất tan",
+            "Nồng độ",
+            "Thể tích"
+          ],
+          "correct": 0,
+          "hint": "Không thêm hoặc lấy chất tan.",
+          "explanation": "Số mol chất tan được bảo toàn."
+        },
+        {
+          "prompt": "Nồng độ thay đổi thế nào?",
+          "options": [
+            "Tăng",
+            "Giảm",
+            "Không đổi"
+          ],
+          "correct": 1,
+          "hint": "C = n/V. Đối chiếu với phương trình và lượng chất ban đầu.",
+          "explanation": "V tăng khi n giữ nguyên nên C giảm."
+        },
+        {
+          "prompt": "Có phản ứng hóa học trong mô hình này không?",
+          "options": [
+            "Có",
+            "Không",
+            "Luôn sinh khí"
+          ],
+          "correct": 1,
+          "hint": "Có chất mới xuất hiện không?",
+          "explanation": "Đây là pha loãng vật lý."
+        }
+      ],
+      "sources": [
+        "indicator"
+      ],
+      "limits": "Mô hình dung dịch lý tưởng, thể tích cộng được; không mô phỏng đầy đủ cân bằng phụ và động học thực tế.",
+      "conditions": "Dung dịch loãng, bình mở ở 25 °C; đúng chất tham gia và rót vào cùng bình.",
+      "reactionIds": [],
+      "modelType": "bounded-stoichiometry"
+    }
+  ],
+  "reactionRules": [
+    {
+      "id": "neutralization",
+      "phase": "pour",
+      "reactants": {
+        "H_plus": 1,
+        "OH_minus": 1
+      },
+      "products": {
+        "H2O": 1
+      },
+      "molecular": {
+        "reactants": {
+          "HCl": 1,
+          "NaOH": 1
+        },
+        "products": {
+          "NaCl": 1,
+          "H2O": 1
+        }
+      }
+    },
+    {
+      "id": "silver-chloride",
+      "phase": "pour",
+      "reactants": {
+        "Ag_plus": 1,
+        "Cl_minus": 1
+      },
+      "products": {
+        "AgCl": 1
+      },
+      "molecular": {
+        "reactants": {
+          "AgNO3": 1,
+          "NaCl": 1
+        },
+        "products": {
+          "AgCl": 1,
+          "NaNO3": 1
+        }
+      }
+    },
+    {
+      "id": "ammonium-base",
+      "phase": "pour",
+      "reactants": {
+        "NH4_plus": 1,
+        "OH_minus": 1
+      },
+      "products": {
+        "NH3": 1,
+        "H2O": 1
+      },
+      "molecular": {
+        "reactants": {
+          "NH4Cl": 1,
+          "NaOH": 1
+        },
+        "products": {
+          "NH3": 1,
+          "NaCl": 1,
+          "H2O": 1
+        }
+      }
+    },
+    {
+      "id": "iron-displacement",
+      "phase": "immersion",
+      "reactants": {
+        "Fe": 1,
+        "Cu_2plus": 1
+      },
+      "products": {
+        "Fe_2plus": 1,
+        "Cu": 1
+      },
+      "molecular": {
+        "reactants": {
+          "Fe": 1,
+          "CuSO4": 1
+        },
+        "products": {
+          "FeSO4": 1,
+          "Cu": 1
+        }
+      }
+    },
+    {
+      "id": "copper-hydroxide",
+      "phase": "pour",
+      "reactants": {
+        "Cu_2plus": 1,
+        "OH_minus": 2
+      },
+      "products": {
+        "CuOH2": 1
+      },
+      "molecular": {
+        "reactants": {
+          "CuSO4": 1,
+          "NaOH": 2
+        },
+        "products": {
+          "Cu(OH)2": 1,
+          "Na2SO4": 1
+        }
+      }
+    },
+    {
+      "id": "calcium-carbonate",
+      "phase": "pour",
+      "reactants": {
+        "Ca_2plus": 1,
+        "CO3_2minus": 1
+      },
+      "products": {
+        "CaCO3": 1
+      },
+      "molecular": {
+        "reactants": {
+          "CaCl2": 1,
+          "Na2CO3": 1
+        },
+        "products": {
+          "CaCO3": 1,
+          "NaCl": 2
+        }
+      }
+    },
+    {
+      "id": "acetate-carbon-dioxide",
+      "phase": "pour",
+      "reactants": {
+        "CH3COOH": 1,
+        "HCO3_minus": 1
+      },
+      "products": {
+        "CH3COO_minus": 1,
+        "CO2": 1,
+        "H2O": 1
+      },
+      "molecular": {
+        "reactants": {
+          "CH3COOH": 1,
+          "NaHCO3": 1
+        },
+        "products": {
+          "CH3COONa": 1,
+          "CO2": 1,
+          "H2O": 1
+        }
+      }
+    }
+  ]
+}

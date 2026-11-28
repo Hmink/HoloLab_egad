@@ -1,0 +1,14 @@
+{
+  "physicalCameraTested": false,
+  "humanHandsTested": false,
+  "environment": "Chromium 133 / SwiftShader; actual CPU MediaPipe model, generated color quadrants and fake webcam",
+  "checks": [
+    {
+      "name": "failure",
+      "passed": false,
+      "error": "Error: worker.evaluate: TypeError: context.getContextAttributes is not a function\n    at eval (eval at evaluate (:311:30), <anonymous>:2:63)\n    at UtilityScript.evaluate (<anonymous>:313:16)\n    at UtilityScript.<anonymous> (<anonymous>:1:44)",
+      "stack": "worker.evaluate: TypeError: context.getContextAttributes is not a function\n    at eval (eval at evaluate (:311:30), <anonymous>:2:63)\n    at UtilityScript.evaluate (<anonymous>:313:16)\n    at UtilityScript.<anonymous> (<anonymous>:1:44)\n    at /workspace/scratch/b420c189187b/HoloLab/tools/qa_transport_v37.mjs:51:30"
+    }
+  ],
+  "errors": []
+}

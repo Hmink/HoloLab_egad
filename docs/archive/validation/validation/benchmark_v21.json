@@ -1,0 +1,19 @@
+{
+  "version": "2.1-preserved-native",
+  "duration_s": 60.01703924699541,
+  "complete": true,
+  "render_frames": 1684,
+  "render_fps": 28.05869834847451,
+  "tracking_samples": 1705,
+  "tracking_hz": 28.40859898108613,
+  "inference_mean_ms": 24.83285078169048,
+  "render_interval_p95_ms": 48.57084299874259,
+  "sample_age_p95_ms": 58.50390699924901,
+  "objects": 5,
+  "width": 1280,
+  "height": 800,
+  "gpu": "llvmpipe (LLVM 20.1.2, 256 bits)",
+  "physical_camera_test": false,
+  "input_source": "repeated-static-reference-photo, simulated 30 Hz capture",
+  "note": "Native MediaPipe + ModernGL/Pillow pipeline. Window output mocked; real inference/render calls retained. Not an isolated algorithm speed comparison."
+}

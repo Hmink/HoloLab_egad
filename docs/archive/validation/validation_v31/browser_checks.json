@@ -1,0 +1,114 @@
+{
+  "checks": [
+    {
+      "name": "WebGL startup and local chemistry API",
+      "passed": true
+    },
+    {
+      "name": "Sidebar collapse/expand",
+      "passed": true
+    },
+    {
+      "name": "Existing inventory mouse drag/drop",
+      "passed": true
+    },
+    {
+      "name": "Titration mode and measured microdose",
+      "passed": true
+    },
+    {
+      "name": "Synthetic pinch/wrist opens valve; missing observation closes it",
+      "passed": true,
+      "opened": 0.4125656385585673,
+      "afterLoss": 0
+    },
+    {
+      "name": "Equivalence pH 7 and base excess / indicator",
+      "passed": true
+    },
+    {
+      "name": "Weak-acid sample reset",
+      "passed": true
+    },
+    {
+      "name": "100-reaction UI, conditions and product quantities",
+      "passed": true
+    },
+    {
+      "name": "Return to preserved free-desk objects",
+      "passed": true
+    },
+    {
+      "name": "Small mirrored camera above workspace at 1280x720",
+      "passed": true,
+      "camera": {
+        "x": 267,
+        "y": 106,
+        "width": 140,
+        "height": 78,
+        "top": 106,
+        "right": 407,
+        "bottom": 184,
+        "left": 267
+      },
+      "workspace": {
+        "x": 266,
+        "y": 192,
+        "width": 998,
+        "height": 354,
+        "top": 192,
+        "right": 1264,
+        "bottom": 546,
+        "left": 266
+      }
+    },
+    {
+      "name": "Real MediaPipe worker on synthetic camera pixels",
+      "passed": true,
+      "delegate": "CPU",
+      "frames": 11,
+      "hands": 2,
+      "maxHz": 60,
+      "width": 640
+    },
+    {
+      "name": "60-second full pipeline benchmark",
+      "passed": true,
+      "schema": "hololab-benchmark-1",
+      "version": "3.1.0",
+      "input_source": "looped still reference photo; not real gestures",
+      "backend": "CPU",
+      "environment": "headless Chromium / SwiftShader",
+      "titration": true,
+      "width": 1280,
+      "height": 720,
+      "duration_s": 60.01090000000056,
+      "complete": true,
+      "abort_reason": null,
+      "render_frames": 3221,
+      "render_fps": 53.67358263248793,
+      "render_interval_p95_ms": 33.30000000000291,
+      "render_cpu_mean_ms": 0.6293697609545623,
+      "tracking_samples": 326,
+      "tracking_hz": 5.43234645706025,
+      "detected_samples": 326,
+      "inference_mean_ms": 128.3009202454319,
+      "transport_mean_ms": null,
+      "sample_age_p95_ms": 232.5,
+      "target_render_50": true,
+      "target_tracking_50": false,
+      "target_render_45": true,
+      "note": "Render FPS is not tracking Hz. Sample age is not end-to-end motion latency. No images saved."
+    },
+    {
+      "name": "Camera stop",
+      "passed": true
+    },
+    {
+      "name": "No browser JS errors",
+      "passed": true
+    }
+  ],
+  "errors": [],
+  "physical_camera_tested": false
+}

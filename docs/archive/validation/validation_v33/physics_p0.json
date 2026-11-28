@@ -1,0 +1,75 @@
+{
+  "project": "/workspace/scratch/b420c189187b/HoloLab_AR_V3_3",
+  "physical_camera_tested": false,
+  "scenarios": [
+    {
+      "name": "release_from_height_and_near_table",
+      "passed": true,
+      "high_gap": 0.003122478723526001,
+      "near_gap": 0.0031224042177200317
+    },
+    {
+      "name": "fast_release_is_bounded_and_stays_in_workspace",
+      "passed": true,
+      "release_m_s": {
+        "x": 0.4000000059604645,
+        "y": 0,
+        "z": 0
+      },
+      "max_hull_x": 4.197004184763169,
+      "max_penetration": 0,
+      "recoveries": 0
+    },
+    {
+      "name": "kinematic_target_jump_has_finite_speed",
+      "passed": true,
+      "peak_held_m_s": 0.7499992847442627
+    },
+    {
+      "name": "gentle_hand_contact",
+      "passed": true,
+      "peak_horizontal_m_s": 0.07812358394378771,
+      "max_displacement_scene": 0.8161105482250934,
+      "max_penetration": 0,
+      "recoveries": 0
+    },
+    {
+      "name": "fast_hand_contact",
+      "passed": true,
+      "peak_horizontal_m_s": 0.08708888344152786,
+      "max_displacement_scene": 1.1222976036933952,
+      "max_penetration": 0.0008961276913463934,
+      "recoveries": 0
+    },
+    {
+      "name": "four_edges_held_and_dynamic_remain_inside",
+      "passed": true,
+      "max_outside_scene": 0,
+      "max_penetration": 0,
+      "recoveries": 0
+    },
+    {
+      "name": "20_grab_release_cycles_and_regrab",
+      "passed": true,
+      "cycles": 20,
+      "max_penetration": 0,
+      "regrab_position_jump": 0,
+      "recoveries": 0
+    },
+    {
+      "name": "60_seconds_untouched_settle",
+      "passed": true,
+      "simulation_seconds": 60,
+      "drift_scene": 0,
+      "sleeping": true,
+      "recoveries": 0
+    },
+    {
+      "name": "tracking_gap_and_frame_stall_do_not_throw",
+      "passed": true,
+      "frozen_m_s": 0,
+      "stall_m_s": 0
+    }
+  ],
+  "passed": true
+}

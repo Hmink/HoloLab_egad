@@ -1,0 +1,49 @@
+
+> hololab-ar-v3@3.1.0 test
+> node --test tests_js/*.test.mjs
+
+✔ Capture sends each camera timestamp at most once and never queues inference (2.146078ms)
+✔ Capture drops stale epoch after async pixel conversion (0.535864ms)
+✔ camera sends at most one inference per unique frame and one in flight (1.477757ms)
+✔ late bitmap from a stopped/replaced stream is closed and never inferred (0.343483ms)
+✔ worker result from old stream generation cannot change the active hand state (0.898874ms)
+✔ metrics separate render rate and tracking rate for exactly 60 seconds (8.179825ms)
+✔ interrupted benchmark is never marked complete (0.317875ms)
+✔ pinch hysteresis: boundary jitter cannot release a valid hold (2.244963ms)
+✔ one noisy open sample and missing frames never release (3.860428ms)
+✔ duplicate timestamps cannot complete pinch debounce or tracking update (0.441086ms)
+✔ normalized pinch is invariant with hand size and camera aspect (2.201382ms)
+✔ alternating high-confidence handedness never loses a held track (4.570638ms)
+✔ two independent hands: near/far, detector order changes, no ownership swap (2.404272ms)
+✔ brief loss keeps object and recovery rebases with zero target jump (1.26084ms)
+✔ timeout parks, never deletes, and requires opening before re-grab (1.690753ms)
+✔ stationary object does not jump on ordinary grab (0.562944ms)
+✔ two hands on one object: remaining hand inherits without a jump (1.509837ms)
+✔ same-object dual hold freezes when one hand is missing; resumes without teleport (0.653825ms)
+✔ ambiguous overlap freezes instead of handing objects to the other hand (0.584856ms)
+✔ crossing paths with depth difference retain identity despite reversed result arrays (3.986434ms)
+✔ slot B remains B when A expires; new hand can reuse slot A (0.407022ms)
+✔ movement reaches image edges without disposing of the object (0.811539ms)
+✔ depth and wrist rotation do not scale the vessel model (0.618979ms)
+✔ rotate mode preserves the anchored position and uses yaw/pitch (1.243788ms)
+✔ late target acquisition uses one pinch cycle at most once (0.476432ms)
+✔ 10/10 deterministic acquisition sequences per hand (synthetic, not camera evidence) (1.669787ms)
+✔ One Euro attenuates stationary jitter while following a ramp (0.360836ms)
+✔ mirror, contain fit, edge mapping, perspective round-trip across aspect ratios (0.559898ms)
+✔ OpenStax strong-acid titration example and check-your-learning (2.201102ms)
+✔ Weak acid: start, half equivalence, equivalence, excess (0.331781ms)
+✔ pH monotonic across equivalence, water autoionization at dilute limit (5.926236ms)
+✔ Reject unsupported reagents and nonfinite/negative parameters (0.478786ms)
+✔ Buret conserves volume, stops empty, no catchup over suspended tab (0.400129ms)
+✔ 100 unique molecular equations balanced; nested formula parser (4.668079ms)
+✔ Every reaction conserves atoms with asymmetric limiting quantities (12.337651ms)
+✔ Condition gating, missing reagent, extras and limiting reactant (0.917128ms)
+✔ Invalid reset leaves previous valid experiment intact (0.88111ms)
+ℹ tests 37
+ℹ suites 0
+ℹ pass 37
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 181.684868

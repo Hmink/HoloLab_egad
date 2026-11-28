@@ -17,36 +17,27 @@ import threading
 import webbrowser
 import socket
 
+from envfile import load_dotenv
 from paths import WEB_DIR
 from version import VERSION
 
 
-def load_dotenv(path):
-    """Minimal .env reader (no dependency). Real environment variables win."""
-    if not path.is_file():
-        return
-    for line in path.read_text(encoding="utf-8").splitlines():
-        line = line.strip()
-        if line and not line.startswith("#") and "=" in line:
-            key, value = line.split("=", 1)
-            os.environ.setdefault(key.strip(), value.strip().strip("\"'"))
-
-
 load_dotenv(ROOT / ".env")
 
+# The chemistry core (chemlab/, lab3d/, data/) is not in the repo yet. Without it the
+# server still serves the web app and EGAD; chemistry endpoints answer 503.
+CHEM_MISSING = None
 try:
     from chemlab.chemistry import load_database
     from lab3d.catalog import CATALOG, STOCK
     from lab3d.mixture import Mixture, transfer
 except ImportError as error:
-    raise SystemExit(
-        f"Thiếu mã lõi hóa học ({error.name}). Cần các thư mục chemlab/, lab3d/, data/ cạnh server.py (trong backend/) "
-        "và giao diện ở frontend/web/."
-    ) from error
+    CHEM_MISSING = error.name
 from native_tracking import NativeTracking
-from egad_llm import assess as assess_egad
+from egad_llm import assess as assess_egad, config as llm_config, problem_body
 
-DB = load_database(ROOT / "data/chemistry.json")
+DB = None if CHEM_MISSING else load_database(ROOT / "data/chemistry.json")
+CHEM_PATHS = ("/api/catalog", "/api/transfer", "/api/session", "/api/experiment/")
 NATIVE = NativeTracking(WEB_DIR / "models" / "hand_landmarker.task")
 
 
@@ -224,7 +215,15 @@ class Handler(SimpleHTTPRequestHandler):
         except (BrokenPipeError, ConnectionResetError):
             pass  # tab closed during inference
 
+    def chem_unavailable(self):
+        if CHEM_MISSING and self.path.startswith(CHEM_PATHS):
+            self.json({"error": f"Chưa có lõi hóa học (thiếu {CHEM_MISSING})"}, 503)
+            return True
+        return False
+
     def do_GET(self):
+        if self.chem_unavailable():
+            return
         if self.path == "/api/catalog":
             self.json(
                 {
@@ -240,7 +239,8 @@ class Handler(SimpleHTTPRequestHandler):
             )
             return
         if self.path == "/api/health":
-            self.json({"ok": True, "version": VERSION})
+            self.json({"ok": True, "version": VERSION, "chemistry": CHEM_MISSING is None,
+                       "llm": {"provider": "ollama", "model": llm_config(os.environ)["OLLAMA_MODEL"]}})
             return
         if self.path.startswith("/api/experiment/"):
             name = self.path.rsplit("/", 1)[-1]
@@ -261,6 +261,8 @@ class Handler(SimpleHTTPRequestHandler):
             f"http://127.0.0.1:{self.server.server_port}",
         ):
             self.json({"error": "Origin not allowed"}, 403)
+            return
+        if self.chem_unavailable():
             return
         if self.path == "/api/tracking/frame":
             try:
@@ -301,7 +303,7 @@ class Handler(SimpleHTTPRequestHandler):
             AttributeError,
             RuntimeError,
         ) as error:
-            self.json({"error": str(error)}, 400)
+            self.json(problem_body(error), getattr(error, "status", 400))
         except ImportError:
             self.json({"error": "Tính năng chưa được cài đặt"}, 400)
 

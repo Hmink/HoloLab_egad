@@ -1,0 +1,75 @@
+{
+  "project": "/workspace/scratch/b420c189187b/baseline_v32",
+  "physical_camera_tested": false,
+  "scenarios": [
+    {
+      "name": "release_from_height_and_near_table",
+      "passed": true,
+      "high_gap": 0.003124072166785341,
+      "near_gap": 0.003122433039054018
+    },
+    {
+      "name": "fast_release_is_bounded_and_stays_in_workspace",
+      "passed": false,
+      "release_m_s": {
+        "x": 1.2000000476837158,
+        "y": 0,
+        "z": 0
+      },
+      "max_hull_x": 59.869051976272345,
+      "max_penetration": 1628.3023636841967,
+      "recoveries": null
+    },
+    {
+      "name": "kinematic_target_jump_has_finite_speed",
+      "passed": false,
+      "peak_held_m_s": 17.008121609687805
+    },
+    {
+      "name": "gentle_hand_contact",
+      "passed": true,
+      "peak_horizontal_m_s": 0.07329677488091989,
+      "max_displacement_scene": 0.9125533681815482,
+      "max_penetration": 0,
+      "recoveries": null
+    },
+    {
+      "name": "fast_hand_contact",
+      "passed": false,
+      "peak_horizontal_m_s": 5.397729901717187,
+      "max_displacement_scene": 55.21511858988154,
+      "max_penetration": 127.02961406015487,
+      "recoveries": null
+    },
+    {
+      "name": "four_edges_held_and_dynamic_remain_inside",
+      "passed": false,
+      "max_outside_scene": 29.177742991947227,
+      "max_penetration": 306.75884036945115,
+      "recoveries": null
+    },
+    {
+      "name": "20_grab_release_cycles_and_regrab",
+      "passed": true,
+      "cycles": 20,
+      "max_penetration": 0,
+      "regrab_position_jump": 0,
+      "recoveries": null
+    },
+    {
+      "name": "60_seconds_untouched_settle",
+      "passed": true,
+      "simulation_seconds": 60,
+      "drift_scene": 0,
+      "sleeping": true,
+      "recoveries": null
+    },
+    {
+      "name": "tracking_gap_and_frame_stall_do_not_throw",
+      "passed": false,
+      "frozen_m_s": 0,
+      "stall_m_s": 1.2000000476837158
+    }
+  ],
+  "passed": false
+}

@@ -1,0 +1,109 @@
+{
+  "checks": [
+    {
+      "name": "mouse inventory -> 3D drag and release",
+      "passed": true
+    },
+    {
+      "name": "tilt, yaw and cap controls",
+      "passed": true
+    },
+    {
+      "name": "save/load round-trip and rejected import leaves scene unchanged",
+      "passed": true
+    },
+    {
+      "name": "neutralization through HTTP adapter: volume, amount and heat",
+      "passed": true
+    },
+    {
+      "name": "guided-mode hazardous transfer is atomic and blocked",
+      "passed": true
+    },
+    {
+      "name": "free-mode qualitative hazard animation retained",
+      "passed": true
+    },
+    {
+      "name": "synthetic two-hand raycast, independent ownership, movement, dropout, release",
+      "passed": true,
+      "grab_ids": [
+        1,
+        2
+      ],
+      "recovery_jump_world_units": 0,
+      "events": [
+        {
+          "t": 2225,
+          "type": "grab",
+          "hand": 1,
+          "object": 1
+        },
+        {
+          "t": 2225,
+          "type": "grab",
+          "hand": 2,
+          "object": 2
+        },
+        {
+          "t": 2992.60000000149,
+          "type": "recover",
+          "hand": 1,
+          "object": 1
+        },
+        {
+          "t": 2992.60000000149,
+          "type": "recover",
+          "hand": 2,
+          "object": 2
+        },
+        {
+          "t": 3138.89999999851,
+          "type": "release",
+          "hand": 1,
+          "object": 1,
+          "reason": "gesture"
+        },
+        {
+          "t": 3138.89999999851,
+          "type": "release",
+          "hand": 2,
+          "object": 2,
+          "reason": "gesture"
+        }
+      ]
+    },
+    {
+      "name": "OrbitControls exclusive mode",
+      "passed": true
+    },
+    {
+      "name": "viewport resize updates camera projection",
+      "passed": true
+    },
+    {
+      "name": "real MediaPipe identifies two hands from explicit fake-camera pixel fixture",
+      "passed": true
+    },
+    {
+      "name": "stop/restart camera without stale result ownership",
+      "passed": true
+    },
+    {
+      "name": "local video input and monotonic timestamps across looping video",
+      "passed": true
+    },
+    {
+      "name": "60-second render + real tracking benchmark completed",
+      "passed": true
+    },
+    {
+      "name": "runtime requests only localhost; no CDN required",
+      "passed": true
+    }
+  ],
+  "page_errors": [],
+  "remote_requests": [],
+  "physical_camera_test": false,
+  "browser": "134.0.6998.35"
+}

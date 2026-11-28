@@ -1,5 +1,14 @@
 # Unreleased
 
+- **Ghép phòng thí nghiệm 3D vào repo** (V3.9 + Hỗ trợ tay): lõi hóa học `chemlab/`, `lab3d/`, `data/`, `experiments/`, `training/` vào `backend/`; ứng dụng lab vào `frontend/web/` (phục vụ ở `/`), khung React `frontend/ui/`; ứng dụng EGAD React chuyển sang `/app/`. Gộp test (JS 156, Python 124) và CI. Bỏ `python_vendor/` (cài bằng `requirements-core.txt`); model nhận diện tay được commit để chạy offline. Tài liệu V3.x vào `docs/lab/`, báo cáo lịch sử vào `docs/archive/`; adapter llama.cpp cũ vào `docs/archive/legacy/`.
+- **Hỗ trợ tay** (xem `docs/BAO_CAO_THAO_TAC_TAY.md`): sửa lỗi vật trôi khỏi tay sau khi mất dấu; vật nằm dưới tay; giữ chiều sâu; dễ gắp hơn; tự căn miệng bình; giữ yên để rót từng lượng 2 mL (tối đa 1,5 mL/s); giữ cố định bình nhận; đặt bình về chỗ cũ khi thả trên bình khác; đổi chiều nhãn Trái/Phải.
+- EGAD đọc được định dạng câu hỏi của lab (trắc nghiệm `prompt`, và `egad-questions.json`).
+- **Bỏ Gemini, dùng Ollama cục bộ (mặc định `qwen3:8b`)**: gửi `think: false`, JSON schema (tự lùi về `format: "json"` với Ollama cũ), `num_ctx`, `keep_alive`, timeout cấu hình được; loại khối `<think>`; từ chối kết quả bị cắt (`done_reason: length`); chặn `OLLAMA_URL` không phải máy này trừ khi `OLLAMA_ALLOW_REMOTE=1`. `list_models.py` liệt kê model Ollama. Bỏ `consent_cloud` ở API và giao diện. Mã lỗi mới: `llm_unavailable`, `llm_error`, `model_not_found`.
+- Kiểm tra trích dẫn bằng **so khớp chuẩn hóa chính xác** (NFKC, bỏ qua hoa/thường, khoảng trắng, dấu câu và ký hiệu; giữ dấu tiếng Việt; khớp nguyên từ).
+- Sửa phân loại lỗi Gemini: 404 là `model_not_found` (không thử lại, kèm hướng dẫn), mọi 4xx khác không thử lại; thêm `backend/list_models.py` liệt kê model dùng được với key; tách `envfile.py`.
+- API EGAD: thêm `question_id` (đưa câu hỏi vào prompt), `session_id` (trả lại nguyên giá trị), `error_code`/`retryable` cho mọi lỗi; `lab_actions` dành riêng cho GĐ4. Frontend gửi các trường mới và hiện nút "Thử chấm lại".
+- Frontend mới (Vite + React): khung ứng dụng, trang EGAD thử nghiệm, dữ liệu bài học/rubric nháp, test JS; thêm `docs/API.md`.
+- Backend chạy được khi thiếu lõi hóa học (API hóa học trả 503); `/api/health` báo `chemistry`; `GEMINI_BASE_URL` để test.
 - Dọn repo: báo cáo/patch lịch sử chuyển vào `archive/`; bỏ launcher Linux trùng.
 - EGAD dùng Gemini API (thay adapter llama.cpp `egad_local.py` bằng `egad_llm.py`); endpoint `/api/egad/assess`; cần `consent_cloud`; key chỉ từ môi trường/`.env`.
 - Sửa đường dẫn model bàn tay về `web/models/`; phiên bản lấy từ `version.py`; `server.py` báo lỗi rõ khi thiếu mã lõi và không lộ lỗi nội bộ khi thiếu thư viện.

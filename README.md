@@ -1,41 +1,84 @@
 # HoloLab AR — thí nghiệm hóa học ảo & EGAD
 
-Phòng thí nghiệm hóa học ảo (kéo thả bằng chuột, tùy chọn tracking bàn tay) kèm EGAD: công cụ đánh giá câu trả lời của học sinh.
+Phòng thí nghiệm Hóa học 3D trên trình duyệt (10 bài lớp 10–12), điều khiển bằng **chuột** hoặc **bàn tay qua webcam**, kèm **EGAD**: công cụ phân tích câu trả lời của học sinh bằng mô hình ngôn ngữ chạy cục bộ (Ollama). Mọi thứ chạy trên máy chủ của bạn; hình ảnh webcam và câu trả lời không gửi ra dịch vụ bên ngoài.
 
-## Trạng thái hiện tại (quan trọng)
+## Trạng thái hiện tại
 
-Repo này mới chỉ có **phần vỏ backend và tài liệu**. **Chưa có** giao diện web (`frontend/web/`, `frontend/ui/`), lõi hóa học (`backend/chemlab/`, `backend/lab3d/`, `backend/data/`), dữ liệu huấn luyện và bộ kiểm thử JS. `server.py` sẽ báo lỗi rõ ràng nếu thiếu các thư mục này. Các báo cáo cũ trong `docs/archive/` mô tả bản V3.9 đầy đủ nhưng **không phải kết quả chạy lại ở repo này**.
+| Phần | Trạng thái |
+|---|---|
+| Phòng thí nghiệm 3D (chuột, bàn tay, 10 bài, vật lý, hóa học) | **Chạy được.** Có **Hỗ trợ tay** (vật nằm dưới tay, tự căn miệng bình, rót nhẹ từng lượng 2 mL) |
+| EGAD qua Ollama (Qwen3) | Có API và trang thử nghiệm; mới kiểm thử với Ollama giả, **chưa đo chất lượng với Qwen3 thật** |
+| Đăng nhập, phiên nhiều lượt, PostgreSQL, trang giáo viên (hợp đồng API v3.1) | **Chưa làm** (bản thiết kế) |
+| Bài học và rubric | 5 bài có ghi "Phân lớp đề xuất" cần giáo viên xác nhận; rubric EGAD là bản minh họa |
 
-Đã có và kiểm thử được: lớp EGAD gọi Gemini (`egad_llm.py`) và `tests/test_egad_llm.py`.
+Kết quả của EGAD là **dự đoán của AI, chưa được giáo viên xác nhận**, không dùng để chấm điểm.
+
+## Chạy nhanh
+
+Cần Python 3.10 trở lên và Chrome hoặc Edge. Không cần Node để chạy, vì giao diện và thư viện đã được đóng kèm.
+
+```bash
+cd backend
+pip install -r requirements-core.txt
+python server.py --browser-tracking
+```
+
+Trên Windows có thể dùng `py -3 server.py --browser-tracking` hoặc `backend/START_WINDOWS.bat`. Giữ cửa sổ terminal mở trong lúc dùng.
+
+| Địa chỉ | Nội dung |
+|---|---|
+| http://127.0.0.1:8765/ | Phòng thí nghiệm 3D |
+| http://127.0.0.1:8765/app/ | Ứng dụng EGAD (cần build một lần: `cd frontend && npm ci && npm run build`) |
+| http://127.0.0.1:8765/egad-pilot.html | Bộ phân loại thống kê cũ (TF-IDF, chỉ để tham khảo) |
+
+**Hướng dẫn làm thí nghiệm chi tiết** (chuột, cử chỉ tay, rót với Hỗ trợ tay, từng bài trong 10 bài, xử lý sự cố): [`docs/HUONG_DAN_THI_NGHIEM.md`](docs/HUONG_DAN_THI_NGHIEM.md).
+
+## EGAD với Ollama (tùy chọn)
+
+1. Cài [Ollama](https://ollama.com) trên máy chủ, rồi tải model: `ollama pull qwen3:8b` (cần khoảng 6 GB RAM/VRAM; máy yếu hơn thử `qwen3:4b`).
+2. `cd backend`, sao chép `.env.example` thành `.env`, rồi kiểm tra bằng `python list_models.py`.
+3. Trong lab bấm **EGAD · Giải thích**, hoặc mở `/app/`.
+
+Ollama chỉ được lắng nghe `127.0.0.1`. **Không mở cổng Ollama ra Internet.** Nếu không có Ollama, lab vẫn chạy bình thường và EGAD báo rõ là chưa có mô hình. Hợp đồng API: [`docs/API.md`](docs/API.md).
 
 ## Cấu trúc
 
 ```
-backend/    Server Python, EGAD (Gemini), tracking, tests, script khởi động
-frontend/   Giao diện web (chưa có mã nguồn), package.json, vite.config.js
-docs/       CHANGELOG, THIRD_PARTY, hướng dẫn Base44, archive/ (báo cáo lịch sử)
-LICENSE
+backend/    server.py (HTTP + API), EGAD (egad_llm.py, Ollama), lõi hóa học (chemlab/, lab3d/, data/),
+            experiments/, training/ (pilot TF-IDF cũ), tests/ (Python), tools/ (đánh giá EGAD...)
+frontend/   web/       ứng dụng lab tĩnh mà server phục vụ: index.html, src/ (Three.js, vật lý,
+                       nhận diện tay, Hỗ trợ tay), data/ (bài học, rubric), vendor/ + models/ (chạy offline)
+            ui/        khung thư viện bài (React) -> web/ui/
+            src/       ứng dụng EGAD (React) -> web/app/
+            tests_js/, tools/ (kiểm tra trình duyệt)
+docs/       hướng dẫn thí nghiệm, báo cáo Hỗ trợ tay, API, CHANGELOG, lab/ (tài liệu kỹ thuật V3.x),
+            archive/ (báo cáo và patch lịch sử)
+licenses/   giấy phép thư viện bên thứ ba (xem docs/THIRD_PARTY.md)
 ```
 
-## Bắt đầu
+## Phát triển và kiểm thử
+
+```bash
+cd frontend
+npm ci
+npm test          # 156 test JavaScript
+npm run build     # build:shell (web/ui) + build:app (web/app)
+npm run dev       # EGAD app ở http://localhost:5173, proxy sang backend :8765
+```
 
 ```bash
 cd backend
-cp .env.example .env     # Windows: copy .env.example .env, rồi điền GEMINI_API_KEY
-python3 -m unittest discover -s tests -v
+pip install -r requirements-dev.txt
+python -m unittest discover -s tests -v    # 124 test Python
 ```
 
-## EGAD với Gemini API
+Kiểm tra trình duyệt (cần Playwright): `node frontend/tools/qa_mouse_v39.mjs` và `qa_egad_v39.mjs`. Đặt `PLAYWRIGHT_PACKAGE` tới module Playwright và `PYTHON` tới Python có `sympy`. GitHub Actions (`.github/workflows/checks.yml`) chạy test frontend và backend ở mỗi lần push.
 
-1. Vào https://aistudio.google.com, chọn **Get API key**, tạo key.
-2. Điền `GEMINI_API_KEY` (và `GEMINI_MODEL` nếu muốn đổi) trong `backend/.env`.
+## Tài liệu
 
-Endpoint: `POST /api/egad/assess` (giữ `/api/egad/local` để tương thích). Body: `{lesson, answer, consent: true, consent_cloud: true}`.
+- [`docs/HUONG_DAN_THI_NGHIEM.md`](docs/HUONG_DAN_THI_NGHIEM.md): hướng dẫn sử dụng và làm thí nghiệm
+- [`docs/BAO_CAO_THAO_TAC_TAY.md`](docs/BAO_CAO_THAO_TAC_TAY.md): báo cáo cải thiện thao tác tay (nguyên nhân, thay đổi, số đo)
+- [`docs/API.md`](docs/API.md): hợp đồng API hiện tại · [`docs/CHANGELOG.md`](docs/CHANGELOG.md)
+- [`docs/lab/`](docs/lab/): tài liệu kỹ thuật các phiên bản V3.x của lab
 
-Ghi chú an toàn:
-- Key chỉ ở backend (`.env` được git bỏ qua). Không đặt trong JS trình duyệt, không chụp màn hình hay dán vào chat. Nếu lỡ lộ, xóa và tạo lại trong AI Studio.
-- Câu trả lời được gửi tới Google. Gói miễn phí có thể cho phép Google dùng dữ liệu để cải thiện sản phẩm: khi test chỉ dùng dữ liệu mô phỏng hoặc ẩn danh. Gói trả phí thay đổi điều khoản dữ liệu và giới hạn tốc độ nhưng không có gì là "tuyệt đối"; vẫn cần đọc điều khoản hiện hành và xin phép đúng quy định trước khi dùng dữ liệu học sinh thật.
-- Gói miễn phí giới hạn tốc độ; lỗi 429 được báo rõ.
-- Kết quả mô hình luôn được kiểm tra: bằng chứng phải trích nguyên văn câu trả lời, nhãn tổng hợp phải nhất quán. Kết quả là **dự đoán, chưa được giáo viên xác nhận**, không dùng để chấm điểm.
-
-Chi tiết: `backend/README.md`, `frontend/README.md`. Giấy phép: `LICENSE`; thư viện bên thứ ba: `docs/THIRD_PARTY.md`.
+Giấy phép: `LICENSE`. Thư viện bên thứ ba (Three.js, Rapier, MediaPipe và model nhận diện tay, React, SymPy) giữ giấy phép riêng: `docs/THIRD_PARTY.md`, `licenses/`.

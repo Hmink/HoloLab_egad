@@ -15,7 +15,7 @@ Bản này giữ nguyên lõi chuột, thí nghiệm, vật lý V3.9. Link EGAD 
 1. Triển khai toàn bộ frontend/web/ ở gốc một HTTPS origin riêng (giữ cấu trúc thư mục). Tài nguyên dùng đường dẫn /vendor, /ui, /data.
 2. Đưa base44/HoloLabEmbed.jsx và BASE44_PROMPT.txt vào dự án Base44. Thay labUrl bằng URL HTTPS thực tế.
 3. Cho phép domain Base44 trong chính sách frame-ancestors ở host. Cấp quyền camera nếu dùng tracking. Không nhúng server.py vào frontend.
-4. Các endpoint Python tùy chọn (native tracking, EGAD Gemini) không có trên static hosting; dùng chuột và EGAD pilot JS không cần chúng.
+4. Các endpoint Python tùy chọn (native tracking, EGAD qua Ollama) không có trên static hosting; dùng chuột và EGAD pilot JS không cần chúng.
 5. Chưa có liên thông tài khoản / ghi kết quả Base44 / sự kiện thao tác. Pilot xuất nhật ký JSON thủ công.
 6. Nếu cần chuyển toàn bộ mã sang React/Base44 thay iframe, cần mã nguồn dự án Base44 để chỉnh build và kiểm thử riêng.
 

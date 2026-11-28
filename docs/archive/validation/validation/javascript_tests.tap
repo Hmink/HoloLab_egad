@@ -1,0 +1,166 @@
+TAP version 13
+# Subtest: camera sends at most one inference per unique frame and one in flight
+ok 1 - camera sends at most one inference per unique frame and one in flight
+  ---
+  duration_ms: 1.753196
+  type: 'test'
+  ...
+# Subtest: late bitmap from a stopped/replaced stream is closed and never inferred
+ok 2 - late bitmap from a stopped/replaced stream is closed and never inferred
+  ---
+  duration_ms: 0.373093
+  type: 'test'
+  ...
+# Subtest: worker result from old stream generation cannot change the active hand state
+ok 3 - worker result from old stream generation cannot change the active hand state
+  ---
+  duration_ms: 0.836884
+  type: 'test'
+  ...
+# Subtest: metrics separate render rate and tracking rate for exactly 60 seconds
+ok 4 - metrics separate render rate and tracking rate for exactly 60 seconds
+  ---
+  duration_ms: 8.48825
+  type: 'test'
+  ...
+# Subtest: interrupted benchmark is never marked complete
+ok 5 - interrupted benchmark is never marked complete
+  ---
+  duration_ms: 0.251079
+  type: 'test'
+  ...
+# Subtest: pinch hysteresis: boundary jitter cannot release a valid hold
+ok 6 - pinch hysteresis: boundary jitter cannot release a valid hold
+  ---
+  duration_ms: 1.196757
+  type: 'test'
+  ...
+# Subtest: one noisy open sample and missing frames never release
+ok 7 - one noisy open sample and missing frames never release
+  ---
+  duration_ms: 2.190918
+  type: 'test'
+  ...
+# Subtest: duplicate timestamps cannot complete pinch debounce or tracking update
+ok 8 - duplicate timestamps cannot complete pinch debounce or tracking update
+  ---
+  duration_ms: 0.270599
+  type: 'test'
+  ...
+# Subtest: normalized pinch is invariant with hand size and camera aspect
+ok 9 - normalized pinch is invariant with hand size and camera aspect
+  ---
+  duration_ms: 2.1854
+  type: 'test'
+  ...
+# Subtest: alternating high-confidence handedness never loses a held track
+ok 10 - alternating high-confidence handedness never loses a held track
+  ---
+  duration_ms: 4.260082
+  type: 'test'
+  ...
+# Subtest: two independent hands: near/far, detector order changes, no ownership swap
+ok 11 - two independent hands: near/far, detector order changes, no ownership swap
+  ---
+  duration_ms: 2.570892
+  type: 'test'
+  ...
+# Subtest: brief loss keeps object and recovery rebases with zero target jump
+ok 12 - brief loss keeps object and recovery rebases with zero target jump
+  ---
+  duration_ms: 1.219892
+  type: 'test'
+  ...
+# Subtest: timeout parks, never deletes, and requires opening before re-grab
+ok 13 - timeout parks, never deletes, and requires opening before re-grab
+  ---
+  duration_ms: 1.215671
+  type: 'test'
+  ...
+# Subtest: stationary object does not jump on ordinary grab
+ok 14 - stationary object does not jump on ordinary grab
+  ---
+  duration_ms: 0.519614
+  type: 'test'
+  ...
+# Subtest: two hands on one object: remaining hand inherits without a jump
+ok 15 - two hands on one object: remaining hand inherits without a jump
+  ---
+  duration_ms: 2.665759
+  type: 'test'
+  ...
+# Subtest: same-object dual hold freezes when one hand is missing; resumes without teleport
+ok 16 - same-object dual hold freezes when one hand is missing; resumes without teleport
+  ---
+  duration_ms: 0.504131
+  type: 'test'
+  ...
+# Subtest: ambiguous overlap freezes instead of handing objects to the other hand
+ok 17 - ambiguous overlap freezes instead of handing objects to the other hand
+  ---
+  duration_ms: 0.599926
+  type: 'test'
+  ...
+# Subtest: crossing paths with depth difference retain identity despite reversed result arrays
+ok 18 - crossing paths with depth difference retain identity despite reversed result arrays
+  ---
+  duration_ms: 7.904865
+  type: 'test'
+  ...
+# Subtest: slot B remains B when A expires; new hand can reuse slot A
+ok 19 - slot B remains B when A expires; new hand can reuse slot A
+  ---
+  duration_ms: 0.418461
+  type: 'test'
+  ...
+# Subtest: movement reaches image edges without disposing of the object
+ok 20 - movement reaches image edges without disposing of the object
+  ---
+  duration_ms: 0.901652
+  type: 'test'
+  ...
+# Subtest: depth and wrist rotation do not scale the vessel model
+ok 21 - depth and wrist rotation do not scale the vessel model
+  ---
+  duration_ms: 0.607438
+  type: 'test'
+  ...
+# Subtest: rotate mode preserves the anchored position and uses yaw/pitch
+ok 22 - rotate mode preserves the anchored position and uses yaw/pitch
+  ---
+  duration_ms: 1.082505
+  type: 'test'
+  ...
+# Subtest: late target acquisition uses one pinch cycle at most once
+ok 23 - late target acquisition uses one pinch cycle at most once
+  ---
+  duration_ms: 0.40412
+  type: 'test'
+  ...
+# Subtest: 10/10 deterministic acquisition sequences per hand (synthetic, not camera evidence)
+ok 24 - 10/10 deterministic acquisition sequences per hand (synthetic, not camera evidence)
+  ---
+  duration_ms: 1.391111
+  type: 'test'
+  ...
+# Subtest: One Euro attenuates stationary jitter while following a ramp
+ok 25 - One Euro attenuates stationary jitter while following a ramp
+  ---
+  duration_ms: 0.261464
+  type: 'test'
+  ...
+# Subtest: mirror, contain fit, edge mapping, perspective round-trip across aspect ratios
+ok 26 - mirror, contain fit, edge mapping, perspective round-trip across aspect ratios
+  ---
+  duration_ms: 0.374546
+  type: 'test'
+  ...
+1..26
+# tests 26
+# suites 0
+# pass 26
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 147.34853

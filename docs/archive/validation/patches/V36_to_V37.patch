@@ -1,0 +1,1631 @@
+--- a/CHANGELOG.md
++++ b/CHANGELOG.md
+@@ -1,3 +1,14 @@
++# V3.7 — 30/10/2026
++
++- Profile phát hiện createImageBitmap/resize phía giao diện chặn render trên đường CPU/đồ họa phần mềm. Dùng VideoFrame cho cả CPU/native khi được hỗ trợ; Worker giữ nguyên kích thước ảnh CV và chiều gương.
++- Canvas tiền xử lý dùng willReadFrequently cho CPU/native; giữ đường canvas GPU. Không đổi model, confidence, numHands, độ phân giải CV mặc định hoặc thuật toán cử chỉ.
++- Nếu tạo/truyền VideoFrame không được hỗ trợ, đóng tài nguyên và tự dùng ImageBitmap; không lặp phép thử lỗi ở mọi frame. Đóng ảnh khi postMessage thất bại hoặc khi phiên camera đã đổi.
++- Báo riêng capture/queue/preprocess/model ms, transport và số đo 60 giây; không gộp FPS render với tốc độ tracking.
++- Kiểm tra lại release, physics, chất lỏng, bài học, UI, camera giả lập và chuyển dữ liệu ảnh. Chi tiết cùng giới hạn webcam thật/50 FPS: VALIDATION_V37.md.
++- Không thêm dependency sản phẩm; đóng gói đầy đủ mã nguồn và thư viện offline.
++
++---
++
+ # V3.6 — 29/10/2026
+ 
+ - Sửa pinch-origin bị fist giữ sai trong rotate; mở tay rõ xác nhận nhanh, giữ chống nhiễu một mẫu.
+--- a/README.md
++++ b/README.md
+@@ -1,10 +1,10 @@
+-# HoloLab AR — V3.6
++# HoloLab AR — V3.7
+ 
+-Bản vá trên V3.5: sửa bình bị giữ sau khi mở tay/mất dấu, tránh reset khi đổi cấu hình, ổn định vòng lặp camera, đưa kho về bên phải và bổ sung gợi ý hóa học/hiệu ứng cháy có điều kiện. Giữ MediaPipe/model, One Euro, hai tay, Rapier, rót bảo toàn lượng chất và 5 bài THPT. Xem kết quả đã chạy và những phần chưa nghiệm thu trong **VALIDATION_V36.md**.
++Bản vá hiệu năng trên V3.6: chuyển khung ảnh trực tiếp sang Worker bằng VideoFrame cho cả CPU/GPU khi hỗ trợ, tránh bước sao chép/thu nhỏ ảnh làm chặn giao diện; giữ ImageBitmap dự phòng. Thừa kế bản sửa bình treo sau khi thả, kho bên phải và gợi ý hóa học. Giữ nguyên model MediaPipe, One Euro, hai tay, Rapier, rót bảo toàn lượng chất và 5 bài THPT. Kết quả đo và phần chưa nghiệm thu nằm trong **VALIDATION_V37.md**.
+ 
+ ## Chạy trên Windows
+ 
+-1. Giải nén **toàn bộ** ZIP vào một thư mục mới, ví dụ `D:\HoloLab_AR_V3_6`. `server.py` và `START_WINDOWS.bat` ở ngay gốc.
++1. Giải nén **toàn bộ** ZIP vào một thư mục mới, ví dụ `D:\HoloLab_AR_V3_7`. `server.py` và `START_WINDOWS.bat` ở ngay gốc.
+ 2. Dừng server cũ bằng Ctrl+C. Nhấp đúp `START_WINDOWS.bat`, hoặc mở PowerShell tại thư mục này:
+ 
+    ```powershell
+@@ -12,7 +12,7 @@
+    ```
+ 
+    Nếu không có launcher `py`, dùng `python server.py --browser-tracking`. Python phải từ 3.10 trở lên. Không cần cài OpenCV/MediaPipe Python để chạy đường web.
+-3. Mở **http://127.0.0.1:8765** bằng Chrome/Edge; giữ terminal mở. Nhấn Ctrl+F5, kiểm tra tab ghi **V3.6**.
++3. Mở **http://127.0.0.1:8765** bằng Chrome/Edge; giữ terminal mở. Nhấn Ctrl+F5, kiểm tra tab ghi **V3.7**.
+ 4. Chọn lớp → chủ đề → thí nghiệm → **Bắt đầu thực hành**. Bảng chọn tự thu gọn; **Chọn bài** mở lại. Bấm **Bật camera**, cấp quyền, hoặc dùng chuột.
+ 
+ Linux: `bash START_LINUX.sh` hoặc `python3 server.py --browser-tracking`. Không chạy `.bat` trên Linux. macOS dùng lệnh Python tương tự.
+@@ -51,7 +51,9 @@
+ 
+ ## Kiểm thử và giới hạn
+ 
+-Xem **VALIDATION_V36.md**, **docs/V36_FIXES.md** và **docs/MANUAL_CHECK_V36.md**. Các bản `VALIDATION_V35.md` trở về trước là hồ sơ lịch sử, không phải bằng chứng của V3.6. Mã test và báo cáo JSON đi kèm để có thể chạy lại.
++Xem **VALIDATION_V37.md**, **docs/V37_FIXES.md** và **docs/MANUAL_CHECK_V37.md**. Các bản `VALIDATION_V36.md` trở về trước là hồ sơ lịch sử, không phải bằng chứng của V3.7. Mã test và báo cáo JSON đi kèm để có thể chạy lại.
++
++Trong **Thông số kỹ thuật**, V3.7 tách thời gian lấy ảnh, chờ Worker, chuẩn bị ảnh và MediaPipe. **Đo 60 giây** rồi xuất JSON để đối chiếu trên máy của bạn. Chọn HD + ảnh CV 640 trước; không tăng lên 960 chỉ vì video hiển thị HD. Giữ tăng tốc đồ họa của trình duyệt nếu thiết bị hỗ trợ. VideoFrame là cơ chế truyền ảnh, không phải một mô hình nhận diện khác.
+ 
+ - Kiểm thử tự động có chạy Rapier thật, trình duyệt, shader, MediaPipe thật với camera giả lập. Chưa thử bàn tay người thật trong lượt sửa này.
+ - Benchmark GPU phần mềm không đạt 50 FPS; không cam kết máy yếu đạt mục tiêu. Độ tuổi mẫu không phải độ trễ chuyển động đầu–cuối.
+--- a/START_WINDOWS.bat
++++ b/START_WINDOWS.bat
+@@ -1,7 +1,7 @@
+ @echo off
+ setlocal
+ cd /d "%~dp0"
+-title HoloLab AR V3.6
++title HoloLab AR V3.7
+ if exist .venv\Scripts\python.exe (
+   .venv\Scripts\python.exe server.py
+   goto done
+--- a/VALIDATION_V37.md
++++ b/VALIDATION_V37.md
+@@ -0,0 +1,189 @@
++# Kiểm chứng HoloLab AR V3.7 — 30/10/2026
++
++**Bản sửa và các kiểm tra tự động bên dưới đã chạy. Chưa nghiệm thu bàn tay,
++webcam thật hoặc mục tiêu 50 FPS trên máy người dùng.** Không coi build/syntax
++thành công là đủ; đã chạy server, trình duyệt, Rapier, MediaPipe và phản ứng.
++
++## Môi trường và phạm vi
++
++- Python 3.12.14; Node 24.22.1; Chromium 133 headless; WebGL SwiftShader (GPU phần
++  mềm), CPU MediaPipe. Không phải i5/HD5500 hay máy có GPU NVIDIA của người dùng.
++- Nguồn camera giả lập Chromium: stream thực 1280×720, 20 FPS, ảnh CV 640×360.
++  Không có bàn tay người trong nguồn này. Cử chỉ dùng quan sát tổng hợp để kiểm
++  tra FSM/ownership/physics; không dùng để báo tỉ lệ gắp thành công bằng tay thật.
++- Không đổi model, confidence, hai tay, bộ lọc, vật lý, hình học bình, chất lỏng,
++  bài học, dữ liệu hoặc dependency. Đối chiếu 22 module lõi và hash runtime trong
++  `validation_v37/preserved_modules.json` / `SOURCE_SHA256.json`.
++- Chỉ 4 tệp JavaScript sản phẩm thay đổi: capture, hand-worker, metrics, main;
++  các tệp khác là nhãn phiên bản, công cụ kiểm tra và tài liệu. Xem danh sách đầy
++  đủ trong `changed_files.json`, bản vá `patches/V36_to_V37.patch`.
++
++## Nguyên nhân và sửa chữa
++
++V3.6 chỉ dùng VideoFrame cho delegate GPU; CPU/native thu nhỏ ImageBitmap trên
++luồng giao diện. Profile trước sửa ghi khoảng 16,90 giây tại createImageBitmap
++trong khoảng đo 19,42 giây. Đây là điểm nghẽn đã quan sát được trên môi trường này.
++
++V3.7 chuyển VideoFrame sang Worker khi hỗ trợ; xử lý kích thước/chiều gương trong
++Worker, giữ ImageBitmap dự phòng. Có đóng tài nguyên khi gửi lỗi hoặc phiên cũ;
++thất bại tạo/transfer VideoFrame không bị thử lại ở mọi frame. CPU canvas dùng
++willReadFrequently; GPU giữ canvas tương ứng. Không sửa thuật toán nhận diện.
++
++Thời gian lấy ảnh phía giao diện trong ba lượt V3.7 có trung vị **0.074 ms**.
++Chi phí tiền xử lý/model vẫn tồn tại trên Worker; không coi là đã loại bỏ toàn bộ
++độ trễ. Bảng kỹ thuật/JSON giờ tách từng công đoạn. `docs/V37_FIXES.md` có vị trí,
++định nghĩa chỉ số và nguồn API.
++
++## Kiểm tra đã đạt
++
++| Nhóm | Kết quả | Bằng chứng |
++|---|---|---|
++| JavaScript | 115/115 | `js-tests.log` |
++| Python | 91/91 | `python-tests.log` |
++| Rapier acceptance | 7/7 nhóm | `physics.json` |
++| Core browser | 12/12 | `browser_checks.json` |
++| Chất lỏng, bài học, UI, nhật ký | 15/15 | `browser.json` |
++| Hồi quy chức năng cũ | 7/7 | `regression_checks.json` |
++| Bản sửa release/config/UI V3.6 | 8/8 | `new_regressions.json` |
++| Chuyển ảnh V3.7 | 7/7 | `frame_transport.json` |
++
++Tất cả tệp bằng chứng trong `validation_v37/`.
++
++- 30 lượt thả–gắp lại trong acceptance; 20 lượt ném nhẹ; 30 va chạm nhẹ; bốn mép
++  và trần; 60 giây mô phỏng để bình nghỉ. Không xuyên/thoát biên, không recovery.
++- Trình duyệt kiểm tra 25 lượt pinch-release với 5 kiểu bình ở nhiều góc, mở
++  cái–trỏ trong rotate, mất dấu ngắn, mất dấu lâu, nhận lại lẻ và camera stall.
++  Rigid body chuyển dynamic, rơi, nằm trên bàn và gắp lại được.
++- Nghiêng 45/90/135/180/270/360 độ; rót tự động, úp hết 30 mL, vũng tràn, bảo toàn
++  nguồn + nhận + tràn, lưu/mở phiên. Năm bài THPT đi qua điều kiện và thao tác
++  tương ứng; AgCl xuất hiện trong mẫu chloride, nước đối chứng không tạo AgCl.
++- Bốn kích thước cửa sổ, kho phải/selector thu gọn, nhãn không chồng; câu hỏi,
++  lời giải thích và nhật ký opt-in. Không phát hiện lỗi JS/WebGL trong các ca này.
++- MediaPipe CPU thật nhận ảnh qua VideoFrame và ImageBitmap. Bốn ô màu cho pixel
++  gương giống nhau, đúng 640×360; Low 640×480 giữ 4:3. Không gửi hai inference
++  đồng thời. Stop/restart và đổi backend trên cùng video stream hoạt động.
++- Yêu cầu GPU được xử lý bởi delegate **GPU** trong lượt thử
++  SwiftShader, model mất **7152.2 ms** ở mẫu ghi nhận.
++  Chỉ xác minh đường API hoạt động; không chứng minh GPU phần mềm nhanh. AUTO
++  nhận diện software GL và chọn CPU như trước.
++
++## Ba cặp đo 60 giây
++
++Cùng máy, Chromium, viewport 1366×900; bề mặt render 1022×418; DPR 1; camera/CV
++như trên; 5 bình, một bình di chuyển bằng mã. Tự điều chỉnh chất lượng tắt để
++giữ điều kiện. Thứ tự cặp 1 trước/sau, cặp 2 sau/trước, cặp 3 trước/sau.
++
++| Cặp | Render V3.6 FPS | Render V3.7 FPS | Tracking V3.6 Hz | Tracking V3.7 Hz |
++|---|---:|---:|---:|---:|
++| 1 | 15.18 | 21.27 | 1.67 | 1.78 |
++| 2 | 15.20 | 18.50 | 1.59 | 1.55 |
++| 3 | 21.18 | 24.48 | 2.22 | 1.96 |
++| Trung vị | 15.20 | 21.27 | 1.67 | 1.78 |
++
++Trung vị render tăng **39.9%**. Trung vị
++khoảng cách frame P95: **316.6 → 233.4 ms**;
++tuổi mẫu P95: **1060.2 → 811.9 ms**.
++CPU physics/frame trung vị **1.91 → 2.20 ms**,
++không cải thiện tất cả chỉ số. Tracking từng cặp có cả tăng và giảm; không suy
++ra độ chính xác nhận diện hay tốc độ trên máy thật từ thay đổi trung vị nhỏ này.
++
++**Có một lượt V3.7 bị timeout 70 giây chờ phép đo hoàn tất.** Harness ban đầu
++chưa lưu runtime state nên chưa xác định nguyên nhân; không tuyên bố đã sửa.
++Đã bổ sung chẩn đoán, chạy lại toàn bộ cặp thứ ba; cặp chạy lại hoàn tất và được
++dùng trong bảng. Nhật ký lỗi và lượt V3.6 ban đầu được giữ tại
++`benchmark-after-3-first-failure.log`, `benchmark-before-3-first.json`.
++Không tính lượt timeout là đạt. `benchmark-comparison.json` ghi rõ các lượt.
++
++Mục tiêu **50 FPS chưa đạt** trong các lượt này. Host dùng chung và GPU phần mềm
++có tải biến động. So sánh hiện tại hỗ trợ kết luận giảm chặn luồng giao diện,
++không phải bảo đảm hiệu năng trên mọi cấu hình. Các profile thử từng bước được
++giữ riêng; chúng không thay thế ba cặp đo cuối.
++
++## Chạy liên tục 30 phút thực
++
++`soak.json`: **1815.10 giây thực**, 30 lần ghi trạng
++thái. MediaPipe thật, camera giả lập, render và Rapier chạy cùng nhau. Mỗi phút
++tạo hiệu ứng có điều kiện → dọn bàn → tạo 5 bình → di chuyển/thả một bình.
++Không phải 30 phút thao tác tay người.
++
++- Không JS error, camera fault, body NaN, liquid error hoặc xuyên mặt bàn ở các
++  mốc kiểm tra; độ xuyên lớn nhất ghi nhận 0.000000 đơn vị scene.
++- Render và inference tiếp tục tạo mẫu ở từng phút; số lần recovery lớn nhất
++  0. Luôn có 5 bình sau mỗi chu kỳ.
++- Tập số geometry/texture/program ghi nhận: **[(70, 7, 12), (74, 7, 12)]**.
++- JS heap luồng giao diện: **9.09–18.25 MB**, mẫu cuối
++  **16.11 MB**. Có GC; số đo này không bao gồm mọi vùng nhớ của GPU/Worker
++  và không chứng minh tuyệt đối không rò rỉ bộ nhớ.
++- Trung bình cả lượt: **32.23 FPS render**, **2.72 Hz tracking**.
++  Từng phút render 3.93–46.75 FPS.
++  Lượt dài dùng DPR 0,75 và kích thước UI tự nhiên, nên không so trực tiếp FPS với
++  bảng DPR 1 ở trên.
++- Khi kết thúc: đóng Worker, dừng mọi video track, running=false; kiểm tra đạt.
++
++## Lỗi phát hiện khi kiểm tra
++
++1. Nút thắt capture CPU trên UI: sửa bằng chuyển VideoFrame; đã đo và kiểm tra
++   pixel/luồng xử lý, có fallback.
++2. Tài nguyên ảnh chưa được đóng khi postMessage thất bại trong mã cũ: bổ sung
++   close/guard, kiểm tra lỗi truyền được tiêm vào. Chưa quan sát lỗi này trên
++   webcam người dùng.
++3. Công cụ test gọi getContextAttributes trên OffscreenCanvas context không có
++   API đó ở Chromium thử nghiệm: sửa harness, kiểm tra pixel trực tiếp; giữ hồ
++   sơ lỗi ở `frame_transport-harness-failure.json`. Không sửa sản phẩm để né test.
++4. Timeout benchmark một lần: chưa tái hiện trong cặp chạy lại; nguyên nhân chưa
++   đủ bằng chứng. Giữ như giới hạn còn tồn tại, không xóa nhật ký lỗi.
++
++## Kiểm tra gói giải nén sạch
++
++Đã giải nén ZIP ứng viên vào thư mục mới và đối chiếu hash các tệp chạy với nguồn
++đã thử. Chạy server và Chromium từ thư mục đó: **12/12 ca core** và **7/7 ca
++chuyển ảnh** đạt, không page error và không dependency runtime tải từ bên ngoài.
++Bằng chứng: `clean-extract/browser_checks.json`, `clean-extract/frame_transport.json`.
++ZIP cuối được kiểm CRC và so khớp lại mã chạy; phần báo cáo/nhật ký được bổ sung
++sau lượt thử, không thay mã sản phẩm.
++
++Lần điều phối đầu tiên của kiểm tra giải nén bị mất phiên thực thi, chưa xuất
++được kết quả đầy đủ. Đã giữ log `clean-core-incomplete-first.log` và chạy lại cả
++hai nhóm; chỉ các lượt hoàn tất được ghi đạt ở trên. Không gán sự gián đoạn công
++cụ này thành một lỗi ứng dụng đã được xác định.
++
++## Chưa kiểm chứng và giới hạn
++
++- Webcam quang học, driver/quyền Windows, tay người, L/R khi giao nhau, độ chính
++  xác gắp ≥9/10 mỗi tay, cảm giác chuyển động và latency đầu–cuối trên máy thật.
++- Tăng tốc GPU phần cứng, native MediaPipe Python ở bản này, trình duyệt khác
++  Chromium đã thử; hỗ trợ VideoFrame không đồng nghĩa mọi thiết bị đều nhanh.
++- Không cam kết 45/50 FPS trên i5-5200U/HD5500. Camera 20/30 FPS không thể cung
++  cấp 50 frame hình mới/giây dù render đạt 50; không nhận diện lặp frame để bù số.
++- Mô hình chất lỏng hình học/bảo toàn, chưa CFD; hiện tượng/hạt phóng đại; tutor
++  quy tắc, chưa mô hình AI huấn luyện hoặc nghiên cứu học sinh có dữ liệu thật.
++
++Làm theo **docs/MANUAL_CHECK_V37.md** để nghiệm thu trên máy đích; ghi rõ những mục
++chưa thử. Dùng JSON đo 60 giây và lỗi đầu tiên trong Console để điều tra tiếp.
++
++## Chạy lại
++
++Chạy sản phẩm: Windows `START_WINDOWS.bat` hoặc
++`py -3.13 server.py --browser-tracking`; Linux `bash START_LINUX.sh`.
++Mở `http://127.0.0.1:8765`, Ctrl+F5, tab phải là V3.7. Không cần npm để sử dụng.
++
++Kiểm tra phát triển: có Node, Python, Playwright/Chromium; NumPy/OpenCV cho các
++test desktop Python. `PLAYWRIGHT_PACKAGE` có thể trỏ tới module Playwright đã cài.
++Ứng dụng không thêm Playwright làm dependency sản phẩm.
++
++```sh
++npm test
++python3 -m unittest discover -s tests
++node tools/physics_acceptance_v34.mjs . validation_v37/physics.json
++node tools/verify_v37.mjs
++BENCH_BASELINE=/duong/dan/V3_6 node tools/compare_v37.mjs
++QA_OUTPUT=validation_v37 SOAK_MINUTES=30 node tools/soak_v36.mjs
++python3 tools/audit_v37.py /duong/dan/V3_6
++python3 tools/report_v37.py
++python3 tools/package_v37.py
++```
++
++QA_OUTPUT cho phép tái sử dụng ca hồi quy V3.6 trên V3.7 mà không chép đè bằng
++chứng cũ. Các thư mục validation phiên bản trước chỉ là lịch sử. Không chạy các
++benchmark trình duyệt đồng thời. ZIP có source, model, thư viện, hướng dẫn,
++patch và kết quả; ảnh QA nội bộ/ảnh người dùng không đóng trong ZIP.
+--- a/docs/MANUAL_CHECK_V37.md
++++ b/docs/MANUAL_CHECK_V37.md
+@@ -0,0 +1,52 @@
++# Kiểm tra V3.7 trên máy thật
++
++Đây là phần chưa được thay thế bằng camera giả lập. Ghi CPU/GPU, trình duyệt,
++webcam và cấu hình. Giải nén vào thư mục mới, dừng server cũ, Ctrl+F5, kiểm tra
++tab **V3.7**. Các ô bên dưới là việc cần thử, không phải kết quả đã đạt.
++
++## Thử nhanh trước buổi trình diễn
++
++1. Mở `http://127.0.0.1:8765`, bấm **Bật camera**, cấp quyền. Nếu ứng dụng Camera
++   Windows cũng tối, kiểm tra nắp che/phím khóa, ánh sáng, quyền và driver trước.
++2. Để webcam **HD**, ảnh CV **640**, backend **Tự động**. Mở **Thông số kỹ thuật**:
++   kiểm tra độ phân giải stream thực tế và ảnh CV. HD preview không đồng nghĩa
++   MediaPipe nhận HD. Ghi transport **VideoFrame** hay **ImageBitmap**.
++3. Mỗi tay gắp và thả 10 lần. Thử mở cái–trỏ nhưng gập ba ngón còn lại trong chế độ
++   xoay; bình phải rơi. Số lần thành công mong muốn ít nhất 9/10 mỗi tay.
++4. Giữ bình 30 giây, di chuyển chậm rồi nhanh trong vùng camera. Thử hai tay riêng
++   và hai tay cùng bình; tay cuối thả mới làm bình rơi.
++5. Che tay khoảng 0,2 giây rồi đưa lại: giữ tạm, không văng. Đưa tay ra khỏi ảnh hơn
++   1 giây: timeout khoảng 0,7 giây phải thả; không coi là nhận diện được ngoài camera.
++6. Lặp gắp–thả ít nhất 20 lần; kéo sát bốn mép, chạm nhẹ bình khác, đặt yên 60 giây.
++   Ghi lại nếu treo, xuyên bàn, tự trượt hoặc văng khỏi vùng thực hành.
++7. Bài chloride: AgNO₃ vào mẫu NaCl → đục/kết tủa trắng; nước đối chứng sạch không
++   tạo AgCl. Dựng nguồn dừng rót, úp để hết, rót lệch có tràn và giảm đúng lượng.
++8. Tắt/bật camera hai lần; thử Low/HD/FHD nếu hỗ trợ, thử CPU/GPU. Thay camera/CV/
++   mirror khi đang giữ phải chờ thả. Không dùng cấu hình GPU nếu driver báo lỗi.
++
++## So sánh hiệu năng
++
++- Dừng bản kia khi đo; cùng máy, ánh sáng, trình duyệt, camera, bài học, 5 dụng cụ,
++  kích thước cửa sổ, DPR, độ phân giải CV và backend. Không mở game/quay màn hình
++  trong một bản rồi so với bản không quay.
++- Chạy **Đo 60 giây**, thao tác bình thường, xuất JSON. Đo ba lượt V3.6 và ba lượt
++  V3.7 xen kẽ. Đối chiếu trung vị render FPS, tracking Hz, min FPS, tuổi mẫu và
++  thời gian các công đoạn. Phân biệt 50 FPS render và 50 mẫu nhận diện/giây.
++- Chạy 30 phút trên máy thật; ghi tình trạng mỗi 5 phút. Kết quả cần đủ mẫu có tay,
++  không chỉ camera bật nhưng không có người thao tác.
++- Muốn đo độ trễ đầu–cuối: quay đồng thời tay và màn hình bằng camera tốc độ cao,
++  đếm chênh lệch frame. Không lấy debounce hoặc thời gian MediaPipe làm số thay thế.
++
++| Chỉ tiêu | Kết quả cần tự ghi |
++|---|---|
++| Gắp trái / phải | …/10 · …/10 |
++| 20 lần thả | …/20 rơi đúng; … lần xuyên/văng/treo |
++| Hai tay / mất dấu ngắn / mất dấu lâu | Đạt / lỗi / chưa thử |
++| Rót + AgCl + nước đối chứng | Đạt / lỗi / chưa thử |
++| 60 giây × 3: render FPS / tracking Hz | Ba báo cáo JSON |
++| Độ phân giải thực / CV / backend / transport | … |
++| Chạy 30 phút | Thời gian thực, lỗi, trạng thái cuối |
++
++Nếu lỗi, gửi **tên bài, loại bình, tay A/B, chế độ, thời điểm, trạng thái hiển thị,
++tracking Hz, JSON đo và lỗi đầu tiên trong F12 Console**. Video tay chỉ gửi nếu
++bạn muốn; không đưa thông tin học sinh vào nhật ký. Không ghi “đạt” cho mục chưa thử.
+--- a/docs/V37_FIXES.md
++++ b/docs/V37_FIXES.md
+@@ -0,0 +1,66 @@
++# V3.7 — nguyên nhân và phạm vi sửa
++
++## Bằng chứng trước khi sửa
++
++V3.6 đã sửa đường release/timeout nhưng phép đo đồ họa phần mềm còn suy giảm.
++Đối chiếu ba pha trong `validation_v37/profile-before.json`: render riêng, bật
++camera + nhận diện, và camera vẫn chạy nhưng tạm bỏ gửi mẫu (chỉ trong công cụ
++chẩn đoán, không phải chế độ sản phẩm).
++
++Trong pha đầy đủ, bộ lấy mẫu CPU của Chromium ghi khoảng **16,90 giây** tại
++`createImageBitmap` trong khoảng quan sát **19,42 giây**. Bước thu nhỏ ảnh chờ đồng
++bộ dữ liệu trên luồng giao diện. Không có resize canvas lặp lại trong pha này;
++draw call/triangle cũng không tăng. Đây là bằng chứng cho một nút thắt cụ thể trên
++môi trường đo, không chứng minh mọi máy đều có cùng nguyên nhân.
++
++Vị trí: `web/src/capture.js`, hàm `frame`. Bản trước chỉ dùng VideoFrame khi
++`delegate === "GPU"`; đường CPU/native luôn đi qua `createImageBitmap(video,
++{resizeWidth, resizeHeight})` trước khi gửi Worker. `await` không bảo đảm phần
++chuẩn bị bên trong API hoàn toàn không chặn luồng chính.
++
++## Các thay đổi
++
++| Tệp | Sửa gì | Giới hạn giữ nguyên |
++|---|---|---|
++| `web/src/capture.js` | Dùng VideoFrame khi có; chuyển quyền sở hữu sang Worker; fallback một lần nếu không truyền được; đóng tài nguyên khi lỗi/phiên cũ; ghi thời gian lấy ảnh/gửi | Một mẫu đang xử lý, không hàng đợi, không nhận diện lặp frame; epoch/sequence và bộ lập lịch giữ nguyên |
++| `web/src/hand-worker.js` | Thu nhỏ và lật gương trên Worker; canvas có gợi ý đọc CPU cho CPU/native; đo chuẩn bị ảnh, chạy model và chờ Worker | Cùng model/confidence/2 tay, VIDEO mode, ảnh CV 640 mặc định; GPU có đường canvas riêng |
++| `web/src/metrics.js` | Thêm bốn trường thời gian vào báo cáo; thiếu dữ liệu trả null | FPS render, tracking Hz và tuổi mẫu vẫn tách riêng; độ trễ đầu–cuối chưa đo |
++| `web/src/main.js` | Hiện các công đoạn trong bảng kỹ thuật thu gọn | Không đổi thao tác, bố cục hay callback cử chỉ |
++| `web/index.html`, `server.py`, launcher, package metadata | Nhãn V3.7 | Dependency và đường khởi động không đổi |
++| `tests_js/frame-transport.test.mjs`, công cụ QA/benchmark | Kiểm tra lỗi transfer, tài nguyên, một frame đang xử lý, pixel gương/tỷ lệ và số đo | Không thay thế kiểm thử bàn tay người thật |
++
++Việc đóng VideoFrame/ImageBitmap trong nhánh thất bại là bản sửa quản lý tài nguyên
++có kiểm tra tiêm lỗi. Không có bằng chứng rằng DataCloneError đã xuất hiện trên
++máy người dùng. Không gọi đây là nguyên nhân đã xác nhận của lỗi gắp.
++
++`willReadFrequently` là yêu cầu tối ưu cho canvas CPU, không bảo đảm một hệ số tăng
++tốc độc lập. Các lượt profile thử có biến động tải; kết quả nghiệm thu dùng ba cặp
++benchmark đầy đủ, không chọn riêng lượt nhanh nhất. Phần tiền xử lý vẫn có thể tốn
++thời gian trên Worker; chuyển sang Worker không làm mất chi phí tính toán.
++
++## Vật lý và cử chỉ
++
++Không thay đổi ngưỡng pinch, One Euro, FSM, ID hai tay, release/700 ms mất dấu,
++quán tính, restitution, friction, damping, collider, gravity, CCD hoặc fixed step
++120 Hz. Không đặt mesh theo tay sau khi đã release. Những bản sửa của V3.6 vẫn
++có trong V3.7 và được chạy hồi quy lại.
++
++Các module được đối chiếu hash với ZIP V3.6 nguyên bản trong
++`validation_v37/preserved_modules.json`. Toàn bộ khác biệt nằm trong
++`patches/V36_to_V37.patch`; `changed_files.json` liệt kê cả tài liệu và công cụ.
++
++## Đọc số đo đúng cách
++
++- `capture_mean_ms`: thời gian chuẩn bị đối tượng ảnh trên giao diện trước gửi.
++- `worker_queue_mean_ms`: từ ngay trước postMessage đến Worker nhận được mẫu.
++- `preprocess_mean_ms`: Worker chuẩn bị kích thước, thu nhỏ và lật ảnh.
++- `model_mean_ms`: gọi MediaPipe; không bao gồm chuẩn bị ảnh ở trên.
++- `inference_mean_ms`: giữ định nghĩa cũ để đối chiếu. Với WASM gồm tiền xử lý và
++  detect; với Python là thời gian inference trả về từ server. Không cộng trường
++  này với preprocess/model lần nữa.
++- `sample_age_p95_ms`: tuổi dữ liệu khi kết quả tới ứng dụng; không phải độ trễ
++  từ chuyển động tay thật tới vật thể trên màn hình.
++
++Tài liệu API tham chiếu: [VideoFrame](https://developer.mozilla.org/en-US/docs/Web/API/VideoFrame),
++[transferable objects](https://developer.mozilla.org/en-US/docs/Web/API/Web_Workers_API/Transferable_objects),
++[OffscreenCanvas.getContext](https://developer.mozilla.org/en-US/docs/Web/API/OffscreenCanvas/getContext).
+--- a/package-lock.json
++++ b/package-lock.json
+@@ -1,12 +1,12 @@
+ {
+   "name": "hololab-ar-v3",
+-  "version": "3.6.0",
++  "version": "3.7.0",
+   "lockfileVersion": 3,
+   "requires": true,
+   "packages": {
+     "": {
+       "name": "hololab-ar-v3",
+-      "version": "3.6.0",
++      "version": "3.7.0",
+       "dependencies": {
+         "@dimforge/rapier3d-compat": "0.17.3",
+         "@mediapipe/tasks-vision": "0.10.32",
+--- a/package.json
++++ b/package.json
+@@ -1,6 +1,6 @@
+ {
+   "name": "hololab-ar-v3",
+-  "version": "3.6.0",
++  "version": "3.7.0",
+   "private": true,
+   "type": "module",
+   "scripts": {
+--- a/server.py
++++ b/server.py
+@@ -203,7 +203,7 @@
+         if self.path == "/api/catalog":
+             self.json(
+                 {
+-                    "version": "3.6.0",
++                    "version": "3.7.0",
+                     "native_tracking": bool(NATIVE.available),
+                     "stocks": [
+                         {**asdict(x), "mixture": mix_payload(Mixture.stock(x))}
+@@ -215,7 +215,7 @@
+             )
+             return
+         if self.path == "/api/health":
+-            self.json({"ok": True, "version": "3.6.0"})
++            self.json({"ok": True, "version": "3.7.0"})
+             return
+         if self.path.startswith("/api/experiment/"):
+             name = self.path.rsplit("/", 1)[-1]
+@@ -290,7 +290,7 @@
+         ("127.0.0.1", args.port), partial(Handler, directory=str(ROOT / "web"))
+     )
+     url = f"http://127.0.0.1:{server.server_port}"
+-    print(f"HoloLab AR V3.6: {url}\nGiu cua so nay mo. Ctrl+C de dung.", flush=True)
++    print(f"HoloLab AR V3.7: {url}\nGiu cua so nay mo. Ctrl+C de dung.", flush=True)
+     if not args.no_browser:
+         threading.Timer(0.5, lambda: webbrowser.open(url)).start()
+     try:
+--- a/tests_js/frame-transport.test.mjs
++++ b/tests_js/frame-transport.test.mjs
+@@ -0,0 +1,63 @@
++import test from 'node:test';
++import assert from 'node:assert/strict';
++import {HandCapture} from '../web/src/capture.js';
++import {Metrics} from '../web/src/metrics.js';
++
++function setup(postMessage) {
++  const c=new HandCapture({readyState:2,videoWidth:1280,videoHeight:720,pause(){},removeAttribute(){}},()=>{},()=>{});
++  c.running=true;c.delegate='CPU';c.worker={postMessage};return c;
++}
++test('CPU transfers decoded VideoFrame without UI ImageBitmap resize, one frame in flight',async()=>{
++  const old=globalThis.VideoFrame,oldBitmap=globalThis.createImageBitmap;
++  const frames=[],messages=[];
++  globalThis.VideoFrame=class {constructor(video,opts){this.opts=opts;this.closed=false;frames.push(this);}close(){this.closed=true;}};
++  globalThis.createImageBitmap=()=>{throw Error('UI copy should not run');};
++  try {
++    const c=setup((data,transfer)=>messages.push({data,transfer}));
++    await c.frame(100,1);await c.frame(120,2);
++    assert.equal(messages.length,1);assert.equal(frames.length,1);
++    assert.equal(messages[0].data.width,640);assert.equal(messages[0].data.height,360);
++    assert.equal(messages[0].transfer[0],frames[0]);assert.equal(frames[0].closed,false);
++    assert.ok(messages[0].data.captureMs>=0);assert.equal(c.frameTransport,'VideoFrame');
++    c.finishFrame({sequence:1});await c.frame(150,1);assert.equal(messages.length,1);
++  }finally{globalThis.VideoFrame=old;globalThis.createImageBitmap=oldBitmap;}
++});
++test('benchmark stage timings remain separate; missing observations are not reported as zero latency',()=>{
++  const m=new Metrics();m.begin(0,{});
++  m.track(100,{hands:[],inferenceMs:25,captureMs:2,queueMs:3,preprocessMs:5,modelMs:20,ageMs:30});
++  m.track(200,{hands:[],inferenceMs:27,ageMs:32});
++  const report=m.finish(60000);
++  assert.equal(report.capture_mean_ms,2);assert.equal(report.worker_queue_mean_ms,3);
++  assert.equal(report.preprocess_mean_ms,5);assert.equal(report.model_mean_ms,20);
++  assert.equal(report.inference_mean_ms,26);assert.equal(report.end_to_end_latency_ms,null);
++  m.begin(60000,{});const empty=m.finish(120000);
++  assert.equal(empty.capture_mean_ms,null);assert.equal(empty.model_mean_ms,null);
++});
++test('unsupported VideoFrame transfer closes its resource then falls back once without duplicate inference',async()=>{
++  const old=globalThis.VideoFrame,oldBitmap=globalThis.createImageBitmap;
++  let closed=0,attempts=0,copies=0;const sent=[];
++  globalThis.VideoFrame=class {close(){closed++;}};
++  globalThis.createImageBitmap=async()=>{copies++;return {close(){}};};
++  try{
++    const c=setup(data=>{attempts++;if(data.bitmap instanceof VideoFrame)throw Error('DataCloneError');sent.push(data);});
++    await c.frame(100,1);assert.equal(attempts,2);assert.equal(sent.length,1);
++    assert.equal(closed,1);assert.equal(copies,1);assert.equal(c.frameTransport,'ImageBitmap');
++    c.finishFrame({sequence:1});await c.frame(140,2);
++    assert.equal(attempts,3);assert.equal(sent.length,2);assert.equal(closed,1);
++  }finally{globalThis.VideoFrame=old;globalThis.createImageBitmap=oldBitmap;}
++});
++test('failed fallback closes bitmap and clears in-flight state; stopped async copy is not sent',async()=>{
++  const old=globalThis.VideoFrame,oldBitmap=globalThis.createImageBitmap;
++  let closed=0,resolve;
++  globalThis.VideoFrame=undefined;
++  try{
++    globalThis.createImageBitmap=async()=>({close(){closed++;}});
++    const c=setup(()=>{throw Error('worker failure');});await c.frame(100,1);
++    assert.equal(closed,1);assert.equal(c.busy,false);
++    globalThis.createImageBitmap=()=>new Promise(r=>resolve=r);
++    let sent=0;c.worker.postMessage=()=>sent++;
++    const pending=c.frame(150,2);await c.stopVideo();c.running=true;
++    resolve({close(){closed++;}});await pending;
++    assert.equal(sent,0);assert.equal(closed,2);assert.equal(c.busy,false);
++  }finally{globalThis.VideoFrame=old;globalThis.createImageBitmap=oldBitmap;}
++});
+--- a/tools/audit_v37.py
++++ b/tools/audit_v37.py
+@@ -0,0 +1,86 @@
++"""Syntax, JSON and exact-source audit. No npm install or app state changes."""
++from pathlib import Path
++import ast
++import difflib
++import hashlib
++import json
++import subprocess
++import sys
++
++ROOT = Path(__file__).resolve().parents[1]
++OUT = ROOT / "validation_v37"
++OUT.mkdir(exist_ok=True)
++
++
++def digest(path):
++    return hashlib.sha256(path.read_bytes()).hexdigest()
++
++
++js = sorted((ROOT / "web/src").glob("*.js"))
++js += sorted((ROOT / "tests_js").glob("*.mjs"))
++js += sorted((ROOT / "tools").glob("*.mjs"))
++for file in js:
++    subprocess.run(["node", "--check", str(file)], check=True, capture_output=True)
++py = list(ROOT.glob("*.py"))
++for folder in ("chemlab", "lab3d", "tests", "tools"):
++    py.extend(p for p in (ROOT / folder).rglob("*.py") if "__pycache__" not in p.parts)
++for file in py:
++    ast.parse(file.read_text(encoding="utf-8-sig"), filename=str(file))
++json_files = list((ROOT / "web/data").glob("*.json")) + list((ROOT / "data").glob("*.json")) + list((ROOT / "experiments").glob("*.json"))
++json_files += [ROOT / "web/profiles.json", ROOT / "package.json", ROOT / "package-lock.json"]
++for file in json_files:
++    json.loads(file.read_text())
++runtime = {}
++for folder in ("web", "chemlab", "lab3d", "data", "experiments", "python_vendor"):
++    for file in sorted((ROOT / folder).rglob("*")):
++        if file.is_file() and "__pycache__" not in file.parts and file.suffix not in (".pyc", ".pyo"):
++            runtime[file.relative_to(ROOT).as_posix()] = digest(file)
++for pattern in ("*.py", "*.bat", "*.sh", "requirements*.txt", "package*.json"):
++    for file in ROOT.glob(pattern):
++        runtime[file.name] = digest(file)
++(OUT / "SOURCE_SHA256.json").write_text(json.dumps(runtime, indent=2) + "\n")
++report = {"js_syntax_files": len(js), "python_ast_files": len(py), "json_files": len(json_files), "passed": True}
++if len(sys.argv) > 1:
++    baseline = Path(sys.argv[1]).resolve()
++    changed = []
++    diffs = []
++    for file in sorted(ROOT.rglob("*")):
++        if not file.is_file():
++            continue
++        rel = file.relative_to(ROOT)
++        if ({"__pycache__", "node_modules", ".git"}.intersection(rel.parts)
++                or rel.parts[0].startswith("validation") or rel.parts[0] == "patches"):
++            continue
++        old = baseline / rel
++        if old.exists() and digest(old) == digest(file):
++            continue
++        changed.append({"file": rel.as_posix(), "status": "modified" if old.exists() else "new",
++                        "before_sha256": digest(old) if old.exists() else None, "after_sha256": digest(file)})
++        try:
++            before = old.read_text().splitlines(keepends=True) if old.exists() else []
++            after = file.read_text().splitlines(keepends=True)
++            diffs.extend(difflib.unified_diff(before, after, fromfile=f"a/{rel}", tofile=f"b/{rel}"))
++        except UnicodeError:
++            pass
++    (OUT / "changed_files.json").write_text(json.dumps(changed, indent=2, ensure_ascii=False) + "\n")
++    preserved = {}
++    for name in ("camera-quality", "filters", "tracks", "interaction", "physics", "render3d", "environment", "coordinates", "lesson-geometry", "titration", "bench", "reaction-engine", "reaction-ui", "vessel-details", "liquid-simulation", "pourable", "spill-ledger", "student-logger", "ai-tutor", "lessons", "lesson-chemistry", "lesson-visuals"):
++        rel = f"web/src/{name}.js"
++        preserved[rel] = {"sha256": digest(ROOT / rel), "unchanged": digest(ROOT / rel) == digest(baseline / rel)}
++        assert preserved[rel]["unchanged"], rel
++    (OUT / "preserved_modules.json").write_text(json.dumps(preserved, indent=2) + "\n")
++    (ROOT / "patches").mkdir(exist_ok=True)
++    (ROOT / "patches/V36_to_V37.patch").write_text("".join(diffs))
++    report["changed_files"] = len(changed)
++    report["preserved_modules"] = len(preserved)
++    previous = json.loads((baseline / "validation_v36/SOURCE_SHA256.json").read_text())
++    assert not (set(previous) - set(runtime)), "Removed runtime files"
++    report["runtime_files"] = len(runtime)
++    report["runtime_changed"] = [name for name, sha in runtime.items() if not (baseline / name).exists() or digest(baseline / name) != sha]
++    for name, sha in runtime.items():
++        if name.startswith(("web/vendor/", "web/models/", "web/data/", "data/", "python_vendor/")):
++            assert previous.get(name) == sha, name
++    assert json.loads((baseline / "package.json").read_text())["dependencies"] == json.loads((ROOT / "package.json").read_text())["dependencies"]
++    report["dependencies_model_data_unchanged"] = True
++(OUT / "source_audit.json").write_text(json.dumps(report, indent=2) + "\n")
++print(json.dumps(report))
+--- a/tools/benchmark_v37.mjs
++++ b/tools/benchmark_v37.mjs
+@@ -0,0 +1,176 @@
++/** Same-host before/after benchmark. Software GL + synthetic camera by default, NOT physical webcam. */
++import { spawn } from "node:child_process";
++import { writeFile, mkdir } from "node:fs/promises";
++import path from "node:path";
++import assert from "node:assert/strict";
++const { chromium } = await import(
++  process.env.PLAYWRIGHT_PACKAGE || "playwright"
++);
++const root = path.resolve(process.env.BENCH_PROJECT || "."),
++  out = process.env.BENCH_OUTPUT;
++if (!out)
++  throw Error("Set BENCH_OUTPUT (CAMERA_FIXTURE is optional)");
++const server = spawn(
++  process.env.PYTHON || (process.platform === "win32" ? "python" : "python3"),
++  ["-S", "server.py", "--no-browser", "--browser-tracking", "--port", "8774"],
++  { cwd: root },
++);
++server.stderr.on("data", () => {});
++await new Promise((r, j) => {
++  server.stdout.on("data", (b) => b.toString().includes("http://") && r());
++  server.on("exit", (c) => j(Error("server " + c)));
++});
++let browser, page;
++const errors = [];
++try {
++  browser = await chromium.launch({
++    headless: true,
++    args: [
++      "--no-sandbox",
++      "--enable-unsafe-swiftshader",
++      "--use-gl=angle",
++      "--use-angle=swiftshader",
++      "--use-fake-ui-for-media-stream",
++      "--use-fake-device-for-media-stream",
++      ...(process.env.CAMERA_FIXTURE ? ["--use-file-for-fake-video-capture=" + process.env.CAMERA_FIXTURE] : []),
++    ],
++  });
++  page = await browser.newPage({
++    viewport: { width: 1366, height: 900 },
++  });
++  page.on("pageerror", (e) => errors.push(e.message));
++  await page.goto("http://127.0.0.1:8774/?test");
++  await page.waitForFunction(() => window.__lab);
++  await page.addStyleTag({
++    content:
++      "#workspace{width:1024px!important;height:420px!important;min-height:420px!important;flex:0 0 420px!important}",
++  });
++  await page.evaluate(() => {
++    const el = document.querySelector("#quality");
++    el.value = "1";
++    el.dispatchEvent(new Event("change"));
++    document.querySelector("#camera-auto").checked = false;
++    __lab.capture.autoCameraQuality = false;
++  });
++  await page.locator("#start-camera").click();
++  await page.waitForFunction(() => __lab.metrics.tracking.length > 5, null, {
++    timeout: 60000,
++  });
++  await page.evaluate(async (lessonId) => {
++    await __lab.capture.applyCameraQuality("HD");
++    __lab.clearDesk();
++    if (lessonId) {
++      __lab.lessons.start(lessonId);
++      return;
++    }
++    for (const [i, id] of [
++      "beaker",
++      "flask",
++      "cuso4",
++      "naoh",
++      "tube",
++    ].entries())
++      __lab.createObject(id, { x: (i - 2) * 1.1, y: -1.0, z: 0 });
++  }, process.env.BENCH_LESSON || null);
++  await page.waitForTimeout(3000);
++  await page.evaluate(() => {
++    const p = __lab.view.physics;
++    __lab.benchStable = __lab.view.objects
++      .slice(0, -1)
++      .map((o) => ({ id: o.id, pos: { ...o.target } }));
++    const o = __lab.view.objects.at(-1);
++    __lab.beginMouse(o, __lab.view.toScreen(o.target));
++    const start = performance.now();
++    __lab.metrics.begin(start, {
++      version: document.title,
++      input_source: "Chromium synthetic camera test pattern; no human hand input",
++      physical_camera_tested: false,
++      environment: "Chromium 133 headless / SwiftShader / WebCPU; synthetic camera",
++      backend: __lab.capture.delegate,
++      camera: __lab.capture.cameraReport(),
++      viewport: { width: innerWidth, height: innerHeight },
++      render_surface: {
++        width: __lab.view.rect.width,
++        height: __lab.view.rect.height,
++      },
++      dpr: __lab.view.pixelRatio,
++      objects: __lab.view.objects.length,
++      lesson: __lab.lessons?.model?.lesson.id || null,
++      moving_body: "one programmatic target; other bodies untouched",
++    });
++    const animate = (t) => {
++      if (!__lab.metrics.current) return;
++      __lab.move(
++        o,
++        {
++          x:
++            (__lab.lessons?.active ? -2.2 : 2.2) +
++            Math.sin((t - start) / 1200) * 0.18,
++          y: 0.3,
++          z: 0,
++        },
++        0,
++        0,
++        0,
++      );
++      requestAnimationFrame(animate);
++    };
++    requestAnimationFrame(animate);
++  });
++  await page.waitForFunction(() => __lab.metrics.lastReport?.complete, null, {
++    timeout: 70000,
++  });
++  const report = await page.evaluate(() => {
++    const stable = __lab.benchStable.map(({ id, pos }) => {
++      const o = __lab.view.objects.find((o) => o.id === id),
++        e = __lab.view.physics.entries.get(id);
++      return {
++        id,
++        drift_scene: Math.hypot(
++          o.target.x - pos.x,
++          o.target.y - pos.y,
++          o.target.z - pos.z,
++        ),
++        sleeping: e.body.isSleeping(),
++      };
++    });
++    return {
++      ...__lab.metrics.lastReport,
++      untouched_bodies_60s: stable,
++      recovery_count: __lab.view.physics.recoveryCount ?? null,
++      camera_final: __lab.capture.cameraReport(),
++      physical_camera_tested: false,
++    };
++  });
++  report.page_errors = errors;
++  assert.deepEqual(errors, []);
++  await writeFile(out, JSON.stringify(report, null, 2));
++  console.log(
++    JSON.stringify({
++      output: out,
++      render_fps: report.render_fps,
++      tracking_hz: report.tracking_hz,
++      physics_cpu_ms: report.physics_cpu_mean_ms,
++      rest: report.untouched_bodies_60s,
++    }),
++  );
++} catch(error) {
++  let timer;
++  const state=await Promise.race([
++    page?.evaluate(()=>({now:performance.now(),visibility:document.visibilityState,
++      current:__lab.metrics.current?{start:__lab.metrics.current.start,frames:__lab.metrics.current.render.length,tracks:__lab.metrics.current.track.length}:null,
++      lastReport:__lab.metrics.lastReport,lastRender:__lab.metrics.renders.at(-1),lastTrack:__lab.metrics.tracking.at(-1),
++      capture:{running:__lab.capture.running,busy:__lab.capture.busy,fault:__lab.capture.fault,sequence:__lab.capture.sequence,
++        active:__lab.capture.activeFrame,report:__lab.capture.cameraReport()},
++      webglLost:__lab.view.renderer.getContext().isContextLost(),liquidError:__lab.liquids.lastError||null,
++      message:document.getElementById('message')?.textContent,
++    })).catch(e=>({diagnosticError:String(e)})),
++    new Promise(resolve=>timer=setTimeout(()=>resolve({diagnosticTimeout:true}),5000)),
++  ]);
++  clearTimeout(timer);
++  await writeFile(out+'.failure.json',JSON.stringify({complete:false,error:String(error),state,page_errors:errors},null,2));
++  throw error;
++} finally {
++  await browser?.close();
++  server.kill();
++}
+--- a/tools/compare_v37.mjs
++++ b/tools/compare_v37.mjs
+@@ -0,0 +1,42 @@
++/** Three paired 60-second runs. Do not run other browser benchmarks concurrently. */
++import {spawn} from 'node:child_process';
++import {mkdir,readFile,writeFile,open} from 'node:fs/promises';
++import path from 'node:path';
++import os from 'node:os';
++import {fileURLToPath} from 'node:url';
++const root=path.resolve(path.dirname(fileURLToPath(import.meta.url)),'..');
++if(!process.env.BENCH_BASELINE)throw Error('Set BENCH_BASELINE to the unchanged V3.6 directory');
++const baseline=path.resolve(process.env.BENCH_BASELINE),out=path.join(root,'validation_v37');
++await mkdir(out,{recursive:true});
++const runs=[];
++for(let pair=1;pair<=3;pair++){
++  for(const variant of pair===2?['after','before']:['before','after']){
++    console.log('START',pair,variant);
++    const file=path.join(out,`benchmark-${variant}-${pair}.json`);
++    const log=await open(path.join(out,`benchmark-${variant}-${pair}.log`),'w');
++    const status=await new Promise((resolve,reject)=>{
++      const child=spawn('node',['tools/benchmark_v37.mjs'],{cwd:root,env:{...process.env,
++        BENCH_PROJECT:variant==='before'?baseline:root,BENCH_OUTPUT:file},stdio:['ignore',log.fd,log.fd]});
++      child.on('error',reject);child.on('exit',resolve);
++    });
++    await log.close();if(status!==0)throw Error(`benchmark ${pair} ${variant} failed`);
++    const report=JSON.parse(await readFile(file,'utf8'));
++    runs.push({pair,variant,file:path.basename(file),render_fps:report.render_fps,
++      tracking_hz:report.tracking_hz,render_interval_p95_ms:report.render_interval_p95_ms,
++      sample_age_p95_ms:report.sample_age_p95_ms,physics_cpu_mean_ms:report.physics_cpu_mean_ms,
++      capture_mean_ms:report.capture_mean_ms??null,preprocess_mean_ms:report.preprocess_mean_ms??null,
++      model_mean_ms:report.model_mean_ms??null,duration_s:report.duration_s});
++    console.log('DONE',JSON.stringify(runs.at(-1)));
++  }
++}
++const median=a=>[...a].sort((a,b)=>a-b)[Math.floor(a.length/2)];
++const aggregate=variant=>Object.fromEntries(['render_fps','tracking_hz','render_interval_p95_ms','sample_age_p95_ms','physics_cpu_mean_ms'].map(key=>
++  [key,median(runs.filter(r=>r.variant===variant).map(r=>r[key]))]));
++await writeFile(path.join(out,'benchmark-comparison.json'),JSON.stringify({
++  complete:true,physical_camera_tested:false,human_hands_tested:false,
++  cpu:os.cpus()[0]?.model,logical_cores:os.cpus().length,total_memory_gb:os.totalmem()/1024**3,
++  environment:'Same shared host; Chromium 133, SwiftShader software GL; synthetic 20 FPS webcam, CPU MediaPipe; alternating paired order',
++  conditions:'HD 1280x720; CV 640x360; DPR 1; render surface 1022x418; five objects with one moving programmatically; 60 seconds each',
++  runs,before_median:aggregate('before'),after_median:aggregate('after'),
++  limitation:'Shared-host load varies. These measurements do not establish hardware webcam accuracy or end-to-end hand latency.',
++},null,2));
+--- a/tools/package_v37.py
++++ b/tools/package_v37.py
+@@ -0,0 +1,41 @@
++"""Create a reproducible source ZIP with offline dependencies and QA evidence.
++
++Screenshots are internal QA artifacts, never deliverables. Run the source audit
++after final edits, then this script. It does not run or claim the webcam tests.
++"""
++from pathlib import Path
++import hashlib
++import json
++import sys
++import zipfile
++
++ROOT = Path(__file__).resolve().parents[1]
++target = Path(sys.argv[1]).resolve() if len(sys.argv) > 1 else ROOT.parent / "HoloLab_AR_V3_7.zip"
++assert ROOT not in target.parents, "Write the archive outside the project"
++excluded = {"__pycache__", "node_modules", ".git", ".venv"}
++images = {".png", ".jpg", ".jpeg", ".webp", ".mp4", ".webm", ".y4m"}
++files = []
++for file in sorted(ROOT.rglob("*")):
++    if not file.is_file():
++        continue
++    relative = file.relative_to(ROOT)
++    if excluded.intersection(relative.parts) or file.suffix in {".pyc", ".pyo"}:
++        continue
++    if relative.parts[0].startswith("validation") and file.suffix.lower() in images:
++        continue
++    if file.name == "soak-progress.json":
++        continue
++    files.append((file, relative.as_posix()))
++with zipfile.ZipFile(target, "w", compression=zipfile.ZIP_DEFLATED, compresslevel=6) as archive:
++    for file, name in files:
++        info = zipfile.ZipInfo(name, (2026, 10, 30, 0, 0, 0))
++        info.compress_type = zipfile.ZIP_DEFLATED
++        info.external_attr = (0o100755 if file.suffix == ".sh" else 0o100644) << 16
++        archive.writestr(info, file.read_bytes())
++with zipfile.ZipFile(target) as archive:
++    assert archive.testzip() is None
++    names = archive.namelist()
++    assert "server.py" in names and "START_WINDOWS.bat" in names
++    assert "web/data/reaction-hints.json" in names
++print(json.dumps({"path": str(target), "files": len(files), "bytes": target.stat().st_size,
++                  "sha256": hashlib.sha256(target.read_bytes()).hexdigest(), "zip_crc_ok": True}))
+--- a/tools/profile_v37.mjs
++++ b/tools/profile_v37.mjs
+@@ -0,0 +1,55 @@
++/** Diagnostic phases, same scene; synthetic camera, no human hands. */
++import {spawn} from 'node:child_process';
++import {writeFile} from 'node:fs/promises';
++import path from 'node:path';
++const root=path.resolve(process.env.BENCH_PROJECT||'.'),out=process.env.BENCH_OUTPUT;
++if(!out)throw Error('Set BENCH_OUTPUT to the diagnostic JSON path');
++const {chromium}=await import(process.env.PLAYWRIGHT_PACKAGE||'playwright');
++const server=spawn(process.env.PYTHON||(process.platform==='win32'?'python':'python3'),['-S','server.py','--no-browser','--browser-tracking','--port','8797'],{cwd:root});
++server.stderr.on('data',()=>{});
++await new Promise((resolve,reject)=>{server.stdout.on('data',b=>b.toString().includes('http://')&&resolve());server.on('exit',c=>reject(Error('server '+c)));});
++let browser;const errors=[],rows=[];
++try{
++ browser=await chromium.launch({headless:true,args:['--no-sandbox','--enable-unsafe-swiftshader','--use-gl=angle','--use-angle=swiftshader','--use-fake-ui-for-media-stream','--use-fake-device-for-media-stream']});
++ const page=await browser.newPage({viewport:{width:1660,height:900}});
++ page.on('pageerror',e=>errors.push(e.message));
++ await page.goto('http://127.0.0.1:8797/?test');await page.waitForFunction(()=>window.__lab);
++ await page.addStyleTag({content:'#workspace{width:1024px!important;height:420px!important;min-height:420px!important;flex:0 0 420px!important}'});
++ await page.evaluate(()=>{
++  const q=document.getElementById('quality');q.value='1';q.dispatchEvent(new Event('change'));
++  __lab.capture.autoCameraQuality=false;
++  for(const [i,id] of ['beaker','flask','cuso4','naoh','tube'].entries())__lab.createObject(id,{x:(i-2)*1.1,y:-1,z:0});
++  const resize=__lab.view.resize.bind(__lab.view);window.resizes=0;__lab.view.resize=(...args)=>{resizes++;return resize(...args);};
++  const bitmap=window.createImageBitmap.bind(window);window.copyMs=[];
++  window.createImageBitmap=async(...args)=>{const t=performance.now();const result=await bitmap(...args);copyMs.push(performance.now()-t);return result;};
++  window.phase={};const render=__lab.metrics.render.bind(__lab.metrics),track=__lab.metrics.track.bind(__lab.metrics);
++  __lab.metrics.render=(t,c,p)=>{phase.frames?.push({t,c,p});return render(t,c,p);};
++  __lab.metrics.track=(t,data)=>{phase.tracks?.push({t,age:data.ageMs,inference:data.inferenceMs});return track(t,data);};
++ });
++ const cdp=await page.context().newCDPSession(page);await cdp.send('Performance.enable');
++ for(const mode of ['render-only','full-pipeline','camera-without-inference']){
++  if(mode==='full-pipeline'){await page.locator('#start-camera').click();await page.waitForFunction(()=>__lab.metrics.tracking.length>2,null,{timeout:60000});}
++  if(mode==='camera-without-inference')await page.evaluate(()=>__lab.capture.frame=()=>{});
++  await page.waitForTimeout(1500);
++  const perf0=await cdp.send('Performance.getMetrics');
++  await cdp.send('Profiler.enable');await cdp.send('Profiler.start');
++  await page.evaluate(()=>{window.phase={start:performance.now(),frames:[],tracks:[]};copyMs=[];resizes=0;});
++  await page.waitForTimeout(12000);
++  const prof=await cdp.send('Profiler.stop'),perf1=await cdp.send('Performance.getMetrics');
++  const row=await page.evaluate(()=>{
++   const duration=(performance.now()-phase.start)/1000;
++   const mean=a=>a.length?a.reduce((s,n)=>s+n,0)/a.length:null;
++   return {duration,renderFPS:phase.frames.length/duration,trackingHz:phase.tracks.length/duration,
++    renderCpuMs:mean(phase.frames.map(f=>f.c)),physicsCpuMs:mean(phase.frames.map(f=>f.p)),
++    bitmapCopyMs:mean(copyMs),inferenceMs:mean(phase.tracks.map(f=>f.inference)),sampleAgeMs:mean(phase.tracks.map(f=>f.age)),
++    resizes,drawCalls:__lab.view.renderer.info.render.calls,triangles:__lab.view.renderer.info.render.triangles,
++    frameTransport:__lab.capture.frameTransport,camera:__lab.capture.cameraReport()};
++  });
++  const before=Object.fromEntries(perf0.metrics.map(m=>[m.name,m.value]));
++  row.cpuCounters=Object.fromEntries(perf1.metrics.filter(m=>/Duration$/.test(m.name)).map(m=>[m.name,m.value-before[m.name]]));
++  const samples=new Map();prof.profile.samples?.forEach((id,i)=>samples.set(id,(samples.get(id)||0)+(prof.profile.timeDeltas[i]||0)));
++  row.top=prof.profile.nodes.map(n=>({function:n.callFrame.functionName,url:n.callFrame.url,line:n.callFrame.lineNumber,ms:(samples.get(n.id)||0)/1000})).sort((a,b)=>b.ms-a.ms).slice(0,12);
++  rows.push({mode,...row});console.log(JSON.stringify({mode,...row,top:row.top.slice(0,5)}));
++ }
++ await writeFile(out,JSON.stringify({rows,errors,physicalWebcam:false},null,2));
++}finally{await browser?.close();server.kill();}
+--- a/tools/qa_core_v36.mjs
++++ b/tools/qa_core_v36.mjs
+@@ -4,7 +4,7 @@
+ import path from "node:path";
+ import assert from "node:assert/strict";
+ const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), ".."),
+-  out = path.join(root, "validation_v36");
++  out = path.resolve(process.env.QA_OUTPUT || path.join(root, "validation_v36"));
+ await mkdir(out, { recursive: true });
+ const { chromium } = await import(
+   process.env.PLAYWRIGHT_PACKAGE || "playwright"
+@@ -518,9 +518,9 @@
+       }
+       requestAnimationFrame(animate);
+       __lab.metrics.begin(performance.now(), {
+-        version: "3.6.0",
++        version: document.title,
+         input_source:
+-          "Y4M loop of static reference hands; not physical gestures",
++          "Chromium synthetic camera or explicitly provided CAMERA_FIXTURE; not physical gestures",
+         physical_camera_tested: false,
+         backend: __lab.capture.delegate,
+         camera: __lab.capture.cameraReport(),
+--- a/tools/qa_liquids_v36.mjs
++++ b/tools/qa_liquids_v36.mjs
+@@ -4,7 +4,7 @@
+ import assert from 'node:assert/strict';
+ import {fileURLToPath} from 'node:url';
+ const root=path.resolve(path.dirname(fileURLToPath(import.meta.url)),'..');
+-const out=path.join(root,'validation_v36');await fs.mkdir(out,{recursive:true});
++const out=path.resolve(process.env.QA_OUTPUT || path.join(root,'validation_v36'));await fs.mkdir(out,{recursive:true});
+ const {chromium}=await import(process.env.PLAYWRIGHT_PACKAGE || 'playwright');
+ const server=spawn(process.env.PYTHON || (process.platform === 'win32' ? 'python' : 'python3'),['-S','server.py','--no-browser','--browser-tracking','--port','8791'],{cwd:root});
+ await new Promise((resolve,reject)=>{server.stdout.on('data',d=>d.toString().includes('http://')&&resolve());server.on('exit',c=>reject(Error('server '+c)));});
+--- a/tools/qa_regression_v36.mjs
++++ b/tools/qa_regression_v36.mjs
+@@ -136,7 +136,7 @@
+   assert.deepEqual(errors, []);
+ } finally {
+   await writeFile(
+-    path.join(root, "validation_v36/regression_checks.json"),
++    path.join(process.env.QA_OUTPUT || path.join(root, "validation_v36"), "regression_checks.json"),
+     JSON.stringify({ checks, page_errors: errors }, null, 2),
+   );
+   await browser?.close();
+--- a/tools/qa_transport_v37.mjs
++++ b/tools/qa_transport_v37.mjs
+@@ -0,0 +1,110 @@
++/** Actual browser + Worker/MediaPipe; generated pixels and synthetic webcam, no human input. */
++import {spawn} from 'node:child_process';
++import {mkdir,writeFile} from 'node:fs/promises';
++import path from 'node:path';
++import {fileURLToPath} from 'node:url';
++import assert from 'node:assert/strict';
++const root=path.resolve(path.dirname(fileURLToPath(import.meta.url)),'..');
++const out=path.resolve(process.env.QA_OUTPUT||path.join(root,'validation_v37'));
++await mkdir(out,{recursive:true});
++const {chromium}=await import(process.env.PLAYWRIGHT_PACKAGE||'playwright');
++const server=spawn(process.env.PYTHON||(process.platform==='win32'?'python':'python3'),
++  ['-S','server.py','--no-browser','--browser-tracking','--port','8798'],{cwd:root});
++server.stderr.on('data',()=>{});
++await new Promise((resolve,reject)=>{
++  server.stdout.on('data',b=>b.toString().includes('http://')&&resolve());
++  server.on('exit',c=>reject(Error('server '+c)));
++});
++let browser;const checks=[],errors=[];
++const check=(name,data={})=>{checks.push({name,passed:true,...data});console.log('PASS',name);};
++try{
++  browser=await chromium.launch({headless:true,args:['--no-sandbox','--enable-unsafe-swiftshader',
++    '--use-gl=angle','--use-angle=swiftshader','--use-fake-ui-for-media-stream','--use-fake-device-for-media-stream']});
++  const page=await browser.newPage({viewport:{width:1440,height:900}});
++  page.on('pageerror',e=>errors.push(e.message));
++  await page.goto('http://127.0.0.1:8798/?test');await page.waitForFunction(()=>window.__lab);
++  const pendingWorker=page.waitForEvent('worker');
++  await page.evaluate(async()=>{
++    const {HandCapture}=await import('/src/capture.js');
++    window.pixelSource=document.createElement('canvas');
++    pixelSource.width=1280;pixelSource.height=720;
++    pixelSource.videoWidth=1280;pixelSource.videoHeight=720;pixelSource.readyState=2;
++    pixelSource.pause=()=>{};
++    const ctx=pixelSource.getContext('2d');
++    for(const [color,x,y] of [['#ff0000',0,0],['#00ff00',640,0],['#0000ff',0,360],['#ffff00',640,360]]){
++      ctx.fillStyle=color;ctx.fillRect(x,y,640,360);
++    }
++    window.pixelResults=[];
++    window.pixelCapture=new HandCapture(pixelSource,data=>pixelResults.push(data),()=>{});
++    pixelCapture.preference='CPU';await pixelCapture.init();pixelCapture.running=true;
++  });
++  const worker=await pendingWorker;
++  const pixels=[];
++  for(const fallback of [false,true]){
++    await page.evaluate(async fallback=>{
++      pixelResults.length=0;pixelCapture.videoFrameDisabled=fallback;
++      const now=performance.now();await pixelCapture.frame(now,now);
++      // A second request while busy must not enqueue another inference.
++      await pixelCapture.frame(now+50,now+50);
++    },fallback);
++    await page.waitForFunction(()=>pixelResults.length===1,null,{timeout:60000});
++    const input=await worker.evaluate(()=>({
++      width:input.width,height:input.height,cpuReadbackHint:cpuInput,
++      pixels:[[.25,.25],[.75,.25],[.25,.75],[.75,.75]].map(([x,y])=>
++        [...context.getImageData(Math.round(input.width*x),Math.round(input.height*y),1,1).data]),
++    }));
++    const result=await page.evaluate(()=>({transport:pixelCapture.frameTransport,
++      sequence:pixelCapture.sequence,busy:pixelCapture.busy,
++      timing:{capture:pixelResults[0].captureMs,queue:pixelResults[0].queueMs,
++        preprocess:pixelResults[0].preprocessMs,model:pixelResults[0].modelMs},
++      hands:pixelResults[0].hands.length}));
++    assert.equal(input.width,640);assert.equal(input.height,360);assert.equal(input.cpuReadbackHint,true);
++    assert.deepEqual(input.pixels,[[0,255,0,255],[255,0,0,255],[255,255,0,255],[0,0,255,255]]);
++    assert.equal(result.transport,fallback?'ImageBitmap':'VideoFrame');assert.equal(result.busy,false);
++    assert.ok(Object.values(result.timing).every(v=>Number.isFinite(v)&&v>=0));
++    pixels.push(input.pixels);check(`Real CPU Worker: ${result.transport}, correct mirror and 640×360 input, single result`,result);
++  }
++  assert.deepEqual(pixels[0],pixels[1]);
++  await page.evaluate(()=>pixelCapture.close());
++  await page.evaluate(()=>{__lab.capture.autoCameraQuality=false;__lab.capture.preference='CPU';});
++  await page.locator('#start-camera').click();
++  await page.waitForFunction(()=>__lab.metrics.tracking.length>=3,null,{timeout:60000});
++  const camera=await page.evaluate(()=>__lab.capture.cameraReport());
++  assert.equal(camera.transport,'VideoFrame');assert.equal(camera.video_width,1280);assert.equal(camera.video_height,720);
++  assert.equal(camera.input_width,640);assert.equal(camera.input_height,360);
++  check('Live synthetic HD video -> real MediaPipe CPU using VideoFrame',camera);
++  await page.evaluate(async()=>{
++    __lab.capture.videoFrameDisabled=true;
++    await __lab.capture.applyCameraQuality('LOW');
++  });
++  await page.waitForFunction(()=>__lab.capture.frameTransport==='ImageBitmap'&&__lab.capture.lastInputSize?.height===480,null,{timeout:60000});
++  const low=await page.evaluate(()=>__lab.capture.cameraReport());
++  assert.equal(low.video_width,640);assert.equal(low.video_height,480);
++  check('Real ImageBitmap fallback and 4:3 Low preserve capture/input aspect',low);
++  await page.locator('#stop-camera').click();
++  assert.equal(await page.evaluate(()=>__lab.capture.running),false);
++  await page.evaluate(()=>{__lab.capture.videoFrameDisabled=false;__lab.capture.cameraQuality='HD';});
++  await page.locator('#start-camera').click();
++  await page.waitForFunction(()=>__lab.capture.running&&__lab.capture.lastInputSize?.height===360&&__lab.capture.frameTransport==='VideoFrame',null,{timeout:60000});
++  await page.waitForFunction(()=>document.getElementById('pipeline-metrics').textContent.includes('Chờ Worker:'));
++  check('Stop/restart restores HD VideoFrame capture and displays separate stage metrics');
++  const gpuWorkerPromise=page.waitForEvent('worker');
++  await page.evaluate(async()=>{window.gpuSwapStart=performance.now();await __lab.capture.switchBackend('GPU');});
++  const gpuWorker=await gpuWorkerPromise;
++  await page.waitForFunction(()=>__lab.capture.running&&__lab.metrics.tracking.at(-1)?.t>gpuSwapStart,null,{timeout:60000});
++  const gpu=await page.evaluate(()=>({requested:__lab.capture.preference,actual:__lab.capture.delegate,
++    transport:__lab.capture.frameTransport,lastModelMs:__lab.metrics.tracking.at(-1)?.modelMs}));
++  const hint=await gpuWorker.evaluate(()=>cpuInput);
++  assert.ok(['GPU','CPU'].includes(gpu.actual));assert.equal(gpu.transport,'VideoFrame');
++  assert.equal(hint,gpu.actual==='CPU');assert.ok(Number.isFinite(gpu.lastModelMs));
++  check('Request GPU backend on live stream: actual delegate produces result, canvas hint matches delegate',gpu);
++  await page.locator('#stop-camera').click();
++  assert.deepEqual(errors,[]);check('No page runtime errors');
++}catch(error){checks.push({name:'failure',passed:false,error:String(error),stack:error.stack});process.exitCode=1;}
++finally{
++  await writeFile(path.join(out,'frame_transport.json'),JSON.stringify({
++    physicalCameraTested:false,humanHandsTested:false,
++    environment:'Chromium 133 / SwiftShader; actual CPU MediaPipe model, generated color quadrants and fake webcam',checks,errors,
++  },null,2));
++  await browser?.close();server.kill();
++}
+--- a/tools/qa_v36.mjs
++++ b/tools/qa_v36.mjs
+@@ -2,7 +2,7 @@
+ import {spawn} from 'node:child_process';
+ import fs from 'node:fs/promises';import path from 'node:path';import {fileURLToPath} from 'node:url';
+ import assert from 'node:assert/strict';
+-const root=path.resolve(path.dirname(fileURLToPath(import.meta.url)),'..'),out=path.join(root,'validation_v36');await fs.mkdir(out,{recursive:true});
++const root=path.resolve(path.dirname(fileURLToPath(import.meta.url)),'..'),out=path.resolve(process.env.QA_OUTPUT || path.join(root,'validation_v36'));await fs.mkdir(out,{recursive:true});
+ const {chromium}=await import(process.env.PLAYWRIGHT_PACKAGE||'playwright');
+ const server=spawn(process.env.PYTHON||'python3',['-S','server.py','--no-browser','--browser-tracking','--port','8793'],{cwd:root});
+ await new Promise((r,j)=>{server.stdout.on('data',b=>b.toString().includes('http://')&&r());server.on('exit',c=>j(Error('server '+c)));});
+--- a/tools/report_v37.py
++++ b/tools/report_v37.py
+@@ -0,0 +1,236 @@
++"""Generate the release QA report only from completed, saved test results."""
++from pathlib import Path
++import json
++import statistics
++
++ROOT = Path(__file__).resolve().parents[1]
++OUT = ROOT / "validation_v37"
++
++
++def read(name):
++    return json.loads((OUT / name).read_text())
++
++
++bench = read("benchmark-comparison.json")
++soak = read("soak.json")
++assert bench["complete"] and soak["complete"] and soak["meets30Minutes"]
++assert not soak["errors"]
++assert all(x["running"] and not x["fault"] for x in soak["samples"])
++groups = {}
++for name in ("browser_checks.json", "browser.json", "regression_checks.json", "new_regressions.json", "frame_transport.json"):
++    report = read(name)
++    assert all(x["passed"] for x in report["checks"]), name
++    groups[name] = len(report["checks"])
++assert read("physics.json")["passed"]
++js = (OUT / "js-tests.log").read_text()
++py = (OUT / "python-tests.log").read_text()
++assert "tests 115" in js and "fail 0" in js
++assert "Ran 91 tests" in py and py.strip().endswith("OK")
++b, a = bench["before_median"], bench["after_median"]
++pairs = []
++for i in range(1, 4):
++    old, new = (next(r for r in bench["runs"] if r["pair"] == i and r["variant"] == variant) for variant in ("before", "after"))
++    pairs.append(f'| {i} | {old["render_fps"]:.2f} | {new["render_fps"]:.2f} | {old["tracking_hz"]:.2f} | {new["tracking_hz"]:.2f} |')
++rows = soak["samples"]
++elapsed = rows[-1]["elapsedSeconds"]
++avg_fps, avg_hz = rows[-1]["frames"] / elapsed, rows[-1]["track"] / elapsed
++gpu_counts = sorted({(r["gpuResources"]["geometries"], r["gpuResources"]["textures"], r["programs"]) for r in rows})
++heap = [r["jsHeapUsedBytes"] / 1e6 for r in rows]
++max_pen = max(body["penetration"] for row in rows for body in row["bodies"])
++capture = statistics.median(r["capture_mean_ms"] for r in bench["runs"] if r["variant"] == "after")
++gpu_result = next(x for x in read("frame_transport.json")["checks"] if x["name"].startswith("Request GPU"))
++clean_core = read("clean-extract/browser_checks.json")
++clean_transport = read("clean-extract/frame_transport.json")
++assert len(clean_core["checks"]) == 12 and all(x["passed"] for x in clean_core["checks"])
++assert len(clean_transport["checks"]) == 7 and all(x["passed"] for x in clean_transport["checks"])
++assert not clean_core["page_errors"] and not clean_transport["errors"]
++text = f'''# Kiểm chứng HoloLab AR V3.7 — 30/10/2026
++
++**Bản sửa và các kiểm tra tự động bên dưới đã chạy. Chưa nghiệm thu bàn tay,
++webcam thật hoặc mục tiêu 50 FPS trên máy người dùng.** Không coi build/syntax
++thành công là đủ; đã chạy server, trình duyệt, Rapier, MediaPipe và phản ứng.
++
++## Môi trường và phạm vi
++
++- Python 3.12.14; Node 24.22.1; Chromium 133 headless; WebGL SwiftShader (GPU phần
++  mềm), CPU MediaPipe. Không phải i5/HD5500 hay máy có GPU NVIDIA của người dùng.
++- Nguồn camera giả lập Chromium: stream thực 1280×720, 20 FPS, ảnh CV 640×360.
++  Không có bàn tay người trong nguồn này. Cử chỉ dùng quan sát tổng hợp để kiểm
++  tra FSM/ownership/physics; không dùng để báo tỉ lệ gắp thành công bằng tay thật.
++- Không đổi model, confidence, hai tay, bộ lọc, vật lý, hình học bình, chất lỏng,
++  bài học, dữ liệu hoặc dependency. Đối chiếu 22 module lõi và hash runtime trong
++  `validation_v37/preserved_modules.json` / `SOURCE_SHA256.json`.
++- Chỉ 4 tệp JavaScript sản phẩm thay đổi: capture, hand-worker, metrics, main;
++  các tệp khác là nhãn phiên bản, công cụ kiểm tra và tài liệu. Xem danh sách đầy
++  đủ trong `changed_files.json`, bản vá `patches/V36_to_V37.patch`.
++
++## Nguyên nhân và sửa chữa
++
++V3.6 chỉ dùng VideoFrame cho delegate GPU; CPU/native thu nhỏ ImageBitmap trên
++luồng giao diện. Profile trước sửa ghi khoảng 16,90 giây tại createImageBitmap
++trong khoảng đo 19,42 giây. Đây là điểm nghẽn đã quan sát được trên môi trường này.
++
++V3.7 chuyển VideoFrame sang Worker khi hỗ trợ; xử lý kích thước/chiều gương trong
++Worker, giữ ImageBitmap dự phòng. Có đóng tài nguyên khi gửi lỗi hoặc phiên cũ;
++thất bại tạo/transfer VideoFrame không bị thử lại ở mọi frame. CPU canvas dùng
++willReadFrequently; GPU giữ canvas tương ứng. Không sửa thuật toán nhận diện.
++
++Thời gian lấy ảnh phía giao diện trong ba lượt V3.7 có trung vị **{capture:.3f} ms**.
++Chi phí tiền xử lý/model vẫn tồn tại trên Worker; không coi là đã loại bỏ toàn bộ
++độ trễ. Bảng kỹ thuật/JSON giờ tách từng công đoạn. `docs/V37_FIXES.md` có vị trí,
++định nghĩa chỉ số và nguồn API.
++
++## Kiểm tra đã đạt
++
++| Nhóm | Kết quả | Bằng chứng |
++|---|---|---|
++| JavaScript | 115/115 | `js-tests.log` |
++| Python | 91/91 | `python-tests.log` |
++| Rapier acceptance | 7/7 nhóm | `physics.json` |
++| Core browser | {groups['browser_checks.json']}/{groups['browser_checks.json']} | `browser_checks.json` |
++| Chất lỏng, bài học, UI, nhật ký | {groups['browser.json']}/{groups['browser.json']} | `browser.json` |
++| Hồi quy chức năng cũ | {groups['regression_checks.json']}/{groups['regression_checks.json']} | `regression_checks.json` |
++| Bản sửa release/config/UI V3.6 | {groups['new_regressions.json']}/{groups['new_regressions.json']} | `new_regressions.json` |
++| Chuyển ảnh V3.7 | {groups['frame_transport.json']}/{groups['frame_transport.json']} | `frame_transport.json` |
++
++Tất cả tệp bằng chứng trong `validation_v37/`.
++
++- 30 lượt thả–gắp lại trong acceptance; 20 lượt ném nhẹ; 30 va chạm nhẹ; bốn mép
++  và trần; 60 giây mô phỏng để bình nghỉ. Không xuyên/thoát biên, không recovery.
++- Trình duyệt kiểm tra 25 lượt pinch-release với 5 kiểu bình ở nhiều góc, mở
++  cái–trỏ trong rotate, mất dấu ngắn, mất dấu lâu, nhận lại lẻ và camera stall.
++  Rigid body chuyển dynamic, rơi, nằm trên bàn và gắp lại được.
++- Nghiêng 45/90/135/180/270/360 độ; rót tự động, úp hết 30 mL, vũng tràn, bảo toàn
++  nguồn + nhận + tràn, lưu/mở phiên. Năm bài THPT đi qua điều kiện và thao tác
++  tương ứng; AgCl xuất hiện trong mẫu chloride, nước đối chứng không tạo AgCl.
++- Bốn kích thước cửa sổ, kho phải/selector thu gọn, nhãn không chồng; câu hỏi,
++  lời giải thích và nhật ký opt-in. Không phát hiện lỗi JS/WebGL trong các ca này.
++- MediaPipe CPU thật nhận ảnh qua VideoFrame và ImageBitmap. Bốn ô màu cho pixel
++  gương giống nhau, đúng 640×360; Low 640×480 giữ 4:3. Không gửi hai inference
++  đồng thời. Stop/restart và đổi backend trên cùng video stream hoạt động.
++- Yêu cầu GPU được xử lý bởi delegate **{gpu_result['actual']}** trong lượt thử
++  SwiftShader, model mất **{gpu_result['lastModelMs']:.1f} ms** ở mẫu ghi nhận.
++  Chỉ xác minh đường API hoạt động; không chứng minh GPU phần mềm nhanh. AUTO
++  nhận diện software GL và chọn CPU như trước.
++
++## Ba cặp đo 60 giây
++
++Cùng máy, Chromium, viewport 1366×900; bề mặt render 1022×418; DPR 1; camera/CV
++như trên; 5 bình, một bình di chuyển bằng mã. Tự điều chỉnh chất lượng tắt để
++giữ điều kiện. Thứ tự cặp 1 trước/sau, cặp 2 sau/trước, cặp 3 trước/sau.
++
++| Cặp | Render V3.6 FPS | Render V3.7 FPS | Tracking V3.6 Hz | Tracking V3.7 Hz |
++|---|---:|---:|---:|---:|
++{chr(10).join(pairs)}
++| Trung vị | {b['render_fps']:.2f} | {a['render_fps']:.2f} | {b['tracking_hz']:.2f} | {a['tracking_hz']:.2f} |
++
++Trung vị render tăng **{(a['render_fps']/b['render_fps']-1)*100:.1f}%**. Trung vị
++khoảng cách frame P95: **{b['render_interval_p95_ms']:.1f} → {a['render_interval_p95_ms']:.1f} ms**;
++tuổi mẫu P95: **{b['sample_age_p95_ms']:.1f} → {a['sample_age_p95_ms']:.1f} ms**.
++CPU physics/frame trung vị **{b['physics_cpu_mean_ms']:.2f} → {a['physics_cpu_mean_ms']:.2f} ms**,
++không cải thiện tất cả chỉ số. Tracking từng cặp có cả tăng và giảm; không suy
++ra độ chính xác nhận diện hay tốc độ trên máy thật từ thay đổi trung vị nhỏ này.
++
++**Có một lượt V3.7 bị timeout 70 giây chờ phép đo hoàn tất.** Harness ban đầu
++chưa lưu runtime state nên chưa xác định nguyên nhân; không tuyên bố đã sửa.
++Đã bổ sung chẩn đoán, chạy lại toàn bộ cặp thứ ba; cặp chạy lại hoàn tất và được
++dùng trong bảng. Nhật ký lỗi và lượt V3.6 ban đầu được giữ tại
++`benchmark-after-3-first-failure.log`, `benchmark-before-3-first.json`.
++Không tính lượt timeout là đạt. `benchmark-comparison.json` ghi rõ các lượt.
++
++Mục tiêu **50 FPS chưa đạt** trong các lượt này. Host dùng chung và GPU phần mềm
++có tải biến động. So sánh hiện tại hỗ trợ kết luận giảm chặn luồng giao diện,
++không phải bảo đảm hiệu năng trên mọi cấu hình. Các profile thử từng bước được
++giữ riêng; chúng không thay thế ba cặp đo cuối.
++
++## Chạy liên tục 30 phút thực
++
++`soak.json`: **{soak['durationSeconds']:.2f} giây thực**, {len(rows)} lần ghi trạng
++thái. MediaPipe thật, camera giả lập, render và Rapier chạy cùng nhau. Mỗi phút
++tạo hiệu ứng có điều kiện → dọn bàn → tạo 5 bình → di chuyển/thả một bình.
++Không phải 30 phút thao tác tay người.
++
++- Không JS error, camera fault, body NaN, liquid error hoặc xuyên mặt bàn ở các
++  mốc kiểm tra; độ xuyên lớn nhất ghi nhận {max_pen:.6f} đơn vị scene.
++- Render và inference tiếp tục tạo mẫu ở từng phút; số lần recovery lớn nhất
++  {max(r['recoveryCount'] for r in rows)}. Luôn có 5 bình sau mỗi chu kỳ.
++- Tập số geometry/texture/program ghi nhận: **{gpu_counts}**.
++- JS heap luồng giao diện: **{min(heap):.2f}–{max(heap):.2f} MB**, mẫu cuối
++  **{heap[-1]:.2f} MB**. Có GC; số đo này không bao gồm mọi vùng nhớ của GPU/Worker
++  và không chứng minh tuyệt đối không rò rỉ bộ nhớ.
++- Trung bình cả lượt: **{avg_fps:.2f} FPS render**, **{avg_hz:.2f} Hz tracking**.
++  Từng phút render {min(r['renderFPS'] for r in rows):.2f}–{max(r['renderFPS'] for r in rows):.2f} FPS.
++  Lượt dài dùng DPR 0,75 và kích thước UI tự nhiên, nên không so trực tiếp FPS với
++  bảng DPR 1 ở trên.
++- Khi kết thúc: đóng Worker, dừng mọi video track, running=false; kiểm tra đạt.
++
++## Lỗi phát hiện khi kiểm tra
++
++1. Nút thắt capture CPU trên UI: sửa bằng chuyển VideoFrame; đã đo và kiểm tra
++   pixel/luồng xử lý, có fallback.
++2. Tài nguyên ảnh chưa được đóng khi postMessage thất bại trong mã cũ: bổ sung
++   close/guard, kiểm tra lỗi truyền được tiêm vào. Chưa quan sát lỗi này trên
++   webcam người dùng.
++3. Công cụ test gọi getContextAttributes trên OffscreenCanvas context không có
++   API đó ở Chromium thử nghiệm: sửa harness, kiểm tra pixel trực tiếp; giữ hồ
++   sơ lỗi ở `frame_transport-harness-failure.json`. Không sửa sản phẩm để né test.
++4. Timeout benchmark một lần: chưa tái hiện trong cặp chạy lại; nguyên nhân chưa
++   đủ bằng chứng. Giữ như giới hạn còn tồn tại, không xóa nhật ký lỗi.
++
++## Kiểm tra gói giải nén sạch
++
++Đã giải nén ZIP ứng viên vào thư mục mới và đối chiếu hash các tệp chạy với nguồn
++đã thử. Chạy server và Chromium từ thư mục đó: **12/12 ca core** và **7/7 ca
++chuyển ảnh** đạt, không page error và không dependency runtime tải từ bên ngoài.
++Bằng chứng: `clean-extract/browser_checks.json`, `clean-extract/frame_transport.json`.
++ZIP cuối được kiểm CRC và so khớp lại mã chạy; phần báo cáo/nhật ký được bổ sung
++sau lượt thử, không thay mã sản phẩm.
++
++Lần điều phối đầu tiên của kiểm tra giải nén bị mất phiên thực thi, chưa xuất
++được kết quả đầy đủ. Đã giữ log `clean-core-incomplete-first.log` và chạy lại cả
++hai nhóm; chỉ các lượt hoàn tất được ghi đạt ở trên. Không gán sự gián đoạn công
++cụ này thành một lỗi ứng dụng đã được xác định.
++
++## Chưa kiểm chứng và giới hạn
++
++- Webcam quang học, driver/quyền Windows, tay người, L/R khi giao nhau, độ chính
++  xác gắp ≥9/10 mỗi tay, cảm giác chuyển động và latency đầu–cuối trên máy thật.
++- Tăng tốc GPU phần cứng, native MediaPipe Python ở bản này, trình duyệt khác
++  Chromium đã thử; hỗ trợ VideoFrame không đồng nghĩa mọi thiết bị đều nhanh.
++- Không cam kết 45/50 FPS trên i5-5200U/HD5500. Camera 20/30 FPS không thể cung
++  cấp 50 frame hình mới/giây dù render đạt 50; không nhận diện lặp frame để bù số.
++- Mô hình chất lỏng hình học/bảo toàn, chưa CFD; hiện tượng/hạt phóng đại; tutor
++  quy tắc, chưa mô hình AI huấn luyện hoặc nghiên cứu học sinh có dữ liệu thật.
++
++Làm theo **docs/MANUAL_CHECK_V37.md** để nghiệm thu trên máy đích; ghi rõ những mục
++chưa thử. Dùng JSON đo 60 giây và lỗi đầu tiên trong Console để điều tra tiếp.
++
++## Chạy lại
++
++Chạy sản phẩm: Windows `START_WINDOWS.bat` hoặc
++`py -3.13 server.py --browser-tracking`; Linux `bash START_LINUX.sh`.
++Mở `http://127.0.0.1:8765`, Ctrl+F5, tab phải là V3.7. Không cần npm để sử dụng.
++
++Kiểm tra phát triển: có Node, Python, Playwright/Chromium; NumPy/OpenCV cho các
++test desktop Python. `PLAYWRIGHT_PACKAGE` có thể trỏ tới module Playwright đã cài.
++Ứng dụng không thêm Playwright làm dependency sản phẩm.
++
++```sh
++npm test
++python3 -m unittest discover -s tests
++node tools/physics_acceptance_v34.mjs . validation_v37/physics.json
++node tools/verify_v37.mjs
++BENCH_BASELINE=/duong/dan/V3_6 node tools/compare_v37.mjs
++QA_OUTPUT=validation_v37 SOAK_MINUTES=30 node tools/soak_v36.mjs
++python3 tools/audit_v37.py /duong/dan/V3_6
++python3 tools/report_v37.py
++python3 tools/package_v37.py
++```
++
++QA_OUTPUT cho phép tái sử dụng ca hồi quy V3.6 trên V3.7 mà không chép đè bằng
++chứng cũ. Các thư mục validation phiên bản trước chỉ là lịch sử. Không chạy các
++benchmark trình duyệt đồng thời. ZIP có source, model, thư viện, hướng dẫn,
++patch và kết quả; ảnh QA nội bộ/ảnh người dùng không đóng trong ZIP.
++'''
++(ROOT / "VALIDATION_V37.md").write_text(text, encoding="utf-8")
++print(ROOT / "VALIDATION_V37.md")
+--- a/tools/soak_v36.mjs
++++ b/tools/soak_v36.mjs
+@@ -8,7 +8,7 @@
+ import { fileURLToPath } from "node:url";
+ import assert from "node:assert/strict";
+ const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
+-const out = path.join(root, "validation_v36");
++const out = path.resolve(process.env.QA_OUTPUT || path.join(root, "validation_v36"));
+ await mkdir(out, { recursive: true });
+ const minutes = Number(process.env.SOAK_MINUTES || 30);
+ assert.ok(Number.isFinite(minutes) && minutes >= 1);
+@@ -102,6 +102,7 @@
+     samples.push(row);
+     await writeFile(path.join(out, "soak-progress.json"), JSON.stringify({ samples, errors }, null, 2));
+     assert.ok(state.running && !state.fault, "camera pipeline stopped");
++    assert.ok(row.trackingHz > 0 && row.renderFPS > 0, "render or inference stopped making progress");
+     assert.equal(state.objects, 5);
+     assert.ok(state.bodies.every(b => b.finite && b.penetration < 0.01), "invalid body or penetration");
+     assert.equal(state.liquidError, null);
+@@ -109,12 +110,24 @@
+     console.log(JSON.stringify({ minute: row.minute, fps: row.renderFPS, hz: row.trackingHz,
+       gpuResources: row.gpuResources, heapMB: row.jsHeapUsedBytes / 1e6 }));
+   }
++  const workerClosed = Promise.all(page.workers().map(worker => new Promise((resolve, reject) => {
++    const timer = setTimeout(() => reject(Error("Worker did not close")), 10000);
++    worker.on("close", () => {clearTimeout(timer); resolve();});
++  })));
++  const shutdown = await page.evaluate(() => {
++    const tracks = __lab.capture.video.srcObject.getTracks();
++    __lab.capture.close();
++    return {running: __lab.capture.running, workerCleared: __lab.capture.worker === null,
++      allVideoTracksEnded: tracks.every(track => track.readyState === "ended")};
++  });
++  await workerClosed;
++  assert.deepEqual(shutdown, {running: false, workerCleared: true, allVideoTracksEnded: true});
+   await writeFile(path.join(out, "soak.json"), JSON.stringify({
+     complete: true, requiredMinutes: 30, durationSeconds: (Date.now() - start) / 1000,
+     meets30Minutes: (Date.now() - start) >= 1800000,
+     physicalCameraTested: false, humanHandsTested: false,
+     environment: "Chromium 133 headless SwiftShader; real MediaPipe with synthetic camera; one programmatic movement per minute, engine fire/reset every minute",
+-    samples, errors,
++    samples, errors, shutdown,
+   }, null, 2));
+ } catch (error) {
+   await writeFile(path.join(out, "soak-failure.json"), JSON.stringify({ complete: false,
+--- a/tools/verify_v37.mjs
++++ b/tools/verify_v37.mjs
+@@ -0,0 +1,24 @@
++/** Repeat regression cases against current source. Browser drivers are development-only. */
++import {spawn} from 'node:child_process';
++import {mkdir,writeFile,open} from 'node:fs/promises';
++import path from 'node:path';
++import {fileURLToPath} from 'node:url';
++const root=path.resolve(path.dirname(fileURLToPath(import.meta.url)),'..');
++const out=path.resolve(process.env.QA_OUTPUT||path.join(root,'validation_v37'));
++await mkdir(out,{recursive:true});
++const commands=['qa_core_v36','qa_liquids_v36','qa_regression_v36','qa_v36','qa_transport_v37'];
++const results=[];
++for(const name of commands){
++  console.log('START',name);
++  const log=await open(path.join(out,`${name}.log`),'w');
++  const start=Date.now();
++  const exit=await new Promise((resolve,reject)=>{
++    const child=spawn('node',[`tools/${name}.mjs`],{cwd:root,
++      env:{...process.env,QA_OUTPUT:out},stdio:['ignore',log.fd,log.fd]});
++    child.on('error',reject);child.on('exit',resolve);
++  });
++  await log.close();results.push({name,exit,seconds:(Date.now()-start)/1000});
++  await writeFile(path.join(out,'browser_suite.json'),JSON.stringify({results,complete:results.length===commands.length&&results.every(x=>x.exit===0)},null,2));
++  console.log(exit===0?'PASS':'FAIL',name);
++  if(exit!==0){process.exitCode=1;break;}
++}
+--- a/web/index.html
++++ b/web/index.html
+@@ -3,7 +3,7 @@
+   <head>
+     <meta charset="utf-8" />
+     <meta name="viewport" content="width=device-width,initial-scale=1" />
+-    <title>HoloLab AR · ChemLab V3.6</title>
++    <title>HoloLab AR · ChemLab V3.7</title>
+     <link rel="stylesheet" href="styles.css" />
+     <script type="importmap">
+       { "imports": { "three": "/vendor/three/three.module.js" } }
+@@ -14,7 +14,7 @@
+       <header>
+         <div class="eyebrow">Phòng thí nghiệm ảo</div>
+         <h1>HoloLab <span>AR</span></h1>
+-        <div class="version">Hóa học THPT · Phiên bản 3.6</div>
++        <div class="version">Hóa học THPT · Phiên bản 3.7</div>
+       </header>
+       <section
+         class="lesson-picker"
+--- a/web/src/capture.js
++++ b/web/src/capture.js
+@@ -33,6 +33,8 @@
+     this.initCancel = null;
+     this.activeFrame = null;
+     this.lastInputSize = null;
++    this.videoFrameDisabled = false;
++    this.lastCaptureMs = null;
+     this.onReconfigure = () => {};
+   }
+   async init() {
+@@ -193,6 +195,8 @@
+       inference_width: this.inferenceWidth,
+       input_width: this.lastInputSize?.width || 0,
+       input_height: this.lastInputSize?.height || 0,
++      transport: this.frameTransport || null,
++      capture_ms: this.lastCaptureMs,
+       note: this.cameraNote,
+     };
+   }
+@@ -287,46 +291,52 @@
+     const height = Math.round(
+       (width * this.video.videoHeight) / this.video.videoWidth,
+     );
++    const captureStart = performance.now();
++    let bitmap = null;
+     try {
+-      // VideoFrame can transfer decoded pixels without an extra ImageBitmap copy.
+-      let bitmap;
+-      if (this.delegate === "GPU" && typeof VideoFrame !== "undefined") {
++      // Transfer the decoded frame for CPU/native delegates too. Resizing an
++      // ImageBitmap on the UI thread can wait for GPU readback and stall render.
++      // Worker drawImage still performs the SAME resize and mirror before CV.
++      for (let attempt = 0; attempt < 2; attempt++) {
++        if (!this.videoFrameDisabled && typeof VideoFrame !== "undefined") {
++          try {
++            bitmap = new VideoFrame(this.video, {timestamp: Math.round(now * 1000)});
++            this.frameTransport = "VideoFrame";
++          } catch {
++            this.videoFrameDisabled = true;
++          }
++        }
++        if (!bitmap) {
++          bitmap = await createImageBitmap(this.video, {
++            resizeWidth: width, resizeHeight: height, resizeQuality: "low",
++          });
++          this.frameTransport = "ImageBitmap";
++        }
++        if (!this.running || epoch !== this.epoch) {
++          bitmap.close(); bitmap = null;
++          if (this.activeFrame === ticket) this.finishFrame(ticket);
++          return;
++        }
++        this.lastInputSize = {width, height};
++        this.lastCaptureMs = performance.now() - captureStart;
+         try {
+-          bitmap = new VideoFrame(this.video, {
+-            timestamp: Math.round(now * 1000),
+-          });
+-          this.frameTransport = "VideoFrame";
+-        } catch {}
++          this.worker.postMessage({
++            type: "frame", bitmap, width, height,
++            sequence: ticket.sequence, epoch, timestamp: now,
++            capturedAt: performance.timeOrigin + now,
++            postedAt: performance.timeOrigin + performance.now(),
++            captureMs: this.lastCaptureMs,
++          }, [bitmap]);
++          bitmap = null; // the worker owns and closes the transferred resource
++          return;
++        } catch (error) {
++          bitmap.close(); bitmap = null;
++          if (this.frameTransport !== "VideoFrame") throw error;
++          this.videoFrameDisabled = true; // unsupported transfer: retry once
++        }
+       }
+-      if (!bitmap) {
+-        bitmap = await createImageBitmap(this.video, {
+-          resizeWidth: width,
+-          resizeHeight: height,
+-          resizeQuality: "low",
+-        });
+-        this.frameTransport = "ImageBitmap";
+-      }
+-      if (!this.running || epoch !== this.epoch) {
+-        bitmap.close();
+-        if (this.activeFrame === ticket) this.finishFrame(ticket);
+-        return;
+-      }
+-      this.lastInputSize = {width,height};
+-      // monotonic wall clock avoids timestamps going backwards when a video loops.
+-      this.worker.postMessage(
+-        {
+-          type: "frame",
+-          bitmap,
+-          width,
+-          height,
+-          sequence: ticket.sequence,
+-          epoch,
+-          timestamp: now,
+-          capturedAt: performance.timeOrigin + now,
+-        },
+-        [bitmap],
+-      );
+     } catch (error) {
++      bitmap?.close();
+       if (this.activeFrame === ticket) this.finishFrame(ticket);
+       this.onStatus(`Không lấy được ảnh: ${error.message}`);
+     }
+--- a/web/src/hand-worker.js
++++ b/web/src/hand-worker.js
+@@ -4,8 +4,16 @@
+   slowGpuFrames = 0,
+   lastTimestamp = -1,
+   native = false;
+-const input = new OffscreenCanvas(1, 1),
+-  context = input.getContext("2d", { alpha: false });
++let input = null, context = null, cpuInput = null;
++function prepareInput() {
++  const cpu = native || delegate === "CPU";
++  if (context && cpuInput === cpu) return;
++  // CPU inference reads pixels. Keep its preprocessing canvas in CPU memory
++  // rather than synchronizing an accelerated 2D surface with a GL readback.
++  input = new OffscreenCanvas(1, 1);
++  context = input.getContext("2d", {alpha: false, willReadFrequently: cpu});
++  cpuInput = cpu;
++}
+ self.onmessage = async ({ data }) => {
+   if (data.type === "init") {
+     try {
+@@ -87,8 +95,12 @@
+     lastTimestamp = timestamp;
+     try {
+       const start = performance.now();
++      const captureMs = data.captureMs ?? null;
++      const queueMs = data.postedAt == null ? null : Math.max(0,
++        performance.timeOrigin + start - data.postedAt);
+       const width = data.width || bitmap.displayWidth || bitmap.width,
+         height = data.height || bitmap.displayHeight || bitmap.height;
++      prepareInput();
+       if (input.width !== width || input.height !== height) {
+         input.width = width;
+         input.height = height;
+@@ -96,6 +108,7 @@
+       // Detector always receives selfie-mirrored pixels. UI mirroring is independent.
+       context.setTransform(-1, 0, 0, 1, input.width, 0);
+       context.drawImage(bitmap, 0, 0, input.width, input.height);
++      const preprocessMs = performance.now() - start;
+       if (native) {
+         const jpeg = await input.convertToBlob({
+           type: "image/jpeg",
+@@ -124,10 +137,16 @@
+           width,
+           height,
+           transportMs: performance.now() - start - result.inferenceMs,
++          captureMs,
++          queueMs,
++          preprocessMs,
++          modelMs: result.inferenceMs,
+         });
+         return;
+       }
++      const detectStart = performance.now();
+       const result = model.detectForVideo(input, timestamp);
++      const modelMs = performance.now() - detectStart;
+       const inferenceMs = performance.now() - start;
+       // A supported GPU can still be slower than CPU (software GL, driver issues).
+       if (preference === "AUTO" && delegate === "GPU") {
+@@ -146,6 +165,10 @@
+         delegate,
+         epoch,
+         inferenceMs,
++        captureMs,
++        queueMs,
++        preprocessMs,
++        modelMs,
+         width,
+         height,
+         hands: result.landmarks.map((landmarks, i) => ({
+--- a/web/src/main.js
++++ b/web/src/main.js
+@@ -736,7 +736,7 @@
+     ageMs: latestResult?.ageMs || 0,
+   });
+   const lastFrame = metrics.renders.at(-1), prevFrame = metrics.renders.at(-2);
+-  setText($("pipeline-metrics"), `Xử lý mẫu: ${latestResult?.inferenceMs?.toFixed(1) ?? "—"} ms · Frame render: ${lastFrame && prevFrame ? (lastFrame.t-prevFrame.t).toFixed(1) : "—"} ms · Xác nhận cử chỉ gần nhất: ${metrics.gestures.at(-1)?.debounceMs?.toFixed(0) ?? "—"} ms · Physics: bước 120 Hz (thời gian mô phỏng) · Giới hạn tracking ${capture.maxHz} Hz, camera ${Math.round(cam.settings.frameRate || 0)} FPS. Độ trễ đầu–cuối: chưa đo.`);
++  setText($("pipeline-metrics"), `Lấy ảnh ${cam.transport || "—"}: ${latestResult?.captureMs?.toFixed(1) ?? "—"} ms · Chờ Worker: ${latestResult?.queueMs?.toFixed(1) ?? "—"} ms · Chuẩn bị ảnh: ${latestResult?.preprocessMs?.toFixed(1) ?? "—"} ms · MediaPipe: ${latestResult?.modelMs?.toFixed(1) ?? "—"} ms · Frame render: ${lastFrame && prevFrame ? (lastFrame.t-prevFrame.t).toFixed(1) : "—"} ms · Xác nhận cử chỉ gần nhất: ${metrics.gestures.at(-1)?.debounceMs?.toFixed(0) ?? "—"} ms · Physics: bước 120 Hz (thời gian mô phỏng) · Giới hạn tracking ${capture.maxHz} Hz, camera ${Math.round(cam.settings.frameRate || 0)} FPS. Độ trễ đầu–cuối: chưa đo.`);
+   inspector();
+   if (metrics.current) {
+     const remain = Math.max(0, 60 - (now - metrics.current.start) / 1000);
+--- a/web/src/metrics.js
++++ b/web/src/metrics.js
+@@ -20,6 +20,10 @@
+     const row = {
+       t,
+       inferenceMs: data.inferenceMs,
++      captureMs: data.captureMs ?? null,
++      queueMs: data.queueMs ?? null,
++      preprocessMs: data.preprocessMs ?? null,
++      modelMs: data.modelMs ?? null,
+       transportMs: data.transportMs ?? null,
+       ageMs: data.ageMs,
+       hands: data.hands.length,
+@@ -85,6 +89,10 @@
+       tracking_hz: run.track.length / duration,
+       detected_samples: run.track.filter((x) => x.hands > 0).length,
+       inference_mean_ms: mean(run.track.map((x) => x.inferenceMs)),
++      capture_mean_ms: mean(run.track.map(x => x.captureMs).filter(x => x !== null)),
++      worker_queue_mean_ms: mean(run.track.map(x => x.queueMs).filter(x => x !== null)),
++      preprocess_mean_ms: mean(run.track.map(x => x.preprocessMs).filter(x => x !== null)),
++      model_mean_ms: mean(run.track.map(x => x.modelMs).filter(x => x !== null)),
+       transport_mean_ms: mean(
+         run.track.map((x) => x.transportMs).filter((x) => x !== null),
+       ),

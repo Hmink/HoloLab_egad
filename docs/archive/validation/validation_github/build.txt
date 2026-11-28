@@ -1,0 +1,13 @@
+npm warn Unknown env config "http-proxy". This will stop working in the next major version of npm.
+
+> hololab-ar-v3@3.9.0 build
+> vite build
+
+vite v7.2.2 building client environment for production...
+transforming...
+✓ 21 modules transformed.
+rendering chunks...
+computing gzip size...
+web/ui/hololab-ar-v3.css    5.85 kB │ gzip:  1.75 kB
+web/ui/shell.js           326.43 kB │ gzip: 75.45 kB
+✓ built in 1.02s

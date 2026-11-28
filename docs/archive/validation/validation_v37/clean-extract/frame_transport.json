@@ -1,0 +1,98 @@
+{
+  "physicalCameraTested": false,
+  "humanHandsTested": false,
+  "environment": "Chromium 133 / SwiftShader; actual CPU MediaPipe model, generated color quadrants and fake webcam",
+  "checks": [
+    {
+      "name": "Real CPU Worker: VideoFrame, correct mirror and 640×360 input, single result",
+      "passed": true,
+      "transport": "VideoFrame",
+      "sequence": 1,
+      "busy": false,
+      "timing": {
+        "capture": 1.7000000029802322,
+        "queue": 3.900146484375,
+        "preprocess": 796,
+        "model": 870.6999999955297
+      },
+      "hands": 0
+    },
+    {
+      "name": "Real CPU Worker: ImageBitmap, correct mirror and 640×360 input, single result",
+      "passed": true,
+      "transport": "ImageBitmap",
+      "sequence": 2,
+      "busy": false,
+      "timing": {
+        "capture": 0.5,
+        "queue": 0.599853515625,
+        "preprocess": 0.10000000149011612,
+        "model": 1250.3999999985099
+      },
+      "hands": 0
+    },
+    {
+      "name": "Live synthetic HD video -> real MediaPipe CPU using VideoFrame",
+      "passed": true,
+      "requested": "HD",
+      "applied": "HD",
+      "auto": false,
+      "settings": {
+        "width": 1280,
+        "height": 720,
+        "frameRate": 20,
+        "aspectRatio": 1.7777777777777777,
+        "resizeMode": "none",
+        "focusMode": "manual"
+      },
+      "video_width": 1280,
+      "video_height": 720,
+      "inference_width": 640,
+      "input_width": 640,
+      "input_height": 360,
+      "transport": "VideoFrame",
+      "capture_ms": 0,
+      "note": ""
+    },
+    {
+      "name": "Real ImageBitmap fallback and 4:3 Low preserve capture/input aspect",
+      "passed": true,
+      "requested": "LOW",
+      "applied": "LOW",
+      "auto": false,
+      "settings": {
+        "width": 640,
+        "height": 480,
+        "frameRate": 20,
+        "aspectRatio": 1.3333333333333333,
+        "resizeMode": "none",
+        "focusMode": "manual"
+      },
+      "video_width": 640,
+      "video_height": 480,
+      "inference_width": 640,
+      "input_width": 640,
+      "input_height": 480,
+      "transport": "ImageBitmap",
+      "capture_ms": 131.90000000596046,
+      "note": ""
+    },
+    {
+      "name": "Stop/restart restores HD VideoFrame capture and displays separate stage metrics",
+      "passed": true
+    },
+    {
+      "name": "Request GPU backend on live stream: actual delegate produces result, canvas hint matches delegate",
+      "passed": true,
+      "requested": "GPU",
+      "actual": "GPU",
+      "transport": "VideoFrame",
+      "lastModelMs": 7156.29999999702
+    },
+    {
+      "name": "No page runtime errors",
+      "passed": true
+    }
+  ],
+  "errors": []
+}

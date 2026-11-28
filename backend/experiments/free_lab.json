@@ -1,0 +1,26 @@
+{
+  "schema": "chemlab3d-experiment-1",
+  "allow_risk": true,
+  "objects": [
+    {
+      "stock": "beaker",
+      "x_norm": 0.28,
+      "y_norm": 0.68
+    },
+    {
+      "stock": "flask",
+      "x_norm": 0.13,
+      "y_norm": 0.24
+    },
+    {
+      "stock": "hcl",
+      "x_norm": 0.46,
+      "y_norm": 0.24
+    },
+    {
+      "stock": "naoh",
+      "x_norm": 0.79,
+      "y_norm": 0.24
+    }
+  ]
+}

@@ -1,0 +1,306 @@
+{
+  "chloride": {
+    "version": 1,
+    "concepts": [
+      {
+        "id": "chloride-core",
+        "title": "Bản chất kết tủa AgCl",
+        "criteria": [
+          {
+            "text": "AgCl là kết tủa trắng",
+            "patterns": [
+              "agcl.*(ket tua|ran).*trang",
+              "ket tua trang.*agcl"
+            ],
+            "reject": [
+              "khong.*(ket tua|trang)"
+            ]
+          },
+          {
+            "text": "Ag⁺ kết hợp Cl⁻ tạo chất ít tan",
+            "patterns": [
+              "ag.*cl.*(it tan|khong tan)",
+              "(it tan|khong tan).*agcl"
+            ]
+          }
+        ],
+        "wrong": [
+          "(khi|hoi) trang",
+          "nano3.*ket tua"
+        ],
+        "followup": "Chất trắng là chất rắn hay khí? Những ion nào tạo nên chất đó?"
+      }
+    ]
+  },
+  "indicator": {
+    "version": 1,
+    "concepts": [
+      {
+        "id": "indicator-core",
+        "title": "Màu chỉ thị và pH",
+        "criteria": [
+          {
+            "text": "Phenolphthalein hồng trong kiềm",
+            "patterns": [
+              "(phenolphthalein|chi thi|pp).*hong.*(kiem|base|bazo)",
+              "(kiem|base|bazo).*hong"
+            ],
+            "reject": [
+              "khong.*hong"
+            ]
+          },
+          {
+            "text": "Không màu không khẳng định pH = 7",
+            "patterns": [
+              "khong mau.*khong.*(7|trung tinh)",
+              "khong mau.*(acid|axit).*trung tinh"
+            ]
+          }
+        ],
+        "wrong": [
+          "khong mau.*luon.*(7|trung tinh)"
+        ],
+        "followup": "Nếu dung dịch không màu, có chắc pH bằng 7 không? Giải thích."
+      }
+    ]
+  },
+  "ammonium": {
+    "version": 1,
+    "concepts": [
+      {
+        "id": "ammonium-core",
+        "title": "Nhận biết NH₄⁺ qua NH₃",
+        "criteria": [
+          {
+            "text": "NH₃ được tạo ra khi thêm kiềm",
+            "patterns": [
+              "nh3.*(kiem|naoh|oh)",
+              "(kiem|naoh|oh).*nh3"
+            ]
+          },
+          {
+            "text": "Thử khí bằng quỳ đỏ ẩm hóa xanh",
+            "patterns": [
+              "quy.*am.*xanh",
+              "quy.*xanh.*am"
+            ]
+          }
+        ],
+        "wrong": [
+          "nh3.*(mau xanh|ket tua)",
+          "ket tua trang"
+        ],
+        "followup": "Vì sao đặt quỳ đỏ ẩm trên miệng bình mà không nhúng vào dung dịch?"
+      }
+    ]
+  },
+  "iron-copper": {
+    "version": 1,
+    "concepts": [
+      {
+        "id": "iron-copper-core",
+        "title": "Sự nhường và nhận electron",
+        "criteria": [
+          {
+            "text": "Fe nhường electron, bị oxi hóa",
+            "patterns": [
+              "fe.*(nhuong|mat).*electron",
+              "sat.*(nhuong|mat).*electron",
+              "fe.*bi oxi hoa"
+            ],
+            "reject": [
+              "khong.*(nhuong|oxi hoa)"
+            ]
+          },
+          {
+            "text": "Cu²⁺ nhận electron tạo Cu",
+            "patterns": [
+              "cu.*nhan.*electron",
+              "dong.*nhan.*electron"
+            ]
+          }
+        ],
+        "wrong": [
+          "fe.*nhan.*electron",
+          "cu.*nhuong.*electron"
+        ],
+        "followup": "Fe và Cu²⁺, chất nào nhường electron và chất nào nhận?"
+      }
+    ]
+  },
+  "biuret": {
+    "version": 1,
+    "concepts": [
+      {
+        "id": "biuret-core",
+        "title": "Phức Cu(II)–peptide",
+        "criteria": [
+          {
+            "text": "Phức màu tím liên quan liên kết peptide",
+            "patterns": [
+              "(peptide|peptit).*tim",
+              "tim.*(peptide|peptit)"
+            ]
+          },
+          {
+            "text": "Có Cu(II) và môi trường kiềm",
+            "patterns": [
+              "cu.*kiem",
+              "kiem.*cu"
+            ]
+          }
+        ],
+        "wrong": [
+          "ket tua tim",
+          "khi tim"
+        ],
+        "followup": "Màu tím là phức trong dung dịch hay kết tủa? Cần điều kiện gì?"
+      }
+    ]
+  },
+  "neutralization": {
+    "version": 1,
+    "concepts": [
+      {
+        "id": "neutralization-core",
+        "title": "Trung hòa và chất dư",
+        "criteria": [
+          {
+            "text": "H⁺ và OH⁻ tạo nước",
+            "patterns": [
+              "h.*oh.*(h2o|nuoc)"
+            ]
+          },
+          {
+            "text": "Trung hòa theo số mol, không chỉ thể tích",
+            "patterns": [
+              "(mol|luong chat).*(bang|1.?1|tuong duong)",
+              "khong.*chi.*the tich"
+            ]
+          }
+        ],
+        "wrong": [
+          "cung the tich.*luon.*trung tinh"
+        ],
+        "followup": "Hai dung dịch có cùng thể tích nhưng khác nồng độ có luôn trung hòa hết nhau không?"
+      }
+    ]
+  },
+  "copper-hydroxide": {
+    "version": 1,
+    "concepts": [
+      {
+        "id": "copper-hydroxide-core",
+        "title": "Kết tủa Cu(OH)₂",
+        "criteria": [
+          {
+            "text": "Kết tủa xanh Cu(OH)₂",
+            "patterns": [
+              "cu\\(oh\\)2.*(ket tua|ran).*xanh",
+              "ket tua xanh.*cu\\(oh\\)2"
+            ]
+          },
+          {
+            "text": "Tỉ lệ Cu²⁺ : OH⁻ là 1:2",
+            "patterns": [
+              "1\\s*[:/]\\s*2",
+              "(hai|2).*oh"
+            ]
+          }
+        ],
+        "wrong": [
+          "cu\\(oh\\)2.*(khi|trang)"
+        ],
+        "followup": "Một mol Cu²⁺ cần bao nhiêu mol OH⁻ để kết tủa hết?"
+      }
+    ]
+  },
+  "calcium-carbonate": {
+    "version": 1,
+    "concepts": [
+      {
+        "id": "calcium-carbonate-core",
+        "title": "Kết tủa CaCO₃",
+        "criteria": [
+          {
+            "text": "CaCO₃ là kết tủa trắng",
+            "patterns": [
+              "caco3.*ket tua.*trang",
+              "ket tua trang.*caco3"
+            ]
+          },
+          {
+            "text": "Ca²⁺ kết hợp CO₃²⁻",
+            "patterns": [
+              "ca.*co3"
+            ]
+          }
+        ],
+        "wrong": [
+          "caco3.*khi",
+          "nacl.*ket tua"
+        ],
+        "followup": "Ion nào tạo kết tủa? Na⁺ và Cl⁻ có vai trò gì?"
+      }
+    ]
+  },
+  "carbon-dioxide": {
+    "version": 1,
+    "concepts": [
+      {
+        "id": "carbon-dioxide-core",
+        "title": "Acid tác dụng hydrogencarbonate",
+        "criteria": [
+          {
+            "text": "Khí thoát ra là CO₂",
+            "patterns": [
+              "(khi|bot).*co2",
+              "co2.*(khi|bot)"
+            ]
+          },
+          {
+            "text": "Sản phẩm có nước và sodium acetate",
+            "patterns": [
+              "(ch3coona|acetate|axetat).*(nuoc|h2o)",
+              "(nuoc|h2o).*(ch3coona|acetate|axetat)"
+            ]
+          }
+        ],
+        "wrong": [
+          "(khi|bot).*\\bh2\\b"
+        ],
+        "followup": "Khí sinh ra là gì? Viết các sản phẩm còn lại."
+      }
+    ]
+  },
+  "dilution": {
+    "version": 1,
+    "concepts": [
+      {
+        "id": "dilution-core",
+        "title": "Bảo toàn chất tan khi pha loãng",
+        "criteria": [
+          {
+            "text": "Số mol chất tan không đổi",
+            "patterns": [
+              "(mol|luong chat tan).*khong doi",
+              "bao toan.*(mol|chat tan)"
+            ]
+          },
+          {
+            "text": "Thể tích tăng làm nồng độ giảm",
+            "patterns": [
+              "the tich.*tang.*nong do.*giam",
+              "nong do.*giam.*the tich.*tang"
+            ]
+          }
+        ],
+        "wrong": [
+          "pha loang.*tao.*chat moi",
+          "them nuoc.*mol.*tang"
+        ],
+        "followup": "Khi thêm nước, đại lượng nào giữ nguyên và đại lượng nào giảm?"
+      }
+    ]
+  }
+}

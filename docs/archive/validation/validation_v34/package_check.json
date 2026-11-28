@@ -1,0 +1,69 @@
+{
+  "date": "2026-10-27",
+  "zip_crc_ok": true,
+  "flat_zip_root": true,
+  "runtime_hashes_verified": 99,
+  "runtime_manifest_sha256": "6dd3cd4b5d340482208c648364bac3f15b2d8383fca6d65ae90b5bc02a5e6fa4",
+  "server_command": "python3 -S server.py --no-browser --browser-tracking --port 8785",
+  "platform": "Linux; Windows BAT not executed",
+  "external_python_packages": false,
+  "health": {
+    "ok": true,
+    "version": "3.4.0"
+  },
+  "lessons": [
+    {
+      "id": "chloride",
+      "objects": 3,
+      "screen": true,
+      "stocks": [
+        "lesson-chloride",
+        "lesson-silver",
+        "lesson-control"
+      ]
+    },
+    {
+      "id": "indicator",
+      "objects": 3,
+      "screen": true,
+      "stocks": [
+        "lesson-indicator",
+        "lesson-base",
+        "lesson-acid"
+      ]
+    },
+    {
+      "id": "ammonium",
+      "objects": 3,
+      "screen": true,
+      "stocks": [
+        "lesson-ammonium",
+        "lesson-base",
+        "lesson-litmus"
+      ]
+    },
+    {
+      "id": "iron-copper",
+      "objects": 2,
+      "screen": true,
+      "stocks": [
+        "lesson-copper",
+        "lesson-iron"
+      ]
+    },
+    {
+      "id": "biuret",
+      "objects": 3,
+      "screen": true,
+      "stocks": [
+        "lesson-protein",
+        "lesson-biuret",
+        "lesson-control"
+      ]
+    }
+  ],
+  "page_errors": [],
+  "request_failures": [],
+  "physical_webcam": false,
+  "note": "Extracted runtime verified. Final archive differs only by this validation record; runtime manifest rechecked after repack."
+}

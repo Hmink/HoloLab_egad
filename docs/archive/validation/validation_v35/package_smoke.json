@@ -1,0 +1,53 @@
+{
+  "zip_crc_passed": true,
+  "flat_root": true,
+  "verified_runtime_files": 1770,
+  "physical_camera_tested": false,
+  "checks": [
+    {
+      "command": [
+        "npm",
+        "test"
+      ],
+      "exit_code": 0,
+      "elapsed_s": 2.33
+    },
+    {
+      "command": [
+        "python",
+        "-m",
+        "unittest",
+        "discover",
+        "-s",
+        "tests"
+      ],
+      "exit_code": 0,
+      "elapsed_s": 2.12
+    },
+    {
+      "command": [
+        "node",
+        "tools/qa_v35.mjs"
+      ],
+      "exit_code": 0,
+      "elapsed_s": 15.54
+    },
+    {
+      "command": [
+        "node",
+        "tools/qa_core_v35.mjs"
+      ],
+      "exit_code": 0,
+      "elapsed_s": 12.72
+    },
+    {
+      "command": [
+        "node",
+        "tools/qa_regression_v35.mjs"
+      ],
+      "exit_code": 0,
+      "elapsed_s": 3.49
+    }
+  ],
+  "passed": true
+}

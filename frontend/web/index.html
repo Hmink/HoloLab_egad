@@ -1,0 +1,434 @@
+<!doctype html>
+<html lang="vi">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <title>HoloLab AR · ChemLab V3.9 · Chuột</title>
+    <link rel="stylesheet" href="styles.css" /><link rel="stylesheet" href="/ui/hololab-ar-v3.css" />
+    <script type="importmap">
+      { "imports": { "three": "/vendor/three/three.module.js" } }
+    </script>
+  </head>
+  <body>
+    <aside id="inventory">
+      <header>
+        <div class="eyebrow">Phòng thí nghiệm ảo</div>
+        <h1>HoloLab <span>AR</span></h1>
+        <a href="/egad-pilot.html" target="_blank" rel="noopener">EGAD · Mô hình thử nghiệm</a><div class="version">Hóa học THPT · Phiên bản 3.9</div>
+      </header>
+      <section
+        class="lesson-picker"
+        aria-label="Chọn bài thực hành Hóa học THPT"
+      >
+        <h2>Thư viện thí nghiệm</h2>
+        <label>1. Khối lớp<select id="lesson-grade"></select></label>
+        <label>2. Chủ đề<select id="lesson-topic"></select></label>
+        <label>3. Thí nghiệm<select id="lesson-select"></select></label>
+        <p id="lesson-preview"></p>
+        <button id="lesson-start" class="primary wide">
+          Bắt đầu thực hành
+        </button>
+        <button id="lesson-exit" class="wide">Về bàn tự do</button>
+      </section>
+
+    </aside>
+    <main>
+      <div class="topbar">
+        <div>
+          <div class="eyebrow">Thực hành khoa học</div>
+          <h2 id="lab-title">Bàn thí nghiệm 3D</h2>
+        </div>
+      </div>
+      <div class="toolbar">
+        <button id="supplies-toggle" aria-expanded="true">Kho bên phải</button><button id="sidebar-toggle" aria-expanded="true">Chọn bài</button
+        >
+        <button id="start-camera" class="primary">Bật camera</button
+        ><button id="stop-camera">Dừng</button
+        ><label class="assist-toggle" title="Giữ vật ngay dưới tay, giữ nguyên độ sâu, tự căn miệng bình khi đưa lại gần; giữ yên tay để rót"
+          ><input id="hand-assist" type="checkbox" checked /> Hỗ trợ tay</label
+        ><input id="video-file" type="file" accept="video/*" hidden /><button
+          id="fullscreen"
+        >
+          Toàn màn hình</button
+        >
+      </div>
+      <div class="camera-deck">
+        <div id="camera-preview">
+          <video id="camera" autoplay muted playsinline></video
+          ><span>Camera gương · Hai tay</span>
+        </div>
+        <div id="hand-status">
+          <div id="hand-a">Tay A · chưa nhận diện</div>
+          <div id="hand-b">Tay B · chưa nhận diện</div>
+        </div>
+      </div>
+      <div id="settings-notice" role="status"></div>
+      <section id="workspace">
+        <div id="three"></div>
+        <div id="labels"></div>
+        <div id="valve-marker" hidden>Chụm và xoay van ↻</div>
+        <div class="room-caption" hidden>
+          Bàn thực hành 01 <span>Môi trường mô phỏng</span>
+        </div>
+        <div id="empty">
+          Chọn bài thực hành để bắt đầu<span
+            >Mở Thư viện để chọn bài, hoặc kéo dụng cụ từ kho bên phải</span
+          >
+        </div>
+        <div id="alert" hidden></div>
+      </section>
+      <section id="lesson-panel" hidden>
+        <div class="lesson-summary">
+          <div>
+            <span id="lesson-step"></span>
+            <p id="lesson-status" role="status"></p>
+          </div>
+          <label class="projection-control"
+            >Màn chiếu<select id="projection-page">
+              <option value="0">Thực hành</option>
+              <option value="1">Chuẩn bị</option>
+              <option value="2">Giải thích</option>
+              <option value="3">Ứng dụng</option>
+            </select></label
+          ><button id="lesson-quiz" disabled>Củng cố kiến thức</button
+          ><button id="lesson-restart">Làm lại bài</button>
+        </div>
+        <details id="lesson-knowledge">
+          <summary>Hướng dẫn thao tác &amp; kiến thức hóa học</summary>
+          <div class="lesson-knowledge-grid">
+            <div>
+              <h3>Mục tiêu</h3>
+              <p id="lesson-objective"></p>
+              <ol id="lesson-steps"></ol>
+              <h3>Phương trình / sơ đồ dự đoán</h3>
+              <p id="lesson-equation"></p>
+              <h3>Quan sát hiện tại</h3>
+              <p id="lesson-observed"></p>
+            </div>
+            <div>
+              <h3>Giải thích</h3>
+              <p id="lesson-explanation"></p>
+              <h3>Ứng dụng</h3>
+              <p id="lesson-application"></p>
+              <h3>An toàn</h3>
+              <p id="lesson-safety"></p>
+              <h3>Giới hạn mô hình</h3>
+              <p id="lesson-limits"></p>
+              <div id="lesson-sources"></div>
+            </div>
+          </div>
+        </details>
+      </section>
+      <section id="titration-panel" hidden>
+        <div class="t-readings">
+          <div>pH <strong id="t-ph">1.00</strong></div>
+          <div>Đã thêm <strong id="t-used">0.00 mL</strong></div>
+          <canvas id="t-chart" width="260" height="80"></canvas>
+        </div>
+        <div id="t-config"></div>
+        <div class="controls">
+          <label
+            >Van
+            <input
+              id="t-valve"
+              type="range"
+              min="0"
+              max="1"
+              step=".01"
+              value="0" /></label
+          ><button id="t-close">Đóng van</button
+          ><button id="t-drop">+ 0,05 mL</button
+          ><button id="t-export">Xuất số liệu</button>
+        </div>
+        <p id="t-feedback"></p>
+        <details>
+          <summary>Thiết lập mẫu mới / hướng dẫn</summary>
+          <div class="controls">
+            <label
+              >Axit
+              <select id="t-acid">
+                <option>HCl</option>
+                <option>HNO3</option>
+                <option>CH3COOH</option>
+              </select></label
+            ><label
+              >M
+              <input
+                id="t-acid-m"
+                type="number"
+                min=".001"
+                max="1"
+                step=".01"
+                value=".1" /></label
+            ><label
+              >mL
+              <input id="t-volume" type="number" min="1" max="100" value="25"
+            /></label>
+            <label
+              >Bazơ
+              <select id="t-base">
+                <option>NaOH</option>
+                <option>KOH</option>
+              </select></label
+            ><label
+              >M
+              <input
+                id="t-base-m"
+                type="number"
+                min=".001"
+                max="1"
+                step=".01"
+                value=".1" /></label
+            ><button id="t-reset">Nạp mẫu / Đặt lại</button>
+          </div>
+          <p>
+            Trạm cố định: đưa con trỏ vào nhãn VAN, chụm rồi xoay cổ tay theo
+            chiều mở. Mở tay hoặc mất dấu sẽ đóng van. Có thể dùng thanh Van
+            bằng chuột. Buret 50 mL; chỉ thị phenolphthalein. Mô hình dung dịch
+            lý tưởng 25 °C; không mô phỏng hoạt độ, trộn chậm hay thể tích giọt
+            thực tế.
+          </p>
+        </details>
+      </section>
+      <details id="learning-panel">
+        <summary>EGAD · Giải thích và tự kiểm tra</summary>
+        <p><strong>Đánh giá theo tiêu chí từng bài</strong> · Chạy trên máy, không cần khóa API. Nhãn là dự đoán, không phải điểm của giáo viên.</p>
+        <p id="tutor-feedback" role="status">Chọn bài thực hành để nhận gợi ý.</p>
+        <label><input type="checkbox" id="learning-consent" /> Tôi đồng ý ghi sự kiện thực hành trong phiên này trên máy.</label>
+        <p id="learning-status">Không ghi dữ liệu. Không lưu video, danh tính hoặc điểm bàn tay.</p>
+        <label>Thời điểm <select id="learning-stage"><option value="prediction">Dự đoán trước thí nghiệm</option><option value="explanation">Giải thích sau quan sát</option></select></label>
+        <label for="learning-response">Lời giải thích (không nhập tên hoặc thông tin cá nhân)</label>
+        <textarea id="learning-response" maxlength="1000" rows="3"></textarea>
+        <label><input type="checkbox" id="egad-local-model" /> Phân tích thêm bằng llama.cpp trên máy (cần cài mô hình riêng)</label>
+        <p id="egad-local-status" role="status"></p><div id="egad-local-result"></div>
+        <div id="egad-results" aria-live="polite"></div>
+        <div class="controls"><button id="learning-save-answer">Phân tích câu trả lời</button><button id="learning-export">Xuất nhật ký</button><button id="learning-clear">Xóa nhật ký</button></div>
+      </details>
+      <details id="practice-options"><summary>Thông tin bình &amp; tùy chọn điều khiển</summary>
+      <div id="inspector">
+        <strong id="object-name">Chưa chọn dụng cụ</strong
+        ><span id="object-metrics"
+          >Chọn bình để xem lượng chất, nhiệt độ và trạng thái mô hình.</span
+        ><span id="object-species"></span>
+      </div>
+      <div id="message" role="status">
+        Đang tải lõi hóa học và dữ liệu dụng cụ…
+      </div>
+      <div class="controls interaction-controls">
+        <label><input id="mirror" type="checkbox" checked /> Lật gương</label
+        ><label
+          >Vùng tay
+          <select id="reach">
+            <option value=".035">Gần toàn ảnh</option>
+            <option value=".12">Vừa</option>
+            <option value=".2">Dễ với</option>
+          </select></label
+        ><label
+          >Thao tác
+          <select id="gesture-mode">
+            <option value="move">Kéo / nghiêng / sâu</option>
+            <option value="rotate">Xoay 3D</option>
+          </select></label
+        ><button id="park">Đặt bình</button><button id="clear">Dọn bàn</button>
+      </div>
+      <div class="controls camera-options">
+        <label
+          >Camera
+          <select id="camera-quality">
+            <option value="LOW">Low · 640×480</option>
+            <option value="HD" selected>HD · 1280×720</option>
+            <option value="FHD">Full HD · 1920×1080</option>
+          </select></label
+        ><label
+          ><input id="camera-auto" type="checkbox" checked /> Tự giảm khi tải
+          cao</label
+        ><span id="camera-resolution">Camera chưa bật</span>
+      </div>
+      </details>
+      <details id="extra-tools"><summary>Công cụ bổ sung</summary><div class="extra-grid"><button id="titration-mode" class="primary">Chuẩn độ</button
+        ><button id="help-button">Hướng dẫn</button><button id="video-input">Thử video</button
+        ><button id="reaction-library">100 phản ứng</button>
+</div></details>
+      <details id="settings">
+        <summary>Thông số kỹ thuật và hiệu chỉnh</summary>
+        <div id="performance">
+          <strong id="render-fps">— FPS</strong
+          ><span id="track-fps">Tracking: — Hz</span
+          ><span id="latency">Độ tuổi mẫu: — ms</span>
+        </div>
+        <div class="controls">
+          <label
+            >Pinch bắt
+            <input
+              id="pinch"
+              type="range"
+              min=".25"
+              max=".60"
+              step=".01"
+              value=".43"
+            /><output id="pinch-value">0.43 / 0.66</output></label
+          ><label
+            >Chất lượng
+            <select id="quality">
+              <option value="auto">Tự động</option>
+              <option value="1">Chuẩn</option>
+              <option value=".75">Nhẹ</option>
+            </select></label
+          ><label
+            >Tracking
+            <select id="tracking-backend">
+              <option value="AUTO">Tự động</option>
+              <option value="NATIVE">Python CPU (cần gói V2)</option>
+              <option value="GPU">Web GPU</option>
+              <option value="CPU">Web CPU</option>
+            </select></label
+          ><label
+            >Ảnh nhận diện<select id="tracking-size">
+              <option value="640">640 px · nhẹ</option>
+              <option value="960">960 px · tay nhỏ/xa</option>
+            </select></label
+          ><label
+            >Giới hạn Hz<select id="tracking-rate">
+              <option value="60">60 (nếu camera hỗ trợ)</option>
+              <option value="30">30</option>
+            </select></label
+          ><button id="view-mode">Xem góc 3D</button
+          ><button id="benchmark">Đo 60 giây</button
+          ><button id="export-metrics">Xuất kết quả</button>
+        </div>
+        <div id="hand-technical" class="small"></div>
+        <p class="small">Đổi ngưỡng Pinch không thả bình. Ngưỡng thả của lượt đang giữ được bảo toàn; ngưỡng mới áp dụng từ lượt gắp tiếp theo.</p>
+        <div id="pipeline-metrics" class="small"></div>
+        <div id="camera-status" class="small">
+          Camera chưa bật. Ảnh được xử lý trên máy.
+        </div>
+        <div class="small">
+          Render FPS và tracking Hz là hai chỉ số khác nhau. Độ tuổi mẫu không
+          phải độ trễ đầu-cuối từ chuyển động tay.
+        </div>
+      </details>
+      <details class="shortcuts">
+        <summary>Phím tắt thao tác</summary>
+        <div class="footer">
+          A/D nghiêng · J/L xoay · W dựng · K nắp · P rót · G đổi thao tác ·
+          Space đặt bình · Backspace bỏ mẫu
+        </div>
+      </details>
+    </main>
+    <aside id="supplies" aria-label="Dụng cụ và hóa chất">
+      <div class="supply-heading"><h2>Dụng cụ &amp; hóa chất</h2><button id="supplies-close" aria-label="Thu gọn kho">Thu gọn</button></div>
+      <label class="catalog-search-label">Tìm trong kho<input id="catalog-search" type="search" placeholder="Tên dụng cụ, công thức…" /></label>
+      <label>Nhóm<select id="catalog-category"><option value="all">Tất cả</option><option value="vessels">Bình &amp; ống</option><option value="support">Dụng cụ hỗ trợ</option><option value="liquids">Dung dịch</option><option value="solids">Chất rắn</option><option value="risk">Minh họa nguy cơ</option></select></label>
+      <nav id="tabs" hidden>
+        <button data-group="tool" class="active">Dụng cụ</button
+        ><button data-group="chemical">Hóa chất</button
+        ><button data-group="risk">Nguy hiểm</button>
+      </nav>
+      <details id="hint-panel"><summary>Gợi ý cho hóa chất đã chọn</summary>
+      <section id="reaction-hints" aria-live="polite"><h3>Gợi ý phản ứng</h3><p>Chọn một hóa chất để xem.</p></section>
+      </details>
+      <div id="cards"></div>
+      <button id="buret-tool" class="wide" style="margin-top: 8px">
+        Buret 50 mL · Trạm chuẩn độ
+      </button>
+      <div class="pages">
+        <button data-action="prev">‹</button><span id="page-label"></span
+        ><button data-action="next">›</button>
+      </div>
+      <button id="risk-mode" data-action="risk" class="wide">
+        Tự do · Hiệu ứng minh họa
+      </button>
+      <p class="small">
+        Kéo thẻ vào bàn bằng chuột. Chọn Nghiêng / rót để xoay bình.
+      </p>
+      <div class="file-tools">
+        <button id="save">Lưu phiên</button><button id="load">Mở JSON</button
+        ><input id="session-file" type="file" accept=".json" hidden />
+      </div>
+      <label class="small"
+        >Bố trí mẫu<select id="experiment">
+          <option value="">Chọn thí nghiệm…</option>
+          <option value="free_lab.json">Bàn tự do</option>
+          <option value="precipitation.json">Kết tủa</option>
+          <option value="gas_open.json">Khí trong bình mở</option>
+          <option value="concentrated_acids.json">Axit đậm đặc</option>
+        </select></label
+      >
+      <div class="small note">
+        Mô hình giáo dục có giới hạn. Các tình huống nguy hiểm chỉ là hoạt họa
+        định tính.
+      </div>
+
+    </aside>
+    <canvas id="hands-overlay"></canvas>
+    <dialog id="reactions-dialog">
+      <h2>Thư viện 100 phản ứng</h2>
+      <p>
+        Tính tỉ lượng theo phương trình và điều kiện đã chọn. Đây là mô hình
+        giới hạn chất phản ứng, không phải bộ dự đoán mọi hỗn hợp.
+      </p>
+      <select id="reaction-select"></select>
+      <p id="reaction-equation"></p>
+      <div id="reaction-inputs"></div>
+      <label
+        ><input id="reaction-condition" type="checkbox" /> Điều kiện yêu cầu đã
+        được đáp ứng trong mô phỏng</label
+      >
+      <p id="reaction-condition-label"></p>
+      <button id="reaction-calculate">Trộn và tính</button>
+      <pre id="reaction-result"></pre>
+      <button id="reactions-close">Đóng</button>
+    </dialog>
+    <dialog id="help">
+      <h2>Hai tay, hai dụng cụ</h2>
+      <p>
+        Đưa cả bàn tay vào hình. Con trỏ A/B đi được toàn màn hình, kể cả kho
+        bên phải. Chụm cái và trỏ trên dụng cụ để gắp; mở ra để thả.
+      </p>
+      <ol>
+        <li>
+          Khi đang giữ, xoay cổ tay để nghiêng; đưa tay gần/xa để đổi độ sâu
+          tương đối.
+        </li>
+        <li>
+          Mỗi tay gắp một bình riêng. Tay thứ hai có thể gắp cùng bình: di
+          chuyển tâm hai tay để kéo, xoay đường nối để nghiêng, tách/gần hai tay
+          để đổi độ sâu.
+        </li>
+        <li>
+          Chọn “Xoay 3D” hoặc nhấn G, rồi chụm/nắm tay và kéo để xoay quanh X/Y.
+        </li>
+        <li>
+          Mất dấu ngắn: con trỏ thành vòng mờ, giữ bình và dừng rót. Sau 0,7
+          giây, hệ thống ngừng giữ và bình rơi xuống bàn; mở tay để gắp lại.
+        </li>
+        <li>
+          Hai tay chồng lên nhau khó phân biệt: tạm giữ các bình, tách tay để
+          tiếp tục.
+        </li>
+      </ol>
+      <p>
+        Chuột: kéo để di chuyển; con lăn đổi chiều sâu. Đặt miệng nguồn phía
+        trên miệng bình nhận, nghiêng ≥45° và giữ khoảng 0,3 giây để rót.
+      </p>
+      <p>
+        Bộ lọc nhãn tay không thay đổi quyền giữ bình. A/B là ID theo dõi;
+        trái/phải là nhãn ước lượng có thể chưa chắc chắn.
+      </p>
+      <p>Vòng xanh là tay A, vòng vàng là tay B. Chấm ở giữa là con trỏ thao tác;
+        màu khác nhau không có nghĩa hai thuật toán đang tranh điều khiển.
+        Vòng mờ báo mất dấu. Nếu cần thả ngay, nhấn Space hoặc “Đặt bình”.</p>
+      <button id="close-help" class="primary">Đã hiểu</button>
+    </dialog>
+    <script type="module" src="/src/main.js"></script>
+    <dialog id="lesson-quiz-dialog" aria-labelledby="lesson-question">
+      <button id="lesson-quiz-close" class="dialog-close">Đóng</button>
+      <p id="lesson-question-count"></p>
+      <h2 id="lesson-question"></h2>
+      <div id="lesson-answers"></div>
+      <p id="lesson-answer-feedback" role="status"></p>
+      <p id="lesson-score"></p>
+      <button id="lesson-quiz-next">Câu tiếp theo →</button>
+    </dialog>
+  </body>
+</html>

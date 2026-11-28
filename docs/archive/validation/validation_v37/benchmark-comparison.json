@@ -1,0 +1,119 @@
+{
+  "complete": true,
+  "physical_camera_tested": false,
+  "human_hands_tested": false,
+  "environment": "Same shared host; Chromium 133 headless, SwiftShader software GL, CPU MediaPipe, synthetic 20 FPS webcam",
+  "conditions": "HD 1280x720, CV 640x360, DPR 1, render surface 1022x418, viewport 1366x900; five objects with one programmatically moving; 60 s each",
+  "order": "pair 1 before/after; pair 2 after/before; pair 3 before/after; after3 timed out, then entire pair3 rerun",
+  "runs": [
+    {
+      "pair": 1,
+      "variant": "before",
+      "file": "benchmark-before-1.json",
+      "render_fps": 15.180492073329647,
+      "tracking_hz": 1.6738315495701903,
+      "render_interval_p95_ms": 416.6999999999971,
+      "sample_age_p95_ms": 1060.199951171875,
+      "physics_cpu_mean_ms": 1.9102620086571664,
+      "capture_mean_ms": null,
+      "preprocess_mean_ms": null,
+      "model_mean_ms": null,
+      "duration_s": 60.34060000000297
+    },
+    {
+      "pair": 1,
+      "variant": "after",
+      "file": "benchmark-after-1.json",
+      "render_fps": 21.26905931341635,
+      "tracking_hz": 1.779222920308812,
+      "render_interval_p95_ms": 233.40000000000146,
+      "sample_age_p95_ms": 811.89990234375,
+      "physics_cpu_mean_ms": 2.2018419032486145,
+      "capture_mean_ms": 0.07431192655082143,
+      "preprocess_mean_ms": 324.34220183442494,
+      "model_mean_ms": 192.78807339455008,
+      "duration_s": 61.26269999999851
+    },
+    {
+      "pair": 2,
+      "variant": "before",
+      "file": "benchmark-before-2.json",
+      "render_fps": 15.20233983839289,
+      "tracking_hz": 1.586331113571432,
+      "render_interval_p95_ms": 316.59999999999854,
+      "sample_age_p95_ms": 1483.900146484375,
+      "physics_cpu_mean_ms": 2.7645652174544724,
+      "capture_mean_ms": null,
+      "preprocess_mean_ms": null,
+      "model_mean_ms": null,
+      "duration_s": 60.51699999999852
+    },
+    {
+      "pair": 2,
+      "variant": "after",
+      "file": "benchmark-after-2.json",
+      "render_fps": 18.504220027156812,
+      "tracking_hz": 1.5475651641417119,
+      "render_interval_p95_ms": 283.3000000000029,
+      "sample_age_p95_ms": 1233.099853515625,
+      "physics_cpu_mean_ms": 2.3046762589432244,
+      "capture_mean_ms": 0.10107526912163663,
+      "preprocess_mean_ms": 408.7924731182315,
+      "model_mean_ms": 210.94301075239977,
+      "duration_s": 60.09440000000149
+    },
+    {
+      "pair": 3,
+      "variant": "before",
+      "file": "benchmark-before-3.json",
+      "render_fps": 21.181744702480646,
+      "tracking_hz": 2.2165004291344816,
+      "render_interval_p95_ms": 266.59999999999854,
+      "sample_age_p95_ms": 766,
+      "physics_cpu_mean_ms": 1.8900865460244058,
+      "capture_mean_ms": null,
+      "preprocess_mean_ms": null,
+      "model_mean_ms": null,
+      "duration_s": 60.0045
+    },
+    {
+      "pair": 3,
+      "variant": "after",
+      "file": "benchmark-after-3.json",
+      "render_fps": 24.477117553351253,
+      "tracking_hz": 1.962160238651799,
+      "render_interval_p95_ms": 233.3000000000029,
+      "sample_age_p95_ms": 647.699951171875,
+      "physics_cpu_mean_ms": 1.8904211955225987,
+      "capture_mean_ms": 0.06525423750281334,
+      "preprocess_mean_ms": 291.13559322008643,
+      "model_mean_ms": 188.78305084725557,
+      "duration_s": 60.13780000000298
+    }
+  ],
+  "excluded_incomplete_runs": [
+    {
+      "file": "benchmark-after-3-first-failure.log",
+      "reason": "waitForFunction complete timed out after 70 s; original harness did not capture runtime state; exact cause not established"
+    },
+    {
+      "file": "benchmark-before-3-first.json",
+      "reason": "Retained as initial partner of failed run; paired comparison uses full rerun of pair3"
+    }
+  ],
+  "before_median": {
+    "render_fps": 15.20233983839289,
+    "tracking_hz": 1.6738315495701903,
+    "render_interval_p95_ms": 316.59999999999854,
+    "sample_age_p95_ms": 1060.199951171875,
+    "physics_cpu_mean_ms": 1.9102620086571664
+  },
+  "after_median": {
+    "render_fps": 21.26905931341635,
+    "tracking_hz": 1.779222920308812,
+    "render_interval_p95_ms": 233.40000000000146,
+    "sample_age_p95_ms": 811.89990234375,
+    "physics_cpu_mean_ms": 2.2018419032486145
+  },
+  "limitation": "Shared-host load varies. No proof of physical webcam accuracy/end-to-end hand latency or 50 FPS. Timeout was not reproduced in rerun; it is not claimed fixed."
+}

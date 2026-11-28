@@ -1,0 +1,41 @@
+{
+  "zip_root_is_flat": true,
+  "zip_crc_verified": true,
+  "runtime_source_hashes_match_extracted_zip": true,
+  "extracted_js_tests": {
+    "passed": 63,
+    "failed": 0
+  },
+  "extracted_python_api_tests_no_site_packages": {
+    "passed": 5,
+    "failed": 0
+  },
+  "extracted_browser_regression_checks": {
+    "checks": [
+      {
+        "name": "Save/load and invalid import preserve IDs/stocks/quantities while physics remains active",
+        "passed": true
+      },
+      {
+        "name": "Guided hazardous transfer remains blocked without changing quantities",
+        "passed": true
+      },
+      {
+        "name": "Free-mode qualitative hazard effects retained",
+        "passed": true
+      },
+      {
+        "name": "OrbitControls exclusive interaction mode retained",
+        "passed": true
+      },
+      {
+        "name": "100-reaction library retained",
+        "passed": true
+      }
+    ],
+    "page_errors": []
+  },
+  "fixtures_screenshots_node_modules_excluded": true,
+  "physical_webcam_tested": false,
+  "windows_hardware_tested": false
+}
