@@ -1,0 +1,90 @@
+{
+  "web/src/camera-quality.js": {
+    "sha256": "07eafbc17ce982032c13d926838995f04d420d14c64e7ec5c0cb6ef7102165fd",
+    "unchanged": true
+  },
+  "web/src/filters.js": {
+    "sha256": "aac864610259238a92e006655cd25bd825009129083139d8eac9bb16a02cbf1f",
+    "unchanged": true
+  },
+  "web/src/tracks.js": {
+    "sha256": "dc737bfdd7d8b2587467a8383b4f2e484319cb78ebd157e9fea68e093df20192",
+    "unchanged": true
+  },
+  "web/src/interaction.js": {
+    "sha256": "ea5322d0c28bf487deafb6e1eb24d1ac6ca06ef420e242d38ef2278117e3d150",
+    "unchanged": true
+  },
+  "web/src/physics.js": {
+    "sha256": "4a31e637c7c9c0a93b0657837036950f2d1479db46d0719e1a7f79c2d9cb1395",
+    "unchanged": true
+  },
+  "web/src/render3d.js": {
+    "sha256": "a1f01b8191af695022516041cc54b1fa9c22605150f34052069650d3ded36276",
+    "unchanged": true
+  },
+  "web/src/environment.js": {
+    "sha256": "59cdf5bc56b4dbe2a87c6213677f4748526d1fdc6b379cab1ab70ba46feb5bf1",
+    "unchanged": true
+  },
+  "web/src/coordinates.js": {
+    "sha256": "ed6c6424203c0df3b66c93c63354c566643c913ffc883ff84fcf7dfb8e51cf53",
+    "unchanged": true
+  },
+  "web/src/lesson-geometry.js": {
+    "sha256": "bd6cee1102878f2056976be12b582382f010bfa7397c54c0213ff638f5f508ce",
+    "unchanged": true
+  },
+  "web/src/titration.js": {
+    "sha256": "afe288356ee6607efb9b507bab1092e4cfc7d6671f801f796fdddb326aaff3bc",
+    "unchanged": true
+  },
+  "web/src/bench.js": {
+    "sha256": "d85cb3065be72d89087ee1b7b5bdff1194566c49382c657033055da878d1e6d3",
+    "unchanged": true
+  },
+  "web/src/reaction-engine.js": {
+    "sha256": "496cf54e12b3340f439234e61298ae7f41734edbb8783dd2e834ba386d5e5dd1",
+    "unchanged": true
+  },
+  "web/src/reaction-ui.js": {
+    "sha256": "1efa4f70631537e464fa781cf481786b0a2908c2e3857b6d2f3b492c877f843a",
+    "unchanged": true
+  },
+  "web/src/vessel-details.js": {
+    "sha256": "d50aa888c61acd5fc921614b3374bf2165f34d26c1bf0b99e77cc58425f52ddf",
+    "unchanged": true
+  },
+  "web/src/liquid-simulation.js": {
+    "sha256": "e12eea33486c27054bdd7c5d9068b1b02a3a12ea3e7e613a0e870418d96bc1dc",
+    "unchanged": true
+  },
+  "web/src/pourable.js": {
+    "sha256": "5904de0b8528c2541a64b57c8918e7891097c7fef3d555771c8bdb3575cfdde8",
+    "unchanged": true
+  },
+  "web/src/spill-ledger.js": {
+    "sha256": "180d1f20d907313b3b4b4cd8b88f14c897a6448aeb87158f0035c6d53e39dbfb",
+    "unchanged": true
+  },
+  "web/src/student-logger.js": {
+    "sha256": "25cc935e60663cbc2be698cd89a82e41fb983b1ddd00f0e9bdebc79df1f64e71",
+    "unchanged": true
+  },
+  "web/src/ai-tutor.js": {
+    "sha256": "d905178e3818f106c44140f67dbc68dfd704cde021b02fd229a33b6e4667f4de",
+    "unchanged": true
+  },
+  "web/src/lessons.js": {
+    "sha256": "3e56cc56e096ae6ce1d0fda65fb08d64aa18ddacd0bf29a1e9fd00e16413e432",
+    "unchanged": true
+  },
+  "web/src/lesson-chemistry.js": {
+    "sha256": "17535abb2928894adcf7e1bf0d820acfa220af725f0db6d51fd767d8ecaf6050",
+    "unchanged": true
+  },
+  "web/src/lesson-visuals.js": {
+    "sha256": "2afccdf5eb9ec46086b4a480cd46a4f2e8fc803df669a2a7c0641591bb1d88c4",
+    "unchanged": true
+  }
+}

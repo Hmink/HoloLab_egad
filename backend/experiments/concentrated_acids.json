@@ -1,0 +1,31 @@
+{
+  "schema": "chemlab3d-experiment-1",
+  "allow_risk": true,
+  "objects": [
+    {
+      "stock": "acid_risk",
+      "x_norm": 0.15,
+      "y_norm": 0.25
+    },
+    {
+      "stock": "nitric_risk",
+      "x_norm": 0.5,
+      "y_norm": 0.25
+    },
+    {
+      "stock": "hcl_risk",
+      "x_norm": 0.84,
+      "y_norm": 0.25
+    },
+    {
+      "stock": "water",
+      "x_norm": 0.2,
+      "y_norm": 0.7
+    },
+    {
+      "stock": "beaker",
+      "x_norm": 0.7,
+      "y_norm": 0.7
+    }
+  ]
+}

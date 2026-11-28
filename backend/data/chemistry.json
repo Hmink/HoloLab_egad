@@ -1,0 +1,523 @@
+{
+  "schema_version": "1.0.0",
+  "scope": "Mô hình giáo dục ảo có giới hạn; không dự đoán mọi hỗn hợp hóa học.",
+  "validation": {
+    "status": "prototype_reference_model_3d_integration",
+    "teacher_reviewed": false,
+    "reviewed_by": null,
+    "use_for_real_lab_safety_decisions": false
+  },
+  "units": {
+    "amount": "mol",
+    "volume": "L",
+    "mass": "g",
+    "temperature": "K",
+    "pressure": "Pa",
+    "energy": "J"
+  },
+  "atomic_masses_g_mol": {
+    "H": 1.008,
+    "O": 15.999,
+    "Na": 22.99,
+    "Cl": 35.45,
+    "Cu": 63.546,
+    "C": 12.011,
+    "Ca": 40.078,
+    "S": 32.06
+  },
+  "species": {
+    "H_plus": {
+      "formula": "H+",
+      "phase": "aq",
+      "atoms": {
+        "H": 1
+      },
+      "charge": 1
+    },
+    "OH_minus": {
+      "formula": "OH-",
+      "phase": "aq",
+      "atoms": {
+        "O": 1,
+        "H": 1
+      },
+      "charge": -1
+    },
+    "Na_plus": {
+      "formula": "Na+",
+      "phase": "aq",
+      "atoms": {
+        "Na": 1
+      },
+      "charge": 1
+    },
+    "Cl_minus": {
+      "formula": "Cl-",
+      "phase": "aq",
+      "atoms": {
+        "Cl": 1
+      },
+      "charge": -1
+    },
+    "H2O": {
+      "formula": "H2O",
+      "phase": "l",
+      "atoms": {
+        "H": 2,
+        "O": 1
+      },
+      "charge": 0
+    },
+    "Cu_2plus": {
+      "formula": "Cu2+",
+      "phase": "aq",
+      "atoms": {
+        "Cu": 1
+      },
+      "charge": 2
+    },
+    "CuOH2": {
+      "formula": "Cu(OH)2",
+      "phase": "s",
+      "atoms": {
+        "Cu": 1,
+        "O": 2,
+        "H": 2
+      },
+      "charge": 0
+    },
+    "HCO3_minus": {
+      "formula": "HCO3-",
+      "phase": "aq",
+      "atoms": {
+        "H": 1,
+        "C": 1,
+        "O": 3
+      },
+      "charge": -1
+    },
+    "CO2": {
+      "formula": "CO2",
+      "phase": "g",
+      "atoms": {
+        "C": 1,
+        "O": 2
+      },
+      "charge": 0
+    },
+    "Ca_2plus": {
+      "formula": "Ca2+",
+      "phase": "aq",
+      "atoms": {
+        "Ca": 1
+      },
+      "charge": 2
+    },
+    "CO3_2minus": {
+      "formula": "CO3(2-)",
+      "phase": "aq",
+      "atoms": {
+        "C": 1,
+        "O": 3
+      },
+      "charge": -2
+    },
+    "CaCO3": {
+      "formula": "CaCO3",
+      "phase": "s",
+      "atoms": {
+        "Ca": 1,
+        "C": 1,
+        "O": 3
+      },
+      "charge": 0
+    },
+    "SO4_2minus": {
+      "formula": "SO4(2-)",
+      "phase": "aq",
+      "atoms": {
+        "S": 1,
+        "O": 4
+      },
+      "charge": -2
+    }
+  },
+  "reagents": [
+    {
+      "id": "hcl_0_1M",
+      "name": "Dung dịch HCl",
+      "formula": "HCl",
+      "phase": "aq",
+      "concentration": {
+        "value": 0.1,
+        "unit": "mol/L"
+      },
+      "dissociation": {
+        "H_plus": 1,
+        "Cl_minus": 1
+      },
+      "tags": [
+        "aqueous",
+        "acid"
+      ],
+      "hazards": {
+        "ghs": null,
+        "nfpa704": null,
+        "sds_url": null,
+        "status": "Chưa gắn SDS đúng sản phẩm/nồng độ; không tự gán nhãn của axit đặc."
+      }
+    },
+    {
+      "id": "naoh_0_1M",
+      "name": "Dung dịch NaOH",
+      "formula": "NaOH",
+      "phase": "aq",
+      "concentration": {
+        "value": 0.1,
+        "unit": "mol/L"
+      },
+      "dissociation": {
+        "Na_plus": 1,
+        "OH_minus": 1
+      },
+      "tags": [
+        "aqueous",
+        "base"
+      ],
+      "hazards": {
+        "ghs": null,
+        "nfpa704": null,
+        "sds_url": null,
+        "status": "Chưa gắn SDS đúng sản phẩm/nồng độ."
+      }
+    },
+    {
+      "id": "water",
+      "name": "Nước",
+      "formula": "H2O",
+      "phase": "l",
+      "concentration": null,
+      "tags": [
+        "water"
+      ],
+      "hazards": {
+        "ghs": null,
+        "nfpa704": null,
+        "sds_url": null,
+        "status": "Không coi thiếu dữ liệu là chứng nhận an toàn."
+      }
+    },
+    {
+      "id": "h2so4_concentrated_reference",
+      "name": "Axit sulfuric đậm đặc — chỉ học cảnh báo",
+      "formula": "H2SO4",
+      "phase": "l",
+      "concentration": {
+        "lower_bound_exclusive": 95,
+        "unit": "mass_percent"
+      },
+      "tags": [
+        "concentrated_acid",
+        "restricted_student",
+        "corrosive"
+      ],
+      "hazards": {
+        "ghs": {
+          "signal_word": "Danger",
+          "pictogram_codes": [
+            "GHS05",
+            "GHS07"
+          ],
+          "classes": [
+            {
+              "name": "skin_corrosion",
+              "category": "1"
+            },
+            {
+              "name": "serious_eye_damage",
+              "category": "1"
+            },
+            {
+              "name": "specific_target_organ_toxicity_single_exposure",
+              "category": "3"
+            }
+          ]
+        },
+        "nfpa704": {
+          "health": 3,
+          "flammability": 0,
+          "instability": 2,
+          "special": [
+            "W_bar"
+          ]
+        },
+        "sds_product": "Fisher Scientific / Acros AC424525000",
+        "sds_revision_date": "2025-12-19",
+        "sds_url": "https://www.fishersci.com/store/msds?countryCode=US&language=en&partNumber=AC424525000&productDescription=SULFURIC+ACID+ACS+500ML&vendorId=VN00033901",
+        "scope_note": "Chỉ áp dụng bản ghi nhãn này cho sản phẩm/nồng độ được SDS mô tả; không suy rộng ra mọi H2SO4."
+      }
+    }
+  ],
+  "reactions": [
+    {
+      "id": "strong_acid_base",
+      "name": "Trung hòa axit mạnh – bazơ mạnh loãng",
+      "equation_display": "H+(aq) + OH-(aq) → H2O(l)",
+      "reactants": {
+        "H_plus": 1,
+        "OH_minus": 1
+      },
+      "products": {
+        "H2O": 1
+      },
+      "model": {
+        "kind": "complete_stoichiometric_approximation",
+        "temperature_K": [
+          288.15,
+          308.15
+        ],
+        "max_initial_reactant_M": 0.2,
+        "needs_shaking": false,
+        "kinetics": null,
+        "reversible": false
+      },
+      "phenomena": {
+        "solution_color": "colorless_without_indicator",
+        "color_hex_illustrative": "#dff6ff",
+        "precipitate": null,
+        "gas": null,
+        "thermal_effect": "exothermic",
+        "note": "Không tự đổi màu nếu không có chỉ thị. Màu chỉ thị cần tính từ pH riêng."
+      },
+      "thermodynamics": {
+        "delta_h_J_per_mol_extent": -57300,
+        "reference_temperature_K": 298.15,
+        "source_url": "https://pcv-amrt.vlabs.ac.in/exp/calorimetry-heat-neutralization/theory.html",
+        "uncertainty_J_per_mol": null,
+        "note": "Giá trị xấp xỉ cho dung dịch loãng; không dùng để suy ra nhiệt pha loãng axit đặc."
+      },
+      "hazards": {
+        "educational_level": "caution",
+        "risk_tags": [
+          "heat",
+          "splash"
+        ],
+        "toxic_gas_species": [],
+        "required_virtual_ppe": [
+          "goggles",
+          "gloves"
+        ],
+        "student_simulation_enabled": true
+      }
+    },
+    {
+      "id": "copper_hydroxide",
+      "name": "Kết tủa đồng(II) hiđroxit",
+      "equation_display": "Cu2+(aq) + 2OH-(aq) → Cu(OH)2(s)",
+      "reactants": {
+        "Cu_2plus": 1,
+        "OH_minus": 2
+      },
+      "products": {
+        "CuOH2": 1
+      },
+      "model": {
+        "kind": "complete_stoichiometric_approximation",
+        "temperature_K": [
+          288.15,
+          308.15
+        ],
+        "max_initial_reactant_M": 0.2,
+        "needs_shaking": false,
+        "kinetics": null,
+        "reversible": false
+      },
+      "phenomena": {
+        "solution_color": "depends_on_remaining_Cu2+",
+        "color_hex_illustrative": "#63b8ea",
+        "precipitate": {
+          "species": "CuOH2",
+          "color_vi": "xanh lam",
+          "color_hex_illustrative": "#5aace1"
+        },
+        "gas": null,
+        "thermal_effect": "not_parameterized",
+        "note": "Xấp xỉ kết tủa hoàn toàn; chưa giải cân bằng Ksp, phức chất hay tái hòa tan."
+      },
+      "thermodynamics": {
+        "delta_h_J_per_mol_extent": null,
+        "source_url": null
+      },
+      "hazards": {
+        "educational_level": "caution",
+        "risk_tags": [
+          "base",
+          "copper_containing_waste"
+        ],
+        "toxic_gas_species": [],
+        "required_virtual_ppe": [
+          "goggles",
+          "gloves"
+        ],
+        "student_simulation_enabled": true
+      }
+    },
+    {
+      "id": "bicarbonate_acid",
+      "name": "Axit với ion hiđrocacbonat",
+      "equation_display": "HCO3-(aq) + H+(aq) → CO2(g) + H2O(l)",
+      "reactants": {
+        "HCO3_minus": 1,
+        "H_plus": 1
+      },
+      "products": {
+        "CO2": 1,
+        "H2O": 1
+      },
+      "model": {
+        "kind": "complete_stoichiometric_approximation",
+        "temperature_K": [
+          288.15,
+          308.15
+        ],
+        "max_initial_reactant_M": 0.2,
+        "needs_shaking": false,
+        "kinetics": null,
+        "reversible": false
+      },
+      "phenomena": {
+        "solution_color": "colorless",
+        "color_hex_illustrative": "#dff6ff",
+        "precipitate": null,
+        "gas": {
+          "species": "CO2",
+          "visual": "bubbles"
+        },
+        "thermal_effect": "not_parameterized",
+        "note": "V khí lý tưởng là lượng khí tương đương tại T/P chỉ định, chưa trừ phần CO2 hòa tan."
+      },
+      "thermodynamics": {
+        "delta_h_J_per_mol_extent": null,
+        "source_url": null
+      },
+      "hazards": {
+        "educational_level": "caution",
+        "risk_tags": [
+          "gas_evolution",
+          "pressure_if_sealed"
+        ],
+        "toxic_gas_species": [],
+        "required_virtual_ppe": [
+          "goggles",
+          "gloves"
+        ],
+        "student_simulation_enabled": true
+      }
+    },
+    {
+      "id": "calcium_carbonate",
+      "name": "Kết tủa canxi cacbonat",
+      "equation_display": "Ca2+(aq) + CO3(2-)(aq) → CaCO3(s)",
+      "reactants": {
+        "Ca_2plus": 1,
+        "CO3_2minus": 1
+      },
+      "products": {
+        "CaCO3": 1
+      },
+      "model": {
+        "kind": "complete_stoichiometric_approximation",
+        "temperature_K": [
+          288.15,
+          308.15
+        ],
+        "max_initial_reactant_M": 0.2,
+        "needs_shaking": false,
+        "kinetics": null,
+        "reversible": false
+      },
+      "phenomena": {
+        "solution_color": "colorless",
+        "color_hex_illustrative": "#edf6ff",
+        "precipitate": {
+          "species": "CaCO3",
+          "color_vi": "trắng",
+          "color_hex_illustrative": "#f5f5ef"
+        },
+        "gas": null,
+        "thermal_effect": "not_parameterized",
+        "note": "Xấp xỉ kết tủa hoàn toàn; không áp dụng khi cần cân bằng cacbonat/CO2 hoặc Ksp."
+      },
+      "thermodynamics": {
+        "delta_h_J_per_mol_extent": null,
+        "source_url": null
+      },
+      "hazards": {
+        "educational_level": "caution",
+        "risk_tags": [
+          "splash"
+        ],
+        "toxic_gas_species": [],
+        "required_virtual_ppe": [
+          "goggles",
+          "gloves"
+        ],
+        "student_simulation_enabled": true
+      }
+    }
+  ],
+  "safety_rules": [
+    {
+      "id": "water_into_concentrated_acid",
+      "when": {
+        "action": "pour",
+        "source_has_tag": "water",
+        "target_has_tag": "concentrated_acid"
+      },
+      "decision": "block",
+      "ppe_can_override": false,
+      "message_vi": "Thêm nước vào axit đậm đặc có thể tỏa nhiệt cục bộ rất mạnh, làm bắn chất ăn mòn. Hủy thao tác ảo; kính/găng tay không mở khóa lỗi này.",
+      "source_url": "https://www.cdc.gov/niosh/npg/npgd0577.html"
+    },
+    {
+      "id": "oxidizer_with_combustible",
+      "when": {
+        "unordered_pair_tags": [
+          "strong_oxidizer",
+          "combustible"
+        ]
+      },
+      "decision": "block",
+      "ppe_can_override": false,
+      "message_vi": "Hỗn hợp chất oxi hóa mạnh và chất dễ cháy bị khóa trong chế độ học sinh."
+    },
+    {
+      "id": "restricted_chemical",
+      "when": {
+        "either_has_tag": "restricted_student"
+      },
+      "decision": "block",
+      "ppe_can_override": false,
+      "message_vi": "Hóa chất thuộc nhóm hạn chế: chỉ xem tình huống cảnh báo, không chạy phản ứng."
+    },
+    {
+      "id": "toxic_gas",
+      "when": {
+        "reaction_has_toxic_gas": true
+      },
+      "decision": "block",
+      "ppe_can_override": false,
+      "message_vi": "Phản ứng có sản phẩm khí độc bị khóa trong chế độ học sinh."
+    },
+    {
+      "id": "gas_in_sealed_vessel",
+      "when": {
+        "gas_product_and_sealed": true
+      },
+      "decision": "block",
+      "ppe_can_override": false,
+      "message_vi": "Khóa mô hình sinh khí trong bình kín; chưa có mô hình áp suất/bền bình."
+    }
+  ],
+  "unmodeled_policy": "BLOCK_UNKNOWN_MODEL: Không có dữ liệu phù hợp; không được suy luận là không phản ứng hoặc an toàn."
+}

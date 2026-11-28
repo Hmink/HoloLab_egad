@@ -1,0 +1,238 @@
+{
+  "checks": [
+    {
+      "name": "Startup: local Rapier WASM, Three.js, chemistry API",
+      "passed": true
+    },
+    {
+      "name": "Mouse grab → kinematic; release → dynamic and visible falling",
+      "passed": true
+    },
+    {
+      "name": "20 real-mesh drop/regrab cycles, tabletop block, rotated collider support, inertia",
+      "passed": true,
+      "cycles": 20,
+      "max_penetration_scene_units": 0,
+      "min_gap": 0.003122223635407373,
+      "held_gap": 0.006000031604104006,
+      "throw_velocity_m_per_s": {
+        "x": 0.21192118525505066,
+        "y": 0.32126790285110474,
+        "z": -2.54299938164114e-38
+      }
+    },
+    {
+      "name": "V3.3 production mesh: fast contact, four physical boundaries, projection, safe fault recovery, no held resize teleport",
+      "passed": true,
+      "peak_contact_horizontal_m_s": 0.13847698849007195,
+      "max_penetration_scene": 0,
+      "max_throw_m_s": 0.3999999864100869,
+      "max_outside_scene": 0,
+      "max_projected_outside_px": 0,
+      "ordinary_recoveries": 0,
+      "fault_recovered": true,
+      "held_resize_jump": 0
+    },
+    {
+      "name": "Bundled Vietnamese fonts, collapsed diagnostics, PBR glass, tool IDs/pivots/colliders retained",
+      "passed": true,
+      "font": "\"Be Vietnam Pro\", \"Segoe UI\", sans-serif",
+      "fontLoaded": true,
+      "glass": "MeshPhysicalMaterial",
+      "cameraFit": "contain",
+      "technicalClosed": true,
+      "snapshots": [
+        {
+          "id": "beaker",
+          "scale": 0.67,
+          "colliders": 1,
+          "physical": true,
+          "mouth_y": 0.84,
+          "liquid": true
+        },
+        {
+          "id": "flask",
+          "scale": 0.67,
+          "colliders": 1,
+          "physical": true,
+          "mouth_y": 1,
+          "liquid": true
+        },
+        {
+          "id": "tube",
+          "scale": 0.67,
+          "colliders": 1,
+          "physical": true,
+          "mouth_y": 1.04,
+          "liquid": true
+        },
+        {
+          "id": "hcl",
+          "scale": 0.67,
+          "colliders": 1,
+          "physical": true,
+          "mouth_y": 1.05,
+          "liquid": true
+        },
+        {
+          "id": "dropper",
+          "scale": 0.67,
+          "colliders": 2,
+          "physical": true,
+          "mouth_y": 0.65,
+          "liquid": true
+        },
+        {
+          "id": "balance",
+          "scale": 0.67,
+          "colliders": 3,
+          "physical": true,
+          "mouth_y": null,
+          "liquid": false
+        }
+      ],
+      "bad": [],
+      "renderCalls": 57,
+      "triangles": 6701.333333333334
+    },
+    {
+      "name": "Synthetic two-hand FSM, temporary tracking loss, valid release handoff",
+      "passed": true,
+      "held": [
+        1,
+        2
+      ],
+      "tracking_gap_froze": true,
+      "release_dynamic": true
+    },
+    {
+      "name": "Preserved chemical transfer quantities",
+      "passed": true
+    },
+    {
+      "name": "Preserved titration scene and microdose",
+      "passed": true
+    },
+    {
+      "name": "HD default and Low/HD/Full-HD camera modes report actual track and video sizes",
+      "passed": true,
+      "modes": [
+        {
+          "requested": "HD",
+          "applied": "HD",
+          "auto": false,
+          "settings": {
+            "width": 1280,
+            "height": 720,
+            "frameRate": 20,
+            "aspectRatio": 1.7777777777777777,
+            "resizeMode": "none",
+            "focusMode": "manual"
+          },
+          "video_width": 1280,
+          "video_height": 720,
+          "inference_width": 640,
+          "input_width": 640,
+          "input_height": 360,
+          "transport": "VideoFrame",
+          "capture_ms": 0,
+          "note": ""
+        },
+        {
+          "requested": "FHD",
+          "applied": "FHD",
+          "auto": false,
+          "settings": {
+            "width": 1920,
+            "height": 1080,
+            "frameRate": 20,
+            "aspectRatio": 1.7777777777777777,
+            "resizeMode": "none",
+            "focusMode": "manual"
+          },
+          "video_width": 1920,
+          "video_height": 1080,
+          "inference_width": 640,
+          "input_width": 640,
+          "input_height": 360,
+          "transport": "VideoFrame",
+          "capture_ms": 0.09999999403953552,
+          "note": ""
+        },
+        {
+          "requested": "LOW",
+          "applied": "LOW",
+          "auto": false,
+          "settings": {
+            "width": 640,
+            "height": 480,
+            "frameRate": 20,
+            "aspectRatio": 1.3333333333333333,
+            "resizeMode": "none",
+            "focusMode": "manual"
+          },
+          "video_width": 640,
+          "video_height": 480,
+          "inference_width": 640,
+          "input_width": 640,
+          "input_height": 360,
+          "transport": "VideoFrame",
+          "capture_ms": 0.09999999403953552,
+          "note": ""
+        },
+        {
+          "requested": "HD",
+          "applied": "HD",
+          "auto": false,
+          "settings": {
+            "width": 1280,
+            "height": 720,
+            "frameRate": 20,
+            "aspectRatio": 1.7777777777777777,
+            "resizeMode": "none",
+            "focusMode": "manual"
+          },
+          "video_width": 1280,
+          "video_height": 720,
+          "inference_width": 640,
+          "input_width": 640,
+          "input_height": 360,
+          "transport": "VideoFrame",
+          "capture_ms": 0.09999999403953552,
+          "note": ""
+        }
+      ]
+    },
+    {
+      "name": "Mirror/aspect and real MediaPipe input pipeline; synthetic test pattern has no hands",
+      "passed": true,
+      "cv_input": {
+        "width": 640,
+        "height": 360
+      },
+      "fit": "contain",
+      "mirror": "matrix(-1, 0, 0, 1, 0, 0)",
+      "tracking": {
+        "t": 17924,
+        "inferenceMs": 509.29999999701977,
+        "captureMs": 0.09999999403953552,
+        "queueMs": 2.89990234375,
+        "preprocessMs": 337.09999999403954,
+        "modelMs": 172.20000000298023,
+        "transportMs": null,
+        "ageMs": 514.89990234375,
+        "hands": 0
+      }
+    },
+    {
+      "name": "Camera stop",
+      "passed": true
+    },
+    {
+      "name": "No page errors and no remote runtime dependencies",
+      "passed": true
+    }
+  ],
+  "page_errors": [],
+  "physical_camera_tested": false
+}

@@ -1,0 +1,155 @@
+{
+  "physicalWebcam": false,
+  "checks": [
+    {
+      "name": "Five actual rendered vessels rotate 45/90/135/180/270/360; release falls on table",
+      "passed": true,
+      "vessels": [
+        {
+          "kind": "beaker",
+          "rate": 32,
+          "colliders": 1
+        },
+        {
+          "kind": "flask",
+          "rate": 18,
+          "colliders": 1
+        },
+        {
+          "kind": "tube",
+          "rate": 4,
+          "colliders": 1
+        },
+        {
+          "kind": "water",
+          "rate": 18,
+          "colliders": 1
+        },
+        {
+          "kind": "dropper",
+          "rate": 0.8,
+          "colliders": 2
+        }
+      ]
+    },
+    {
+      "name": "Production rAF pouring creates AgCl after geometric alignment",
+      "passed": true,
+      "aligned": true,
+      "from": [
+        0.40768880397081375,
+        0.8822108060121536,
+        0.34999996423721313
+      ],
+      "mouth": [
+        -6.370582950054882e-8,
+        0.2949225742441509,
+        0.34999996423721313
+      ],
+      "to": [
+        0,
+        -0.25507753438949576,
+        0.3500000014901161
+      ]
+    },
+    {
+      "name": "Lesson source + target + spill volumes conserved",
+      "passed": true,
+      "mol": 0.00011000972995669276,
+      "volumes": 46,
+      "spilled": 0
+    },
+    {
+      "name": "Water control has no invented precipitate",
+      "passed": true
+    },
+    {
+      "name": "Quiz feedback works",
+      "passed": true
+    },
+    {
+      "name": "Reset releases precipitate and effect instance buffers",
+      "passed": true,
+      "grains": 1,
+      "bubbles": 1,
+      "remaining": 0
+    },
+    {
+      "name": "Full inversion drains 30 mL to visible puddle via production loop",
+      "passed": true,
+      "spilled": 30,
+      "liquid": false,
+      "puddles": 1
+    },
+    {
+      "name": "Save/load preserves vessel quantities and spill ledger together",
+      "passed": true
+    },
+    {
+      "name": "Guided chemistry through rendered vessels: indicator",
+      "passed": true
+    },
+    {
+      "name": "Guided chemistry through rendered vessels: biuret",
+      "passed": true
+    },
+    {
+      "name": "Guided chemistry through rendered vessels: ammonium",
+      "passed": true
+    },
+    {
+      "name": "Iron immersion reacts and lifting out stops reaction",
+      "passed": true,
+      "n": 0.000700011666666667,
+      "after": 0.000700011666666667,
+      "immersed": true
+    },
+    {
+      "name": "Responsive collapsed selector, labels do not overlap or overflow",
+      "passed": true,
+      "layout": [
+        {
+          "width": 1920,
+          "canvas": 1576,
+          "height": 828,
+          "finite": true,
+          "overlaps": false,
+          "overflow": false
+        },
+        {
+          "width": 1366,
+          "canvas": 1022,
+          "height": 516,
+          "finite": true,
+          "overlaps": false,
+          "overflow": false
+        },
+        {
+          "width": 1024,
+          "canvas": 680,
+          "height": 516,
+          "finite": true,
+          "overlaps": false,
+          "overflow": false
+        },
+        {
+          "width": 640,
+          "canvas": 391,
+          "height": 548,
+          "finite": true,
+          "overlaps": false,
+          "overflow": false
+        }
+      ]
+    },
+    {
+      "name": "Opt-in event log, explanation, export payload and erase via UI",
+      "passed": true
+    },
+    {
+      "name": "No JS or WebGL errors",
+      "passed": true
+    }
+  ],
+  "errors": []
+}

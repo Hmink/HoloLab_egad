@@ -17,37 +17,33 @@ import threading
 import webbrowser
 import socket
 
+from envfile import load_dotenv
 from paths import WEB_DIR
 from version import VERSION
 
 
-def load_dotenv(path):
-    """Minimal .env reader (no dependency). Real environment variables win."""
-    if not path.is_file():
-        return
-    for line in path.read_text(encoding="utf-8").splitlines():
-        line = line.strip()
-        if line and not line.startswith("#") and "=" in line:
-            key, value = line.split("=", 1)
-            os.environ.setdefault(key.strip(), value.strip().strip("\"'"))
-
-
 load_dotenv(ROOT / ".env")
 
+# The chemistry core (chemlab/, lab3d/, data/) is not in the repo yet. Without it the
+# server still serves the web app and EGAD; chemistry endpoints answer 503.
+CHEM_MISSING = None
 try:
     from chemlab.chemistry import load_database
     from lab3d.catalog import CATALOG, STOCK
     from lab3d.mixture import Mixture, transfer
 except ImportError as error:
-    raise SystemExit(
-        f"Thiếu mã lõi hóa học ({error.name}). Cần các thư mục chemlab/, lab3d/, data/ cạnh server.py (trong backend/) "
-        "và giao diện ở frontend/web/."
-    ) from error
+    CHEM_MISSING = error.name
 from native_tracking import NativeTracking
-from egad_llm import assess as assess_egad
+from egad_llm import assess as assess_egad, config as llm_config, problem_body
 
-DB = load_database(ROOT / "data/chemistry.json")
+DB = None if CHEM_MISSING else load_database(ROOT / "data/chemistry.json")
+CHEM_PATHS = ("/api/catalog", "/api/transfer", "/api/session", "/api/experiment/")
 NATIVE = NativeTracking(WEB_DIR / "models" / "hand_landmarker.task")
+# API v3.1 (/api/v1: accounts...). Started in main() when HOLOLAB_DATABASE_URL is set; None = accounts off.
+API = None
+API_PREFIX = "/api/v1/"
+# Set to 1 only when server.py sits behind your own HTTPS reverse proxy (Caddy/nginx) that sets X-Forwarded-*.
+TRUST_UPSTREAM = os.environ.get("HOLOLAB_TRUST_FORWARDED", "").strip().lower() in ("1", "true", "yes", "on")
 
 
 def finite(value, low, high):
@@ -224,7 +220,34 @@ class Handler(SimpleHTTPRequestHandler):
         except (BrokenPipeError, ConnectionResetError):
             pass  # tab closed during inference
 
+    def api_v1(self):
+        """/api/v1/* goes to the v3.1 API. Without it: 404 with no error_code, which the frontend reads as
+        "accounts are not enabled on this server"."""
+        if not self.path.startswith(API_PREFIX):
+            return False
+        if API is None:
+            self.json({"error": "Not found"}, 404)
+        else:
+            API.forward(self, TRUST_UPSTREAM)
+        return True
+
+    def do_PUT(self):
+        if not self.api_v1():
+            self.json({"error": "Method not allowed"}, 405)
+
+    do_PATCH = do_DELETE = do_PUT
+
+    def chem_unavailable(self):
+        if CHEM_MISSING and self.path.startswith(CHEM_PATHS):
+            self.json({"error": f"Chưa có lõi hóa học (thiếu {CHEM_MISSING})"}, 503)
+            return True
+        return False
+
     def do_GET(self):
+        if self.api_v1():
+            return
+        if self.chem_unavailable():
+            return
         if self.path == "/api/catalog":
             self.json(
                 {
@@ -240,7 +263,8 @@ class Handler(SimpleHTTPRequestHandler):
             )
             return
         if self.path == "/api/health":
-            self.json({"ok": True, "version": VERSION})
+            self.json({"ok": True, "version": VERSION, "chemistry": CHEM_MISSING is None,
+                       "llm": {"provider": "ollama", "model": llm_config(os.environ)["OLLAMA_MODEL"]}})
             return
         if self.path.startswith("/api/experiment/"):
             name = self.path.rsplit("/", 1)[-1]
@@ -254,6 +278,8 @@ class Handler(SimpleHTTPRequestHandler):
         super().do_GET()
 
     def do_POST(self):
+        if self.api_v1():  # the v3.1 API makes its own Origin checks
+            return
         # Local compute endpoints only. Reject cross-origin form/fetch requests.
         origin = self.headers.get("Origin")
         if origin and origin not in (
@@ -261,6 +287,8 @@ class Handler(SimpleHTTPRequestHandler):
             f"http://127.0.0.1:{self.server.server_port}",
         ):
             self.json({"error": "Origin not allowed"}, 403)
+            return
+        if self.chem_unavailable():
             return
         if self.path == "/api/tracking/frame":
             try:
@@ -301,12 +329,16 @@ class Handler(SimpleHTTPRequestHandler):
             AttributeError,
             RuntimeError,
         ) as error:
-            self.json({"error": str(error)}, 400)
+            self.json(problem_body(error), getattr(error, "status", 400))
         except ImportError:
             self.json({"error": "Tính năng chưa được cài đặt"}, 400)
 
 
 def main():
+    try:  # Windows: a piped console may not be UTF-8; never crash on a Vietnamese status line
+        sys.stdout.reconfigure(errors="backslashreplace")
+    except (AttributeError, ValueError):
+        pass
     parser = argparse.ArgumentParser()
     parser.add_argument("--port", type=int, default=8765)
     parser.add_argument("--no-browser", action="store_true")
@@ -320,7 +352,13 @@ def main():
         ("127.0.0.1", args.port), partial(Handler, directory=str(WEB_DIR))
     )
     url = f"http://127.0.0.1:{server.server_port}"
-    print(f"HoloLab AR V{VERSION}: {url}\nGiu cua so nay mo. Ctrl+C de dung.", flush=True)
+    global API
+    try:
+        from hololab_api.embedded import start as start_api
+        API, api_status = start_api()
+    except Exception as error:  # accounts are optional: never block the lab
+        API, api_status = None, f"Tài khoản: tắt (lỗi {type(error).__name__}: {error})."
+    print(f"HoloLab AR V{VERSION}: {url}\n{api_status}\nGiu cua so nay mo. Ctrl+C de dung.", flush=True)
     if not args.no_browser:
         threading.Timer(0.5, lambda: webbrowser.open(url)).start()
     try:

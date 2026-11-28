@@ -1,0 +1,25 @@
+{
+  "kind": "synthetic valid samples, no camera/inference/physics/render latency",
+  "rows": [
+    {
+      "version": "V3.5",
+      "hz": 30,
+      "release_debounce_ms": 133.33333333333348
+    },
+    {
+      "version": "V3.5",
+      "hz": 60,
+      "release_debounce_ms": 116.6666666666668
+    },
+    {
+      "version": "V3.6",
+      "hz": 30,
+      "release_debounce_ms": 33.33333333333337
+    },
+    {
+      "version": "V3.6",
+      "hz": 60,
+      "release_debounce_ms": 33.33333333333337
+    }
+  ]
+}

@@ -1,0 +1,230 @@
+[
+  {
+    "file": "CHANGELOG.md",
+    "status": "modified",
+    "before_sha256": "01dccb1ff3c0b44d74e3d5b04faaf5f2b363694e379467a4157de91c3be8a758",
+    "after_sha256": "33ec59a2c5c2d333f0c8e8612cab1b3a0dfadcfab86d8a5ce83669d72080f626"
+  },
+  {
+    "file": "README.md",
+    "status": "modified",
+    "before_sha256": "a315a1db6e6035daa2ce151a24b309784dda8706b635c2c2c079764a0d055c46",
+    "after_sha256": "1de99f84f62bce3fafeec17d6ae7d084e18059d681c57fb18d7bde0bcd06c569"
+  },
+  {
+    "file": "START_LINUX.sh",
+    "status": "new",
+    "before_sha256": null,
+    "after_sha256": "3ee9804b9df6fdb20dfe50ff32a6ea448254c20b0b214e9db2da53ef1d5fbe73"
+  },
+  {
+    "file": "START_WINDOWS.bat",
+    "status": "modified",
+    "before_sha256": "2a7100e3c50d49d994ed219a151cfb3a78f9a256251a9ddd102b931414e5073a",
+    "after_sha256": "c71908d86672fc353fd8e2f8b65a702580707c89d7fed078974c73c3dc89c8c3"
+  },
+  {
+    "file": "VALIDATION_V35.md",
+    "status": "new",
+    "before_sha256": null,
+    "after_sha256": "ace7455e80911637a3c77e00b7cf3e5d0321f0ec44ed79a2ac42e73804973eed"
+  },
+  {
+    "file": "docs/MANUAL_CHECK_V35.md",
+    "status": "new",
+    "before_sha256": null,
+    "after_sha256": "cb693f790f54a0703a06a90e3a24b83f20fcc189b3876cb1e151f4032079c28e"
+  },
+  {
+    "file": "docs/V35_IMPLEMENTATION.md",
+    "status": "new",
+    "before_sha256": null,
+    "after_sha256": "a2b270582d2351779bb3a5a46f1c4879b8a18f54d2eb198c7ce7a051aba54b7a"
+  },
+  {
+    "file": "package-lock.json",
+    "status": "modified",
+    "before_sha256": "cca930e429ddb5590734b978306185d5d92dc36567639ff46546c5b4d99b0e3a",
+    "after_sha256": "622781e266e5191569c78322b83278b5baca53f02e4a0c2bccb064ef78a2e70a"
+  },
+  {
+    "file": "package.json",
+    "status": "modified",
+    "before_sha256": "93ff3e02b8131b0390be22d5010001394952b2fd2bce2eeaf89f8a18abd46c87",
+    "after_sha256": "0772d0cd3591ec4a49237b8de2fad26ffa5f4c8d96976e6db65453cb8b2aba44"
+  },
+  {
+    "file": "server.py",
+    "status": "modified",
+    "before_sha256": "e1c843ffa44c4c49fb1ea88fc6b0420b75ab450716953a28c8955624d0bc5ef5",
+    "after_sha256": "73b5c1aefad7f16c0c90222b56cf8e4c2aa81feed7e3889d8ea318f8c071c8e5"
+  },
+  {
+    "file": "tests/test_web_api.py",
+    "status": "modified",
+    "before_sha256": "fc1100d26d1844b4c16577423310c392d289fc1f1e37a397828bb8badf99f8f7",
+    "after_sha256": "75a26dcc7cdabd379d0bd2ae440e0f9697302ff8474e8a17f4f04ec36c60ddd4"
+  },
+  {
+    "file": "tests_js/learning.test.mjs",
+    "status": "new",
+    "before_sha256": null,
+    "after_sha256": "3f3c9c2c36f5c5d3968c5d0ff75551b1f05fdd6c5f7c731ecaf07ee57b8a5c7e"
+  },
+  {
+    "file": "tests_js/lessons.test.mjs",
+    "status": "modified",
+    "before_sha256": "6d1cd1c721b9fd9b815d36e47b72d00e8a04f6b02660413c049137cbb2e3afd5",
+    "after_sha256": "3159521bfea6f9b00dd998d7114ead7bcba964ef41b05e60d79f1b8a24e1588f"
+  },
+  {
+    "file": "tests_js/liquids.test.mjs",
+    "status": "new",
+    "before_sha256": null,
+    "after_sha256": "40deb9265163bc5aef2c55a4377a8ede56f717aa6785ef6a8ba2572d9ec1418f"
+  },
+  {
+    "file": "tests_js/rotation-physics.test.mjs",
+    "status": "new",
+    "before_sha256": null,
+    "after_sha256": "76a173ab4618305bcbabbda7912b0b56628cbfdd4997cdefef780d6cdcb91888"
+  },
+  {
+    "file": "tools/audit_v35.py",
+    "status": "new",
+    "before_sha256": null,
+    "after_sha256": "c043616b3ffaa892e015ad72396b0c6c41251de22afdd5864a8fc84835456a5f"
+  },
+  {
+    "file": "tools/benchmark_v35.mjs",
+    "status": "new",
+    "before_sha256": null,
+    "after_sha256": "3a4b6145f739ab6af228b1c5571df5df55cccce4c280793dbd6eb1ce5f63d6dd"
+  },
+  {
+    "file": "tools/package_project.py",
+    "status": "modified",
+    "before_sha256": "f9176145234ac38938475c31f5b85066cf749e22f60e6b366897bf4590269f84",
+    "after_sha256": "b275e8987ea20c829980080714e234891fbe12f6fdffd55b7dd890da0a2ccd9a"
+  },
+  {
+    "file": "tools/qa_core_v35.mjs",
+    "status": "new",
+    "before_sha256": null,
+    "after_sha256": "38fdd030b739a611c32e9d7ec39a6aab1c6d1472ea0f7450ab0cd6494205898d"
+  },
+  {
+    "file": "tools/qa_regression_v35.mjs",
+    "status": "new",
+    "before_sha256": null,
+    "after_sha256": "619d44bc3b4f8c24090e9fca89944996c5de9d1399c69be73cd4ccd596b37135"
+  },
+  {
+    "file": "tools/qa_v35.mjs",
+    "status": "new",
+    "before_sha256": null,
+    "after_sha256": "c7b3fbd46934ce5e974e96c2e551ca4e8ec293e8ea7c4a9ba75e4a65ae07ac2e"
+  },
+  {
+    "file": "web/data/lessons-thpt.json",
+    "status": "modified",
+    "before_sha256": "38e792d745c06cf94117ed76f9dedd7c648fea2e71da5e7a630ebaa4b3848ce6",
+    "after_sha256": "c66a19c822e9d6edcf6cabf1e699fc1e67285acad93529c439a288261f064fdd"
+  },
+  {
+    "file": "web/index.html",
+    "status": "modified",
+    "before_sha256": "957d1e946df5b10f82f08feefc223bf010a839a997e48e53cd026c47d05c8533",
+    "after_sha256": "1ade8d6072c3f95017032b23929674c8f0a37222d30e1260850e3c0839fa9948"
+  },
+  {
+    "file": "web/src/ai-tutor.js",
+    "status": "new",
+    "before_sha256": null,
+    "after_sha256": "d905178e3818f106c44140f67dbc68dfd704cde021b02fd229a33b6e4667f4de"
+  },
+  {
+    "file": "web/src/environment.js",
+    "status": "modified",
+    "before_sha256": "430e9af0012d17470ef315b8b7ea178a48f4e436846358dab56d14612c9ddc4e",
+    "after_sha256": "59cdf5bc56b4dbe2a87c6213677f4748526d1fdc6b379cab1ab70ba46feb5bf1"
+  },
+  {
+    "file": "web/src/interaction.js",
+    "status": "modified",
+    "before_sha256": "10d2140abf302561b5517ccf0692bcceaadfcedf1707443f106884d7bd44caa2",
+    "after_sha256": "36bd89b471ffc062243c257d70b77e9f0c4a455cc8501cc9a175108df0bf6ce8"
+  },
+  {
+    "file": "web/src/lesson-chemistry.js",
+    "status": "modified",
+    "before_sha256": "577bb5d5d7acd6ccfab12890d19897a17f4156e99d1bc76c3496f3867661d781",
+    "after_sha256": "17535abb2928894adcf7e1bf0d820acfa220af725f0db6d51fd767d8ecaf6050"
+  },
+  {
+    "file": "web/src/lesson-visuals.js",
+    "status": "modified",
+    "before_sha256": "87a2ae3479b6fefb738d9127fac5b974de73cb75509f13b6980603c928656750",
+    "after_sha256": "2afccdf5eb9ec46086b4a480cd46a4f2e8fc803df669a2a7c0641591bb1d88c4"
+  },
+  {
+    "file": "web/src/lessons.js",
+    "status": "modified",
+    "before_sha256": "eeca0d27e373edbfd8294e319da435f367067f2616b717985bb87aefdc8c7fb0",
+    "after_sha256": "3e56cc56e096ae6ce1d0fda65fb08d64aa18ddacd0bf29a1e9fd00e16413e432"
+  },
+  {
+    "file": "web/src/liquid-simulation.js",
+    "status": "new",
+    "before_sha256": null,
+    "after_sha256": "e12eea33486c27054bdd7c5d9068b1b02a3a12ea3e7e613a0e870418d96bc1dc"
+  },
+  {
+    "file": "web/src/liquid-visual.js",
+    "status": "new",
+    "before_sha256": null,
+    "after_sha256": "04d2b21e0fee02036b9c1aadf9cd2969ad605658a1c7daf19e0c2e280b2c1c2e"
+  },
+  {
+    "file": "web/src/main.js",
+    "status": "modified",
+    "before_sha256": "911aeb62cfefe04d68572d03cc1c781301233ae585e9fc49872629905a43f7fb",
+    "after_sha256": "19765b9be198c0fb9a32fa08ed25983715adafd8d84eaf2dff9aba03f3a213ca"
+  },
+  {
+    "file": "web/src/pourable.js",
+    "status": "new",
+    "before_sha256": null,
+    "after_sha256": "5904de0b8528c2541a64b57c8918e7891097c7fef3d555771c8bdb3575cfdde8"
+  },
+  {
+    "file": "web/src/reaction-visuals.js",
+    "status": "new",
+    "before_sha256": null,
+    "after_sha256": "cbae719ecc4cbfb764981b3625a61d6edac18daa0168f4f58ed377277fef689b"
+  },
+  {
+    "file": "web/src/render3d.js",
+    "status": "modified",
+    "before_sha256": "f8ba6d5faaa268775f405b890db9a5505cb290c94c434bc8c7dfede9249413fe",
+    "after_sha256": "8db1851feb8a2bd9de94ff3954c36b2065e56570dca7994709da102f2c9eba86"
+  },
+  {
+    "file": "web/src/spill-ledger.js",
+    "status": "new",
+    "before_sha256": null,
+    "after_sha256": "180d1f20d907313b3b4b4cd8b88f14c897a6448aeb87158f0035c6d53e39dbfb"
+  },
+  {
+    "file": "web/src/student-logger.js",
+    "status": "new",
+    "before_sha256": null,
+    "after_sha256": "25cc935e60663cbc2be698cd89a82e41fb983b1ddd00f0e9bdebc79df1f64e71"
+  },
+  {
+    "file": "web/styles.css",
+    "status": "modified",
+    "before_sha256": "f363aa7280d0c9863319e54c9c067ee4f61c3da46bf815458a93f0597ea4dd8b",
+    "after_sha256": "e6d4b48e039db71cfe33515f74c4ffa31d272b6b10371397dcd6f1576f79862a"
+  }
+]

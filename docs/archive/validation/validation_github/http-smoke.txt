@@ -1,0 +1,11 @@
+PASS HTTP /
+PASS HTTP /ui/shell.js
+PASS HTTP /ui/hololab-ar-v3.css
+PASS HTTP /egad-pilot.html
+PASS HTTP /data/egad-model.json
+PASS HTTP /data/egad-questions.json
+PASS HTTP /data/egad-examples.json
+PASS HTTP /src/mouse-motion.js
+PASS HTTP /vendor/rapier/rapier.mjs
+PASS pilot inline module syntax
+PASS 45 examples cover 9 questions with synthetic provenance

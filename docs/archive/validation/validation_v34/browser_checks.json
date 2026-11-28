@@ -1,0 +1,10 @@
+{
+  "checks": [
+    {
+      "name": "Startup: local Rapier WASM, Three.js, chemistry API",
+      "passed": true
+    }
+  ],
+  "page_errors": [],
+  "physical_camera_tested": false
+}

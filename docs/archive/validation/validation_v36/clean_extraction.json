@@ -1,0 +1,15 @@
+{
+  "clean_zip": "HoloLab_AR_V3_6_candidate.zip",
+  "zip_sha256": "78e0bc522c7158e2a4133f654bec08c5b83856111135d0d520f37cc729e311d0",
+  "runtime_files_verified": 1773,
+  "js_tests": 111,
+  "python_tests": 91,
+  "physical_webcam_tested": false,
+  "notes": [
+    "Fresh extraction, all runtime SHA-256 entries match. Final ZIP may add documentation/soak reports; runtime hash manifest must stay identical.",
+    "The 30-minute endurance test loads the core before the final small-screen aria-expanded toggle correction. This UI handler is checked separately on the clean extraction; tracking/physics/liquids code is identical."
+  ],
+  "browser_regression_groups": 8,
+  "small_screen_menu_open_close_and_aria_verified": true,
+  "runtime_errors": []
+}

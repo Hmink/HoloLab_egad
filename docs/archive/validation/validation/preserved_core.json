@@ -1,0 +1,22 @@
+{
+  "chemlab/safety.py": true,
+  "chemlab/chemistry.py": true,
+  "chemlab/tracking.py": true,
+  "chemlab/gestures.py": true,
+  "chemlab/scene.py": true,
+  "chemlab/__init__.py": true,
+  "chemlab/selection.py": true,
+  "chemlab/config.py": true,
+  "chemlab/render.py": true,
+  "lab3d/mixture.py": true,
+  "lab3d/catalog.py": true,
+  "lab3d/ui.py": true,
+  "lab3d/camera.py": true,
+  "lab3d/scene.py": true,
+  "lab3d/geometry.py": true,
+  "lab3d/hand_input.py": true,
+  "lab3d/__init__.py": true,
+  "lab3d/gl_renderer.py": true,
+  "data/hazards.json": true,
+  "data/chemistry.json": true
+}

@@ -1,0 +1,20 @@
+{
+  "web/src/reaction-ui.js": "1efa4f70631537e464fa781cf481786b0a2908c2e3857b6d2f3b492c877f843a",
+  "web/src/bench.js": "d85cb3065be72d89087ee1b7b5bdff1194566c49382c657033055da878d1e6d3",
+  "web/src/reaction-engine.js": "496cf54e12b3340f439234e61298ae7f41734edbb8783dd2e834ba386d5e5dd1",
+  "web/src/tracks.js": "1fa8e995ee2bb0c57e4c614707e7d43a9b256de1fc7f0c4e2c4c21d384c2c52c",
+  "web/src/titration.js": "afe288356ee6607efb9b507bab1092e4cfc7d6671f801f796fdddb326aaff3bc",
+  "web/src/render3d.js": "b045694068a8da45f3fb979f757bd1c8ec5e21f4aa70c82364d6ccf37ca590b5",
+  "web/src/hand-worker.js": "c6083bf36c11f7b5d15f28aefee8256924beb2dfb512c90810bafcd76b2b6773",
+  "web/src/main.js": "a9e574b94efabe0612a95906f553ae0c2fcb02a1b49e48914d8f6049659c5f1c",
+  "web/src/capture.js": "d88202d2bb497355c8174389cc1d5758b7693d41112b59fb33c5fae3489b4511",
+  "web/src/environment.js": "16375d53bdee24c992c3444d0ae277ca7218b26959cb07e10fa30aeee49cca82",
+  "web/src/interaction.js": "275cdb7c4c4e4163890204d0893be651f0a4e09e57716692accb8aa83dae516c",
+  "web/src/coordinates.js": "ed6c6424203c0df3b66c93c63354c566643c913ffc883ff84fcf7dfb8e51cf53",
+  "web/src/filters.js": "e0fc3c1c0c0858210939f556f2d82e6a888bf2bf166b9bb678cf890c4a95c3bf",
+  "web/src/metrics.js": "8847c1ad8e5c1153703891bd806b827214492ea24ebbab8550b672a9696c7f17",
+  "server.py": "67e36c74af046a26bde09d835e215811becb6df5b098c80b678febd031f17bde",
+  "web/index.html": "553d6dc2cea506c7a37ae70f2df6ae9fcc26f472b36104bf0e16fee9a7523fe8",
+  "web/styles.css": "efb5c05f24430e0a4de049262e189aee4b6c2fe1539069c27eec8c7acb37ad32",
+  "web/data/reactions100.json": "002bdbe84324ba7ddbc9833e886cfcf84c168baf44917194d6191a9c5184ee52"
+}

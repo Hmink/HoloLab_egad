@@ -1,0 +1,2292 @@
+{
+  "complete": true,
+  "requiredMinutes": 30,
+  "durationSeconds": 1807.579,
+  "meets30Minutes": true,
+  "physicalCameraTested": false,
+  "humanHandsTested": false,
+  "environment": "Chromium 133 headless SwiftShader; real MediaPipe with synthetic camera; one programmatic movement per minute, engine fire/reset every minute",
+  "samples": [
+    {
+      "minute": 1,
+      "elapsedSeconds": 60.118,
+      "frames": 2421,
+      "track": 261,
+      "frameCost": 5901.299999900162,
+      "physicsCost": 1476.0999996438622,
+      "cycles": 1,
+      "running": true,
+      "fault": false,
+      "camera": {
+        "requested": "HD",
+        "applied": "HD",
+        "auto": false,
+        "settings": {
+          "width": 1280,
+          "height": 720,
+          "frameRate": 20,
+          "aspectRatio": 1.7777777777777777,
+          "resizeMode": "none",
+          "focusMode": "manual"
+        },
+        "video_width": 1280,
+        "video_height": 720,
+        "inference_width": 640,
+        "input_width": 640,
+        "input_height": 360,
+        "note": ""
+      },
+      "gpuResources": {
+        "geometries": 74,
+        "textures": 7
+      },
+      "programs": 12,
+      "effects": 0,
+      "objects": 5,
+      "recoveryCount": 0,
+      "liquidError": null,
+      "bodies": [
+        {
+          "id": 1,
+          "finite": true,
+          "penetration": 0,
+          "sleeping": true
+        },
+        {
+          "id": 2,
+          "finite": true,
+          "penetration": 0,
+          "sleeping": true
+        },
+        {
+          "id": 3,
+          "finite": true,
+          "penetration": 0,
+          "sleeping": true
+        },
+        {
+          "id": 4,
+          "finite": true,
+          "penetration": 0,
+          "sleeping": true
+        },
+        {
+          "id": 5,
+          "finite": true,
+          "penetration": 0,
+          "sleeping": true
+        }
+      ],
+      "renderFPS": 40.270800758508265,
+      "trackingHz": 4.341461791809441,
+      "jsHeapUsedBytes": 15060216,
+      "jsHeapTotalBytes": 33464320,
+      "rendererTaskSeconds": 30.731708
+    },
+    {
+      "minute": 2,
+      "elapsedSeconds": 120.181,
+      "frames": 4703,
+      "track": 499,
+      "frameCost": 12513.79999999702,
+      "physicsCost": 2834.499999500811,
+      "cycles": 2,
+      "running": true,
+      "fault": false,
+      "camera": {
+        "requested": "HD",
+        "applied": "HD",
+        "auto": false,
+        "settings": {
+          "width": 1280,
+          "height": 720,
+          "frameRate": 20,
+          "aspectRatio": 1.7777777777777777,
+          "resizeMode": "none",
+          "focusMode": "manual"
+        },
+        "video_width": 1280,
+        "video_height": 720,
+        "inference_width": 640,
+        "input_width": 640,
+        "input_height": 360,
+        "note": ""
+      },
+      "gpuResources": {
+        "geometries": 70,
+        "textures": 7
+      },
+      "programs": 12,
+      "effects": 0,
+      "objects": 5,
+      "recoveryCount": 0,
+      "liquidError": null,
+      "bodies": [
+        {
+          "id": 1,
+          "finite": true,
+          "penetration": 0,
+          "sleeping": true
+        },
+        {
+          "id": 2,
+          "finite": true,
+          "penetration": 0,
+          "sleeping": true
+        },
+        {
+          "id": 3,
+          "finite": true,
+          "penetration": 0,
+          "sleeping": true
+        },
+        {
+          "id": 4,
+          "finite": true,
+          "penetration": 0,
+          "sleeping": true
+        },
+        {
+          "id": 5,
+          "finite": true,
+          "penetration": 0,
+          "sleeping": true
+        }
+      ],
+      "renderFPS": 37.99344022110118,
+      "trackingHz": 3.962506035329571,
+      "jsHeapUsedBytes": 18449336,
+      "jsHeapTotalBytes": 35299328,
+      "rendererTaskSeconds": 62.890967
+    },
+    {
+      "minute": 3,
+      "elapsedSeconds": 180.249,
+      "frames": 6424,
+      "track": 685,
+      "frameCost": 18671.99999973178,
+      "physicsCost": 4841.099999144673,
+      "cycles": 3,
+      "running": true,
+      "fault": false,
+      "camera": {
+        "requested": "HD",
+        "applied": "HD",
+        "auto": false,
+        "settings": {
+          "width": 1280,
+          "height": 720,
+          "frameRate": 20,
+          "aspectRatio": 1.7777777777777777,
+          "resizeMode": "none",
+          "focusMode": "manual"
+        },
+        "video_width": 1280,
+        "video_height": 720,
+        "inference_width": 640,
+        "input_width": 640,
+        "input_height": 360,
+        "note": ""
+      },
+      "gpuResources": {
+        "geometries": 74,
+        "textures": 7
+      },
+      "programs": 12,
+      "effects": 0,
+      "objects": 5,
+      "recoveryCount": 0,
+      "liquidError": null,
+      "bodies": [
+        {
+          "id": 1,
+          "finite": true,
+          "penetration": 0,
+          "sleeping": true
+        },
+        {
+          "id": 2,
+          "finite": true,
+          "penetration": 0,
+          "sleeping": true
+        },
+        {
+          "id": 3,
+          "finite": true,
+          "penetration": 0,
+          "sleeping": true
+        },
+        {
+          "id": 4,
+          "finite": true,
+          "penetration": 0,
+          "sleeping": true
+        },
+        {
+          "id": 5,
+          "finite": true,
+          "penetration": 0,
+          "sleeping": true
+        }
+      ],
+      "renderFPS": 28.650862355996537,
+      "trackingHz": 3.0964906439368716,
+      "jsHeapUsedBytes": 12739044,
+      "jsHeapTotalBytes": 31461376,
+      "rendererTaskSeconds": 100.15112
+    },
+    {
+      "minute": 4,
+      "elapsedSeconds": 240.36,
+      "frames": 8669,
+      "track": 931,
+      "frameCost": 23834.899999581277,
+      "physicsCost": 6036.099998891354,
+      "cycles": 4,
+      "running": true,
+      "fault": false,
+      "camera": {
+        "requested": "HD",
+        "applied": "HD",
+        "auto": false,
+        "settings": {
+          "width": 1280,
+          "height": 720,
+          "frameRate": 20,
+          "aspectRatio": 1.7777777777777777,
+          "resizeMode": "none",
+          "focusMode": "manual"
+        },
+        "video_width": 1280,
+        "video_height": 720,
+        "inference_width": 640,
+        "input_width": 640,
+        "input_height": 360,
+        "note": ""
+      },
+      "gpuResources": {
+        "geometries": 74,
+        "textures": 7
+      },
+      "programs": 12,
+      "effects": 0,
+      "objects": 5,
+      "recoveryCount": 0,
+      "liquidError": null,
+      "bodies": [
+        {
+          "id": 1,
+          "finite": true,
+          "penetration": 0,
+          "sleeping": true
+        },
+        {
+          "id": 2,
+          "finite": true,
+          "penetration": 0,
+          "sleeping": true
+        },
+        {
+          "id": 3,
+          "finite": true,
+          "penetration": 0,
+          "sleeping": true
+        },
+        {
+          "id": 4,
+          "finite": true,
+          "penetration": 0,
+          "sleeping": true
+        },
+        {
+          "id": 5,
+          "finite": true,
+          "penetration": 0,
+          "sleeping": true
+        }
+      ],
+      "renderFPS": 37.347573655404155,
+      "trackingHz": 4.092429006338273,
+      "jsHeapUsedBytes": 11340188,
+      "jsHeapTotalBytes": 32772096,
+      "rendererTaskSeconds": 131.302411
+    },
+    {
+      "minute": 5,
+      "elapsedSeconds": 300.496,
+      "frames": 10784,
+      "track": 1165,
+      "frameCost": 28770.79999947548,
+      "physicsCost": 7292.299998879433,
+      "cycles": 5,
+      "running": true,
+      "fault": false,
+      "camera": {
+        "requested": "HD",
+        "applied": "HD",
+        "auto": false,
+        "settings": {
+          "width": 1280,
+          "height": 720,
+          "frameRate": 20,
+          "aspectRatio": 1.7777777777777777,
+          "resizeMode": "none",
+          "focusMode": "manual"
+        },
+        "video_width": 1280,
+        "video_height": 720,
+        "inference_width": 640,
+        "input_width": 640,
+        "input_height": 360,
+        "note": ""
+      },
+      "gpuResources": {
+        "geometries": 74,
+        "textures": 7
+      },
+      "programs": 12,
+      "effects": 0,
+      "objects": 5,
+      "recoveryCount": 0,
+      "liquidError": null,
+      "bodies": [
+        {
+          "id": 1,
+          "finite": true,
+          "penetration": 0,
+          "sleeping": true
+        },
+        {
+          "id": 2,
+          "finite": true,
+          "penetration": 0,
+          "sleeping": true
+        },
+        {
+          "id": 3,
+          "finite": true,
+          "penetration": 0,
+          "sleeping": true
+        },
+        {
+          "id": 4,
+          "finite": true,
+          "penetration": 0,
+          "sleeping": true
+        },
+        {
+          "id": 5,
+          "finite": true,
+          "penetration": 0,
+          "sleeping": true
+        }
+      ],
+      "renderFPS": 35.170280697086625,
+      "trackingHz": 3.8911799920180945,
+      "jsHeapUsedBytes": 18599792,
+      "jsHeapTotalBytes": 49549312,
+      "rendererTaskSeconds": 164.036545
+    },
+    {
+      "minute": 6,
+      "elapsedSeconds": 360.589,
+      "frames": 12766,
+      "track": 1385,
+      "frameCost": 33703.39999975264,
+      "physicsCost": 8635.4999987185,
+      "cycles": 6,
+      "running": true,
+      "fault": false,
+      "camera": {
+        "requested": "HD",
+        "applied": "HD",
+        "auto": false,
+        "settings": {
+          "width": 1280,
+          "height": 720,
+          "frameRate": 20,
+          "aspectRatio": 1.7777777777777777,
+          "resizeMode": "none",
+          "focusMode": "manual"
+        },
+        "video_width": 1280,
+        "video_height": 720,
+        "inference_width": 640,
+        "input_width": 640,
+        "input_height": 360,
+        "note": ""
+      },
+      "gpuResources": {
+        "geometries": 74,
+        "textures": 7
+      },
+      "programs": 12,
+      "effects": 0,
+      "objects": 5,
+      "recoveryCount": 0,
+      "liquidError": null,
+      "bodies": [
+        {
+          "id": 1,
+          "finite": true,
+          "penetration": 0,
+          "sleeping": true
+        },
+        {
+          "id": 2,
+          "finite": true,
+          "penetration": 0,
+          "sleeping": true
+        },
+        {
+          "id": 3,
+          "finite": true,
+          "penetration": 0,
+          "sleeping": true
+        },
+        {
+          "id": 4,
+          "finite": true,
+          "penetration": 0,
+          "sleeping": true
+        },
+        {
+          "id": 5,
+          "finite": true,
+          "penetration": 0,
+          "sleeping": true
+        }
+      ],
+      "renderFPS": 32.98221090642836,
+      "trackingHz": 3.660992128866922,
+      "jsHeapUsedBytes": 14926648,
+      "jsHeapTotalBytes": 18354176,
+      "rendererTaskSeconds": 197.920352
+    },
+    {
+      "minute": 7,
+      "elapsedSeconds": 420.742,
+      "frames": 15078,
+      "track": 1627,
+      "frameCost": 38949.699999794364,
+      "physicsCost": 9869.29999870807,
+      "cycles": 7,
+      "running": true,
+      "fault": false,
+      "camera": {
+        "requested": "HD",
+        "applied": "HD",
+        "auto": false,
+        "settings": {
+          "width": 1280,
+          "height": 720,
+          "frameRate": 20,
+          "aspectRatio": 1.7777777777777777,
+          "resizeMode": "none",
+          "focusMode": "manual"
+        },
+        "video_width": 1280,
+        "video_height": 720,
+        "inference_width": 640,
+        "input_width": 640,
+        "input_height": 360,
+        "note": ""
+      },
+      "gpuResources": {
+        "geometries": 74,
+        "textures": 7
+      },
+      "programs": 12,
+      "effects": 0,
+      "objects": 5,
+      "recoveryCount": 0,
+      "liquidError": null,
+      "bodies": [
+        {
+          "id": 1,
+          "finite": true,
+          "penetration": 0,
+          "sleeping": true
+        },
+        {
+          "id": 2,
+          "finite": true,
+          "penetration": 0,
+          "sleeping": true
+        },
+        {
+          "id": 3,
+          "finite": true,
+          "penetration": 0,
+          "sleeping": true
+        },
+        {
+          "id": 4,
+          "finite": true,
+          "penetration": 0,
+          "sleeping": true
+        },
+        {
+          "id": 5,
+          "finite": true,
+          "penetration": 0,
+          "sleeping": true
+        }
+      ],
+      "renderFPS": 38.43532325902281,
+      "trackingHz": 4.023074493375225,
+      "jsHeapUsedBytes": 11113192,
+      "jsHeapTotalBytes": 21762048,
+      "rendererTaskSeconds": 229.434464
+    },
+    {
+      "minute": 8,
+      "elapsedSeconds": 480.84,
+      "frames": 17294,
+      "track": 1860,
+      "frameCost": 44516.79999938607,
+      "physicsCost": 10985.099998377264,
+      "cycles": 8,
+      "running": true,
+      "fault": false,
+      "camera": {
+        "requested": "HD",
+        "applied": "HD",
+        "auto": false,
+        "settings": {
+          "width": 1280,
+          "height": 720,
+          "frameRate": 20,
+          "aspectRatio": 1.7777777777777777,
+          "resizeMode": "none",
+          "focusMode": "manual"
+        },
+        "video_width": 1280,
+        "video_height": 720,
+        "inference_width": 640,
+        "input_width": 640,
+        "input_height": 360,
+        "note": ""
+      },
+      "gpuResources": {
+        "geometries": 74,
+        "textures": 7
+      },
+      "programs": 12,
+      "effects": 0,
+      "objects": 5,
+      "recoveryCount": 0,
+      "liquidError": null,
+      "bodies": [
+        {
+          "id": 1,
+          "finite": true,
+          "penetration": 0,
+          "sleeping": true
+        },
+        {
+          "id": 2,
+          "finite": true,
+          "penetration": 0,
+          "sleeping": true
+        },
+        {
+          "id": 3,
+          "finite": true,
+          "penetration": 0,
+          "sleeping": true
+        },
+        {
+          "id": 4,
+          "finite": true,
+          "penetration": 0,
+          "sleeping": true
+        },
+        {
+          "id": 5,
+          "finite": true,
+          "penetration": 0,
+          "sleeping": true
+        }
+      ],
+      "renderFPS": 36.873107258145055,
+      "trackingHz": 3.8770008985324,
+      "jsHeapUsedBytes": 13102944,
+      "jsHeapTotalBytes": 24645632,
+      "rendererTaskSeconds": 260.858632
+    },
+    {
+      "minute": 9,
+      "elapsedSeconds": 541.082,
+      "frames": 19392,
+      "track": 2093,
+      "frameCost": 49898.899999171495,
+      "physicsCost": 12244.799998104572,
+      "cycles": 9,
+      "running": true,
+      "fault": false,
+      "camera": {
+        "requested": "HD",
+        "applied": "HD",
+        "auto": false,
+        "settings": {
+          "width": 1280,
+          "height": 720,
+          "frameRate": 20,
+          "aspectRatio": 1.7777777777777777,
+          "resizeMode": "none",
+          "focusMode": "manual"
+        },
+        "video_width": 1280,
+        "video_height": 720,
+        "inference_width": 640,
+        "input_width": 640,
+        "input_height": 360,
+        "note": ""
+      },
+      "gpuResources": {
+        "geometries": 70,
+        "textures": 7
+      },
+      "programs": 12,
+      "effects": 0,
+      "objects": 5,
+      "recoveryCount": 0,
+      "liquidError": null,
+      "bodies": [
+        {
+          "id": 1,
+          "finite": true,
+          "penetration": 0,
+          "sleeping": true
+        },
+        {
+          "id": 2,
+          "finite": true,
+          "penetration": 0,
+          "sleeping": true
+        },
+        {
+          "id": 3,
+          "finite": true,
+          "penetration": 0,
+          "sleeping": true
+        },
+        {
+          "id": 4,
+          "finite": true,
+          "penetration": 0,
+          "sleeping": true
+        },
+        {
+          "id": 5,
+          "finite": true,
+          "penetration": 0,
+          "sleeping": true
+        }
+      ],
+      "renderFPS": 34.82620098934297,
+      "trackingHz": 3.867733474984229,
+      "jsHeapUsedBytes": 17034152,
+      "jsHeapTotalBytes": 24645632,
+      "rendererTaskSeconds": 294.734751
+    },
+    {
+      "minute": 10,
+      "elapsedSeconds": 601.298,
+      "frames": 21200,
+      "track": 2285,
+      "frameCost": 56326.69999908656,
+      "physicsCost": 13863.499997787178,
+      "cycles": 10,
+      "running": true,
+      "fault": false,
+      "camera": {
+        "requested": "HD",
+        "applied": "HD",
+        "auto": false,
+        "settings": {
+          "width": 1280,
+          "height": 720,
+          "frameRate": 20,
+          "aspectRatio": 1.7777777777777777,
+          "resizeMode": "none",
+          "focusMode": "manual"
+        },
+        "video_width": 1280,
+        "video_height": 720,
+        "inference_width": 640,
+        "input_width": 640,
+        "input_height": 360,
+        "note": ""
+      },
+      "gpuResources": {
+        "geometries": 70,
+        "textures": 7
+      },
+      "programs": 12,
+      "effects": 0,
+      "objects": 5,
+      "recoveryCount": 0,
+      "liquidError": null,
+      "bodies": [
+        {
+          "id": 1,
+          "finite": true,
+          "penetration": 0,
+          "sleeping": true
+        },
+        {
+          "id": 2,
+          "finite": true,
+          "penetration": 0,
+          "sleeping": true
+        },
+        {
+          "id": 3,
+          "finite": true,
+          "penetration": 0,
+          "sleeping": true
+        },
+        {
+          "id": 4,
+          "finite": true,
+          "penetration": 0,
+          "sleeping": true
+        },
+        {
+          "id": 5,
+          "finite": true,
+          "penetration": 0,
+          "sleeping": true
+        }
+      ],
+      "renderFPS": 30.025242460475617,
+      "trackingHz": 3.1885213232363485,
+      "jsHeapUsedBytes": 15630416,
+      "jsHeapTotalBytes": 32247808,
+      "rendererTaskSeconds": 329.951834
+    },
+    {
+      "minute": 11,
+      "elapsedSeconds": 661.553,
+      "frames": 22686,
+      "track": 2448,
+      "frameCost": 61222.999999165535,
+      "physicsCost": 15190.499997504056,
+      "cycles": 11,
+      "running": true,
+      "fault": false,
+      "camera": {
+        "requested": "HD",
+        "applied": "HD",
+        "auto": false,
+        "settings": {
+          "width": 1280,
+          "height": 720,
+          "frameRate": 20,
+          "aspectRatio": 1.7777777777777777,
+          "resizeMode": "none",
+          "focusMode": "manual"
+        },
+        "video_width": 1280,
+        "video_height": 720,
+        "inference_width": 640,
+        "input_width": 640,
+        "input_height": 360,
+        "note": ""
+      },
+      "gpuResources": {
+        "geometries": 74,
+        "textures": 7
+      },
+      "programs": 12,
+      "effects": 0,
+      "objects": 5,
+      "recoveryCount": 0,
+      "liquidError": null,
+      "bodies": [
+        {
+          "id": 1,
+          "finite": true,
+          "penetration": 0,
+          "sleeping": true
+        },
+        {
+          "id": 2,
+          "finite": true,
+          "penetration": 0,
+          "sleeping": true
+        },
+        {
+          "id": 3,
+          "finite": true,
+          "penetration": 0,
+          "sleeping": true
+        },
+        {
+          "id": 4,
+          "finite": true,
+          "penetration": 0,
+          "sleeping": true
+        },
+        {
+          "id": 5,
+          "finite": true,
+          "penetration": 0,
+          "sleeping": true
+        }
+      ],
+      "renderFPS": 24.661853788067383,
+      "trackingHz": 2.705169695460958,
+      "jsHeapUsedBytes": 18927516,
+      "jsHeapTotalBytes": 32509952,
+      "rendererTaskSeconds": 369.712564
+    },
+    {
+      "minute": 12,
+      "elapsedSeconds": 721.661,
+      "frames": 24262,
+      "track": 2622,
+      "frameCost": 66942.59999937564,
+      "physicsCost": 16754.299997396767,
+      "cycles": 12,
+      "running": true,
+      "fault": false,
+      "camera": {
+        "requested": "HD",
+        "applied": "HD",
+        "auto": false,
+        "settings": {
+          "width": 1280,
+          "height": 720,
+          "frameRate": 20,
+          "aspectRatio": 1.7777777777777777,
+          "resizeMode": "none",
+          "focusMode": "manual"
+        },
+        "video_width": 1280,
+        "video_height": 720,
+        "inference_width": 640,
+        "input_width": 640,
+        "input_height": 360,
+        "note": ""
+      },
+      "gpuResources": {
+        "geometries": 70,
+        "textures": 7
+      },
+      "programs": 12,
+      "effects": 0,
+      "objects": 5,
+      "recoveryCount": 0,
+      "liquidError": null,
+      "bodies": [
+        {
+          "id": 1,
+          "finite": true,
+          "penetration": 0,
+          "sleeping": true
+        },
+        {
+          "id": 2,
+          "finite": true,
+          "penetration": 0,
+          "sleeping": true
+        },
+        {
+          "id": 3,
+          "finite": true,
+          "penetration": 0,
+          "sleeping": true
+        },
+        {
+          "id": 4,
+          "finite": true,
+          "penetration": 0,
+          "sleeping": true
+        },
+        {
+          "id": 5,
+          "finite": true,
+          "penetration": 0,
+          "sleeping": true
+        }
+      ],
+      "renderFPS": 26.21947161775473,
+      "trackingHz": 2.894789379117591,
+      "jsHeapUsedBytes": 14458308,
+      "jsHeapTotalBytes": 20451328,
+      "rendererTaskSeconds": 408.896359
+    },
+    {
+      "minute": 13,
+      "elapsedSeconds": 781.812,
+      "frames": 25741,
+      "track": 2784,
+      "frameCost": 71619.09999909997,
+      "physicsCost": 17917.399997152388,
+      "cycles": 13,
+      "running": true,
+      "fault": false,
+      "camera": {
+        "requested": "HD",
+        "applied": "HD",
+        "auto": false,
+        "settings": {
+          "width": 1280,
+          "height": 720,
+          "frameRate": 20,
+          "aspectRatio": 1.7777777777777777,
+          "resizeMode": "none",
+          "focusMode": "manual"
+        },
+        "video_width": 1280,
+        "video_height": 720,
+        "inference_width": 640,
+        "input_width": 640,
+        "input_height": 360,
+        "note": ""
+      },
+      "gpuResources": {
+        "geometries": 74,
+        "textures": 7
+      },
+      "programs": 12,
+      "effects": 0,
+      "objects": 5,
+      "recoveryCount": 0,
+      "liquidError": null,
+      "bodies": [
+        {
+          "id": 1,
+          "finite": true,
+          "penetration": 0,
+          "sleeping": true
+        },
+        {
+          "id": 2,
+          "finite": true,
+          "penetration": 0,
+          "sleeping": true
+        },
+        {
+          "id": 3,
+          "finite": true,
+          "penetration": 0,
+          "sleeping": true
+        },
+        {
+          "id": 4,
+          "finite": true,
+          "penetration": 0,
+          "sleeping": true
+        },
+        {
+          "id": 5,
+          "finite": true,
+          "penetration": 0,
+          "sleeping": true
+        }
+      ],
+      "renderFPS": 24.58811989825603,
+      "trackingHz": 2.693222057821147,
+      "jsHeapUsedBytes": 13744292,
+      "jsHeapTotalBytes": 19402752,
+      "rendererTaskSeconds": 449.533821
+    },
+    {
+      "minute": 14,
+      "elapsedSeconds": 842.235,
+      "frames": 26976,
+      "track": 2925,
+      "frameCost": 76680.49999901652,
+      "physicsCost": 19162.199997089803,
+      "cycles": 14,
+      "running": true,
+      "fault": false,
+      "camera": {
+        "requested": "HD",
+        "applied": "HD",
+        "auto": false,
+        "settings": {
+          "width": 1280,
+          "height": 720,
+          "frameRate": 20,
+          "aspectRatio": 1.7777777777777777,
+          "resizeMode": "none",
+          "focusMode": "manual"
+        },
+        "video_width": 1280,
+        "video_height": 720,
+        "inference_width": 640,
+        "input_width": 640,
+        "input_height": 360,
+        "note": ""
+      },
+      "gpuResources": {
+        "geometries": 70,
+        "textures": 7
+      },
+      "programs": 12,
+      "effects": 0,
+      "objects": 5,
+      "recoveryCount": 0,
+      "liquidError": null,
+      "bodies": [
+        {
+          "id": 1,
+          "finite": true,
+          "penetration": 0,
+          "sleeping": true
+        },
+        {
+          "id": 2,
+          "finite": true,
+          "penetration": 0,
+          "sleeping": true
+        },
+        {
+          "id": 3,
+          "finite": true,
+          "penetration": 0,
+          "sleeping": true
+        },
+        {
+          "id": 4,
+          "finite": true,
+          "penetration": 0,
+          "sleeping": true
+        },
+        {
+          "id": 5,
+          "finite": true,
+          "penetration": 0,
+          "sleeping": true
+        }
+      ],
+      "renderFPS": 20.439236714496136,
+      "trackingHz": 2.333548483193486,
+      "jsHeapUsedBytes": 14356596,
+      "jsHeapTotalBytes": 19140608,
+      "rendererTaskSeconds": 491.891605
+    },
+    {
+      "minute": 15,
+      "elapsedSeconds": 902.771,
+      "frames": 28362,
+      "track": 3083,
+      "frameCost": 83507.09999880195,
+      "physicsCost": 22090.69999681413,
+      "cycles": 15,
+      "running": true,
+      "fault": false,
+      "camera": {
+        "requested": "HD",
+        "applied": "HD",
+        "auto": false,
+        "settings": {
+          "width": 1280,
+          "height": 720,
+          "frameRate": 20,
+          "aspectRatio": 1.7777777777777777,
+          "resizeMode": "none",
+          "focusMode": "manual"
+        },
+        "video_width": 1280,
+        "video_height": 720,
+        "inference_width": 640,
+        "input_width": 640,
+        "input_height": 360,
+        "note": ""
+      },
+      "gpuResources": {
+        "geometries": 70,
+        "textures": 7
+      },
+      "programs": 12,
+      "effects": 0,
+      "objects": 5,
+      "recoveryCount": 0,
+      "liquidError": null,
+      "bodies": [
+        {
+          "id": 1,
+          "finite": true,
+          "penetration": 0,
+          "sleeping": true
+        },
+        {
+          "id": 2,
+          "finite": true,
+          "penetration": 0,
+          "sleeping": true
+        },
+        {
+          "id": 3,
+          "finite": true,
+          "penetration": 0,
+          "sleeping": true
+        },
+        {
+          "id": 4,
+          "finite": true,
+          "penetration": 0,
+          "sleeping": true
+        },
+        {
+          "id": 5,
+          "finite": true,
+          "penetration": 0,
+          "sleeping": true
+        }
+      ],
+      "renderFPS": 22.895467160037025,
+      "trackingHz": 2.6100171798599203,
+      "jsHeapUsedBytes": 12110068,
+      "jsHeapTotalBytes": 19402752,
+      "rendererTaskSeconds": 533.691933
+    },
+    {
+      "minute": 16,
+      "elapsedSeconds": 962.889,
+      "frames": 30268,
+      "track": 3287,
+      "frameCost": 89132.99999860674,
+      "physicsCost": 23373.799996562302,
+      "cycles": 16,
+      "running": true,
+      "fault": false,
+      "camera": {
+        "requested": "HD",
+        "applied": "HD",
+        "auto": false,
+        "settings": {
+          "width": 1280,
+          "height": 720,
+          "frameRate": 20,
+          "aspectRatio": 1.7777777777777777,
+          "resizeMode": "none",
+          "focusMode": "manual"
+        },
+        "video_width": 1280,
+        "video_height": 720,
+        "inference_width": 640,
+        "input_width": 640,
+        "input_height": 360,
+        "note": ""
+      },
+      "gpuResources": {
+        "geometries": 70,
+        "textures": 7
+      },
+      "programs": 12,
+      "effects": 0,
+      "objects": 5,
+      "recoveryCount": 0,
+      "liquidError": null,
+      "bodies": [
+        {
+          "id": 1,
+          "finite": true,
+          "penetration": 0,
+          "sleeping": true
+        },
+        {
+          "id": 2,
+          "finite": true,
+          "penetration": 0,
+          "sleeping": true
+        },
+        {
+          "id": 3,
+          "finite": true,
+          "penetration": 0,
+          "sleeping": true
+        },
+        {
+          "id": 4,
+          "finite": true,
+          "penetration": 0,
+          "sleeping": true
+        },
+        {
+          "id": 5,
+          "finite": true,
+          "penetration": 0,
+          "sleeping": true
+        }
+      ],
+      "renderFPS": 31.704314847466623,
+      "trackingHz": 3.393326457965997,
+      "jsHeapUsedBytes": 16702600,
+      "jsHeapTotalBytes": 24907776,
+      "rendererTaskSeconds": 569.142008
+    },
+    {
+      "minute": 17,
+      "elapsedSeconds": 1023.002,
+      "frames": 31618,
+      "track": 3419,
+      "frameCost": 94383.69999867678,
+      "physicsCost": 24691.699996456504,
+      "cycles": 17,
+      "running": true,
+      "fault": false,
+      "camera": {
+        "requested": "HD",
+        "applied": "HD",
+        "auto": false,
+        "settings": {
+          "width": 1280,
+          "height": 720,
+          "frameRate": 20,
+          "aspectRatio": 1.7777777777777777,
+          "resizeMode": "none",
+          "focusMode": "manual"
+        },
+        "video_width": 1280,
+        "video_height": 720,
+        "inference_width": 640,
+        "input_width": 640,
+        "input_height": 360,
+        "note": ""
+      },
+      "gpuResources": {
+        "geometries": 70,
+        "textures": 7
+      },
+      "programs": 12,
+      "effects": 0,
+      "objects": 5,
+      "recoveryCount": 0,
+      "liquidError": null,
+      "bodies": [
+        {
+          "id": 1,
+          "finite": true,
+          "penetration": 0,
+          "sleeping": true
+        },
+        {
+          "id": 2,
+          "finite": true,
+          "penetration": 0,
+          "sleeping": true
+        },
+        {
+          "id": 3,
+          "finite": true,
+          "penetration": 0,
+          "sleeping": true
+        },
+        {
+          "id": 4,
+          "finite": true,
+          "penetration": 0,
+          "sleeping": true
+        },
+        {
+          "id": 5,
+          "finite": true,
+          "penetration": 0,
+          "sleeping": true
+        }
+      ],
+      "renderFPS": 22.45770465623079,
+      "trackingHz": 2.195864455275899,
+      "jsHeapUsedBytes": 14370608,
+      "jsHeapTotalBytes": 18616320,
+      "rendererTaskSeconds": 610.901765
+    },
+    {
+      "minute": 18,
+      "elapsedSeconds": 1083.116,
+      "frames": 33063,
+      "track": 3577,
+      "frameCost": 100416.19999852031,
+      "physicsCost": 26163.099996231496,
+      "cycles": 18,
+      "running": true,
+      "fault": false,
+      "camera": {
+        "requested": "HD",
+        "applied": "HD",
+        "auto": false,
+        "settings": {
+          "width": 1280,
+          "height": 720,
+          "frameRate": 20,
+          "aspectRatio": 1.7777777777777777,
+          "resizeMode": "none",
+          "focusMode": "manual"
+        },
+        "video_width": 1280,
+        "video_height": 720,
+        "inference_width": 640,
+        "input_width": 640,
+        "input_height": 360,
+        "note": ""
+      },
+      "gpuResources": {
+        "geometries": 70,
+        "textures": 7
+      },
+      "programs": 12,
+      "effects": 0,
+      "objects": 5,
+      "recoveryCount": 0,
+      "liquidError": null,
+      "bodies": [
+        {
+          "id": 1,
+          "finite": true,
+          "penetration": 0,
+          "sleeping": true
+        },
+        {
+          "id": 2,
+          "finite": true,
+          "penetration": 0,
+          "sleeping": true
+        },
+        {
+          "id": 3,
+          "finite": true,
+          "penetration": 0,
+          "sleeping": true
+        },
+        {
+          "id": 4,
+          "finite": true,
+          "penetration": 0,
+          "sleeping": true
+        },
+        {
+          "id": 5,
+          "finite": true,
+          "penetration": 0,
+          "sleeping": true
+        }
+      ],
+      "renderFPS": 24.037661775959,
+      "trackingHz": 2.6283394883055515,
+      "jsHeapUsedBytes": 10932140,
+      "jsHeapTotalBytes": 15732736,
+      "rendererTaskSeconds": 647.886728
+    },
+    {
+      "minute": 19,
+      "elapsedSeconds": 1143.261,
+      "frames": 35227,
+      "track": 3824,
+      "frameCost": 105023.89999815077,
+      "physicsCost": 27254.499995805323,
+      "cycles": 19,
+      "running": true,
+      "fault": false,
+      "camera": {
+        "requested": "HD",
+        "applied": "HD",
+        "auto": false,
+        "settings": {
+          "width": 1280,
+          "height": 720,
+          "frameRate": 20,
+          "aspectRatio": 1.7777777777777777,
+          "resizeMode": "none",
+          "focusMode": "manual"
+        },
+        "video_width": 1280,
+        "video_height": 720,
+        "inference_width": 640,
+        "input_width": 640,
+        "input_height": 360,
+        "note": ""
+      },
+      "gpuResources": {
+        "geometries": 74,
+        "textures": 7
+      },
+      "programs": 12,
+      "effects": 0,
+      "objects": 5,
+      "recoveryCount": 0,
+      "liquidError": null,
+      "bodies": [
+        {
+          "id": 1,
+          "finite": true,
+          "penetration": 0,
+          "sleeping": true
+        },
+        {
+          "id": 2,
+          "finite": true,
+          "penetration": 0,
+          "sleeping": true
+        },
+        {
+          "id": 3,
+          "finite": true,
+          "penetration": 0,
+          "sleeping": true
+        },
+        {
+          "id": 4,
+          "finite": true,
+          "penetration": 0,
+          "sleeping": true
+        },
+        {
+          "id": 5,
+          "finite": true,
+          "penetration": 0,
+          "sleeping": true
+        }
+      ],
+      "renderFPS": 35.979715687089545,
+      "trackingHz": 4.1067420400698325,
+      "jsHeapUsedBytes": 12156784,
+      "jsHeapTotalBytes": 22286336,
+      "rendererTaskSeconds": 680.98698
+    },
+    {
+      "minute": 20,
+      "elapsedSeconds": 1203.43,
+      "frames": 37728,
+      "track": 4104,
+      "frameCost": 110161.19999784231,
+      "physicsCost": 28501.899995550513,
+      "cycles": 20,
+      "running": true,
+      "fault": false,
+      "camera": {
+        "requested": "HD",
+        "applied": "HD",
+        "auto": false,
+        "settings": {
+          "width": 1280,
+          "height": 720,
+          "frameRate": 20,
+          "aspectRatio": 1.7777777777777777,
+          "resizeMode": "none",
+          "focusMode": "manual"
+        },
+        "video_width": 1280,
+        "video_height": 720,
+        "inference_width": 640,
+        "input_width": 640,
+        "input_height": 360,
+        "note": ""
+      },
+      "gpuResources": {
+        "geometries": 70,
+        "textures": 7
+      },
+      "programs": 12,
+      "effects": 0,
+      "objects": 5,
+      "recoveryCount": 0,
+      "liquidError": null,
+      "bodies": [
+        {
+          "id": 1,
+          "finite": true,
+          "penetration": 0,
+          "sleeping": true
+        },
+        {
+          "id": 2,
+          "finite": true,
+          "penetration": 0,
+          "sleeping": true
+        },
+        {
+          "id": 3,
+          "finite": true,
+          "penetration": 0,
+          "sleeping": true
+        },
+        {
+          "id": 4,
+          "finite": true,
+          "penetration": 0,
+          "sleeping": true
+        },
+        {
+          "id": 5,
+          "finite": true,
+          "penetration": 0,
+          "sleeping": true
+        }
+      ],
+      "renderFPS": 41.56625504828061,
+      "trackingHz": 4.653559141750728,
+      "jsHeapUsedBytes": 13243076,
+      "jsHeapTotalBytes": 31985664,
+      "rendererTaskSeconds": 710.583095
+    },
+    {
+      "minute": 21,
+      "elapsedSeconds": 1263.584,
+      "frames": 40036,
+      "track": 4353,
+      "frameCost": 115279.59999788553,
+      "physicsCost": 29635.399995304644,
+      "cycles": 21,
+      "running": true,
+      "fault": false,
+      "camera": {
+        "requested": "HD",
+        "applied": "HD",
+        "auto": false,
+        "settings": {
+          "width": 1280,
+          "height": 720,
+          "frameRate": 20,
+          "aspectRatio": 1.7777777777777777,
+          "resizeMode": "none",
+          "focusMode": "manual"
+        },
+        "video_width": 1280,
+        "video_height": 720,
+        "inference_width": 640,
+        "input_width": 640,
+        "input_height": 360,
+        "note": ""
+      },
+      "gpuResources": {
+        "geometries": 70,
+        "textures": 7
+      },
+      "programs": 12,
+      "effects": 0,
+      "objects": 5,
+      "recoveryCount": 0,
+      "liquidError": null,
+      "bodies": [
+        {
+          "id": 1,
+          "finite": true,
+          "penetration": 0,
+          "sleeping": true
+        },
+        {
+          "id": 2,
+          "finite": true,
+          "penetration": 0,
+          "sleeping": true
+        },
+        {
+          "id": 3,
+          "finite": true,
+          "penetration": 0,
+          "sleeping": true
+        },
+        {
+          "id": 4,
+          "finite": true,
+          "penetration": 0,
+          "sleeping": true
+        },
+        {
+          "id": 5,
+          "finite": true,
+          "penetration": 0,
+          "sleeping": true
+        }
+      ],
+      "renderFPS": 38.36818831665392,
+      "trackingHz": 4.139375602619943,
+      "jsHeapUsedBytes": 15791928,
+      "jsHeapTotalBytes": 30937088,
+      "rendererTaskSeconds": 741.095747
+    },
+    {
+      "minute": 22,
+      "elapsedSeconds": 1323.683,
+      "frames": 42415,
+      "track": 4606,
+      "frameCost": 120757.19999780506,
+      "physicsCost": 30833.999995276332,
+      "cycles": 22,
+      "running": true,
+      "fault": false,
+      "camera": {
+        "requested": "HD",
+        "applied": "HD",
+        "auto": false,
+        "settings": {
+          "width": 1280,
+          "height": 720,
+          "frameRate": 20,
+          "aspectRatio": 1.7777777777777777,
+          "resizeMode": "none",
+          "focusMode": "manual"
+        },
+        "video_width": 1280,
+        "video_height": 720,
+        "inference_width": 640,
+        "input_width": 640,
+        "input_height": 360,
+        "note": ""
+      },
+      "gpuResources": {
+        "geometries": 70,
+        "textures": 7
+      },
+      "programs": 12,
+      "effects": 0,
+      "objects": 5,
+      "recoveryCount": 0,
+      "liquidError": null,
+      "bodies": [
+        {
+          "id": 1,
+          "finite": true,
+          "penetration": 0,
+          "sleeping": true
+        },
+        {
+          "id": 2,
+          "finite": true,
+          "penetration": 0,
+          "sleeping": true
+        },
+        {
+          "id": 3,
+          "finite": true,
+          "penetration": 0,
+          "sleeping": true
+        },
+        {
+          "id": 4,
+          "finite": true,
+          "penetration": 0,
+          "sleeping": true
+        },
+        {
+          "id": 5,
+          "finite": true,
+          "penetration": 0,
+          "sleeping": true
+        }
+      ],
+      "renderFPS": 39.58468526930569,
+      "trackingHz": 4.20972062763108,
+      "jsHeapUsedBytes": 15454936,
+      "jsHeapTotalBytes": 33034240,
+      "rendererTaskSeconds": 771.555444
+    },
+    {
+      "minute": 23,
+      "elapsedSeconds": 1383.786,
+      "frames": 44466,
+      "track": 4830,
+      "frameCost": 126576.69999744743,
+      "physicsCost": 31998.09999487549,
+      "cycles": 23,
+      "running": true,
+      "fault": false,
+      "camera": {
+        "requested": "HD",
+        "applied": "HD",
+        "auto": false,
+        "settings": {
+          "width": 1280,
+          "height": 720,
+          "frameRate": 20,
+          "aspectRatio": 1.7777777777777777,
+          "resizeMode": "none",
+          "focusMode": "manual"
+        },
+        "video_width": 1280,
+        "video_height": 720,
+        "inference_width": 640,
+        "input_width": 640,
+        "input_height": 360,
+        "note": ""
+      },
+      "gpuResources": {
+        "geometries": 74,
+        "textures": 7
+      },
+      "programs": 12,
+      "effects": 0,
+      "objects": 5,
+      "recoveryCount": 0,
+      "liquidError": null,
+      "bodies": [
+        {
+          "id": 1,
+          "finite": true,
+          "penetration": 0,
+          "sleeping": true
+        },
+        {
+          "id": 2,
+          "finite": true,
+          "penetration": 0,
+          "sleeping": true
+        },
+        {
+          "id": 3,
+          "finite": true,
+          "penetration": 0,
+          "sleeping": true
+        },
+        {
+          "id": 4,
+          "finite": true,
+          "penetration": 0,
+          "sleeping": true
+        },
+        {
+          "id": 5,
+          "finite": true,
+          "penetration": 0,
+          "sleeping": true
+        }
+      ],
+      "renderFPS": 34.12475250819423,
+      "trackingHz": 3.7269354275160933,
+      "jsHeapUsedBytes": 14534436,
+      "jsHeapTotalBytes": 32509952,
+      "rendererTaskSeconds": 805.139025
+    },
+    {
+      "minute": 24,
+      "elapsedSeconds": 1443.929,
+      "frames": 46362,
+      "track": 5025,
+      "frameCost": 132272.89999727905,
+      "physicsCost": 33427.899994805455,
+      "cycles": 24,
+      "running": true,
+      "fault": false,
+      "camera": {
+        "requested": "HD",
+        "applied": "HD",
+        "auto": false,
+        "settings": {
+          "width": 1280,
+          "height": 720,
+          "frameRate": 20,
+          "aspectRatio": 1.7777777777777777,
+          "resizeMode": "none",
+          "focusMode": "manual"
+        },
+        "video_width": 1280,
+        "video_height": 720,
+        "inference_width": 640,
+        "input_width": 640,
+        "input_height": 360,
+        "note": ""
+      },
+      "gpuResources": {
+        "geometries": 74,
+        "textures": 7
+      },
+      "programs": 12,
+      "effects": 0,
+      "objects": 5,
+      "recoveryCount": 0,
+      "liquidError": null,
+      "bodies": [
+        {
+          "id": 1,
+          "finite": true,
+          "penetration": 0,
+          "sleeping": true
+        },
+        {
+          "id": 2,
+          "finite": true,
+          "penetration": 0,
+          "sleeping": true
+        },
+        {
+          "id": 3,
+          "finite": true,
+          "penetration": 0,
+          "sleeping": true
+        },
+        {
+          "id": 4,
+          "finite": true,
+          "penetration": 0,
+          "sleeping": true
+        },
+        {
+          "id": 5,
+          "finite": true,
+          "penetration": 0,
+          "sleeping": true
+        }
+      ],
+      "renderFPS": 31.524865736660942,
+      "trackingHz": 3.2422725836755717,
+      "jsHeapUsedBytes": 19010996,
+      "jsHeapTotalBytes": 49025024,
+      "rendererTaskSeconds": 840.540347
+    },
+    {
+      "minute": 25,
+      "elapsedSeconds": 1504.064,
+      "frames": 48466,
+      "track": 5253,
+      "frameCost": 137520.7999971956,
+      "physicsCost": 34810.39999474585,
+      "cycles": 25,
+      "running": true,
+      "fault": false,
+      "camera": {
+        "requested": "HD",
+        "applied": "HD",
+        "auto": false,
+        "settings": {
+          "width": 1280,
+          "height": 720,
+          "frameRate": 20,
+          "aspectRatio": 1.7777777777777777,
+          "resizeMode": "none",
+          "focusMode": "manual"
+        },
+        "video_width": 1280,
+        "video_height": 720,
+        "inference_width": 640,
+        "input_width": 640,
+        "input_height": 360,
+        "note": ""
+      },
+      "gpuResources": {
+        "geometries": 70,
+        "textures": 7
+      },
+      "programs": 12,
+      "effects": 0,
+      "objects": 5,
+      "recoveryCount": 0,
+      "liquidError": null,
+      "bodies": [
+        {
+          "id": 1,
+          "finite": true,
+          "penetration": 0,
+          "sleeping": true
+        },
+        {
+          "id": 2,
+          "finite": true,
+          "penetration": 0,
+          "sleeping": true
+        },
+        {
+          "id": 3,
+          "finite": true,
+          "penetration": 0,
+          "sleeping": true
+        },
+        {
+          "id": 4,
+          "finite": true,
+          "penetration": 0,
+          "sleeping": true
+        },
+        {
+          "id": 5,
+          "finite": true,
+          "penetration": 0,
+          "sleeping": true
+        }
+      ],
+      "renderFPS": 34.987943793132125,
+      "trackingHz": 3.7914691943127967,
+      "jsHeapUsedBytes": 13191556,
+      "jsHeapTotalBytes": 47190016,
+      "rendererTaskSeconds": 874.285451
+    },
+    {
+      "minute": 26,
+      "elapsedSeconds": 1564.452,
+      "frames": 50062,
+      "track": 5428,
+      "frameCost": 141838.59999696165,
+      "physicsCost": 36109.59999443591,
+      "cycles": 26,
+      "running": true,
+      "fault": false,
+      "camera": {
+        "requested": "HD",
+        "applied": "HD",
+        "auto": false,
+        "settings": {
+          "width": 1280,
+          "height": 720,
+          "frameRate": 20,
+          "aspectRatio": 1.7777777777777777,
+          "resizeMode": "none",
+          "focusMode": "manual"
+        },
+        "video_width": 1280,
+        "video_height": 720,
+        "inference_width": 640,
+        "input_width": 640,
+        "input_height": 360,
+        "note": ""
+      },
+      "gpuResources": {
+        "geometries": 70,
+        "textures": 7
+      },
+      "programs": 12,
+      "effects": 0,
+      "objects": 5,
+      "recoveryCount": 0,
+      "liquidError": null,
+      "bodies": [
+        {
+          "id": 1,
+          "finite": true,
+          "penetration": 0,
+          "sleeping": true
+        },
+        {
+          "id": 2,
+          "finite": true,
+          "penetration": 0,
+          "sleeping": true
+        },
+        {
+          "id": 3,
+          "finite": true,
+          "penetration": 0,
+          "sleeping": true
+        },
+        {
+          "id": 4,
+          "finite": true,
+          "penetration": 0,
+          "sleeping": true
+        },
+        {
+          "id": 5,
+          "finite": true,
+          "penetration": 0,
+          "sleeping": true
+        }
+      ],
+      "renderFPS": 26.429091872557496,
+      "trackingHz": 2.8979267404120064,
+      "jsHeapUsedBytes": 22228400,
+      "jsHeapTotalBytes": 48500736,
+      "rendererTaskSeconds": 911.816531
+    },
+    {
+      "minute": 27,
+      "elapsedSeconds": 1624.557,
+      "frames": 51751,
+      "track": 5601,
+      "frameCost": 146596.499996908,
+      "physicsCost": 37291.299994289875,
+      "cycles": 27,
+      "running": true,
+      "fault": false,
+      "camera": {
+        "requested": "HD",
+        "applied": "HD",
+        "auto": false,
+        "settings": {
+          "width": 1280,
+          "height": 720,
+          "frameRate": 20,
+          "aspectRatio": 1.7777777777777777,
+          "resizeMode": "none",
+          "focusMode": "manual"
+        },
+        "video_width": 1280,
+        "video_height": 720,
+        "inference_width": 640,
+        "input_width": 640,
+        "input_height": 360,
+        "note": ""
+      },
+      "gpuResources": {
+        "geometries": 74,
+        "textures": 7
+      },
+      "programs": 12,
+      "effects": 0,
+      "objects": 5,
+      "recoveryCount": 0,
+      "liquidError": null,
+      "bodies": [
+        {
+          "id": 1,
+          "finite": true,
+          "penetration": 0,
+          "sleeping": true
+        },
+        {
+          "id": 2,
+          "finite": true,
+          "penetration": 0,
+          "sleeping": true
+        },
+        {
+          "id": 3,
+          "finite": true,
+          "penetration": 0,
+          "sleeping": true
+        },
+        {
+          "id": 4,
+          "finite": true,
+          "penetration": 0,
+          "sleeping": true
+        },
+        {
+          "id": 5,
+          "finite": true,
+          "penetration": 0,
+          "sleeping": true
+        }
+      ],
+      "renderFPS": 28.10082355877214,
+      "trackingHz": 2.878296314782463,
+      "jsHeapUsedBytes": 20168828,
+      "jsHeapTotalBytes": 46927872,
+      "rendererTaskSeconds": 949.251295
+    },
+    {
+      "minute": 28,
+      "elapsedSeconds": 1684.72,
+      "frames": 53450,
+      "track": 5780,
+      "frameCost": 151949.89999689162,
+      "physicsCost": 38507.69999434799,
+      "cycles": 28,
+      "running": true,
+      "fault": false,
+      "camera": {
+        "requested": "HD",
+        "applied": "HD",
+        "auto": false,
+        "settings": {
+          "width": 1280,
+          "height": 720,
+          "frameRate": 20,
+          "aspectRatio": 1.7777777777777777,
+          "resizeMode": "none",
+          "focusMode": "manual"
+        },
+        "video_width": 1280,
+        "video_height": 720,
+        "inference_width": 640,
+        "input_width": 640,
+        "input_height": 360,
+        "note": ""
+      },
+      "gpuResources": {
+        "geometries": 74,
+        "textures": 7
+      },
+      "programs": 12,
+      "effects": 0,
+      "objects": 5,
+      "recoveryCount": 0,
+      "liquidError": null,
+      "bodies": [
+        {
+          "id": 1,
+          "finite": true,
+          "penetration": 0,
+          "sleeping": true
+        },
+        {
+          "id": 2,
+          "finite": true,
+          "penetration": 0,
+          "sleeping": true
+        },
+        {
+          "id": 3,
+          "finite": true,
+          "penetration": 0,
+          "sleeping": true
+        },
+        {
+          "id": 4,
+          "finite": true,
+          "penetration": 0,
+          "sleeping": true
+        },
+        {
+          "id": 5,
+          "finite": true,
+          "penetration": 0,
+          "sleeping": true
+        }
+      ],
+      "renderFPS": 28.23994814088393,
+      "trackingHz": 2.9752505692867706,
+      "jsHeapUsedBytes": 14113264,
+      "jsHeapTotalBytes": 48500736,
+      "rendererTaskSeconds": 986.932505
+    },
+    {
+      "minute": 29,
+      "elapsedSeconds": 1745.29,
+      "frames": 55010,
+      "track": 5942,
+      "frameCost": 158355.79999680072,
+      "physicsCost": 40227.89999423921,
+      "cycles": 29,
+      "running": true,
+      "fault": false,
+      "camera": {
+        "requested": "HD",
+        "applied": "HD",
+        "auto": false,
+        "settings": {
+          "width": 1280,
+          "height": 720,
+          "frameRate": 20,
+          "aspectRatio": 1.7777777777777777,
+          "resizeMode": "none",
+          "focusMode": "manual"
+        },
+        "video_width": 1280,
+        "video_height": 720,
+        "inference_width": 640,
+        "input_width": 640,
+        "input_height": 360,
+        "note": ""
+      },
+      "gpuResources": {
+        "geometries": 70,
+        "textures": 7
+      },
+      "programs": 12,
+      "effects": 0,
+      "objects": 5,
+      "recoveryCount": 0,
+      "liquidError": null,
+      "bodies": [
+        {
+          "id": 1,
+          "finite": true,
+          "penetration": 0,
+          "sleeping": true
+        },
+        {
+          "id": 2,
+          "finite": true,
+          "penetration": 0,
+          "sleeping": true
+        },
+        {
+          "id": 3,
+          "finite": true,
+          "penetration": 0,
+          "sleeping": true
+        },
+        {
+          "id": 4,
+          "finite": true,
+          "penetration": 0,
+          "sleeping": true
+        },
+        {
+          "id": 5,
+          "finite": true,
+          "penetration": 0,
+          "sleeping": true
+        }
+      ],
+      "renderFPS": 25.755324418028753,
+      "trackingHz": 2.674591381872217,
+      "jsHeapUsedBytes": 21003748,
+      "jsHeapTotalBytes": 48238592,
+      "rendererTaskSeconds": 1024.770466
+    },
+    {
+      "minute": 30,
+      "elapsedSeconds": 1807.566,
+      "frames": 55812,
+      "track": 6006,
+      "frameCost": 164088.09999664128,
+      "physicsCost": 42018.599993899465,
+      "cycles": 30,
+      "running": true,
+      "fault": false,
+      "camera": {
+        "requested": "HD",
+        "applied": "HD",
+        "auto": false,
+        "settings": {
+          "width": 1280,
+          "height": 720,
+          "frameRate": 20,
+          "aspectRatio": 1.7777777777777777,
+          "resizeMode": "none",
+          "focusMode": "manual"
+        },
+        "video_width": 1280,
+        "video_height": 720,
+        "inference_width": 640,
+        "input_width": 640,
+        "input_height": 360,
+        "note": ""
+      },
+      "gpuResources": {
+        "geometries": 74,
+        "textures": 7
+      },
+      "programs": 12,
+      "effects": 0,
+      "objects": 5,
+      "recoveryCount": 0,
+      "liquidError": null,
+      "bodies": [
+        {
+          "id": 1,
+          "finite": true,
+          "penetration": 0,
+          "sleeping": true
+        },
+        {
+          "id": 2,
+          "finite": true,
+          "penetration": 0,
+          "sleeping": true
+        },
+        {
+          "id": 3,
+          "finite": true,
+          "penetration": 0,
+          "sleeping": true
+        },
+        {
+          "id": 4,
+          "finite": true,
+          "penetration": 0,
+          "sleeping": true
+        },
+        {
+          "id": 5,
+          "finite": true,
+          "penetration": 0,
+          "sleeping": true
+        }
+      ],
+      "renderFPS": 12.878155308626102,
+      "trackingHz": 1.027683216648467,
+      "jsHeapUsedBytes": 14687444,
+      "jsHeapTotalBytes": 16781312,
+      "rendererTaskSeconds": 1074.717495
+    }
+  ],
+  "errors": []
+}

@@ -1,0 +1,42 @@
+{
+  "changed": [
+    "README.md",
+    "server.py",
+    "package-lock.json",
+    "THIRD_PARTY.md",
+    "package.json",
+    "START_WINDOWS.bat",
+    "web/profiles.json",
+    "web/index.html",
+    "web/src/environment.js",
+    "web/src/main.js",
+    "web/src/physics.js",
+    "web/src/render3d.js"
+  ],
+  "new": [
+    "vite.config.js",
+    "licenses/react-dom-LICENSE.txt",
+    "licenses/react-LICENSE.txt",
+    "licenses/scheduler-LICENSE.txt",
+    "docs/REFERENCE_V38.md",
+    "tools/qa_mouse_v38.mjs",
+    "tools/qa_liquids_v38.mjs",
+    "tests_js/mouse-motion.test.mjs",
+    "ui/shell.jsx",
+    "ui/shell.css",
+    "web/src/mouse-motion.js",
+    "web/src/tube-rack.js",
+    "web/ui/hololab-ar-v3.css",
+    "web/ui/shell.js"
+  ],
+  "core_unchanged": {
+    "capture.js": true,
+    "hand-worker.js": true,
+    "interaction.js": true,
+    "tracks.js": true,
+    "filters.js": true,
+    "liquid-simulation.js": true,
+    "lesson-chemistry.js": true,
+    "reaction-engine.js": true
+  }
+}

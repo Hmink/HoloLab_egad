@@ -1,0 +1,95 @@
+{
+  "schema": "hololab-benchmark-1",
+  "version": "HoloLab AR · ChemLab V3.4",
+  "input_source": "Y4M 1280x720@30 still-photo loop; not physical gestures",
+  "physical_camera_tested": false,
+  "environment": "Chromium 134 headless / SwiftShader / WebCPU",
+  "backend": "CPU",
+  "camera": {
+    "requested": "HD",
+    "applied": "HD",
+    "auto": false,
+    "settings": {
+      "width": 1280,
+      "height": 720,
+      "frameRate": 30,
+      "aspectRatio": 1.7777777777777777,
+      "resizeMode": "none"
+    },
+    "video_width": 1280,
+    "video_height": 720,
+    "inference_width": 640,
+    "note": ""
+  },
+  "viewport": {
+    "width": 1366,
+    "height": 900
+  },
+  "render_surface": {
+    "width": 1022,
+    "height": 418
+  },
+  "dpr": 1,
+  "objects": 5,
+  "lesson": null,
+  "moving_body": "one programmatic target; other bodies untouched",
+  "duration_s": 60.08100000000148,
+  "complete": true,
+  "abort_reason": null,
+  "render_frames": 1806,
+  "render_fps": 30.059419783291816,
+  "render_interval_p95_ms": 183.39999999999418,
+  "render_cpu_mean_ms": 2.7094684386025634,
+  "physics_cpu_mean_ms": 1.2126799555926493,
+  "physics_cpu_p95_ms": 3.100000001490116,
+  "tracking_samples": 170,
+  "tracking_hz": 2.8295134901215993,
+  "detected_samples": 170,
+  "inference_mean_ms": 142.7335294115631,
+  "transport_mean_ms": null,
+  "sample_age_p95_ms": 410.800048828125,
+  "target_render_50": false,
+  "target_tracking_50": false,
+  "target_render_45": false,
+  "note": "Render FPS is not tracking Hz. Sample age is not end-to-end motion latency. No images saved.",
+  "untouched_bodies_60s": [
+    {
+      "id": 1,
+      "drift_scene": 0,
+      "sleeping": true
+    },
+    {
+      "id": 2,
+      "drift_scene": 0,
+      "sleeping": true
+    },
+    {
+      "id": 3,
+      "drift_scene": 0,
+      "sleeping": true
+    },
+    {
+      "id": 4,
+      "drift_scene": 0,
+      "sleeping": true
+    }
+  ],
+  "recovery_count": 0,
+  "camera_final": {
+    "requested": "HD",
+    "applied": "HD",
+    "auto": false,
+    "settings": {
+      "width": 1280,
+      "height": 720,
+      "frameRate": 30,
+      "aspectRatio": 1.7777777777777777,
+      "resizeMode": "none"
+    },
+    "video_width": 1280,
+    "video_height": 720,
+    "inference_width": 640,
+    "note": ""
+  },
+  "page_errors": []
+}

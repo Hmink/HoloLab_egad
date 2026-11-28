@@ -1,0 +1,121 @@
+test_balances_atoms_and_charge (test_chemistry.ChemistryTests.test_balances_atoms_and_charge) ... ok
+test_charge_invalid_equation_rejected (test_chemistry.ChemistryTests.test_charge_invalid_equation_rejected) ... ok
+test_gas_equivalent_uses_explicit_T_P (test_chemistry.ChemistryTests.test_gas_equivalent_uses_explicit_T_P) ... ok
+test_invalid_and_nonfinite_inputs_rejected (test_chemistry.ChemistryTests.test_invalid_and_nonfinite_inputs_rejected) ... ok
+test_known_virtual_reaction_needs_ppe (test_chemistry.ChemistryTests.test_known_virtual_reaction_needs_ppe) ... ok
+test_limiting_reagent_and_no_negative_amounts (test_chemistry.ChemistryTests.test_limiting_reagent_and_no_negative_amounts) ... ok
+test_missing_reactant_makes_no_product (test_chemistry.ChemistryTests.test_missing_reactant_makes_no_product) ... ok
+test_neutralization_known_endpoint (test_chemistry.ChemistryTests.test_neutralization_known_endpoint) ... ok
+test_oxidizer_combustible_unordered (test_chemistry.ChemistryTests.test_oxidizer_combustible_unordered) ... ok
+test_precipitation_and_unknown_heat_remains_unknown (test_chemistry.ChemistryTests.test_precipitation_and_unknown_heat_remains_unknown) ... ok
+test_sealed_gas_is_blocked (test_chemistry.ChemistryTests.test_sealed_gas_is_blocked) ... ok
+test_toxic_gas_and_restricted_reagents_blocked (test_chemistry.ChemistryTests.test_toxic_gas_and_restricted_reagents_blocked) ... ok
+test_unknown_model_is_not_assumed_safe (test_chemistry.ChemistryTests.test_unknown_model_is_not_assumed_safe) ... ok
+test_water_into_concentrated_acid_blocked_despite_ppe (test_chemistry.ChemistryTests.test_water_into_concentrated_acid_blocked_despite_ppe) ... ok
+test_consent_required (test_egad_local.EGADLocalTests.test_consent_required) ... ok
+test_fabricated_quote_rejected (test_egad_local.EGADLocalTests.test_fabricated_quote_rejected) ... ok
+test_inconsistent_label_rejected (test_egad_local.EGADLocalTests.test_inconsistent_label_rejected) ... ok
+test_local_protocol_with_mock (test_egad_local.EGADLocalTests.test_local_protocol_with_mock) ... ok
+test_valid_output (test_egad_local.EGADLocalTests.test_valid_output) ... ok
+test_wrong_concept_rejected (test_egad_local.EGADLocalTests.test_wrong_concept_rejected) ... ok
+test_absent_classes_disclosed (test_egad_metrics.EvaluationTests.test_absent_classes_disclosed) ... ok
+test_empty_rejected (test_egad_metrics.EvaluationTests.test_empty_rejected) ... ok
+test_perfect_four_classes (test_egad_metrics.EvaluationTests.test_perfect_four_classes) ... ok
+test_other_hand_cannot_take_held_object_after_loss (test_hand_recovery.OwnershipTests.test_other_hand_cannot_take_held_object_after_loss) ... ok
+test_small_right_hand_selected_over_larger_left (test_hand_recovery.OwnershipTests.test_small_right_hand_selected_over_larger_left) ... ok
+test_uncertain_label_nearby_not_new_owner (test_hand_recovery.OwnershipTests.test_uncertain_label_nearby_not_new_owner) ... ok
+test_calibration_is_validated_and_suppresses_grab (test_hand_recovery.RecoveryTests.test_calibration_is_validated_and_suppresses_grab) ... ok
+test_depth_scale_does_not_release (test_hand_recovery.RecoveryTests.test_depth_scale_does_not_release) ... ok
+test_duplicate_sample_does_not_complete_debounce (test_hand_recovery.RecoveryTests.test_duplicate_sample_does_not_complete_debounce) ... ok
+test_filter_reduces_lag_vs_20_without_losing_rest_stability (test_hand_recovery.RecoveryTests.test_filter_reduces_lag_vs_20_without_losing_rest_stability) ... ok
+test_long_dropout_parks_once_and_requires_open_hand (test_hand_recovery.RecoveryTests.test_long_dropout_parks_once_and_requires_open_hand) ... ok
+test_palm_length_prevents_edge_on_palm_ratio_blowup (test_hand_recovery.RecoveryTests.test_palm_length_prevents_edge_on_palm_ratio_blowup) ... ok
+test_reach_edges_stay_inside_camera (test_hand_recovery.RecoveryTests.test_reach_edges_stay_inside_camera) ... ok
+test_short_dropout_keeps_grab_and_rebases_without_jump (test_hand_recovery.RecoveryTests.test_short_dropout_keeps_grab_and_rebases_without_jump) ... ok
+test_single_open_spike_does_not_drop_item (test_hand_recovery.RecoveryTests.test_single_open_spike_does_not_drop_item) ... ok
+test_stalled_loop_is_loss_even_without_missing_frame (test_hand_recovery.RecoveryTests.test_stalled_loop_is_loss_even_without_missing_frame) ... ok
+test_sudden_discontinuity_freezes_instead_of_cancelling (test_hand_recovery.RecoveryTests.test_sudden_discontinuity_freezes_instead_of_cancelling) ... ok
+test_tiny_hand_suspends_interaction_without_releasing (test_hand_recovery.RecoveryTests.test_tiny_hand_suspends_interaction_without_releasing) ... ok
+test_existing_vessel_stays_at_last_valid_position (test_hand_recovery.SceneLossTests.test_existing_vessel_stays_at_last_valid_position) ... ok
+test_full_input_scene_trace_farther_hand_then_loss (test_hand_recovery.SceneLossTests.test_full_input_scene_trace_farther_hand_then_loss) ... ok
+test_missing_control_clears_stream_and_dwell_even_if_points_exist (test_hand_recovery.SceneLossTests.test_missing_control_clears_stream_and_dwell_even_if_points_exist) ... ok
+test_new_vessel_survives_loss_even_before_leaving_inventory (test_hand_recovery.SceneLossTests.test_new_vessel_survives_loss_even_before_leaving_inventory) ... ok
+test_release_outside_workspace_does_not_delete_new_object (test_hand_recovery.SceneLossTests.test_release_outside_workspace_does_not_delete_new_object) ... ok
+test_hydrochloric_not_automatically_fire (test_hazards.HazardTests.test_hydrochloric_not_automatically_fire) ... ok
+test_nitric_oxidizer_scenario_is_distinct_from_water (test_hazards.HazardTests.test_nitric_oxidizer_scenario_is_distinct_from_water) ... ok
+test_qualitative_cases_remain_nonquantitative_and_training_atomic (test_hazards.HazardTests.test_qualitative_cases_remain_nonquantitative_and_training_atomic) ... ok
+test_rule_source_references_resolve (test_hazards.HazardTests.test_rule_source_references_resolve) ... ok
+test_same_acid_or_empty_receiver_does_not_invent_incident (test_hazards.HazardTests.test_same_acid_or_empty_receiver_does_not_invent_incident) ... ok
+test_water_acid_order_changes_effect_but_neither_is_fire (test_hazards.HazardTests.test_water_acid_order_changes_effect_but_neither_is_fire) ... ok
+test_long_loop_pause_cancels (test_interaction.GestureTests.test_long_loop_pause_cancels) ... ok
+test_long_loss_cancel_and_closed_reacquisition_does_not_grab (test_interaction.GestureTests.test_long_loss_cancel_and_closed_reacquisition_does_not_grab) ... ok
+test_one_euro_reduces_stationary_jitter (test_interaction.GestureTests.test_one_euro_reduces_stationary_jitter) ... ok
+test_open_required_then_debounced_edges (test_interaction.GestureTests.test_open_required_then_debounced_edges) ... ok
+test_pending_close_does_not_count_missing_time (test_interaction.GestureTests.test_pending_close_does_not_count_missing_time) ... ok
+test_pixel_distance_uses_actual_height (test_interaction.GestureTests.test_pixel_distance_uses_actual_height) ... ok
+test_pointer_reaches_left_and_right (test_interaction.GestureTests.test_pointer_reaches_left_and_right) ... ok
+test_ratio_invariant_to_image_size (test_interaction.GestureTests.test_ratio_invariant_to_image_size) ... ok
+test_short_spike_is_not_grab (test_interaction.GestureTests.test_short_spike_is_not_grab) ... ok
+test_tiny_palm_is_not_interactable (test_interaction.GestureTests.test_tiny_palm_is_not_interactable) ... ok
+test_drop_near_hud_clamps_to_visible_area (test_interaction.SceneTests.test_drop_near_hud_clamps_to_visible_area) ... ok
+test_existing_grab_preserves_offset (test_interaction.SceneTests.test_existing_grab_preserves_offset) ... ok
+test_hold_does_not_duplicate_objects (test_interaction.SceneTests.test_hold_does_not_duplicate_objects) ... ok
+test_independent_instances_and_topmost_selection (test_interaction.SceneTests.test_independent_instances_and_topmost_selection) ... ok
+test_invalid_existing_drop_restores_position (test_interaction.SceneTests.test_invalid_existing_drop_restores_position) ... ok
+test_invalid_new_drop_removes_instance (test_interaction.SceneTests.test_invalid_new_drop_removes_instance) ... ok
+test_inventory_to_workspace (test_interaction.SceneTests.test_inventory_to_workspace) ... ok
+test_tracking_loss_does_not_commit_new_object (test_interaction.SceneTests.test_tracking_loss_does_not_commit_new_object) ... ok
+test_abstract_combustion_has_no_invented_chemical_products (test_lab3d.MixtureTests.test_abstract_combustion_has_no_invented_chemical_products) ... ok
+test_capacity_clamps_without_discarding_material (test_lab3d.MixtureTests.test_capacity_clamps_without_discarding_material) ... ok
+test_closed_gas_scenario_is_qualitative (test_lab3d.MixtureTests.test_closed_gas_scenario_is_qualitative) ... ok
+test_full_vessel_and_empty_source_do_not_mutate (test_lab3d.MixtureTests.test_full_vessel_and_empty_source_do_not_mutate) ... ok
+test_neutralization_quantities_and_temperature (test_lab3d.MixtureTests.test_neutralization_quantities_and_temperature) ... ok
+test_nonfinite_or_nonpositive_transfer_rejected (test_lab3d.MixtureTests.test_nonfinite_or_nonpositive_transfer_rejected) ... ok
+test_open_gas_escapes_and_element_ledger_is_conserved (test_lab3d.MixtureTests.test_open_gas_escapes_and_element_ledger_is_conserved) ... ok
+test_precipitate_conserves_copper_and_charge (test_lab3d.MixtureTests.test_precipitate_conserves_copper_and_charge) ... ok
+test_precipitate_moves_as_well_mixed_suspension (test_lab3d.MixtureTests.test_precipitate_moves_as_well_mixed_suspension) ... ok
+test_repeated_pour_respects_limiting_reagent (test_lab3d.MixtureTests.test_repeated_pour_respects_limiting_reagent) ... ok
+test_risk_training_block_is_atomic_but_sandbox_has_visual_effect (test_lab3d.MixtureTests.test_risk_training_block_is_atomic_but_sandbox_has_visual_effect) ... ok
+test_solid_transfer_is_conserved_and_unmodeled (test_lab3d.MixtureTests.test_solid_transfer_is_conserved_and_unmodeled) ... ok
+test_transfer_is_atomic_and_preserves_material (test_lab3d.MixtureTests.test_transfer_is_atomic_and_preserves_material) ... ok
+test_unsupported_mix_stays_unknown_after_dilution (test_lab3d.MixtureTests.test_unsupported_mix_stays_unknown_after_dilution) ... ok
+test_automatic_pour_needs_target_tilt_and_dwell (test_lab3d.Scene3DTests.test_automatic_pour_needs_target_tilt_and_dwell) ... ok
+test_cancel_after_material_transfer_keeps_source_and_conserves (test_lab3d.Scene3DTests.test_cancel_after_material_transfer_keeps_source_and_conserves) ... ok
+test_closed_source_cannot_pour (test_lab3d.Scene3DTests.test_closed_source_cannot_pour) ... ok
+test_experiments_are_plain_data (test_lab3d.Scene3DTests.test_experiments_are_plain_data) ... ok
+test_flask_level_is_not_linear_in_volume (test_lab3d.Scene3DTests.test_flask_level_is_not_linear_in_volume) ... ok
+test_inventory_grab_moves_actual_vessel (test_lab3d.Scene3DTests.test_inventory_grab_moves_actual_vessel) ... ok
+test_missing_tracking_stops_pouring_immediately (test_lab3d.Scene3DTests.test_missing_tracking_stops_pouring_immediately) ... ok
+test_no_target_no_transfer (test_lab3d.Scene3DTests.test_no_target_no_transfer) ... ok
+test_session_round_trip_and_duplicate_id_rejection_are_atomic (test_lab3d.Scene3DTests.test_session_round_trip_and_duplicate_id_rejection_are_atomic) ... ok
+test_render_paths (unittest.loader._FailedTest.test_render_paths) ... ERROR
+test_all_stock_geometry_has_finite_vertices (test_saved_inputs.SavedInputTests.test_all_stock_geometry_has_finite_vertices) ... ok
+test_malformed_nested_mixture_does_not_replace_current_scene (test_saved_inputs.SavedInputTests.test_malformed_nested_mixture_does_not_replace_current_scene) ... ok
+test_closed_source_and_danger_lockout_preserve_inputs (test_web_api.WebAdapterTests.test_closed_source_and_danger_lockout_preserve_inputs) ... ok
+test_continuous_aliquot_and_invalid_amounts (test_web_api.WebAdapterTests.test_continuous_aliquot_and_invalid_amounts) ... ok
+test_invalid_session_is_rejected_before_client_commit (test_web_api.WebAdapterTests.test_invalid_session_is_rejected_before_client_commit) ... ok
+test_qualitative_effect_has_no_invented_temperature (test_web_api.WebAdapterTests.test_qualitative_effect_has_no_invented_temperature) ... ok
+test_roundtrip_preserves_quantities_and_old_schema_loads (test_web_api.WebAdapterTests.test_roundtrip_preserves_quantities_and_old_schema_loads) ... ok
+test_transfer_is_atomic_and_preserves_material (test_web_api.WebAdapterTests.test_transfer_is_atomic_and_preserves_material) ... ok
+
+======================================================================
+ERROR: test_render_paths (unittest.loader._FailedTest.test_render_paths)
+----------------------------------------------------------------------
+ImportError: Failed to import test module: test_render_paths
+Traceback (most recent call last):
+  File "/opt/codex/runtimes/codex-primary-runtime/dependencies/python/lib/python3.12/unittest/loader.py", line 396, in _find_test_path
+    module = self._get_module_from_name(name)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/codex/runtimes/codex-primary-runtime/dependencies/python/lib/python3.12/unittest/loader.py", line 339, in _get_module_from_name
+    __import__(name)
+  File "/workspace/scratch/b420c189187b/release/HoloLab_Base44_EGAD_Pilot/tests/test_render_paths.py", line 6, in <module>
+    from chemlab.render import text, font
+  File "/workspace/scratch/b420c189187b/release/HoloLab_Base44_EGAD_Pilot/chemlab/render.py", line 6, in <module>
+    import cv2
+ModuleNotFoundError: No module named 'cv2'
+
+
+----------------------------------------------------------------------
+Ran 99 tests in 0.066s
+
+FAILED (errors=1)

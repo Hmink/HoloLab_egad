@@ -1,0 +1,29 @@
+{
+  "source_and_docs": [
+    "CHANGELOG.md",
+    "README.md",
+    "START_WINDOWS.bat",
+    "THIRD_PARTY.md",
+    "VALIDATION_V33.md",
+    "docs/V33_STABILITY.md",
+    "docs/legacy/README_V32.md",
+    "package-lock.json",
+    "package.json",
+    "server.py",
+    "tests_js/physics.test.mjs",
+    "tests_js/physics_workspace.test.mjs",
+    "tools/benchmark_v33.mjs",
+    "tools/package_project.py",
+    "tools/physics_scenarios_v33.mjs",
+    "tools/qa_regression_physics_v33.mjs",
+    "tools/qa_v33.mjs",
+    "web/index.html",
+    "web/src/environment.js",
+    "web/src/main.js",
+    "web/src/physics.js",
+    "web/src/render3d.js",
+    "web/src/vessel-details.js",
+    "web/styles.css"
+  ],
+  "added_binary_assets": "web/vendor/fonts/*.woff2 (SIL OFL) - hashes in SOURCE_SHA256.json"
+}

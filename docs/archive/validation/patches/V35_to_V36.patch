@@ -1,0 +1,3340 @@
+--- a/CHANGELOG.md
++++ b/CHANGELOG.md
+@@ -1,3 +1,18 @@
++# V3.6 — 29/10/2026
++
++- Sửa pinch-origin bị fist giữ sai trong rotate; mở tay rõ xác nhận nhanh, giữ chống nhiễu một mẫu.
++- Mất tracking ngắn giữ tạm; sau 700 ms không có bằng chứng ổn định thì release qua Rapier. Một mẫu nhận lại lẻ không gia hạn vô hạn.
++- Phân biệt tracking chậm dưới 10 Hz và mất tracking thật; không rebase điểm neo ở mọi mẫu chậm.
++- Chỉnh độ nhạy không parkAll; cấu hình camera/CV/backend/mirror xếp hàng đến khi thả. Worker/backend đổi trên luồng camera đang có.
++- Một initPromise, một chuỗi video callback, một inference đang chạy; bảo vệ epoch/sequence khỏi phản hồi cũ.
++- Kho bên phải, gợi ý phản ứng/điều kiện/nguồn đọc từ engine và bài học; sửa banner nguy hiểm còn sót sau dọn bàn.
++- Fire được engine xác nhận có thêm tia sáng/khói/flash có giới hạn và dispose. Không tự tạo phản ứng nổ, lửa khi pha axit hoặc kết tủa.
++- Bổ sung số đo camera thực/ảnh CV/min FPS/debounce; không coi debounce là độ trễ đầu–cuối.
++- Không đổi LiquidSimulation, lượng chất, các hằng số Rapier, model MediaPipe, One Euro hoặc thêm dependency sản phẩm.
++- Kết quả và giới hạn: VALIDATION_V36.md; chưa nghiệm thu webcam thật/50 FPS trên máy người dùng.
++
++---
++
+ # V3.5 — 28/10/2026
+ 
+ - Sửa clamp góc roll/pitch; góc liên tục cho một/hai tay, giữ giới hạn tốc độ physics.
+--- a/README.md
++++ b/README.md
+@@ -1,10 +1,10 @@
+-# HoloLab AR — V3.5
++# HoloLab AR — V3.6
+ 
+-Bản vá trên V3.4: xoay liên tục, rót theo miệng bình và trọng lực, bảo toàn thể tích khi tràn, khung thực hành rộng, kết tủa dễ quan sát, nhật ký học tập tùy chọn. Giữ MediaPipe, hai tay, bộ lọc, Rapier và 5 bài THPT. Không phải bản viết lại.
++Bản vá trên V3.5: sửa bình bị giữ sau khi mở tay/mất dấu, tránh reset khi đổi cấu hình, ổn định vòng lặp camera, đưa kho về bên phải và bổ sung gợi ý hóa học/hiệu ứng cháy có điều kiện. Giữ MediaPipe/model, One Euro, hai tay, Rapier, rót bảo toàn lượng chất và 5 bài THPT. Xem kết quả đã chạy và những phần chưa nghiệm thu trong **VALIDATION_V36.md**.
+ 
+ ## Chạy trên Windows
+ 
+-1. Giải nén **toàn bộ** ZIP vào một thư mục mới, ví dụ `D:\HoloLab_AR_V3_5`. `server.py` và `START_WINDOWS.bat` ở ngay gốc.
++1. Giải nén **toàn bộ** ZIP vào một thư mục mới, ví dụ `D:\HoloLab_AR_V3_6`. `server.py` và `START_WINDOWS.bat` ở ngay gốc.
+ 2. Dừng server cũ bằng Ctrl+C. Nhấp đúp `START_WINDOWS.bat`, hoặc mở PowerShell tại thư mục này:
+ 
+    ```powershell
+@@ -12,7 +12,7 @@
+    ```
+ 
+    Nếu không có launcher `py`, dùng `python server.py --browser-tracking`. Python phải từ 3.10 trở lên. Không cần cài OpenCV/MediaPipe Python để chạy đường web.
+-3. Mở **http://127.0.0.1:8765** bằng Chrome/Edge; giữ terminal mở. Nhấn Ctrl+F5, kiểm tra tab ghi **V3.5**.
++3. Mở **http://127.0.0.1:8765** bằng Chrome/Edge; giữ terminal mở. Nhấn Ctrl+F5, kiểm tra tab ghi **V3.6**.
+ 4. Chọn lớp → chủ đề → thí nghiệm → **Bắt đầu thực hành**. Bảng chọn tự thu gọn; **Chọn bài** mở lại. Bấm **Bật camera**, cấp quyền, hoặc dùng chuột.
+ 
+ Linux: `bash START_LINUX.sh` hoặc `python3 server.py --browser-tracking`. Không chạy `.bat` trên Linux. macOS dùng lệnh Python tương tự.
+@@ -25,7 +25,7 @@
+ - Xoay cổ tay để nghiêng; góc được nối liên tục qua ±180°, không còn chặn ở ±86°. Vẫn giới hạn tốc độ rigid body để tránh xung lực bất thường.
+ - Nhấc nguồn lên, đưa **miệng nguồn** thẳng phía trên **miệng bình nhận**. Nghiêng để chất lỏng tới miệng. Góc bắt đầu còn phụ thuộc mức đầy và hình bình; chai ít dung dịch thường cần nghiêng hơn 90°.
+ - Dựng thẳng để dừng. Úp ngược đủ lâu sẽ rót hết phần dung dịch. Bình đầy hoặc rót lệch sẽ tạo vũng tràn và trừ đúng lượng nguồn.
+-- Mất dấu ngắn giữ bình, tạm dừng rót khi đang do tay điều khiển. Sau timeout cũ, bình được thả; bình đổ/úp ngược không có nắp có thể tiếp tục chảy do trọng lực.
++- Mất dấu ngắn giữ bình, tạm dừng rót khi đang do tay điều khiển. Sau khoảng **700 ms** không có bằng chứng tracking ổn định, bình được thả; bình đổ/úp ngược không có nắp có thể tiếp tục chảy do trọng lực.
+ - Chuột: kéo vật, con lăn chỉnh chiều sâu; khi giữ vật dùng **A/D** để nghiêng liên tục, **W** dựng, **J/L** xoay, **K** nắp. **P** là thao tác rót một lượng thử: 2 mL trong bài, 10 mL ở bàn tự do (ống nhỏ giọt 0,2 mL). Đây là đường hỗ trợ kiểm tra, không thay thế rót tự động.
+ - Thả chai ngay trên mẫu có thể làm đổ mẫu. Hãy dựng và đặt về chỗ trống trước khi mở tay.
+ 
+@@ -41,7 +41,7 @@
+ 
+ Màn chiếu có các trang thực hành, chuẩn bị, giải thích, ứng dụng. Nội dung chữ cũng nằm trong phần kiến thức dưới bàn. Câu hỏi củng cố mở khi đủ hiện tượng chính. **Làm lại bài** nạp lại lượng chất ban đầu.
+ 
+-Các nút **100 phản ứng / Thử video / Hướng dẫn / Chuẩn độ** và kho tự do được chuyển vào **Công cụ bổ sung**, không xóa module/dữ liệu. **Thông tin bình & tùy chọn điều khiển** chứa thông số bình và camera; **Thông số kỹ thuật** chứa FPS render, tracking Hz, độ tuổi mẫu, phép đo 60 giây. Có thể cần cuộn xuống để mở.
++**Kho dụng cụ và hóa chất ở bên phải**, thu gọn bằng nút **Kho bên phải / Thu gọn**. Chọn hóa chất để xem gợi ý, điều kiện, hiện tượng và nguồn; gợi ý áp dụng mẫu gốc, không đánh giá mọi hỗn hợp. Các nút **100 phản ứng / Thử video / Hướng dẫn / Chuẩn độ** nằm trong **Công cụ bổ sung**, không xóa module/dữ liệu. **Thông tin bình & tùy chọn điều khiển** chứa thông số bình và camera; **Thông số kỹ thuật** chứa FPS render, tracking Hz, độ tuổi mẫu, phép đo 60 giây. Có thể cần cuộn xuống để mở. Mức camera/CV/mirror/backend sẽ chờ thả bình rồi áp dụng; không cần khởi động lại ứng dụng. Độ nhạy, DPR, giới hạn Hz thay đổi tại chỗ. Vòng xanh/vàng là track A/B; chấm vàng nhỏ là tâm điều khiển, không có nghĩa đã gắp.
+ 
+ ## Nhật ký và hỗ trợ học tập
+ 
+@@ -51,7 +51,7 @@
+ 
+ ## Kiểm thử và giới hạn
+ 
+-Xem **VALIDATION_V35.md**, **docs/V35_IMPLEMENTATION.md** và **docs/MANUAL_CHECK_V35.md**. Các bản `VALIDATION_V34.md` trở về trước là hồ sơ lịch sử, không phải bằng chứng của V3.5.
++Xem **VALIDATION_V36.md**, **docs/V36_FIXES.md** và **docs/MANUAL_CHECK_V36.md**. Các bản `VALIDATION_V35.md` trở về trước là hồ sơ lịch sử, không phải bằng chứng của V3.6. Mã test và báo cáo JSON đi kèm để có thể chạy lại.
+ 
+ - Kiểm thử tự động có chạy Rapier thật, trình duyệt, shader, MediaPipe thật với camera giả lập. Chưa thử bàn tay người thật trong lượt sửa này.
+ - Benchmark GPU phần mềm không đạt 50 FPS; không cam kết máy yếu đạt mục tiêu. Độ tuổi mẫu không phải độ trễ chuyển động đầu–cuối.
+--- a/START_WINDOWS.bat
++++ b/START_WINDOWS.bat
+@@ -1,7 +1,7 @@
+ @echo off
+ setlocal
+ cd /d "%~dp0"
+-title HoloLab AR V3.5
++title HoloLab AR V3.6
+ if exist .venv\Scripts\python.exe (
+   .venv\Scripts\python.exe server.py
+   goto done
+--- a/VALIDATION_V36.md
++++ b/VALIDATION_V36.md
+@@ -0,0 +1,193 @@
++# HoloLab AR V3.6 — Kết quả kiểm chứng
++
++Ngày kiểm tra: 29/10/2026. Nguồn đối chiếu: V3.5 đã bàn giao, không phải dự án dựng lại.
++**Đã sửa và kiểm chứng lỗi release bằng dữ liệu cử chỉ tổng hợp và Rapier thật.
++Chưa nghiệm thu webcam/bàn tay người thật hoặc mục tiêu 50 FPS trên thiết bị đích.**
++
++## Môi trường và ý nghĩa của bằng chứng
++
++- Linux trong môi trường chạy mã; Chromium 133 headless, SwiftShader (GPU phần mềm).
++- Three.js/Rapier/MediaPipe và model dùng đúng bản offline trong dự án.
++- Camera giả Chromium có stream thực trong trình duyệt, nhưng nội dung là test
++  pattern **không có bàn tay**. Nó kiểm tra tải/đổi stream và vòng đời worker.
++- Mẫu pinch/hai tay đưa qua HandTracks → Interaction; kiểm tra sau đó dùng body,
++  mesh, raycast và vòng lặp ứng dụng thật. Không gọi đó là nhận diện tay người thật.
++- Không có bước bundler: ứng dụng ES modules chạy trực tiếp. Đã kiểm tra syntax,
++  import/runtime, JSON, Python AST và tải WASM/model/API; không dùng syntax pass để
++  thay bằng chứng thao tác đúng.
++
++## Bộ kiểm tra đã chạy
++
++| Bộ thử | Kết quả | Bằng chứng |
++|---|---|---|
++| V3.5 nguyên bản, JS hiện có | 97/97 đạt | `validation_v36/baseline-tests.log` |
++| Sáu hồi quy release mới chạy trên runtime V3.5 | 6/6 thất bại theo tiêu chí mới | `reproduce-before.log` |
++| V3.6 JavaScript | 111/111 đạt, không bỏ qua test | `unit.log` |
++| Python chemistry/legacy | 91/91 đạt | `python.log` |
++| Chấp nhận physics Rapier | 7/7 nhóm đạt | `physics.json` |
++| Browser core/camera/two-hand/physics | 12/12 nhóm đạt | `browser_checks.json` |
++| Browser chất lỏng/5 bài/UI/logger | 15/15 nhóm đạt | `browser.json` |
++| Browser hồi quy phiên/chuẩn độ/khóa nguy cơ/đồng rắn | 7/7 nhóm đạt | `regression_checks.json` |
++| Browser lỗi release/cấu hình/kho/hiệu ứng mới | 8/8 nhóm đạt | `new_regressions.json` |
++| Kiểm tra syntax/AST/JSON, hash module giữ nguyên | Đạt; số tệp trong báo cáo audit | `source_audit.json`, `preserved_modules.json` |
++
++Số “nhóm” không phải số lượt người dùng thử. Các bài có liên quan nhau được gộp
++trong từng nhóm. Log đầy đủ và script đi kèm, không chỉ có ảnh minh họa.
++
++## Release, mất dấu và va chạm
++
++- 25 vòng pinch → mở tay khi còn gập các ngón khác → dynamic → rơi → đứng trên bàn
++  → gắp lại; 5 kiểu mesh ở 5 góc khác nhau. Không có lượt vẫn bị giữ sau mở tay.
++- Penetration lớn nhất đo được: 0 scene unit; khoảng hở tiếp xúc lớn nhất
++  `0,00312254` scene unit, tương đương khoảng `0,3123 mm` theo tỷ lệ 0,1 m/unit.
++  Đây là khoảng hở solver, không phải bình lơ lửng hàng centimet.
++- Mất 238 ms vẫn giữ; mất lâu qua 700 ms, mẫu nhận lại lẻ hoặc ngừng callback đều
++  thả qua đường `park` của sản phẩm. Không teleport về vị trí đầu.
++- Core browser thêm 20 vòng thả/gắp thật qua mouse events; module physics thêm 30
++  vòng thả, 20 ném nhẹ và 30 chạm bình. Tất cả nằm trong biên, không xuyên bàn trong
++  các tình huống đã chạy. Không cộng các lượt này thành thử nghiệm người thật.
++- Vận tốc ném lớn nhất trong bộ physics độc lập khoảng `0,2308 m/s`; chạm nhẹ lớn
++  nhất khoảng `0,0801 m/s`. Bộ browser kiểm tra cap ném khoảng `0,4 m/s`.
++- Sáu dụng cụ nghỉ 60 **giây mô phỏng**: drift 0, sleeping. Từng benchmark 60 **giây
++  thời gian thực** cũng kiểm tra 4 dụng cụ không tương tác: drift 0, sleeping.
++- Input hợp lệ 6,67 Hz không còn bị rebase ở mọi mẫu; tests hai tay/trao quyền cũ
++  tiếp tục đạt. Chưa kiểm tra chồng/che tay thật ở nhiều điều kiện ánh sáng.
++
++## Thời gian xác nhận mở tay
++
++| Tần số mẫu tổng hợp | V3.5 | V3.6 |
++|---|---:|---:|
++| 30 Hz | 133,3 ms | 33,3 ms |
++| 60 Hz | 116,7 ms | 33,3 ms |
++
++Đo từ **mẫu mở rõ đầu tiên** đến quyết định release của gate. Không gồm camera,
++truyền ảnh, inference, màn hình hay chuyển động thực. Bằng chứng:
++`validation_v36/gesture_latency.json`. Với ratio gần ngưỡng, vẫn dùng xác nhận dài
++hơn để tránh tự nhả. Không tuyên bố độ trễ đầu–cuối chỉ 33 ms.
++
++## Benchmark cùng môi trường
++
++Mỗi lượt 60 giây thực; camera HD thực 1280×720, 20 FPS do camera giả cung cấp; ảnh
++CV V3.6 đo được 640×360. Viewport 1366×900, canvas 1022×418, DPR 1, 5 dụng cụ, một
++vật thể có mục tiêu chuyển động theo script. Không chạy hai phiên cùng lúc.
++V3.5 cũng giới hạn CV 640 nhưng chưa báo chiều cao ảnh input riêng.
++
++| Lượt | Render V3.5 | Render V3.6 | Tracking V3.5 | Tracking V3.6 |
++|---|---:|---:|---:|---:|
++| 1 | 13,68 FPS | 9,60 FPS | 1,47 Hz | 0,93 Hz |
++| 2 | 21,95 FPS | 19,07 FPS | 2,32 Hz | 2,08 Hz |
++| 3 | 20,90 FPS | 15,96 FPS | 2,21 Hz | 1,62 Hz |
++| Trung vị | 20,90 FPS | 15,96 FPS | 2,21 Hz | 1,62 Hz |
++
++**Không đạt 50 FPS trong phép đo này.** Trung vị render giảm khoảng 23,6%, tracking
++giảm khoảng 27,0%. Kết quả dao động giữa các lượt; không bỏ lượt thấp để báo cáo đẹp.
++Nguồn số: `benchmark-before*.json`, `benchmark-after*.json`, `benchmark-comparison.json`.
++
++CPU physics trung vị/frame: 1,83 → 2,14 ms; thời gian inference trung vị theo lượt:
++123,50 → 138,65 ms. FPS thấp làm mỗi frame phải bù nhiều bước physics; đây không phải
++đo tổng CPU/GPU % của máy. Chưa xác định đầy đủ phần giảm do bố cục/compositor và
++biến động tài nguyên host. Engine physics, worker inference và model không thay;
++không được vì thế kết luận toàn bộ suy giảm là lỗi máy người dùng.
++
++Hướng xử lý tiếp: so sánh trên GPU thật với cùng camera/cấu hình; profile
++compositor/capture trước khi đổi solver hoặc model. Có thể dùng chất lượng render
++Tự động/0,75 và thu kho khi thao tác. Những tùy chọn này đã có; chưa dùng chúng để
++đổi điều kiện giữa hai bản rồi tuyên bố đã tăng FPS. Tuổi mẫu P95 là tuổi dữ liệu,
++không phải độ trễ tay–bình. Độ trễ đầu–cuối, tổng CPU/GPU % và chất lượng ảnh webcam
++thật chưa được đo trong môi trường này.
++
++## Chạy liên tục
++
++Kết quả thử 30 phút được ghi sau khi lượt chạy kết thúc trong
++`validation_v36/soak.json`. Không dùng `soak-progress.json` hoặc một lượt rút ngắn
++làm bằng chứng đã đủ 30 phút. Kịch bản: camera giả + MediaPipe thật + render/physics;
++mỗi phút tạo hiệu ứng fire theo engine, dọn bàn, tạo 5 dụng cụ, di chuyển/thả một
++vật thể. Không có người thực hành hoặc bàn tay trong ảnh camera.
++
++<!-- SOAK_RESULT -->
++Lượt chạy đã đủ **30.13 phút thực**, 30 chu kỳ tạo–dọn–di chuyển–thả.
++Không có lỗi JavaScript được ghi nhận, camera không fault/dừng, penetration lớn nhất
++0.000000 scene unit; số recovery lỗi kỹ thuật 0.
++Tài nguyên đồ họa dao động 70–74 geometry,
++7 texture, 12 chương trình shader. JS heap renderer 10.93–22.23 MB,
++có tăng/giảm do GC; không thấy số tài nguyên tăng dần theo các lần reset. Đây không
++phải phép đo tổng RAM/VRAM của máy.
++
++Render trung bình 30.88 FPS, trung bình từng phút nằm trong
++12.88–41.57 FPS; tracking trung bình 3.32 Hz.
++Cấu hình endurance là DPR 0,75, khác benchmark DPR 1, không so hai phép đo như cùng
++điều kiện. Phút cuối giảm còn 12.88 FPS: **chưa đạt tiêu chí hiệu năng
++ổn định/50 FPS**, dù các kiểm tra chức năng và tài nguyên trên vượt qua. Cần profile
++trên thiết bị đích; chưa xác định đầy đủ nguyên nhân dao động/giảm tốc trong host này.
++Bằng chứng tổng hợp: `soak-summary.json`; các mẫu mỗi phút: `soak.json`.
++<!-- /SOAK_RESULT -->
++
++## Hồi quy và giới hạn
++
++Đã kiểm tra rót đúng miệng, úp hết, lưu lượng/volume và sổ lượng tràn; AgCl, nước
++đối chứng, màu chỉ thị/biuret, ammonium, Fe–CuSO₄; câu hỏi, nhật ký đồng ý mới ghi,
++import phiên không hợp lệ không phá phiên cũ. Kho phải không đè canvas tại 4 độ
++rộng; gợi ý AgCl hiển thị đúng; fire thêm sparks/flash/smoke và dispose buffers.
++Cu(OH)₂ không nhận hiệu ứng lửa. Reset xóa banner cảnh báo của bàn cũ.
++
++Những phần **chưa nghiệm thu**: webcam laptop thật, gắp ≥9/10 mỗi tay trên người,
++giữ 30 giây với tay thật, khả năng ID khi che khuất phức tạp, cảm giác trễ chủ quan,
++camera quang học/driver, 50 FPS và độ trễ đầu–cuối trên thiết bị đích. Hướng dẫn
++điền kết quả thật: `docs/MANUAL_CHECK_V36.md`.
++
++Chưa có engine dự đoán nổ định lượng, nên không thêm vụ nổ giả cho các phản ứng
++không xác nhận điều kiện. Chất lỏng là mô hình hình học/bảo toàn lượng, không CFD;
++thủy tinh không vỡ. Gợi ý an toàn là thông tin giáo dục cho mẫu/điều kiện cụ thể,
++không phải SDS hoặc đánh giá hỗn hợp bất kỳ. Phần AI đánh giá kiến thức chưa được
++huấn luyện/kiểm chứng; tutor quy tắc hiện có được giữ nguyên.
++
++## Kiểm tra gói giải nén
++
++Đã giải nén ZIP ứng viên sang thư mục sạch và đối chiếu 1.773 hash runtime; chạy lại
++111/111 JS và 91/91 Python. Browser regression cuối chạy trên bản giải nén, gồm
++kiểm tra mở/đóng bộ chọn bài ở cửa sổ nhỏ. Lượt endurance 30 phút nạp core trước
++bản chỉnh thuộc tính trợ năng của nút Chọn bài; thay đổi UI nhỏ này được kiểm tra
++riêng sau đó. Mã camera/gesture/physics/liquid trong lượt endurance không đổi.
++Bản ZIP cuối chỉ bổ sung báo cáo sau chạy; runtime phải khớp manifest đã kiểm tra.
++
++## Tái lập
++
++Chạy trong thư mục gốc đã giải nén; Node.js có sẵn để chạy test JS. Chạy sản phẩm
++thì chỉ cần Python 3.10+ và trình duyệt, không cần npm install.
++
++```bash
++npm test
++python3 tools/audit_v36.py /duong/dan/ban-V3.5
++node tools/physics_acceptance_v34.mjs . validation_v36/physics.json
++```
++
++Python tests cần NumPy/OpenCV và SymPy theo môi trường phát triển; có SymPy/mpmath
++trong `python_vendor`. Lượt kiểm tra này dùng OpenCV headless 4.11.0.86/NumPy 2.2.6
++ngoài thư mục sản phẩm. Đặt `PYTHONPATH` gồm `python_vendor`, rồi:
++
++```bash
++python3 -m unittest discover -s tests
++```
++
++Browser QA cần Playwright và Chromium cho máy kiểm thử, không thêm vào dependency
++chạy HoloLab. Dùng `PLAYWRIGHT_PACKAGE` nếu module Playwright đặt ngoài dự án.
++Các script tự khởi động/dừng server thử trên cổng riêng:
++
++```bash
++node tools/qa_core_v36.mjs
++node tools/qa_liquids_v36.mjs
++node tools/qa_regression_v36.mjs
++node tools/qa_v36.mjs
++node tools/soak_v36.mjs
++```
++
++`soak_v36.mjs` mặc định 30 phút thực; nếu dùng `SOAK_MINUTES` ngắn hơn thì báo cáo
++`meets30Minutes` là false. Các script có thể tạo ảnh nội bộ để kiểm tra bố cục;
++ảnh camera/ảnh người dùng không được đưa vào ZIP bàn giao.
++
++Benchmark có script `tools/benchmark_v35.mjs` dùng chung cho hai thư mục:
++đặt `BENCH_PROJECT`, `BENCH_OUTPUT`, `PLAYWRIGHT_PACKAGE`. Script thêm callback
++chuyển mục tiêu cho bài thử; đó không phải vòng render thứ hai trong sản phẩm.
++
++Chi tiết sửa: `docs/V36_FIXES.md`; diff: `patches/V35_to_V36.patch`;
++hash runtime: `validation_v36/SOURCE_SHA256.json`.
+--- a/docs/MANUAL_CHECK_V36.md
++++ b/docs/MANUAL_CHECK_V36.md
+@@ -0,0 +1,69 @@
++# Kiểm tra V3.6 bằng webcam thật
++
++Các bài tự động không thay thế quy trình này. Ghi tên máy, CPU/GPU, hệ điều hành,
++trình duyệt và phiên bản; ghi rõ dùng webcam nào. Không ghi thông tin cá nhân vào
++nhật ký học tập. Dùng một thư mục giải nén mới, dừng server cũ, Ctrl+F5 rồi xác nhận
++tab ghi **V3.6**.
++
++## Camera và đo hiệu năng
++
++1. Mở `http://127.0.0.1:8765`, bấm Bật camera và cấp quyền. Đóng ứng dụng khác nếu
++   đang dùng camera. Nếu ứng dụng Camera của Windows cũng đen, kiểm tra nắp che,
++   phím khóa camera và quyền Windows trước khi quy lỗi cho HoloLab.
++2. Trong Thông tin bình & tùy chọn điều khiển, chọn HD; để ảnh CV 640 trước.
++   Đối chiếu **độ phân giải stream thực tế** và **ảnh CV thực tế** trong Thông số kỹ
++   thuật. Video HD không có nghĩa inference cũng chạy HD.
++3. Đưa tay rõ vào camera, đủ sáng, tránh ngược sáng. Giữ rồi di chuyển chậm/nhanh;
++   ghi xem mất dấu xảy ra ở vị trí/góc nào. Không đánh đồng mất dấu với sai kiến thức.
++4. Đo 60 giây khi bật camera và thao tác 5 bình; xuất báo cáo JSON. Ghi render FPS,
++   tracking Hz, min FPS/1 giây, inference ms, tuổi mẫu và số tay nhận được. Đo 3 lượt
++   trên V3.5 và V3.6 cùng máy, cùng camera/cấu hình/bài học, không mở cả hai đồng thời.
++5. Độ trễ đầu–cuối chưa được số đo này bao phủ. Nếu cần, quay đồng thời tay thật và
++   màn hình bằng máy quay tốc độ cao; tính chênh frame giữa chuyển động thật và bình.
++6. LOW, HD, FHD chỉ kiểm tra ở mức camera hỗ trợ; không ép 1080p nếu FPS/độ rõ kém.
++
++## Cử chỉ và lỗi bình treo
++
++| Thử | Cách làm | Điều cần ghi |
++|---|---|---|
++| Gắp từng tay | 10 lần trái, 10 lần phải, tay ở gần/xa khác nhau | Số lần đúng / 10; loại bình và chế độ |
++| Giữ | Giữ một bình 30 giây, đi qua vùng hợp lệ | Số lần tự nhả; đoạn tracking bị mất |
++| Thả nhìn thấy rõ | Gắp bình trên cao, mở cái–trỏ trong camera | Owner hết; bình rơi, không về vị trí đầu |
++| Thả trong rotate | Gắp bằng pinch, đổi rotate, mở cái–trỏ nhưng gập 3 ngón còn lại | Không còn bị fist giữ sai |
++| Mất dấu ngắn | Che tay khoảng 0,2–0,3 giây rồi đưa lại | Giữ bình, không ném do tracking nhảy |
++| Mất dấu lâu | Đưa tay khỏi camera >1 giây | Đếm ngược; khoảng 0,7 giây không có bằng chứng thì bình rơi |
++| Hai tay riêng | Mỗi tay giữ một bình, đưa chéo/chênh độ sâu | Không đổi owner; nếu mơ hồ thì giữ ngắn thay vì nhảy |
++| Hai tay một bình | Cùng giữ, lần lượt mở một tay rồi tay cuối | Chỉ tay cuối thả mới rơi; không giật khi bàn giao |
++| Tracking chậm | Thử thiết bị yếu, ghi tracking Hz | Phân biệt dưới 10 Hz với mất dấu thật; không đứng một chỗ vì rebase liên tục |
++
++Chấm vàng nhỏ chỉ là tâm tương tác. Vòng xanh/vàng phân biệt track A/B. Hãy đọc
++trạng thái và tên bình, không dùng màu chấm để kết luận gắp thành công.
++
++## Physics và rót
++
++Lặp 25 lượt: mỗi kiểu cốc, bình tam giác, ống nghiệm, chai, nhỏ giọt ở các góc
++0°, 45°, 90°, 135°, 180°. Nâng lên → mở tay → quan sát rơi → gắp lại.
++Ghi video nếu có treo, xuyên bàn, văng khỏi biên hoặc nhảy pose.
++
++- Kéo xuống dưới mặt bàn, tới bốn mép; collider phải chặn cả bình đang gắp.
++- Ném nhẹ và chạm bình cạnh bên; có chuyển động vừa phải, không phóng ra ngoài.
++- Đặt bình rồi không thao tác 60 giây, kiểm tra đứng yên.
++- Bài AgCl: AgNO₃ vào mẫu NaCl tạo đục/trắng; nước đối chứng sạch không tạo AgCl.
++- Nghiêng từng bước, úp ngược; dung dịch giảm liên tục, tràn được ghi nhận.
++- Gắp/đặt/nhúng thanh Fe, xác nhận Cu bám chỉ khi tiếp xúc dung dịch phù hợp.
++- Làm lại 5 bài, kiểm tra câu hỏi, lưu/mở phiên, chuẩn độ và nhật ký tùy chọn.
++
++## Cấu hình, giao diện và chạy lâu
++
++1. Khi đang giữ bình, đổi pinch/DPR/tracking Hz/reach/move–rotate: owner không mất.
++2. Khi đang giữ, yêu cầu đổi ảnh CV/camera/mirror/backend: thấy thông báo chờ; thả
++   bình rồi thay đổi mới áp dụng. Đổi backend không cần tải lại trang.
++3. Thu/mở kho bên phải và Chọn bài bên trái; kiểm tra nhãn không đè nhau, cuộn được
++   gợi ý hóa học và tùy chọn. Thử cửa sổ nhỏ và chế độ toàn màn hình.
++4. Chạy liên tục 30 phút với camera và thao tác thật; mỗi 5 phút đo FPS/Hz, theo dõi
++   Task Manager nếu cần. Không kết luận leak chỉ vì RAM tăng rồi được GC thu lại.
++5. Mở F12 Console: lưu lỗi đầu tiên cùng thao tác, thời điểm và file/dòng. Ghi rõ
++   “chưa kiểm tra” cho trường hợp không thực hiện; không thay bằng “đạt”.
++
++Mẫu ghi lỗi: **Bài / bình / chế độ / tay A-B / độ phân giải thực / tracking Hz /
++thao tác trước lỗi / trạng thái hiển thị / có lặp lại được không / lỗi console**.
+--- a/docs/V36_FIXES.md
++++ b/docs/V36_FIXES.md
+@@ -0,0 +1,119 @@
++# V3.6 — Chẩn đoán và thay đổi
++
++Ngày: 29/10/2026. Nền so sánh: ZIP HoloLab_AR_V3_5.zip,
++SHA-256 `89342c4c92c9092dd7f805c17e810a8cd667f1da627dc805856618db66b4aa2e`.
++Mã nguồn được vá theo module; không dựng lại ứng dụng. Kết quả chạy nằm trong
++`VALIDATION_V36.md` và `validation_v36/`.
++
++## Vì sao bình vẫn treo khi đã mở tay?
++
++Ảnh báo lỗi hiển thị **“Tay B · mất dấu · giữ vị trí”**. Điều đó cho thấy ứng dụng
++đang giữ quyền sở hữu cho một track không còn quan sát được. Ảnh không đủ để kết luận
++gravity/collider đã hỏng. Đường release → Rapier dynamic của V3.5 vẫn vượt qua kiểm
++tra vật lý; lỗi cần sửa nằm ở điều kiện phát hiện release và quản lý track.
++
++| Bằng chứng trong bản gốc | Hậu quả | Sửa ở V3.6 |
++|---|---|---|
++| `web/src/interaction.js`, `update`: chế độ rotate thay pinch ratio bằng `0.1` nếu `pose.fist` đúng | Mở cái–trỏ nhưng còn gập các ngón khác vẫn bị coi là đang nắm | Ghi nhận kiểu gắp ban đầu. Nắm bằng pinch phải thả theo pinch; fist chỉ dùng nếu bắt đầu bằng fist. Sau khi thả phải mở lại để tái kích hoạt fist. |
++| `interaction.js`, nhánh missing/sweep: gia hạn theo mọi mẫu nhận lại và timeout 1.800 ms | Các mẫu đơn lẻ/nhiễu có thể kéo dài trạng thái giữ mất dấu | Thời gian giữ tạm 700 ms từ bằng chứng hợp lệ; cần hai mẫu liên tiếp sau mất dấu để gia hạn. Watchdog vẫn hoạt động khi camera ngừng trả callback. |
++| `web/src/tracks.js`, `update`: mọi khoảng cách mẫu >100 ms bị đánh dấu `recovered` | Tracking <10 Hz liên tục rebase điểm neo, bình có thể dính một chỗ | Chỉ rebase nếu mẫu trước thực sự thiếu/mơ hồ hoặc gián đoạn >700 ms. Bài thử 6,67 Hz vẫn kéo được. |
++| `interaction.js`, `setThreshold`: gọi `parkAll("settings")` | Đổi độ nhạy tự thả bình dù người dùng chưa thả | Cập nhật gate tại chỗ; giữ ngưỡng thả của lần gắp hiện tại đến khi kết thúc. |
++| `web/src/filters.js`, `PinchGate.missing`: chỉ xóa bằng chứng khi một khoảng thiếu >180 ms | Những mẫu mở không liên tục có thể cộng dồn | Mỗi mẫu thiếu ngắt bằng chứng đang chờ, nhưng không xóa trạng thái đang gắp. |
++| `web/src/capture.js`, init/schedule/worker messages: không khóa init đồng thời hoặc bảo vệ callback cũ | Có đường sinh worker/callback dư, cập nhật busy sai khi chuyển backend | Dùng một initPromise, một callback camera, generation/epoch/sequence; bỏ phản hồi từ worker và frame cũ. |
++| `capture.js`, `applyCameraQuality`: bỏ yêu cầu nếu đang đổi chất lượng | Chọn nhanh nhiều mức khiến giao diện và mức áp dụng lệch nhau | Giữ yêu cầu cuối và áp dụng sau yêu cầu đang chạy. |
++| `web/src/main.js`, thông báo mất dấu | “Giữ vị trí” không nói lúc nào thả | Hiển thị đếm ngược đến thả, đồng bộ với watchdog. Hai track cùng nhãn handedness hiển thị đang xác định, không ép đổi ID. |
++| `main.js`, `clearDesk`: chưa xóa banner nguy hiểm còn thời gian sống | Cảnh báo của bài cũ vẫn nằm trên bàn mới | Xóa banner cùng trạng thái bàn khi reset. |
++| Nút Chọn bài trên cửa sổ nhỏ: trạng thái ẩn do media query khác class desktop | Thuộc tính `aria-expanded` có thể báo ngược trạng thái đang hiển thị | Tính trạng thái mở riêng theo viewport, đồng bộ class và thuộc tính trợ năng; thêm kiểm tra mở/đóng trên cửa sổ nhỏ. |
++
++Các tình huống release mới được chạy cả trên nguồn gốc lẫn bản vá. Sáu bài hồi quy
++mới thất bại trên V3.5 và vượt qua trên V3.6. Trong đó timeout 700 ms và release nhanh
++là thay đổi tiêu chí thiết kế; không diễn giải mọi khác biệt đó là lỗi cú pháp của bản cũ.
++
++## Cử chỉ và vòng lặp
++
++- Giữ MediaPipe task/model, worker suy luận, chuẩn hóa theo kích thước bàn tay,
++  tọa độ mirror, hệ hai tay và One Euro. Không đổi các hệ số lọc vị trí của One Euro.
++- Giữ close 0,43 / open 0,66 mặc định, debounce gắp 55 ms. Mở chưa rõ vẫn xác nhận
++  105 ms. Nếu mở rõ với ratio ≥ max(0,9; open + 0,18), xác nhận 32 ms từ mẫu đầu.
++  Một mẫu ngoại lai không đủ thả. Số ms này không phải độ trễ toàn hệ thống.
++- Mất dấu ngắn giữ pose, tạm ngừng rót do tay điều khiển. Hết 700 ms không có bằng
++  chứng ổn định thì bỏ owner và gọi đường release vật lý, không trả bình về vị trí đầu.
++- Các trạng thái bổ sung PINCH_START, ROTATING, RELEASING nối vào FSM cũ; IDLE,
++  HOVER, GRABBING, DRAGGING, RELEASED vẫn tương thích.
++- Lọc trùng detector chỉ bỏ hai bộ 21 điểm gần như trùng nhau. Không bỏ một tay vì
++  có cùng nhãn Left/Right. Khi hai tay che nhau lâu, camera một góc nhìn vẫn có giới hạn.
++- Chỉ có một rAF render trong sản phẩm, một chuỗi video callback và tối đa một
++  inference đang chạy. Worker cũ không được điều khiển busy/owner của worker mới.
++- Overlay dùng màu vòng xanh cho A, vàng cho B; chấm vàng nhỏ là tâm tương tác.
++  Chấm vàng không phải tín hiệu “đã gắp”. Trạng thái gắp còn phải xem chữ/owner.
++
++## Cấu hình khi đang thực hành
++
++| Nhóm | Tùy chọn | Cách áp dụng |
++|---|---|---|
++| A: tại chỗ | Độ nhạy pinch, DPR render, giới hạn tracking 30/60 Hz | Không tạo lại model hoặc thả bình. Ngưỡng thả đang dùng được giữ hết lượt. |
++| A: tại chỗ, đổi neo | Vùng điều khiển, move/rotate, resize giao diện | Rebase ở mẫu hợp lệ kế tiếp, giữ vị trí và owner. |
++| B: sau khi thả | LOW/HD/FHD, chiều rộng ảnh CV 640/960, mirror | Xếp hàng; chờ hết owner tay/chuột/van rồi áp dụng. Chỉ thay thành phần cần thiết. |
++| C: khởi tạo lại thành phần | Backend AUTO/CPU/GPU/native | Chờ thả, hủy worker cũ, tạo worker mới và tiếp tục trên **cùng luồng video**. Không khởi động lại Three.js hoặc trang. |
++
++Thông báo áp dụng/chờ/lỗi nằm phía trên bàn. Chọn nhiều lần giữ giá trị mới nhất
++cho từng tùy chọn. Không bắt buộc tải lại trang sau đổi backend.
++
++## Vật lý: giữ engine thật
++
++Không thay gravity bằng phép ép tọa độ y. Rapier 0.17.3 và geometry/collider hiện tại
++được giữ: mesh theo rigid body, đáy collider xoay theo quaternion và scale/pivot.
++Release cuối cùng chuyển kinematic → dynamic; một tay thả khi tay kia vẫn giữ cùng
++bình thì bình tiếp tục được giữ. `freezeHeld` chỉ đóng băng một lần, không đặt lại
++history/target ở từng frame thiếu dấu.
++
++| Thông số giữ nguyên từ V3.5 | Giá trị |
++|---|---:|
++| Tỷ lệ scene | 1 unit = 0,1 m |
++| Gravity | 9,81 m/s² |
++| Physics timestep | 1/120 s, accumulator có giới hạn bù |
++| Tốc độ điều khiển tối đa | 0,75 m/s; gần va chạm 0,14 m/s |
++| Gain / giới hạn vận tốc thả | 0,55 / 0,40 m/s |
++| Linear / angular damping | 1,1 / 2,4 |
++| Friction bàn / dụng cụ | 0,82 / 0,75 |
++| Restitution | 0,02 |
++
++Khoảng cách tiếp xúc nhỏ của solver không đồng nghĩa bình treo: trong 25 bài thử
++bình xoay, gap lớn nhất khoảng 0,00313 scene unit (0,313 mm theo tỷ lệ mô hình).
++Không phát hiện xuyên bàn trong bộ thử đó. Không tuyên bố không bao giờ xuyên trong
++mọi cấu hình hoặc mọi mô hình chưa kiểm tra.
++
++## Giao diện, gợi ý hóa học và hiệu ứng
++
++- Kho dụng cụ/hóa chất ở bên phải, thu gọn được; bộ chọn bài vẫn bên trái.
++  Đã kiểm tra 1920, 1366, 1024 và 640 px. Hướng dẫn phản ứng hiện trong vùng cuộn riêng.
++- `reaction-hints.js` đọc phương trình/hiện tượng từ cùng dữ liệu của engine và
++  bài học. `reaction-hints.json` chỉ bổ sung điều kiện, mức lưu ý, nguồn dẫn.
++  Không cho gợi ý kích hoạt phản ứng và không tạo sản phẩm ngẫu nhiên.
++- Các màu nguy cơ là thang lưu ý giáo dục theo điều kiện ghi kèm, **không phải
++  phân loại GHS/SDS**. Gợi ý mô tả mẫu gốc, chưa phân tích mọi hỗn hợp trong bình.
++- Hiệu ứng fire do engine xác nhận thêm 16 tia sáng, 12 cụm khói instanced và flash
++  ngắn; không thêm đèn động/thư viện nặng. Buffers/materials được giải phóng khi hết
++  hiệu ứng hoặc dọn bàn. Màu/lượng chất vẫn do engine cũ quyết định.
++- Không thêm phản ứng nổ mới: engine hiện chưa có mô hình định lượng vụ nổ. Hiệu ứng
++  pressure của bình kín vẫn là cảnh báo áp suất, không tự nâng thành vụ nổ.
++  Pha loãng axit không tự có lửa; kết tủa không có tia lửa.
++
++## Các phần được bảo toàn
++
++Không sửa LiquidSimulation, PourableContainer, spill ledger, engine hóa học Python,
++engine/bộ dữ liệu 5 bài THPT, bộ worker MediaPipe/model, solver chuẩn độ, thư viện 100
++phản ứng, nhật ký opt-in và tutor quy tắc. Mã kiểm tra `tools/audit_v36.py` so SHA-256
++với nền V3.5; danh sách cụ thể nằm trong `validation_v36/preserved_modules.json`.
++Không thêm dependency chạy sản phẩm.
++
++## Hạn chế phải công bố
++
++1. Chưa có thử nghiệm webcam/bàn tay người thật trên laptop của người dùng; không
++   kết luận nguyên nhân camera tối, lấy nét, driver hay 50 FPS trên máy đó.
++2. Camera giả trong phép thử là test pattern, **không có tay**. MediaPipe thật vẫn
++   chạy, nhưng gesture regression dùng dữ liệu tổng hợp riêng.
++3. Mất dấu lâu không thể suy ra người dùng còn pinch hay đã mở tay. 700 ms là chính
++   sách giữ tạm rồi thả; thiết bị tracking rất chậm cần đo lại trên video tay thật.
++4. Hệ số physics không đổi; độ mượt và độ trễ đầu–cuối cần đo trên thiết bị đích.
++5. Hạt chất lỏng/kết tủa và lửa là minh họa, không CFD, không dự báo nguy cơ thực tế.
+--- a/package-lock.json
++++ b/package-lock.json
+@@ -1,12 +1,12 @@
+ {
+   "name": "hololab-ar-v3",
+-  "version": "3.5.0",
++  "version": "3.6.0",
+   "lockfileVersion": 3,
+   "requires": true,
+   "packages": {
+     "": {
+       "name": "hololab-ar-v3",
+-      "version": "3.5.0",
++      "version": "3.6.0",
+       "dependencies": {
+         "@dimforge/rapier3d-compat": "0.17.3",
+         "@mediapipe/tasks-vision": "0.10.32",
+--- a/package.json
++++ b/package.json
+@@ -1,6 +1,6 @@
+ {
+   "name": "hololab-ar-v3",
+-  "version": "3.5.0",
++  "version": "3.6.0",
+   "private": true,
+   "type": "module",
+   "scripts": {
+--- a/server.py
++++ b/server.py
+@@ -203,7 +203,7 @@
+         if self.path == "/api/catalog":
+             self.json(
+                 {
+-                    "version": "3.4.0",
++                    "version": "3.6.0",
+                     "native_tracking": bool(NATIVE.available),
+                     "stocks": [
+                         {**asdict(x), "mixture": mix_payload(Mixture.stock(x))}
+@@ -215,7 +215,7 @@
+             )
+             return
+         if self.path == "/api/health":
+-            self.json({"ok": True, "version": "3.4.0"})
++            self.json({"ok": True, "version": "3.6.0"})
+             return
+         if self.path.startswith("/api/experiment/"):
+             name = self.path.rsplit("/", 1)[-1]
+@@ -290,7 +290,7 @@
+         ("127.0.0.1", args.port), partial(Handler, directory=str(ROOT / "web"))
+     )
+     url = f"http://127.0.0.1:{server.server_port}"
+-    print(f"HoloLab AR V3.5: {url}\nGiu cua so nay mo. Ctrl+C de dung.", flush=True)
++    print(f"HoloLab AR V3.6: {url}\nGiu cua so nay mo. Ctrl+C de dung.", flush=True)
+     if not args.no_browser:
+         threading.Timer(0.5, lambda: webbrowser.open(url)).start()
+     try:
+--- a/tests_js/config-regression.test.mjs
++++ b/tests_js/config-regression.test.mjs
+@@ -0,0 +1,50 @@
++import test from 'node:test';
++import assert from 'node:assert/strict';
++import {HandCapture} from '../web/src/capture.js';
++import {distinctObservations} from '../web/src/tracks.js';
++
++test('detector duplicate skeletons produce one observation; real spatially separate hands survive',()=>{
++ const a={palm:.12,score:.95,points:Array.from({length:21},(_,i)=>({x:.3+i*.003,y:.4+i*.004}))};
++ const b={...a,score:.8,points:a.points.map(p=>({x:p.x+.0001,y:p.y+.0001}))};
++ assert.equal(distinctObservations([a,b]).length,1);
++ b.points=b.points.map(p=>({...p,x:p.x+.3}));assert.equal(distinctObservations([a,b]).length,2);
++});
++test('one frame callback chain even with repeated schedule; cancelled callback cannot restart it',()=>{
++ const callbacks=new Map();let next=0,calls=0;
++ const c=new HandCapture({requestVideoFrameCallback:fn=>{callbacks.set(++next,fn);return next;},cancelVideoFrameCallback(){}},()=>{},()=>{});
++ c.running=true;c.frame=()=>calls++;
++ c.schedule();c.schedule();assert.equal(next,1);
++ const old=callbacks.get(1);c.cancelSchedule();c.schedule();assert.equal(next,2);
++ old(10,{mediaTime:1});assert.equal(next,2);assert.equal(calls,0);
++ callbacks.get(2)(20,{mediaTime:2});assert.equal(next,3);assert.equal(calls,1);
++});
++test('concurrent init reuses one worker; stale worker messages cannot alter the new worker',async()=>{
++ const old=globalThis.Worker,created=[];
++ globalThis.Worker=class{constructor(){created.push(this);}postMessage(){}terminate(){this.terminated=true;}};
++ const c=new HandCapture({pause(){},removeAttribute(){}},()=>{},()=>{});
++ try {
++   const a=c.init(),b=c.init();assert.equal(created.length,1);
++   created[0].onmessage({data:{type:'ready',delegate:'CPU'}});await Promise.all([a,b]);
++   c.close();const pending=c.init();created[1].onmessage({data:{type:'ready',delegate:'GPU'}});await pending;
++   c.busy=true;c.activeFrame={sequence:40};
++   created[0].onmessage({data:{type:'result',epoch:c.epoch,sequence:1}});
++   assert.equal(c.busy,true);assert.equal(c.delegate,'GPU');
++   created[1].onmessage({data:{type:'result',epoch:c.epoch,sequence:39}});assert.equal(c.busy,true);
++   created[1].onmessage({data:{type:'result',epoch:c.epoch,sequence:40}});assert.equal(c.busy,false);
++ }finally{c.close();globalThis.Worker=old;}
++});
++test('rapid camera requests apply newest selection after in-progress constraints',async()=>{
++ let finish;const requests=[];
++ const track={applyConstraints:c=>{requests.push(c.width.exact||c.width.ideal);return new Promise(r=>finish=r);},getCapabilities:()=>({}),getSettings:()=>({width:1280,height:720})};
++ const c=new HandCapture({srcObject:{getVideoTracks:()=>[track]}},()=>{},()=>{});
++ const first=c.applyCameraQuality('HD');await c.applyCameraQuality('LOW');await c.applyCameraQuality('FHD');
++ finish();for(let i=0;i<5;i++)await Promise.resolve();
++ assert.deepEqual(requests,[1280,1920]);finish();await first;
++ assert.equal(c.activeCameraQuality,'FHD');assert.equal(c.qualityBusy,false);
++});
++test('input size and Hz edits do not reset stream or duplicate its scheduler',()=>{
++ const c=new HandCapture({},()=>{},()=>{});let changed=0;c.onReconfigure=()=>changed++;
++ c.running=true;const epoch=c.epoch;c.setInferenceWidth(960);c.setMaxHz(30);
++ assert.equal(c.running,true);assert.equal(c.epoch,epoch+1);assert.equal(changed,1);assert.equal(c.maxHz,30);
++ c.setInferenceWidth(960);c.setInferenceWidth(Infinity);c.setMaxHz(-1);assert.equal(changed,1);assert.equal(c.maxHz,30);
++});
+--- a/tests_js/hints-effects.test.mjs
++++ b/tests_js/hints-effects.test.mjs
+@@ -0,0 +1,27 @@
++import test from 'node:test';import assert from 'node:assert/strict';import fs from 'node:fs';
++import {hintsFor} from '../web/src/reaction-hints.js';
++import * as T from '../web/vendor/three/three.module.js';
++import {createCombustion,updateCombustion,disposeCombustion} from '../web/src/combustion-visual.js';
++const read=p=>JSON.parse(fs.readFileSync(new URL(p,import.meta.url)));
++const hints=read('../web/data/reaction-hints.json'),lessons=read('../web/data/lessons-thpt.json'),db=read('../data/chemistry.json');
++test('hints use actual reaction IDs/equations and stated concentrations, sources and safety',()=>{
++ const ids=[...new Set(hints.free.flatMap(r=>r.stocks))];
++ const catalog={...db,stocks:ids.map(id=>({id,name:id}))};
++ for(const id of ids){const list=hintsFor({id},catalog,lessons,hints);assert.ok(list.length);for(const r of list){assert.equal(r.equation,db.reactions.find(x=>x.id===r.reaction).equation_display);assert.ok(r.conditions&&r.basis&&r.safety&&r.sources.length);}}
++ const cu=hintsFor({id:'cuso4'},catalog,lessons,hints)[0];assert.match(cu.phenomenon,/xanh lam/);
++});
++test('AgNO3 lesson hint matches lesson chemistry; water is a distinct negative control',()=>{
++ const catalog={stocks:lessons.stocks};
++ const silver=hintsFor({id:'lesson-silver'},catalog,lessons,hints,'chloride')[0];
++ assert.match(silver.equation,/AgCl/);assert.match(silver.phenomenon,/trắng/);
++ assert.equal(hintsFor({id:'lesson-control'},catalog,lessons,hints,'chloride')[0].level,'relative');
++ assert.equal(hintsFor({id:'copper'},catalog,lessons,hints).length,0);
++});
++test('combustion overlay has bounded buffers and releases all private materials/instances',()=>{
++ const scene=new T.Scene(),geometry=new T.SphereGeometry(.045,6,4),fx=createCombustion(scene,geometry);
++ let disposed=0;for(const x of [fx.sparks,fx.smoke,fx.flash])x.material.addEventListener('dispose',()=>disposed++);
++ for(let t=0;t<3000;t+=16)updateCombustion(fx,new T.Vector3(1,2,3),t);
++ assert.equal(fx.sparks.count,16);assert.equal(fx.smoke.count,12);assert.equal(scene.children.length,3);
++ assert.ok([...fx.sparks.instanceMatrix.array].every(Number.isFinite));
++ disposeCombustion(scene,fx);assert.equal(disposed,3);assert.equal(scene.children.length,0);geometry.dispose();
++});
+--- a/tests_js/release-regression.test.mjs
++++ b/tests_js/release-regression.test.mjs
+@@ -0,0 +1,50 @@
++import test from 'node:test';
++import assert from 'node:assert/strict';
++import { Interaction } from '../web/src/interaction.js';
++import { HandTracks } from '../web/src/tracks.js';
++
++const pose = (x=.4, ratio=.2, fist=false) => ({x,y:.5,center:{x,y:.5},ratio,palm:.13,angle:0,label:'Right',score:.99,points:[],fist});
++function rig() {
++  const object={id:1,target:{x:0,y:1,z:0},roll:0,yaw:0,pitch:0}, released=[];
++  const interaction=new Interaction({pick:()=>({type:'object',object}),toWorld:p=>({x:p.x/100,y:p.y/100,z:0}),acquire(){},select(){},park:(o,reason)=>released.push(reason),move:(o,target,roll,yaw,pitch)=>Object.assign(o,{target,roll,yaw,pitch})});
++  const tracks=new HandTracks();let now=0;
++  const feed=(poses,dt=34)=>{now+=dt;interaction.update(tracks.update(poses,now),now,now);interaction.sweep(now);};
++  for(let i=0;i<6;i++)feed([pose()]);
++  return {object,interaction,tracks,released,feed,get now(){return now;}};
++}
++test('changing pinch threshold while held does not release or reset the body',()=>{
++ const r=rig();r.interaction.setThreshold(.6);r.feed([pose(.4,.5)]);
++ assert.equal(r.interaction.owners(r.object).length,1);assert.deepEqual(r.released,[]);
++ for(let i=0;i<6;i++)r.feed([pose(.4,.95)]);
++ assert.equal(r.interaction.owners(r.object).length,0);
++});
++test('opening thumb/index releases a pinch-origin hold in rotate mode even with other fingers folded',()=>{
++ const r=rig();r.interaction.mode='rotate';
++ for(let i=0;i<6;i++)r.feed([pose(.4,1.2,true)]);
++ assert.equal(r.interaction.owners(r.object).length,0);
++ assert.deepEqual(r.released,['gesture']);
++});
++test('brief lost tracking preserves ownership, sustained loss releases within 900 ms',()=>{
++ const r=rig();for(let i=0;i<7;i++)r.feed([]);
++ assert.equal(r.interaction.owners(r.object).length,1);
++ for(let i=0;i<20;i++)r.feed([]);
++ assert.equal(r.interaction.owners(r.object).length,0);
++});
++test('a single intermittent reacquired sample cannot keep a stale owner suspended indefinitely',()=>{
++ const r=rig();
++ for(let cycle=0;cycle<4;cycle++) {for(let i=0;i<15;i++)r.feed([]);r.feed([pose()]);}
++ assert.equal(r.interaction.owners(r.object).length,0);
++});
++test('one very open sample is noise; sustained deliberate opening releases within 70 ms at 30 Hz',()=>{
++ const r=rig();r.feed([pose(.4,1.2)]);assert.equal(r.interaction.owners(r.object).length,1);
++ r.feed([pose()]);assert.equal(r.interaction.owners(r.object).length,1);
++ r.feed([pose(.4,1.2)]);r.feed([pose(.4,1.2)]);r.feed([pose(.4,1.2)]);
++ assert.equal(r.interaction.owners(r.object).length,0);
++});
++test('continuous valid input below 10 Hz still moves a held tool, never rebases every sample',()=>{
++ const r=rig(),start=r.object.target.x;
++ for(let i=1;i<=20;i++)r.feed([pose(.4+i*.008)],150);
++ assert.equal(r.interaction.owners(r.object).length,1);
++ assert.ok(r.object.target.x>start+1,'slow valid tracking froze the target');
++ assert.equal(r.interaction.events.filter(e=>e.type==='recover').length,0);
++});
+--- a/tools/audit_v36.py
++++ b/tools/audit_v36.py
+@@ -0,0 +1,76 @@
++"""Syntax, JSON and exact-source audit. No npm install or app state changes."""
++from pathlib import Path
++import ast
++import difflib
++import hashlib
++import json
++import subprocess
++import sys
++
++ROOT = Path(__file__).resolve().parents[1]
++OUT = ROOT / "validation_v36"
++OUT.mkdir(exist_ok=True)
++
++
++def digest(path):
++    return hashlib.sha256(path.read_bytes()).hexdigest()
++
++
++js = sorted((ROOT / "web/src").glob("*.js"))
++js += sorted((ROOT / "tests_js").glob("*.mjs"))
++js += sorted((ROOT / "tools").glob("*v36.mjs"))
++for file in js:
++    subprocess.run(["node", "--check", str(file)], check=True, capture_output=True)
++py = list(ROOT.glob("*.py"))
++for folder in ("chemlab", "lab3d", "tests", "tools"):
++    py.extend(p for p in (ROOT / folder).rglob("*.py") if "__pycache__" not in p.parts)
++for file in py:
++    ast.parse(file.read_text(encoding="utf-8-sig"), filename=str(file))
++json_files = list((ROOT / "web/data").glob("*.json")) + list((ROOT / "data").glob("*.json"))
++json_files += [ROOT / "web/profiles.json", ROOT / "package.json", ROOT / "package-lock.json"]
++for file in json_files:
++    json.loads(file.read_text())
++runtime = {}
++for folder in ("web", "chemlab", "lab3d", "data", "python_vendor"):
++    for file in sorted((ROOT / folder).rglob("*")):
++        if file.is_file() and "__pycache__" not in file.parts and file.suffix not in (".pyc", ".pyo"):
++            runtime[file.relative_to(ROOT).as_posix()] = digest(file)
++for name in ("server.py", "START_WINDOWS.bat", "START_LINUX.sh", "requirements.txt", "package.json", "package-lock.json"):
++    runtime[name] = digest(ROOT / name)
++(OUT / "SOURCE_SHA256.json").write_text(json.dumps(runtime, indent=2) + "\n")
++report = {"js_syntax_files": len(js), "python_ast_files": len(py), "json_files": len(json_files), "passed": True}
++if len(sys.argv) > 1:
++    baseline = Path(sys.argv[1]).resolve()
++    changed = []
++    diffs = []
++    for file in sorted(ROOT.rglob("*")):
++        if not file.is_file():
++            continue
++        rel = file.relative_to(ROOT)
++        if ({"__pycache__", "node_modules", ".git"}.intersection(rel.parts)
++                or rel.parts[0].startswith("validation") or rel.parts[0] == "patches"):
++            continue
++        old = baseline / rel
++        if old.exists() and digest(old) == digest(file):
++            continue
++        changed.append({"file": rel.as_posix(), "status": "modified" if old.exists() else "new",
++                        "before_sha256": digest(old) if old.exists() else None, "after_sha256": digest(file)})
++        try:
++            before = old.read_text().splitlines(keepends=True) if old.exists() else []
++            after = file.read_text().splitlines(keepends=True)
++            diffs.extend(difflib.unified_diff(before, after, fromfile=f"a/{rel}", tofile=f"b/{rel}"))
++        except UnicodeError:
++            pass
++    (OUT / "changed_files.json").write_text(json.dumps(changed, indent=2, ensure_ascii=False) + "\n")
++    preserved = {}
++    for name in ("camera-quality", "hand-worker", "coordinates", "lesson-geometry", "titration", "bench", "reaction-engine", "reaction-ui", "vessel-details", "liquid-simulation", "pourable", "spill-ledger", "student-logger", "ai-tutor", "lessons", "lesson-chemistry", "lesson-visuals"):
++        rel = f"web/src/{name}.js"
++        preserved[rel] = {"sha256": digest(ROOT / rel), "unchanged": digest(ROOT / rel) == digest(baseline / rel)}
++        assert preserved[rel]["unchanged"], rel
++    (OUT / "preserved_modules.json").write_text(json.dumps(preserved, indent=2) + "\n")
++    (ROOT / "patches").mkdir(exist_ok=True)
++    (ROOT / "patches/V35_to_V36.patch").write_text("".join(diffs))
++    report["changed_files"] = len(changed)
++    report["preserved_modules"] = len(preserved)
++(OUT / "source_audit.json").write_text(json.dumps(report, indent=2) + "\n")
++print(json.dumps(report))
+--- a/tools/package_v36.py
++++ b/tools/package_v36.py
+@@ -0,0 +1,41 @@
++"""Create a reproducible source ZIP with offline dependencies and QA evidence.
++
++Screenshots are internal QA artifacts, never deliverables. Run the source audit
++after final edits, then this script. It does not run or claim the webcam tests.
++"""
++from pathlib import Path
++import hashlib
++import json
++import sys
++import zipfile
++
++ROOT = Path(__file__).resolve().parents[1]
++target = Path(sys.argv[1]).resolve() if len(sys.argv) > 1 else ROOT.parent / "HoloLab_AR_V3_6.zip"
++assert ROOT not in target.parents, "Write the archive outside the project"
++excluded = {"__pycache__", "node_modules", ".git", ".venv"}
++images = {".png", ".jpg", ".jpeg", ".webp", ".mp4", ".webm", ".y4m"}
++files = []
++for file in sorted(ROOT.rglob("*")):
++    if not file.is_file():
++        continue
++    relative = file.relative_to(ROOT)
++    if excluded.intersection(relative.parts) or file.suffix in {".pyc", ".pyo"}:
++        continue
++    if relative.parts[0].startswith("validation") and file.suffix.lower() in images:
++        continue
++    if file.name in {"soak-progress.json", "new_regressions_failure.json", "soak-failure.json"}:
++        continue
++    files.append((file, relative.as_posix()))
++with zipfile.ZipFile(target, "w", compression=zipfile.ZIP_DEFLATED, compresslevel=6) as archive:
++    for file, name in files:
++        info = zipfile.ZipInfo(name, (2026, 10, 29, 0, 0, 0))
++        info.compress_type = zipfile.ZIP_DEFLATED
++        info.external_attr = (0o100755 if file.suffix == ".sh" else 0o100644) << 16
++        archive.writestr(info, file.read_bytes())
++with zipfile.ZipFile(target) as archive:
++    assert archive.testzip() is None
++    names = archive.namelist()
++    assert "server.py" in names and "START_WINDOWS.bat" in names
++    assert "web/data/reaction-hints.json" in names
++print(json.dumps({"path": str(target), "files": len(files), "bytes": target.stat().st_size,
++                  "sha256": hashlib.sha256(target.read_bytes()).hexdigest(), "zip_crc_ok": True}))
+--- a/tools/qa_core_v36.mjs
++++ b/tools/qa_core_v36.mjs
+@@ -0,0 +1,577 @@
++import { spawn } from "node:child_process";
++import { mkdir, writeFile } from "node:fs/promises";
++import { fileURLToPath } from "node:url";
++import path from "node:path";
++import assert from "node:assert/strict";
++const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), ".."),
++  out = path.join(root, "validation_v36");
++await mkdir(out, { recursive: true });
++const { chromium } = await import(
++  process.env.PLAYWRIGHT_PACKAGE || "playwright"
++);
++const server = spawn(
++  process.env.PYTHON || (process.platform === "win32" ? "python" : "python3"),
++  ["-S", "server.py", "--no-browser", "--browser-tracking", "--port", "8768"],
++  { cwd: root },
++);
++server.stderr.on("data", () => {});
++await new Promise((r, j) => {
++  server.stdout.on("data", (b) => b.toString().includes("http://") && r());
++  server.on("exit", (c) => j(Error("server " + c)));
++});
++let browser;
++const errors = [],
++  checks = [],
++  requests = new Set();
++const check = (name, data = {}) => {
++  checks.push({ name, passed: true, ...data });
++  console.log("PASS", name);
++};
++try {
++  browser = await chromium.launch({
++    headless: true,
++    args: [
++      "--no-sandbox",
++      "--enable-unsafe-swiftshader",
++      "--use-gl=angle",
++      "--use-angle=swiftshader",
++      "--use-fake-ui-for-media-stream",
++      "--use-fake-device-for-media-stream",
++      ...(process.env.CAMERA_FIXTURE
++        ? ["--use-file-for-fake-video-capture=" + process.env.CAMERA_FIXTURE]
++        : []),
++    ],
++  });
++  const page = await browser.newPage({
++    viewport: { width: 1366, height: 900 },
++  });
++  page.on("pageerror", (e) => errors.push(e.message));
++  page.on("request", (r) => requests.add(r.url()));
++  await page.goto("http://127.0.0.1:8768/?test");
++  await page.waitForFunction(() => window.__lab, null, { timeout: 30000 });
++  check("Startup: local Rapier WASM, Three.js, chemistry API");
++  // Mouse grab/release exercises the production event handlers, not a mocked physics body.
++  const point = await page.evaluate(() => {
++    const o=__lab.createObject("beaker",{x:0,y:0,z:0});
++    for(let i=0;i<480;i++)__lab.view.physics.step(1/120);
++    __lab.view.scene.updateMatrixWorld(true);
++    return __lab.view.toScreen(o.group.position);
++  });
++  const work = await page.locator("#workspace").boundingBox();
++  await page.mouse.move(point.x,point.y);
++  await page.mouse.down();
++  await page.mouse.move(work.x + work.width * 0.4, work.y + work.height * 0.3, {
++    steps: 15,
++  });
++  await page.waitForFunction(() => {
++    const o=__lab.view.objects[0];return o.group.position.distanceTo(o.target)<0.01;
++  });
++  await page.waitForTimeout(250);
++  assert.equal(
++    await page.evaluate(() =>
++      __lab.view.physics.entries.get(1).body.isKinematic(),
++    ),
++    true,
++  );
++  const before = await page.evaluate(
++    () => __lab.view.objects[0].group.position.y,
++  );
++  await page.mouse.up();
++  assert.equal(
++    await page.evaluate(() =>
++      __lab.view.physics.entries.get(1).body.isDynamic(),
++    ),
++    true,
++  );
++  await page.waitForFunction(y => __lab.view.objects[0].group.position.y < y - 0.05, before, {timeout:4000});
++  await page.waitForTimeout(1000);
++  check("Mouse grab → kinematic; release → dynamic and visible falling");
++  const drops = await page.evaluate(() => {
++    const p = __lab.view.physics,
++      o = __lab.view.objects[0];
++    let maxPen = 0,
++      minFloorGap = Infinity;
++    for (let n = 0; n < 20; n++) {
++      __lab.beginMouse(o, __lab.view.toScreen(o.target));
++      __lab.move(
++        o,
++        { x: 0, y: n % 2 ? -0.9 : 1.2, z: 0 },
++        (n % 3) * 0.25,
++        0,
++        0,
++      );
++      for (let i = 0; i < 100; i++) p.step(1 / 120);
++      if (!p.entries.get(o.id).body.isKinematic()) throw Error("not held");
++      __lab.endMouse();
++      if (!p.entries.get(o.id).body.isDynamic()) throw Error("not released");
++      const e = p.entries.get(o.id);
++      for (let i = 0; i < 320; i++) {
++        p.step(1 / 120);
++        const gap =
++          p.bounds(e, e.body.rotation(), p.position(e)).min.y - p.table.top;
++        maxPen = Math.max(maxPen, -gap);
++        minFloorGap = Math.min(minFloorGap, gap);
++        if (gap < -0.005) throw Error("table penetrated " + gap);
++      }
++    }
++    __lab.beginMouse(o, __lab.view.toScreen(o.target));
++    __lab.move(o, { x: 0, y: -10, z: 0 }, 1.2, 0.4, 0.3);
++    for (let i = 0; i < 120; i++) p.step(1 / 120);
++    const e = p.entries.get(o.id),
++      heldGap =
++        p.bounds(e, e.body.rotation(), p.position(e)).min.y - p.table.top;
++    if (heldGap < -0.001) throw Error("held below table");
++    __lab.endMouse();
++    // Regrab/release during a short deliberate horizontal movement.
++    __lab.beginMouse(o, __lab.view.toScreen(o.target));
++    for (let i = 0; i < 30; i++) {
++      __lab.move(o, { x: i * 0.02, y: 0.8, z: 0 }, 0, 0, 0);
++      p.step(1 / 120);
++    }
++    __lab.endMouse();
++    const velocity = e.body.linvel();
++    if (velocity.x <= 0.05) throw Error("no throw inertia");
++    return {
++      cycles: 20,
++      max_penetration_scene_units: maxPen,
++      min_gap: minFloorGap,
++      held_gap: heldGap,
++      throw_velocity_m_per_s: { x: velocity.x, y: velocity.y, z: velocity.z },
++    };
++  });
++  check(
++    "20 real-mesh drop/regrab cycles, tabletop block, rotated collider support, inertia",
++    drops,
++  );
++  const physicsAcceptance = await page.evaluate(() => {
++    __lab.clearDesk();
++    const p = __lab.view.physics,
++      dt = 1 / 120;
++    const step = (n = 1) => {
++      for (let i = 0; i < n; i++) p.step(dt);
++    };
++    const gap = (e) =>
++      p.bounds(e, e.body.rotation(), p.position(e)).min.y - p.table.top;
++    const a = __lab.createObject("beaker", { x: -1.5, y: -1.0, z: 0 });
++    const b = __lab.createObject("flask", { x: 0, y: -1.0, z: 0 });
++    step(600);
++    __lab.beginMouse(a, __lab.view.toScreen(a.target));
++    let peak = 0,
++      penetration = 0;
++    for (let i = 0; i < 240; i++) {
++      p.setTarget(a, { x: 2.2, y: -1.0, z: 0 });
++      step();
++      const e = p.entries.get(b.id),
++        v = e.body.linvel();
++      peak = Math.max(peak, Math.hypot(v.x, v.z));
++      penetration = Math.max(penetration, -gap(e));
++    }
++    __lab.endMouse();
++    if (peak > 0.66 || penetration > 0.005)
++      throw Error(
++        "real-model collision unsafe " + JSON.stringify({ peak, penetration }),
++      );
++    step(600);
++    __lab.clearDesk();
++    const o = __lab.createObject("beaker", { x: 0, y: 1, z: 0 }),
++      e = p.entries.get(o.id);
++    let outside = 0,
++      maxThrow = 0,
++      maxGapBelow = 0,
++      screenOutside = 0;
++    const l = p.limits;
++    for (const target of [
++      { x: -30, y: 1, z: 0 },
++      { x: 30, y: 1, z: 0 },
++      { x: 0, y: 1, z: -30 },
++      { x: 0, y: 1, z: 30 },
++    ]) {
++      __lab.beginMouse(o, __lab.view.toScreen(o.target));
++      p.setTarget(o, target, 0.8, 0.3, 0.2);
++      step(160);
++      __lab.endMouse();
++      const v = e.body.linvel();
++      maxThrow = Math.max(maxThrow, Math.hypot(v.x, v.y, v.z));
++      for (let i = 0; i < 360; i++) {
++        step();
++        const bound = p.bounds(e, e.body.rotation(), p.position(e));
++        outside = Math.max(
++          outside,
++          l.xMin - bound.min.x,
++          bound.max.x - l.xMax,
++          l.zMin - bound.min.z,
++          bound.max.z - l.zMax,
++          bound.max.y - l.top,
++        );
++        maxGapBelow = Math.max(maxGapBelow, -gap(e));
++        if (i % 60 === 0)
++          for (const x of [bound.min.x, bound.max.x])
++            for (const y of [bound.min.y, bound.max.y])
++              for (const z of [bound.min.z, bound.max.z]) {
++                const s = __lab.view.toScreen({ x, y, z }),
++                  r = __lab.view.rect;
++                screenOutside = Math.max(
++                  screenOutside,
++                  r.left - s.x,
++                  s.x - r.right,
++                  r.top - s.y,
++                  s.y - r.bottom,
++                );
++              }
++      }
++    }
++    if (
++      outside > 0.005 ||
++      maxGapBelow > 0.005 ||
++      maxThrow > 0.401 ||
++      screenOutside > 1
++    )
++      throw Error(
++        "boundary failure " +
++          JSON.stringify({ outside, maxGapBelow, maxThrow, screenOutside }),
++      );
++    const ordinaryRecoveries = p.recoveryCount;
++    // Fault injection is deliberately separated from normal interaction evidence.
++    e.body.setTranslation({ x: 5, y: 0, z: 0 }, true);
++    p.recover(e);
++    const recovery = p.position(e),
++      faultRecovered =
++        p.recoveryCount === ordinaryRecoveries + 1 && recovery.x < l.xMax;
++    if (!faultRecovered) throw Error("fault recovery failed");
++    __lab.beginMouse(o, __lab.view.toScreen(o.target));
++    const before = p.position(e);
++    p.setWorkspace({ ...l, xMin: l.xMin + 0.3, xMax: l.xMax - 0.3 });
++    const after = p.position(e);
++    const resizeJump = Math.hypot(
++      before.x - after.x,
++      before.y - after.y,
++      before.z - after.z,
++    );
++    if (resizeJump > 1e-6) throw Error("resize teleported held tool");
++    __lab.endMouse();
++    step(1);
++    return {
++      peak_contact_horizontal_m_s: peak,
++      max_penetration_scene: Math.max(penetration, maxGapBelow),
++      max_throw_m_s: maxThrow,
++      max_outside_scene: outside,
++      max_projected_outside_px: screenOutside,
++      ordinary_recoveries: ordinaryRecoveries,
++      fault_recovered: faultRecovered,
++      held_resize_jump: resizeJump,
++    };
++  });
++  check(
++    "V3.3 production mesh: fast contact, four physical boundaries, projection, safe fault recovery, no held resize teleport",
++    physicsAcceptance,
++  );
++  const design = await page.evaluate(async () => {
++    await document.fonts.ready;
++    const bad = [];
++    __lab.clearDesk();
++    const snapshots = [];
++    for (const [i, id] of [
++      "beaker",
++      "flask",
++      "tube",
++      "hcl",
++      "dropper",
++      "balance",
++    ].entries()) {
++      const o = __lab.createObject(id, { x: (i - 2.5) * 0.95, y: -0.8, z: 0 }),
++        e = __lab.view.physics.entries.get(o.id);
++      snapshots.push({
++        id: stockId(o),
++        scale: o.group.scale.x,
++        colliders: e.colliders.length,
++        physical: !!e.body,
++        mouth_y: o.mouthY ?? null,
++        liquid: !!o.liquid,
++      });
++      const grad = o.group.children.find(
++        (n) => n.name === "vessel-visual-details",
++      )?.userData.graduations;
++      if (grad)
++        for (const mark of grad) {
++          const g = __lab.view.liquidGeometry(
++            o.stock.kind,
++            mark.ml / o.stock.capacity_ml,
++          );
++          g.computeBoundingBox();
++          if (Math.abs(g.boundingBox.max.y - mark.level) > 0.001)
++            bad.push(id + ":graduation");
++          g.dispose();
++        }
++      function stockId(o) {
++        return o.stock.id;
++      }
++      if (o.group.scale.x !== 0.67 || !e.colliders.length) bad.push(id);
++    }
++    for (let i = 0; i < 600; i++) __lab.view.physics.step(1 / 120);
++    const selected = __lab.view.objects.at(-1);
++    const glass = __lab.view.glass.type;
++    return {
++      font: getComputedStyle(document.body).fontFamily,
++      fontLoaded: document.fonts.check('400 14px "Be Vietnam Pro"'),
++      glass,
++      cameraFit: getComputedStyle(document.querySelector("#camera")).objectFit,
++      technicalClosed: !document.querySelector("#settings").open,
++      snapshots,
++      bad,
++      renderCalls: __lab.view.renderer.info.render.calls,
++      triangles: __lab.view.renderer.info.render.triangles,
++    };
++  });
++  assert.ok(design.fontLoaded);
++  assert.equal(design.glass, "MeshPhysicalMaterial");
++  assert.deepEqual(design.bad, []);
++  assert.ok(design.technicalClosed);
++  check(
++    "Bundled Vietnamese fonts, collapsed diagnostics, PBR glass, tool IDs/pivots/colliders retained",
++    design,
++  );
++  await page.screenshot({ path: path.join(out, "internal_design_v33.png") });
++
++  // Actual Interaction FSM with two pose streams; this is synthetic gesture evidence.
++  const gestures = await page.evaluate(async () => {
++    __lab.clearDesk();
++    const p = __lab.view.physics;
++    const a = __lab.createObject("beaker", { x: -1.2, y: 1, z: 0 }),
++      b = __lab.createObject("flask", { x: 1.2, y: 1, z: 0 });
++    const pose = (o, label, palm) => {
++      const at = __lab.view.toScreen(o.target);
++      const x = 0.035 + (at.x / innerWidth) * 0.93,
++        y = 0.035 + (at.y / innerHeight) * 0.93;
++      return {
++        x,
++        y,
++        center: { x, y },
++        ratio: 0.9,
++        palm,
++        angle: 0,
++        label,
++        score: 0.99,
++        fist: false,
++        points: Array.from({ length: 21 }, () => ({ x, y, z: 0 })),
++      };
++    };
++    // Freeze as though just touched while preparing the open-hand acquisition samples.
++    p.beginGrab(a);
++    p.beginGrab(b);
++    const pa = pose(a, "Left", 0.15),
++      pb = pose(b, "Right", 0.06);
++    let clock = performance.now();
++    const send = (rows, n = 1) => {
++      for (let i = 0; i < n; i++) {
++        clock += 34;
++        __lab.replay(structuredClone(rows), clock);
++      }
++    };
++    send([pa, pb], 6);
++    pa.ratio = pb.ratio = 0.2;
++    send([pa, pb], 6);
++    if (
++      __lab.interaction.owners(a).length !== 1 ||
++      __lab.interaction.owners(b).length !== 1
++    )
++      throw Error("two-hand grab failed");
++    const held = __lab.state().hands.map((h) => h.object);
++    const t = __lab.tracks.lastFrame + 34;
++    __lab.replay([], t);
++    __lab.view.physics.ownership(a, true, false);
++    __lab.view.physics.ownership(b, true, false);
++    const frozen = p.position(p.entries.get(a.id));
++    for (let i = 0; i < 20; i++) p.step(1 / 120);
++    if (
++      !p.entries.get(a.id).body.isKinematic() ||
++      __lab.interaction.owners(a).length !== 1
++    )
++      throw Error("tracking gap dropped object");
++    const after = p.position(p.entries.get(a.id));
++    if (
++      Math.hypot(after.x - frozen.x, after.y - frozen.y, after.z - frozen.z) >
++      1e-5
++    )
++      throw Error("gap moved object");
++    let time = t + 34;
++    pa.ratio = pb.ratio = 0.9;
++    for (let i = 0; i < 8; i++) {
++      __lab.replay([pa, pb], time);
++      time += 34;
++    }
++    if (
++      __lab.interaction.owners(a).length ||
++      !p.entries.get(a.id).body.isDynamic()
++    )
++      throw Error("release FSM did not detach");
++    __lab.interaction.reset();
++    __lab.tracks.reset();
++    return { held, tracking_gap_froze: true, release_dynamic: true };
++  });
++  check(
++    "Synthetic two-hand FSM, temporary tracking loss, valid release handoff",
++    gestures,
++  );
++  await page.evaluate(async () => {
++    __lab.clearDesk();
++    const a = __lab.createObject("hcl", { x: -1, y: 0, z: 0 }),
++      b = __lab.createObject("naoh", { x: 1, y: 0, z: 0 });
++    await __lab.pour(a, b, true);
++    if (a.mixture.volume_ml !== 90 || b.mixture.volume_ml !== 110)
++      throw Error("chem regression");
++  });
++  check("Preserved chemical transfer quantities");
++  await page.evaluate(() => document.querySelector("#extra-tools").open=true);
++  await page.locator("#titration-mode").click();
++  await page.locator("#t-drop").click();
++  assert.equal(await page.locator("#t-used").textContent(), "0.05 mL");
++  await page.locator("#titration-mode").click();
++  check("Preserved titration scene and microdose");
++  await page.evaluate(() => document.querySelector("#practice-options").open=true);
++  await page.locator("#camera-auto").uncheck();
++  await page.locator("#start-camera").click();
++  await page.waitForFunction(
++    () => __lab.capture.running && __lab.metrics.tracking.length > 5,
++    null,
++    { timeout: 60000 },
++  );
++  const modes = [];
++  for (const mode of ["HD", "FHD", "LOW", "HD"]) {
++    await page.locator("#camera-quality").selectOption(mode);
++    await page.waitForFunction(() => !__lab.capture.qualityBusy);
++    await page.waitForTimeout(200);
++    const report = await page.evaluate(() => __lab.capture.cameraReport());
++    modes.push(report);
++    assert.ok(report.settings.width > 0 && report.video_width > 0);
++    assert.equal(report.requested, mode);
++  }
++  check(
++    "HD default and Low/HD/Full-HD camera modes report actual track and video sizes",
++    { modes },
++  );
++  await page.evaluate(() => {
++    const receive = __lab.capture.onResult;
++    __lab.capture.onResult = (data) => {
++      __lab.testInputShape = { width: data.width, height: data.height };
++      receive(data);
++    };
++  });
++  await page.waitForFunction(
++    () =>
++      __lab.testInputShape?.width === 640 &&
++      __lab.testInputShape?.height === 360,
++    null,
++    { timeout: 30000 },
++  );
++  if (process.env.CAMERA_FIXTURE) await page.waitForFunction(
++    () => __lab.metrics.tracking.some((t) => t.hands > 0),
++    null,
++    { timeout: 30000 },
++  );
++  const preview = await page.evaluate(() => ({
++    cv_input: __lab.testInputShape,
++    fit: getComputedStyle(document.querySelector("#camera")).objectFit,
++    mirror: getComputedStyle(document.querySelector("#camera")).transform,
++    tracking: __lab.metrics.tracking.at(-1),
++  }));
++  assert.equal(preview.fit, "contain");
++  assert.ok(preview.mirror.includes("-1"));
++  assert.ok(preview.tracking);
++  if (process.env.CAMERA_FIXTURE) assert.ok(preview.tracking.hands > 0);
++  check(
++    "Mirror/aspect and real MediaPipe input pipeline; synthetic test pattern has no hands",
++    preview,
++  );
++  await page.evaluate(() => {
++    const q = document.querySelector("#quality");
++    q.value = "1";
++    q.dispatchEvent(new Event("change"));
++  });
++  await page.evaluate(() => {
++    __lab.clearDesk();
++    for (const [i, id] of [
++      "beaker",
++      "flask",
++      "cuso4",
++      "naoh",
++      "tube",
++    ].entries())
++      __lab.createObject(id, { x: (i - 2) * 1.1, y: 0.5, z: 0 });
++  });
++  await page.waitForTimeout(2000);
++  await page.screenshot({ path: path.join(out, "internal_interface.png") });
++  if (process.env.BENCHMARK === "1") {
++    await page.evaluate(() => {
++      const o = __lab.view.objects.at(-1);
++      __lab.beginMouse(o, __lab.view.toScreen(o.target));
++      let start = performance.now();
++      function animate(t) {
++        if (!__lab.metrics.current) return;
++        __lab.move(
++          o,
++          { x: 2.2 + Math.sin((t - start) / 1200) * 0.18, y: 0.3, z: 0 },
++          0,
++          0,
++          0,
++        );
++        requestAnimationFrame(animate);
++      }
++      requestAnimationFrame(animate);
++      __lab.metrics.begin(performance.now(), {
++        version: "3.6.0",
++        input_source:
++          "Y4M loop of static reference hands; not physical gestures",
++        physical_camera_tested: false,
++        backend: __lab.capture.delegate,
++        camera: __lab.capture.cameraReport(),
++        physics: "Rapier 0.17.3 / 120 Hz / 5 bodies",
++        viewport: { width: innerWidth, height: innerHeight },
++        environment: "Chromium headless / SwiftShader",
++        moving_body: "programmatic hand target; other four bodies dynamic",
++      });
++    });
++    await page.waitForFunction(() => __lab.metrics.lastReport?.complete, null, {
++      timeout: 70000,
++    });
++    const result = await page.evaluate(() => ({
++      ...__lab.metrics.lastReport,
++      physics_last_frame_ms: __lab.view.physics.lastStepCost,
++      physics_steps: __lab.view.physics.totalSteps,
++    }));
++    await writeFile(
++      path.join(out, "benchmark.json"),
++      JSON.stringify(result, null, 2),
++    );
++    check(
++      "60-second webcam-fixture + MediaPipe + Three.js + Rapier measurement",
++      result,
++    );
++  }
++  await page.locator("#stop-camera").click();
++  await page.waitForTimeout(100);
++  assert.equal(await page.evaluate(() => __lab.capture.running), false);
++  check("Camera stop");
++  assert.deepEqual(errors, []);
++  const remote = [...requests].filter(
++    (u) => !u.startsWith("http://127.0.0.1:8768/") && !u.startsWith("blob:"),
++  );
++  assert.deepEqual(remote, []);
++  check("No page errors and no remote runtime dependencies");
++} catch (e) {
++  await writeFile(
++    path.join(out, "browser_failure.json"),
++    JSON.stringify({ error: String(e), errors, checks }, null, 2),
++  );
++  throw e;
++} finally {
++  await writeFile(
++    path.join(out, "browser_checks.json"),
++    JSON.stringify(
++      { checks, page_errors: errors, physical_camera_tested: false },
++      null,
++      2,
++    ),
++  );
++  await browser?.close();
++  server.kill();
++}
+--- a/tools/qa_liquids_v36.mjs
++++ b/tools/qa_liquids_v36.mjs
+@@ -0,0 +1,139 @@
++import {spawn} from 'node:child_process';
++import fs from 'node:fs/promises';
++import path from 'node:path';
++import assert from 'node:assert/strict';
++import {fileURLToPath} from 'node:url';
++const root=path.resolve(path.dirname(fileURLToPath(import.meta.url)),'..');
++const out=path.join(root,'validation_v36');await fs.mkdir(out,{recursive:true});
++const {chromium}=await import(process.env.PLAYWRIGHT_PACKAGE || 'playwright');
++const server=spawn(process.env.PYTHON || (process.platform === 'win32' ? 'python' : 'python3'),['-S','server.py','--no-browser','--browser-tracking','--port','8791'],{cwd:root});
++await new Promise((resolve,reject)=>{server.stdout.on('data',d=>d.toString().includes('http://')&&resolve());server.on('exit',c=>reject(Error('server '+c)));});
++const errors=[],checks=[];
++let browser;
++const check=(name,data={})=>{checks.push({name,passed:true,...data});console.log('PASS',name);};
++try {
++ browser=await chromium.launch({headless:true,args:['--no-sandbox','--enable-unsafe-swiftshader','--use-gl=angle','--use-angle=swiftshader']});
++ const page=await browser.newPage({viewport:{width:1440,height:1000}});
++ page.on('pageerror',e=>errors.push(e.message));
++ page.on('console',m=>{if(m.type()==='error')errors.push(m.text());});
++ await page.goto('http://127.0.0.1:8791/?test');await page.waitForFunction(()=>window.__lab);
++ await page.evaluate(()=>{
++ window.stepBodies=(n=240)=>{for(let i=0;i<n;i++)__lab.view.physics.step(1/120);__lab.view.scene.updateMatrixWorld(true);};
++ window.alignPour=(sourceKey,targetKey,angle=135)=>{
++ const a=__lab.lessons.objects.get(sourceKey),b=__lab.lessons.objects.get(targetKey),p=__lab.view.physics;
++ __lab.beginMouse(a,__lab.view.toScreen(a.target));
++ __lab.move(a,{x:a.target.x,y:1.15,z:0},0,0,0);stepBodies();
++ __lab.move(a,{x:a.target.x,y:1.15,z:0},angle*Math.PI/180,0,0);stepBodies();
++ a.pourable.updatePose();b.pourable.updatePose();
++ const offset=a.pourable.mouth.clone().sub(a.group.position),mouth=b.pourable.center;
++ __lab.move(a,{x:mouth.x-offset.x,y:mouth.y+.55-offset.y,z:mouth.z-offset.z},angle*Math.PI/180,0,0);stepBodies(480);
++ return {aligned:__lab.view.pourTarget(a)===b,from:a.group.position.toArray(),mouth:a.pourable.mouth.toArray(),to:b.pourable.center.toArray()};
++ };
++ });
++ const all=await page.evaluate(()=>{
++ __lab.clearDesk();const results=[];
++ for(const kind of ['beaker','flask','tube','water','dropper']) {
++ __lab.clearDesk();const o=__lab.createObject(kind,{x:0,y:.5,z:0});
++ __lab.beginMouse(o,__lab.view.toScreen(o.target));
++ for(const angle of [45,90,135,180,270,360]){__lab.move(o,{x:0,y:.5,z:0},angle*Math.PI/180,0,0);stepBodies(180);const axis=o.pourable.updatePose().axis;if(Math.abs(axis.y-Math.cos(angle*Math.PI/180))>.03)throw Error(kind+' rotation '+angle);}
++ o.mixture.volume_ml=kind==='dropper'?3:10;__lab.view.updateMixture(o);
++ __lab.move(o,{x:0,y:.5,z:0},Math.PI,0,0);stepBodies();
++ results.push({kind,rate:o.pourable.updatePose().rate(),colliders:__lab.view.physics.entries.get(o.id).colliders.length});
++ __lab.endMouse();stepBodies(600);
++ const e=__lab.view.physics.entries.get(o.id);if(__lab.view.physics.bounds(e,e.body.rotation(),__lab.view.physics.position(e)).min.y<__lab.view.physics.table.top-.01)throw Error('penetrated');
++ }
++ return results;
++ });
++ assert.ok(all.every(x=>x.rate>0));check('Five actual rendered vessels rotate 45/90/135/180/270/360; release falls on table',{vessels:all});
++ await page.click('#lesson-start');
++ await page.waitForTimeout(600);
++ const aligned=await page.evaluate(()=>alignPour('lesson-silver','lesson-chloride'));
++ assert.ok(aligned.aligned,JSON.stringify(aligned));
++ await page.waitForFunction(()=>__lab.lessons.model.get('lesson-chloride').mol.AgCl>0.00005,null,{timeout:8000});
++ check('Production rAF pouring creates AgCl after geometric alignment',aligned);
++ await page.evaluate(()=>{const o=__lab.lessons.objects.get('lesson-silver');__lab.move(o,{x:-2,y:1,z:0},0,0,0);stepBodies(240);__lab.endMouse();stepBodies(480);});
++ await page.waitForTimeout(300);
++ const amount=await page.evaluate(()=>({mol:__lab.lessons.model.get('lesson-chloride').mol.AgCl,volumes:[...__lab.lessons.model.vessels.values()].reduce((s,m)=>s+m.volume_ml,0),spilled:__lab.spillLedger.reduce((s,m)=>s+m.volume_ml,0)}));
++ assert.ok(Math.abs(amount.volumes+amount.spilled-46)<1e-6,JSON.stringify(amount));check('Lesson source + target + spill volumes conserved',amount);
++ await page.screenshot({path:path.join(out,'internal_chloride_after.png')});
++ const negative=await page.evaluate(()=>{const m=__lab.lessons.model;return m.get('lesson-control').mol.AgCl||0;});assert.equal(negative,0);check('Water control has no invented precipitate');
++ await page.click('#lesson-quiz');await page.locator('#lesson-answers button').nth(1).click();assert.match(await page.locator('#lesson-answer-feedback').innerText(),/Gợi ý/);await page.click('#lesson-quiz-close');check('Quiz feedback works');
++ const disposed=await page.evaluate(()=>{
++   const o=__lab.lessons.objects.get('lesson-chloride');let grains=0,bubbles=0;
++   o.precipitateVisual.mesh.addEventListener('dispose',()=>grains++);
++   __lab.view.effect(o,'bubbles',performance.now());
++   __lab.view.effects.find(e=>e.item===o).mesh.addEventListener('dispose',()=>bubbles++);
++   __lab.lessons.start('chloride');
++   return {grains,bubbles,remaining:__lab.view.effects.length};
++ });assert.deepEqual(disposed,{grains:1,bubbles:1,remaining:0});check('Reset releases precipitate and effect instance buffers',disposed);
++ // Full inversion must drain in the real animation loop, including a spill without receiver.
++ await page.evaluate(()=>{__lab.lessons.start('chloride');const o=__lab.lessons.objects.get('lesson-silver');__lab.beginMouse(o,__lab.view.toScreen(o.target));__lab.move(o,{x:-2,y:1,z:0},Math.PI,0,0);stepBodies(480);});
++ await page.waitForFunction(()=>__lab.lessons.model.get('lesson-silver').volume_ml<1e-8,null,{timeout:15000});
++ const drain=await page.evaluate(()=>({spilled:__lab.spillLedger.reduce((s,m)=>s+m.volume_ml,0),liquid:__lab.lessons.objects.get('lesson-silver').liquid.visible,puddles:__lab.view.spills.length}));
++ await page.waitForTimeout(200);
++ assert.ok(drain.spilled>29.9&&drain.puddles>0,JSON.stringify(drain));check('Full inversion drains 30 mL to visible puddle via production loop',drain);
++ const restored=await page.evaluate(async()=>{
++   const before=__lab.session();await __lab.loadSession(before);const after=__lab.session();
++   return JSON.stringify(before.spills)===JSON.stringify(after.spills)&&JSON.stringify(before.model.vessels)===JSON.stringify(after.model.vessels);
++ });assert.ok(restored);check('Save/load preserves vessel quantities and spill ledger together');
++ // Each remaining guided lesson uses the actual mouth alignment and transfer path.
++ await page.evaluate(()=>{
++   window.parkSource=()=>{const o=__lab.view.objects.find(o=>o.mouseOwned);if(!o)return;__lab.move(o,{x:-3.7,y:1,z:0},0,0,0);stepBodies(300);__lab.endMouse();stepBodies(400);};
++ });
++ for (const [id,from,to,condition] of [
++   ['indicator','lesson-base','lesson-indicator','pink'],
++   ['biuret','lesson-biuret','lesson-protein','complete'],
++   ['ammonium','lesson-base','lesson-ammonium','gas'],
++ ]) {
++   await page.evaluate(id=>__lab.lessons.start(id),id);await page.waitForTimeout(250);
++   assert.ok((await page.evaluate(([a,b])=>alignPour(a,b),[from,to])).aligned);
++   await page.waitForFunction(kind=>kind==='pink'?__lab.lessons.model.seenPink:kind==='gas'?__lab.lessons.model.get('lesson-ammonium').escaped_mol.NH3>0:__lab.lessons.model.complete,condition,{timeout:8000});
++   await page.evaluate(()=>parkSource());
++   if(id==='indicator') {
++     await page.evaluate(()=>alignPour('lesson-acid','lesson-indicator'));
++     await page.waitForFunction(()=>__lab.lessons.model.complete,null,{timeout:8000});await page.evaluate(()=>parkSource());
++   }
++   if(id==='ammonium') {
++     const gas=await page.evaluate(()=>{
++       const a=__lab.lessons.objects.get('lesson-litmus'),b=__lab.lessons.objects.get('lesson-ammonium');
++       __lab.beginMouse(a,__lab.view.toScreen(a.target));__lab.move(a,{x:b.target.x,y:1.2,z:b.target.z},0,0,0);stepBodies(300);
++       const m=__lab.view.mouth(b);__lab.move(a,{x:m.x,y:m.y+.25-.28*.67,z:m.z},0,0,0);stepBodies(300);
++       for(let i=0;i<120;i++)__lab.lessons.tick(1/60,performance.now()+i*1000/60);
++       return __lab.lessons.model.complete;
++     });assert.ok(gas);
++   }
++   check('Guided chemistry through rendered vessels: '+id);
++ }
++ await page.evaluate(()=>__lab.lessons.start('iron-copper'));await page.waitForTimeout(250);
++ const iron=await page.evaluate(()=>{
++   const a=__lab.lessons.objects.get('lesson-iron'),b=__lab.lessons.objects.get('lesson-copper');
++   __lab.beginMouse(a,__lab.view.toScreen(a.target));__lab.move(a,{x:b.target.x,y:1.2,z:b.target.z},0,0,0);stepBodies(400);
++   __lab.move(a,{x:b.target.x,y:b.target.y+.28,z:b.target.z},0,0,0);stepBodies(400);
++   const contacts=__lab.lessons.visuals.contacts(__lab.lessons.objects,__lab.lessons.model);
++   for(let i=0;i<120;i++)__lab.lessons.tick(1/60,performance.now()+i*1000/60);
++   const n=__lab.lessons.model.get('lesson-iron').mol.Cu||0;
++   __lab.move(a,{x:b.target.x,y:1.5,z:b.target.z},0,0,0);stepBodies(400);
++   for(let i=0;i<120;i++)__lab.lessons.tick(1/60,performance.now()+i*1000/60);
++   return {n,after:__lab.lessons.model.get('lesson-iron').mol.Cu||0,immersed:contacts.immersed};
++ });assert.ok(iron.immersed&&iron.n>0);assert.equal(iron.n,iron.after);check('Iron immersion reacts and lifting out stops reaction',iron);
++ await page.evaluate(()=>__lab.lessons.start('chloride'));
++ const layout=[];
++ for(const [w,h] of [[1920,1080],[1366,768],[1024,768],[640,800]]){
++   await page.setViewportSize({width:w,height:h});await page.waitForTimeout(250);
++   const info=await page.evaluate(()=>{
++     const r=__lab.view.rect,labels=__lab.view.objects.map(o=>{const r=o.label.getBoundingClientRect();return{x:r.x,y:r.y,w:r.width,h:r.height};});
++     const overlaps=labels.some((a,i)=>labels.some((b,j)=>j>i&&a.x<b.x+b.w&&a.x+a.w>b.x&&a.y<b.y+b.h&&a.y+a.h>b.y));
++     return {width:innerWidth,canvas:r.width,height:r.height,finite:Number.isFinite(__lab.view.camera.position.z),overlaps,overflow:document.documentElement.scrollWidth>innerWidth};
++   });assert.ok(info.canvas>300&&info.finite&&!info.overlaps&&!info.overflow,JSON.stringify(info));layout.push(info);
++ }
++ check('Responsive collapsed selector, labels do not overlap or overflow', {layout});
++ await page.setViewportSize({width:1440,height:1000});
++ await page.locator('#learning-panel > summary').click();
++ await page.check('#learning-consent');await page.fill('#learning-response','Ag+ kết hợp Cl- tạo AgCl trắng.');await page.click('#learning-save-answer');
++ const log=await page.evaluate(()=>__lab.learningLogger.export());assert.ok(log.events.some(e=>e.type==='explanation'));assert.equal(log.raw_video,false);assert.equal(log.raw_landmarks,false);
++ await page.click('#learning-clear');assert.equal(await page.evaluate(()=>__lab.learningLogger.events.length),0);check('Opt-in event log, explanation, export payload and erase via UI');
++ await page.evaluate(()=>document.querySelector('#learning-panel').open=false);
++ await page.screenshot({path:path.join(out,'internal_final_layout.png')});
++ assert.deepEqual(errors,[]);check('No JS or WebGL errors');
++} catch(e) {checks.push({name:'failure',passed:false,error:String(e),stack:e.stack});console.error(e);process.exitCode=1;}
++finally {await fs.writeFile(path.join(out,'browser.json'),JSON.stringify({physicalWebcam:false,checks,errors},null,2));await browser?.close();server.kill();}
+--- a/tools/qa_regression_v36.mjs
++++ b/tools/qa_regression_v36.mjs
+@@ -0,0 +1,144 @@
++import { spawn } from "node:child_process";
++import { writeFile } from "node:fs/promises";
++import path from "node:path";
++import { fileURLToPath } from "node:url";
++import assert from "node:assert/strict";
++const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
++const { chromium } = await import(
++  process.env.PLAYWRIGHT_PACKAGE || "playwright"
++);
++const server = spawn(
++  process.env.PYTHON || (process.platform === "win32" ? "python" : "python3"),
++  ["-S", "server.py", "--no-browser", "--browser-tracking", "--port", "8772"],
++  { cwd: root },
++);
++server.stderr.on("data", () => {});
++await new Promise((r) =>
++  server.stdout.on("data", (b) => b.toString().includes("http://") && r()),
++);
++let browser;
++const errors = [],
++  checks = [];
++const check = (name) => {
++  checks.push({ name, passed: true });
++  console.log("PASS", name);
++};
++try {
++  browser = await chromium.launch({
++    headless: true,
++    args: [
++      "--no-sandbox",
++      "--enable-unsafe-swiftshader",
++      "--use-gl=angle",
++      "--use-angle=swiftshader",
++    ],
++  });
++  const page = await browser.newPage({
++    viewport: { width: 1280, height: 800 },
++  });
++  page.on("pageerror", (e) => errors.push(e.message));
++  await page.goto("http://127.0.0.1:8772/?test");
++  await page.waitForFunction(() => window.__lab);
++  await page.locator("#extra-tools > summary").click();
++  const saved = await page.evaluate(async () => {
++    __lab.createObject("beaker", { x: 0, y: 0, z: 0 });
++    const s = __lab.session();
++    await __lab.loadSession(s);
++    const a = __lab.session();
++    const before = JSON.stringify(
++      a.objects.map((o) => ({ id: o.id, stock: o.stock, mixture: o.mixture })),
++    );
++    let rejected = false;
++    try {
++      await __lab.loadSession({
++        schema: "hololab3-session-1",
++        objects: [{ stock: "invalid" }],
++      });
++    } catch {
++      rejected = true;
++    }
++    const after = JSON.stringify(
++      __lab
++        .session()
++        .objects.map((o) => ({ id: o.id, stock: o.stock, mixture: o.mixture })),
++    );
++    return { stock: a.objects[0].stock, rejected, unchanged: before === after };
++  });
++  assert.equal(saved.stock, "beaker");
++  assert.ok(saved.rejected && saved.unchanged);
++  check(
++    "Save/load and invalid import preserve IDs/stocks/quantities while physics remains active",
++  );
++  await page.locator("#risk-mode").click();
++  const risk = await page.evaluate(async () => {
++    __lab.clearDesk();
++    const a = __lab.createObject("water", { x: -1, y: 0, z: 0 }),
++      b = __lab.createObject("acid_risk", { x: 1, y: 0, z: 0 });
++    const before = JSON.stringify([a.mixture, b.mixture]);
++    await __lab.pour(a, b, true);
++    return before === JSON.stringify([a.mixture, b.mixture]);
++  });
++  assert.ok(risk);
++  check(
++    "Guided hazardous transfer remains blocked without changing quantities",
++  );
++  await page.locator("#risk-mode").click();
++  const effects = await page.evaluate(async () => {
++    const [a, b] = __lab.view.objects;
++    await __lab.pour(a, b, true);
++    return { qual: b.mixture.qualitative, effects: __lab.view.effects.length };
++  });
++  assert.ok(effects.qual && effects.effects > 0);
++  check("Free-mode qualitative hazard effects retained");
++  await page.evaluate(() => document.querySelector("#view-mode").click());
++  assert.equal(await page.evaluate(() => __lab.view.controls.enabled), true);
++  await page.evaluate(() => document.querySelector("#view-mode").click());
++  assert.equal(await page.evaluate(() => __lab.view.controls.enabled), false);
++  check("OrbitControls exclusive interaction mode retained");
++  await page.locator("#reaction-library").click();
++  assert.equal(await page.locator("#reaction-select option").count(), 100);
++  await page.locator("#reactions-close").click();
++  check("100-reaction library retained");
++  await page.evaluate(() => {
++    __lab.clearDesk();
++    __lab.learningLogger.setEnabled(true);
++    const target=__lab.createObject("beaker",{x:0,y:0,z:0});
++    const sample=__lab.createObject("copper",{x:-2,y:1,z:0});
++    for(let i=0;i<300;i++)__lab.view.physics.step(1/120);
++    __lab.view.scene.updateMatrixWorld(true);
++    __lab.beginMouse(sample,__lab.view.toScreen(sample.target));
++    __lab.move(sample,{x:sample.target.x,y:1.2,z:sample.target.z},0,0,0);
++    for(let i=0;i<300;i++)__lab.view.physics.step(1/120);
++    __lab.view.scene.updateMatrixWorld(true);
++    const mouth=target.pourable.updatePose().center;
++    __lab.move(sample,{x:mouth.x,y:mouth.y+.8,z:mouth.z},0,0,0);
++    for(let i=0;i<300;i++)__lab.view.physics.step(1/120);
++  });
++  try {
++    await page.waitForFunction(()=>__lab.view.objects.find(o=>o.stock.id==='copper').mixture.solid_copper_g<1e-9,null,{timeout:8000});
++  } catch(error) {
++    console.error(JSON.stringify(await page.evaluate(()=>({message:document.querySelector('#message').textContent,errors:__lab.liquids.lastError,objects:__lab.view.objects.map(o=>({stock:o.stock.id,held:o.mouseOwned,pos:o.group.position.toArray(),target:__lab.view.pourTarget(o)?.stock.id,mix:o.mixture}))})),null,2));
++    throw error;
++  }
++  const solid=await page.evaluate(()=>({
++    mass:__lab.view.objects.find(o=>o.stock.id==='beaker').mixture.solid_copper_g,
++    liquidStreams:__lab.view.streams.filter(s=>s.source.stock.id==='copper').length,
++    logged:__lab.learningLogger.events.some(e=>e.type==='solid-add'&&e.source==='copper'),
++  }));
++  assert.equal(solid.mass,.5);assert.equal(solid.liquidStreams,0);assert.ok(solid.logged);
++  check("Discrete copper sample still transfers through production loop; no liquid stream or invented reaction");
++  const freeLog=await page.evaluate(async()=>{
++    __lab.endMouse();__lab.clearDesk();
++    const source=__lab.createObject('hcl',{x:-2,y:0,z:0}),target=__lab.createObject('beaker',{x:2,y:0,z:0});
++    await __lab.pour(source,target,true,.125);
++    return __lab.learningLogger.events.some(e=>e.type==='pour'&&e.source==='hcl'&&e.target==='beaker'&&e.amount_ml===.125);
++  });assert.ok(freeLog);check("Opt-in logger records the actual free-desk aliquot");
++  assert.deepEqual(errors, []);
++} finally {
++  await writeFile(
++    path.join(root, "validation_v36/regression_checks.json"),
++    JSON.stringify({ checks, page_errors: errors }, null, 2),
++  );
++  await browser?.close();
++  server.kill();
++}
+--- a/tools/qa_v36.mjs
++++ b/tools/qa_v36.mjs
+@@ -0,0 +1,116 @@
++/** Regression with real browser/Rapier and synthetic observations, not a real hand test. */
++import {spawn} from 'node:child_process';
++import fs from 'node:fs/promises';import path from 'node:path';import {fileURLToPath} from 'node:url';
++import assert from 'node:assert/strict';
++const root=path.resolve(path.dirname(fileURLToPath(import.meta.url)),'..'),out=path.join(root,'validation_v36');await fs.mkdir(out,{recursive:true});
++const {chromium}=await import(process.env.PLAYWRIGHT_PACKAGE||'playwright');
++const server=spawn(process.env.PYTHON||'python3',['-S','server.py','--no-browser','--browser-tracking','--port','8793'],{cwd:root});
++await new Promise((r,j)=>{server.stdout.on('data',b=>b.toString().includes('http://')&&r());server.on('exit',c=>j(Error('server '+c)));});
++const errors=[],checks=[],diagnostics=[];let browser;
++const check=(name,data={})=>{checks.push({name,passed:true,...data});console.log('PASS',name);};
++try{
++ browser=await chromium.launch({headless:true,args:['--no-sandbox','--enable-unsafe-swiftshader','--use-gl=angle','--use-angle=swiftshader','--use-fake-ui-for-media-stream','--use-fake-device-for-media-stream']});
++ const page=await browser.newPage({viewport:{width:1440,height:950}});
++ page.on('pageerror',e=>errors.push(e.stack||e.message));page.on('console',m=>{
++  if(m.type()==='error') {
++   if(m.text().startsWith('INFO: Created TensorFlow Lite XNNPACK delegate'))diagnostics.push(m.text());
++   else errors.push(m.text());
++  }
++ });
++ await page.goto('http://127.0.0.1:8793/?test');await page.waitForFunction(()=>window.__lab);
++ await page.evaluate(()=>{
++ window.makeRig=(kind='beaker',roll=0)=>{
++  __lab.clearDesk();
++  const o=__lab.createObject(kind,{x:0,y:.7,z:0},{roll}),p=__lab.view.physics,entry=p.entries.get(o.id),a=__lab.interaction;
++  __lab.view.scene.updateMatrixWorld(true);
++  const screen=__lab.view.toScreen(o.group.position),m=a.margin;
++  const x=m+screen.x/innerWidth*(1-2*m),y=m+screen.y/innerHeight*(1-2*m);
++  let time=performance.now();
++  const pose=(ratio=.2,fist=false)=>({x,y,center:{x,y},ratio,fist,palm:.15,angle:0,label:'Right',score:.99,points:Array.from({length:21},()=>({x,y,z:0}))});
++  const feed=(rows,dt=34)=>{
++   time+=dt;__lab.replay(rows,time);a.sweep(time);
++   const owners=a.owners(o);p.ownership(o,owners.length>0,owners.every(h=>h.track.observed&&!h.missing&&!h.track.ambiguous));p.step(dt/1000);
++  };
++  for(let i=0;i<6;i++)feed([pose()]);
++  if(a.owners(o).length!==1)throw Error('Raycast did not acquire '+kind);
++  return {o,p,a,entry,feed,pose,get time(){return time;}};
++ };
++ });
++ const drops=await page.evaluate(()=>{
++  let maxPen=0,maxGap=0;const angles=[0,.7,Math.PI/2,Math.PI,2.5];
++  for(let i=0;i<25;i++){
++   const r=makeRig(['beaker','flask','tube','water','dropper'][i%5],angles[Math.floor(i/5)]);
++   r.a.setMode('rotate');r.feed([r.pose()]);
++   const before=r.o.group.position.y;
++   for(let n=0;n<3;n++)r.feed([r.pose(1.2,true)]);
++   if(!r.entry.body.isDynamic()||r.a.owners(r.o).length)throw Error('Still held after opening');
++   for(let n=0;n<30;n++)r.p.step(1/120);
++   if(r.o.group.position.y>=before-.05)throw Error('Did not fall');
++   for(let n=0;n<600;n++){r.p.step(1/120);maxPen=Math.max(maxPen,r.p.table.top-r.p.bounds(r.entry,r.entry.body.rotation(),r.p.position(r.entry)).min.y);}
++   maxGap=Math.max(maxGap,r.p.bounds(r.entry,r.entry.body.rotation(),r.p.position(r.entry)).min.y-r.p.table.top);
++   if(maxGap>.04)throw Error('Hover gap '+maxGap);
++   __lab.beginMouse(r.o,__lab.view.toScreen(r.o.target));if(!r.entry.body.isKinematic())throw Error('Cannot regrab');__lab.endMouse();
++  }
++  return {cycles:25,maxPenetrationScene:maxPen,maxFloorGapScene:maxGap};
++ });assert.ok(drops.maxPenetrationScene<.004);check('25 pinch-release cycles with folded fingers, five real vessel meshes/angles: dynamic, falls, rests, regrabs',drops);
++ const lost=await page.evaluate(()=>{
++  let r=makeRig();for(let i=0;i<7;i++)r.feed([]);if(!r.entry.body.isKinematic())throw Error('short gap dropped');
++  r.feed([r.pose()]);r.feed([r.pose()]);if(!r.entry.body.isKinematic())throw Error('recovery failed');
++  for(let i=0;i<22;i++)r.feed([]);if(!r.entry.body.isDynamic())throw Error('loss never released');
++  r=makeRig();for(let n=0;n<3;n++){for(let i=0;i<15;i++)r.feed([]);r.feed([r.pose()]);}
++  if(!r.entry.body.isDynamic())throw Error('intermittent stale hold');
++  r=makeRig();r.a.sweep(r.time+710);if(!r.entry.body.isDynamic())throw Error('stalled callback');
++  return {briefGapMs:238,watchdogMs:700};
++ });check('Brief loss retained; long loss, isolated reacquisition and camera stall release through production park',lost);
++ const settings=await page.evaluate(()=>{
++  const r=makeRig(),at=r.o.group.position.clone(),releases=r.a.events.filter(e=>e.type==='release').length;
++  const emit=(id,value,event='change')=>{const el=document.getElementById(id);el.value=value;el.dispatchEvent(new Event(event));};
++  emit('pinch','.60','input');emit('quality','.75');emit('tracking-rate','30');emit('reach','.12');emit('gesture-mode','rotate');
++  if(r.a.events.filter(e=>e.type==='release').length!==releases||!r.entry.body.isKinematic())throw Error('live setting dropped');
++  emit('tracking-size','960');emit('camera-quality','LOW');emit('tracking-backend','CPU');
++  if(__lab.capture.inferenceWidth!==640||!r.entry.body.isKinematic())throw Error('component change applied mid-hold');
++  if(r.o.group.position.distanceTo(at)>1e-8)throw Error('settings teleported');
++  r.a.parkAll('test');return {settings:9};
++ });await page.waitForFunction(()=>__lab.capture.inferenceWidth===960&&__lab.capture.preference==='CPU');check('Nine production settings controls preserve hold or defer component changes until release',settings);
++ // All tested swaps use the same video track; no physical webcam is accessed.
++ await page.locator('#start-camera').click();await page.waitForFunction(()=>__lab.capture.running,null,{timeout:60000});
++ await page.waitForFunction(()=>__lab.metrics.tracking.length>1,null,{timeout:60000});
++ await page.evaluate(()=>window.oldTrack=__lab.capture.video.srcObject.getVideoTracks()[0]);
++ await page.evaluate(()=>{const e=document.getElementById('tracking-backend');e.value='AUTO';e.dispatchEvent(new Event('change'));});
++ await page.waitForFunction(()=>__lab.capture.running&&__lab.capture.preference==='AUTO',null,{timeout:60000});
++ assert.ok(await page.evaluate(()=>oldTrack===__lab.capture.video.srcObject.getVideoTracks()[0]));
++ const report=await page.evaluate(()=>__lab.capture.cameraReport());check('Backend restarts worker without replacing live video track; actual capture and input dimensions reported',report);
++ await page.locator('#stop-camera').click();
++ // Dataset-driven hints and real reaction effects.
++ await page.evaluate(()=>{__lab.lessons.start('chloride');__lab.select(__lab.lessons.objects.get('lesson-silver'));});
++ assert.match(await page.locator('#reaction-hints').innerText(),/AgCl/);assert.match(await page.locator('#reaction-hints').innerText(),/trắng/);check('Right-hand hints show verified chloride equation, white precipitate and safety sources');
++ const effects=await page.evaluate(async()=>{
++  __lab.clearDesk();const a=__lab.createObject('oxidizer_risk',{x:-2,y:0,z:0}),b=__lab.createObject('fuel_risk',{x:2,y:0,z:0});
++  await __lab.pour(a,b,true,2);const fx=__lab.view.effects.find(e=>e.item===b&&e.kind==='fire');if(!fx?.combustion)throw Error('No engine-confirmed sparks');
++  __lab.view.render(.016,performance.now());
++  let disposed=0;fx.combustion.sparks.addEventListener('dispose',()=>disposed++);fx.combustion.smoke.addEventListener('dispose',()=>disposed++);
++  const sparks=fx.combustion.sparks.count;__lab.clearDesk();if(disposed!==2)throw Error('particle buffer leak');
++  const c=__lab.createObject('cuso4',{x:-2,y:0,z:0}),d=__lab.createObject('naoh',{x:2,y:0,z:0});
++  await __lab.pour(c,d,true,2);__lab.view.render(.1,performance.now());
++  if(!d.mixture.mol.CuOH2||__lab.view.effects.some(e=>e.combustion))throw Error('precipitate got fire');
++  return {sparks,instanceBuffersDisposed:disposed,precipitateMol:d.mixture.mol.CuOH2};
++ });check('Engine fire produces bounded sparks/flash/smoke, reset disposes them; Cu(OH)2 never gets fire',effects);
++ for(const [width,height] of [[1920,1080],[1366,768],[1024,768],[640,800]]) {
++  await page.setViewportSize({width,height});await page.waitForTimeout(300);
++  const layout=await page.evaluate(()=>{
++   const w=document.getElementById('workspace').getBoundingClientRect(),s=document.getElementById('supplies').getBoundingClientRect();
++   return {work:{x:w.x,right:w.right,width:w.width},stock:{x:s.x,width:s.width},overflow:document.documentElement.scrollWidth>innerWidth};
++  });assert.ok(layout.work.width>200&&!layout.overflow,JSON.stringify(layout));assert.ok(layout.stock.x>=layout.work.right-1,JSON.stringify(layout));
++ }
++ check('Stock panel stays to right without canvas overlap or page overflow at four viewport sizes');
++ await page.locator('#sidebar-toggle').click();
++ assert.equal(await page.locator('#sidebar-toggle').getAttribute('aria-expanded'),'true');
++ assert.ok(await page.locator('#inventory').isVisible());
++ await page.locator('#sidebar-toggle').click();
++ assert.equal(await page.locator('#sidebar-toggle').getAttribute('aria-expanded'),'false');
++ assert.equal(await page.locator('#inventory').isVisible(),false);
++ await page.setViewportSize({width:1366,height:900});await page.screenshot({path:path.join(out,'internal_v36_layout.png')});
++ assert.deepEqual(errors,[]);check('No JavaScript/WebGL runtime errors');
++ await fs.writeFile(path.join(out,'new_regressions.json'),JSON.stringify({environment:'Chromium headless SwiftShader; synthetic hand observations and fake camera',checks,errors,diagnostics},null,2));
++}catch(error){await fs.writeFile(path.join(out,'new_regressions_failure.json'),JSON.stringify({checks,errors,error:String(error)},null,2));throw error;}
++finally{await browser?.close();server.kill();}
+--- a/tools/soak_v36.mjs
++++ b/tools/soak_v36.mjs
+@@ -0,0 +1,125 @@
++/** Real wall-clock endurance run. Fake camera + real MediaPipe/Rapier/WebGL.
++ * Programmatic object movement is NOT a human hand or physical webcam test.
++ * Default: 30 minutes. SOAK_MINUTES allows a shorter harness smoke check.
++ */
++import { spawn } from "node:child_process";
++import { mkdir, writeFile } from "node:fs/promises";
++import path from "node:path";
++import { fileURLToPath } from "node:url";
++import assert from "node:assert/strict";
++const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
++const out = path.join(root, "validation_v36");
++await mkdir(out, { recursive: true });
++const minutes = Number(process.env.SOAK_MINUTES || 30);
++assert.ok(Number.isFinite(minutes) && minutes >= 1);
++const { chromium } = await import(process.env.PLAYWRIGHT_PACKAGE || "playwright");
++const server = spawn(process.env.PYTHON || (process.platform === "win32" ? "python" : "python3"),
++  ["-S", "server.py", "--no-browser", "--browser-tracking", "--port", "8796"], { cwd: root });
++server.stderr.on("data", () => {});
++await new Promise((resolve, reject) => {
++  server.stdout.on("data", b => b.toString().includes("http://") && resolve());
++  server.on("exit", code => reject(Error("server " + code)));
++});
++let browser;
++const errors = [], samples = [];
++let start = null;
++try {
++  browser = await chromium.launch({ headless: true, args: ["--no-sandbox", "--enable-unsafe-swiftshader",
++    "--use-gl=angle", "--use-angle=swiftshader", "--use-fake-ui-for-media-stream", "--use-fake-device-for-media-stream"] });
++  const page = await browser.newPage({ viewport: { width: 1366, height: 900 } });
++  page.on("pageerror", error => errors.push(error.message));
++  await page.goto("http://127.0.0.1:8796/?test");
++  await page.waitForFunction(() => window.__lab);
++  await page.evaluate(() => {
++    __lab.capture.autoCameraQuality = false;
++    const quality = document.getElementById("quality");
++    quality.value = "0.75";
++    quality.dispatchEvent(new Event("change"));
++  });
++  await page.locator("#start-camera").click();
++  await page.waitForFunction(() => __lab.metrics.tracking.length > 1, null, { timeout: 60000 });
++  await page.evaluate(() => {
++    window.soak = { frames: 0, track: 0, frameCost: 0, physicsCost: 0, cycles: 0 };
++    const originalRender = __lab.metrics.render.bind(__lab.metrics);
++    __lab.metrics.render = (t, cost, physicsCost) => {
++      soak.frames++; soak.frameCost += cost; soak.physicsCost += physicsCost;
++      return originalRender(t, cost, physicsCost);
++    };
++    const originalTrack = __lab.metrics.track.bind(__lab.metrics);
++    __lab.metrics.track = (t, data) => { soak.track++; return originalTrack(t, data); };
++    window.prepareCycle = async () => {
++      __lab.endMouse(); __lab.clearDesk();
++      const oxidizer = __lab.createObject("oxidizer_risk", { x: -2, y: 0, z: 0 });
++      const fuel = __lab.createObject("fuel_risk", { x: 2, y: 0, z: 0 });
++      await __lab.pour(oxidizer, fuel, true, 2);
++    };
++    window.moveCycle = () => {
++      __lab.clearDesk();
++      ["beaker", "flask", "water", "tube", "dropper"].forEach((stock, i) =>
++        __lab.createObject(stock, { x: (i - 2) * 1.1, y: 0.5, z: 0 }));
++      const item = __lab.view.objects[0];
++      __lab.beginMouse(item, __lab.view.toScreen(item.target));
++      __lab.move(item, { x: -1.8, y: 0.8, z: 0.3 }, 0.8, 0, 0);
++      soak.cycles++;
++    };
++  });
++  const cdp = await page.context().newCDPSession(page);
++  await cdp.send("Performance.enable");
++  start = Date.now();
++  for (let minute = 0; minute < minutes; minute++) {
++    const intervalStart = Date.now();
++    await page.evaluate(() => prepareCycle());
++    await page.waitForTimeout(1500);
++    await page.evaluate(() => moveCycle());
++    await page.waitForTimeout(1500);
++    await page.evaluate(() => __lab.endMouse());
++    // Each wait is < 60 s; the tool session can be polled during the full run.
++    const remaining = Math.max(0, 60000 - (Date.now() - intervalStart));
++    if (remaining) await page.waitForTimeout(remaining);
++    const state = await page.evaluate(() => {
++      const physics = __lab.view.physics;
++      const bodies = [...physics.entries.values()].map(entry => {
++        const position = physics.position(entry), bounds = physics.bounds(entry, entry.body.rotation(), position);
++        return { id: entry.item.id, finite: [position.x, position.y, position.z].every(Number.isFinite),
++          penetration: Math.max(0, physics.table.top - bounds.min.y), sleeping: entry.body.isSleeping() };
++      });
++      return { ...soak, running: __lab.capture.running, fault: __lab.capture.fault,
++        camera: __lab.capture.cameraReport(), gpuResources: { ...__lab.view.renderer.info.memory },
++        programs: __lab.view.renderer.info.programs.length, effects: __lab.view.effects.length,
++        objects: __lab.view.objects.length, recoveryCount: physics.recoveryCount,
++        liquidError: __lab.liquids.lastError || null, bodies };
++    });
++    const perf = await cdp.send("Performance.getMetrics");
++    const raw = Object.fromEntries(perf.metrics.map(m => [m.name, m.value]));
++    const previous = samples.at(-1);
++    const elapsed = (Date.now() - start) / 1000;
++    const duration = elapsed - (previous?.elapsedSeconds || 0);
++    const row = { minute: minute + 1, elapsedSeconds: elapsed, ...state,
++      renderFPS: (state.frames - (previous?.frames || 0)) / duration,
++      trackingHz: (state.track - (previous?.track || 0)) / duration,
++      jsHeapUsedBytes: raw.JSHeapUsedSize ?? null, jsHeapTotalBytes: raw.JSHeapTotalSize ?? null,
++      rendererTaskSeconds: raw.TaskDuration ?? null };
++    samples.push(row);
++    await writeFile(path.join(out, "soak-progress.json"), JSON.stringify({ samples, errors }, null, 2));
++    assert.ok(state.running && !state.fault, "camera pipeline stopped");
++    assert.equal(state.objects, 5);
++    assert.ok(state.bodies.every(b => b.finite && b.penetration < 0.01), "invalid body or penetration");
++    assert.equal(state.liquidError, null);
++    assert.deepEqual(errors, []);
++    console.log(JSON.stringify({ minute: row.minute, fps: row.renderFPS, hz: row.trackingHz,
++      gpuResources: row.gpuResources, heapMB: row.jsHeapUsedBytes / 1e6 }));
++  }
++  await writeFile(path.join(out, "soak.json"), JSON.stringify({
++    complete: true, requiredMinutes: 30, durationSeconds: (Date.now() - start) / 1000,
++    meets30Minutes: (Date.now() - start) >= 1800000,
++    physicalCameraTested: false, humanHandsTested: false,
++    environment: "Chromium 133 headless SwiftShader; real MediaPipe with synthetic camera; one programmatic movement per minute, engine fire/reset every minute",
++    samples, errors,
++  }, null, 2));
++} catch (error) {
++  await writeFile(path.join(out, "soak-failure.json"), JSON.stringify({ complete: false,
++    error: String(error), durationSeconds: start ? (Date.now() - start) / 1000 : 0, samples, errors }, null, 2));
++  throw error;
++} finally {
++  await browser?.close(); server.kill();
++}
+--- a/web/data/reaction-hints.json
++++ b/web/data/reaction-hints.json
+@@ -0,0 +1,139 @@
++{
++  "schema": "hololab-hints-1",
++  "reviewed": "2026-10-29",
++  "notice": "Màu biểu thị mức lưu ý giáo dục cho điều kiện ghi kèm; không phải phân loại GHS/SDS hay đánh giá an toàn thực nghiệm. Chưa có phản ứng trong mô hình không có nghĩa hỗn hợp an toàn.",
++  "free": [
++    {
++      "stocks": [
++        "hcl",
++        "naoh"
++      ],
++      "reaction": "strong_acid_base",
++      "level": "attention",
++      "conditions": "Dung dịch gốc 0,1 M; trong giới hạn dung dịch loãng của mô hình.",
++      "safety": "Tránh bắn vào mắt; phản ứng tỏa nhiệt. Đeo kính khi thực hành thật.",
++      "basis": "NaOH 0,1 M được tài liệu giáo dục RSC lưu ý gây kích ứng; mức lưu ý dùng cho dung dịch loãng.",
++      "sources": [
++        "https://edu.rsc.org/experiments/testing-the-ph-of-different-solutions/395.article"
++      ]
++    },
++    {
++      "stocks": [
++        "cuso4",
++        "naoh"
++      ],
++      "reaction": "copper_hydroxide",
++      "level": "attention",
++      "conditions": "Dung dịch gốc 0,1 M, tiếp xúc trong cùng bình; không có tác nhân tạo phức.",
++      "safety": "Tránh tiếp xúc da/mắt, thu gom chất thải chứa đồng riêng.",
++      "basis": "Dung dịch loãng; lưu ý tác động của muối đồng và bazơ.",
++      "sources": [
++        "https://www2.chem.wisc.edu/deptfiles/genchem/lab/ccaold/main/naoh/page1.htm",
++        "https://chem.washington.edu/lecture-demos/carbonate-precipitates"
++      ]
++    },
++    {
++      "stocks": [
++        "hcl",
++        "nahco3"
++      ],
++      "reaction": "bicarbonate_acid",
++      "level": "attention",
++      "conditions": "Dung dịch loãng trong bình mở; không đậy kín bình đang sinh khí.",
++      "safety": "Khí CO₂ thoát ra; bình kín có nguy cơ tăng áp. Không thử tăng áp ngoài đời.",
++      "basis": "Mức lưu ý cho dung dịch gốc 0,1 M trong bình mở, không áp dụng cho bình kín.",
++      "sources": [
++        "https://chem.libretexts.org/Ancillary_Materials/Laboratory_Experiments/Wet_Lab_Experiments/General_Chemistry_Labs/Online_Chemistry_Lab_Manual/Chem_9_Experiments/10%3A_Double_Replacement_Reactions_%28Experiment%29"
++      ]
++    },
++    {
++      "stocks": [
++        "cacl2",
++        "na2co3"
++      ],
++      "reaction": "calcium_carbonate",
++      "level": "attention",
++      "conditions": "Dung dịch gốc 0,1 M trong cùng bình.",
++      "safety": "Tránh tiếp xúc mắt; không nếm hóa chất.",
++      "basis": "CaCl₂ có thể gây kích ứng; phản ứng này tạo kết tủa, không sinh lửa.",
++      "sources": [
++        "https://www.colorado.edu/lab/lecture-demo-manual/general-reactions/s130-chemical-rxns-precipitation-cacl2-na2co3-caco3"
++      ]
++    }
++  ],
++  "qualitative": [
++    {
++      "stocks": [
++        "acid_risk"
++      ],
++      "title": "Pha loãng axit đặc (mô phỏng)",
++      "partners": [
++        "Nước / dung dịch nước"
++      ],
++      "equation": "Quá trình pha loãng; không gán phương trình sinh lửa.",
++      "phenomenon": "Tỏa nhiệt; nước vào axit đặc có nguy cơ bắn tóe.",
++      "conditions": "Mẫu H₂SO₄ đặc, không định lượng nồng độ/nhiệt trong mô phỏng.",
++      "level": "danger",
++      "safety": "Ăn mòn và tỏa nhiệt mạnh; không dùng hoạt họa để quyết định thao tác thật.",
++      "basis": "CDC/NIOSH mô tả tương tác mạnh với nước, tỏa nhiệt và bỏng hóa chất.",
++      "sources": [
++        "https://www.cdc.gov/niosh/npg/npgd0577.html"
++      ]
++    },
++    {
++      "stocks": [
++        "nitric_risk"
++      ],
++      "title": "Axit nitric đặc (mô phỏng)",
++      "partners": [
++        "Nước / vật liệu dễ cháy ảo"
++      ],
++      "equation": "Chỉ minh họa nguy cơ; không tính sản phẩm hoặc năng lượng.",
++      "phenomenon": "Pha loãng tỏa nhiệt; chất oxi hóa có thể làm tăng khả năng cháy của vật liệu khác.",
++      "conditions": "Mẫu HNO₃ định tính; không có công thức phối trộn thực.",
++      "level": "danger",
++      "safety": "Tránh tiếp xúc, hít hơi; nguy cơ ăn mòn và oxi hóa.",
++      "basis": "CDC/NIOSH: axit không tự cháy, nhưng làm vật liệu dễ cháy bắt lửa dễ hơn.",
++      "sources": [
++        "https://www.cdc.gov/niosh/npg/npgd0447.html"
++      ]
++    },
++    {
++      "stocks": [
++        "hcl_risk"
++      ],
++      "title": "Axit clohiđric đặc (mô phỏng)",
++      "partners": [
++        "Dung dịch nước"
++      ],
++      "equation": "Chỉ minh họa hơi/kích ứng, không có phản ứng sinh lửa.",
++      "phenomenon": "Làn mờ là ký hiệu hơi gây kích ứng, không phải khói cháy.",
++      "conditions": "Mẫu HCl đặc định tính; không dự đoán đám khí.",
++      "level": "danger",
++      "safety": "Nguy cơ tổn thương mắt/da và đường hô hấp.",
++      "basis": "CDC/NIOSH: hydrogen chloride không cháy; dung dịch có tính ăn mòn.",
++      "sources": [
++        "https://www.cdc.gov/niosh/npg/npgd0332.html"
++      ]
++    },
++    {
++      "stocks": [
++        "oxidizer_risk",
++        "fuel_risk"
++      ],
++      "title": "Tình huống cháy giả định",
++      "partners": [
++        "Chất oxi hóa ảo OX + vật liệu dễ cháy ảo FUEL"
++      ],
++      "equation": "OX/FUEL không phải công thức hóa học, không có phương trình hoặc tỉ lệ thực.",
++      "phenomenon": "Ngọn lửa, tia sáng và khói minh họa sau khi quy tắc nguy cơ trong mô hình khớp.",
++      "conditions": "Chế độ minh họa nguy cơ; không phải mọi chất oxi hóa/chất cháy đều phản ứng như vậy.",
++      "level": "severe",
++      "safety": "Tình huống rất nguy hiểm được dựng cho giáo dục, không thử phối trộn ngoài đời.",
++      "basis": "Mức đỏ áp dụng tình huống cháy giả định; nguồn NIOSH chỉ hỗ trợ nguyên lý chất oxi hóa làm tăng nguy cơ cháy, không xác nhận hỗn hợp hư cấu.",
++      "sources": [
++        "https://www.cdc.gov/niosh/npg/npgd0447.html"
++      ]
++    }
++  ]
++}
+--- a/web/index.html
++++ b/web/index.html
+@@ -3,7 +3,7 @@
+   <head>
+     <meta charset="utf-8" />
+     <meta name="viewport" content="width=device-width,initial-scale=1" />
+-    <title>HoloLab AR · ChemLab V3.5</title>
++    <title>HoloLab AR · ChemLab V3.6</title>
+     <link rel="stylesheet" href="styles.css" />
+     <script type="importmap">
+       { "imports": { "three": "/vendor/three/three.module.js" } }
+@@ -14,7 +14,7 @@
+       <header>
+         <div class="eyebrow">Phòng thí nghiệm ảo</div>
+         <h1>HoloLab <span>AR</span></h1>
+-        <div class="version">Hóa học THPT · Phiên bản 3.5</div>
++        <div class="version">Hóa học THPT · Phiên bản 3.6</div>
+       </header>
+       <section
+         class="lesson-picker"
+@@ -40,7 +40,7 @@
+         </div>
+       </div>
+       <div class="toolbar">
+-        <button id="sidebar-toggle" aria-expanded="true">Chọn bài</button
++        <button id="supplies-toggle" aria-expanded="true">Kho bên phải</button><button id="sidebar-toggle" aria-expanded="true">Chọn bài</button
+         >
+         <button id="start-camera" class="primary">Bật camera</button
+         ><button id="stop-camera">Dừng</button
+@@ -60,6 +60,7 @@
+           <div id="hand-b">Tay B · chưa nhận diện</div>
+         </div>
+       </div>
++      <div id="settings-notice" role="status"></div>
+       <section id="workspace">
+         <div id="three"></div>
+         <div id="labels"></div>
+@@ -242,42 +243,7 @@
+       <details id="extra-tools"><summary>Công cụ bổ sung</summary><div class="extra-grid"><button id="titration-mode" class="primary">Chuẩn độ</button
+         ><button id="help-button">Hướng dẫn</button><button id="video-input">Thử video</button
+         ><button id="reaction-library">100 phản ứng</button>
+-      <nav id="tabs">
+-        <button data-group="tool" class="active">Dụng cụ</button
+-        ><button data-group="chemical">Hóa chất</button
+-        ><button data-group="risk">Nguy hiểm</button>
+-      </nav>
+-      <div id="cards"></div>
+-      <button id="buret-tool" class="wide" style="margin-top: 8px">
+-        Buret 50 mL · Trạm chuẩn độ
+-      </button>
+-      <div class="pages">
+-        <button data-action="prev">‹</button><span id="page-label"></span
+-        ><button data-action="next">›</button>
+-      </div>
+-      <button id="risk-mode" data-action="risk" class="wide">
+-        Tự do · Hiệu ứng minh họa
+-      </button>
+-      <p class="small">
+-        Chụm ngón cái + trỏ trên thẻ để lấy đồ. Mỗi tay có thể giữ một bình.
+-      </p>
+-      <div class="file-tools">
+-        <button id="save">Lưu phiên</button><button id="load">Mở JSON</button
+-        ><input id="session-file" type="file" accept=".json" hidden />
+-      </div>
+-      <label class="small"
+-        >Bố trí mẫu<select id="experiment">
+-          <option value="">Chọn thí nghiệm…</option>
+-          <option value="free_lab.json">Bàn tự do</option>
+-          <option value="precipitation.json">Kết tủa</option>
+-          <option value="gas_open.json">Khí trong bình mở</option>
+-          <option value="concentrated_acids.json">Axit đậm đặc</option>
+-        </select></label
+-      >
+-      <div class="small note">
+-        Mô hình giáo dục có giới hạn. Các tình huống nguy hiểm chỉ là hoạt họa
+-        định tính.
+-      </div></div></details>
++</div></details>
+       <details id="settings">
+         <summary>Thông số kỹ thuật và hiệu chỉnh</summary>
+         <div id="performance">
+@@ -326,6 +292,8 @@
+           ><button id="export-metrics">Xuất kết quả</button>
+         </div>
+         <div id="hand-technical" class="small"></div>
++        <p class="small">Đổi ngưỡng Pinch không thả bình. Ngưỡng thả của lượt đang giữ được bảo toàn; ngưỡng mới áp dụng từ lượt gắp tiếp theo.</p>
++        <div id="pipeline-metrics" class="small"></div>
+         <div id="camera-status" class="small">
+           Camera chưa bật. Ảnh được xử lý trên máy.
+         </div>
+@@ -342,6 +310,49 @@
+         </div>
+       </details>
+     </main>
++    <aside id="supplies" aria-label="Dụng cụ và hóa chất">
++      <div class="supply-heading"><h2>Dụng cụ &amp; hóa chất</h2><button id="supplies-close" aria-label="Thu gọn kho">Thu gọn</button></div>
++      <nav id="tabs">
++        <button data-group="tool" class="active">Dụng cụ</button
++        ><button data-group="chemical">Hóa chất</button
++        ><button data-group="risk">Nguy hiểm</button>
++      </nav>
++      <details id="hint-panel" open><summary>Gợi ý cho hóa chất đã chọn</summary>
++      <section id="reaction-hints" aria-live="polite"><h3>Gợi ý phản ứng</h3><p>Chọn một hóa chất để xem.</p></section>
++      </details>
++      <div id="cards"></div>
++      <button id="buret-tool" class="wide" style="margin-top: 8px">
++        Buret 50 mL · Trạm chuẩn độ
++      </button>
++      <div class="pages">
++        <button data-action="prev">‹</button><span id="page-label"></span
++        ><button data-action="next">›</button>
++      </div>
++      <button id="risk-mode" data-action="risk" class="wide">
++        Tự do · Hiệu ứng minh họa
++      </button>
++      <p class="small">
++        Chụm ngón cái + trỏ trên thẻ để lấy đồ. Mỗi tay có thể giữ một bình.
++      </p>
++      <div class="file-tools">
++        <button id="save">Lưu phiên</button><button id="load">Mở JSON</button
++        ><input id="session-file" type="file" accept=".json" hidden />
++      </div>
++      <label class="small"
++        >Bố trí mẫu<select id="experiment">
++          <option value="">Chọn thí nghiệm…</option>
++          <option value="free_lab.json">Bàn tự do</option>
++          <option value="precipitation.json">Kết tủa</option>
++          <option value="gas_open.json">Khí trong bình mở</option>
++          <option value="concentrated_acids.json">Axit đậm đặc</option>
++        </select></label
++      >
++      <div class="small note">
++        Mô hình giáo dục có giới hạn. Các tình huống nguy hiểm chỉ là hoạt họa
++        định tính.
++      </div>
++
++    </aside>
+     <canvas id="hands-overlay"></canvas>
+     <dialog id="reactions-dialog">
+       <h2>Thư viện 100 phản ứng</h2>
+@@ -365,7 +376,7 @@
+       <h2>Hai tay, hai dụng cụ</h2>
+       <p>
+         Đưa cả bàn tay vào hình. Con trỏ A/B đi được toàn màn hình, kể cả kho
+-        bên trái. Chụm cái và trỏ trên dụng cụ để gắp; mở ra để thả.
++        bên phải. Chụm cái và trỏ trên dụng cụ để gắp; mở ra để thả.
+       </p>
+       <ol>
+         <li>
+@@ -381,7 +392,7 @@
+           Chọn “Xoay 3D” hoặc nhấn G, rồi chụm/nắm tay và kéo để xoay quanh X/Y.
+         </li>
+         <li>
+-          Mất dấu ngắn: con trỏ thành vòng mờ, giữ bình và dừng rót. Sau 1,8
++          Mất dấu ngắn: con trỏ thành vòng mờ, giữ bình và dừng rót. Sau 0,7
+           giây, hệ thống ngừng giữ và bình rơi xuống bàn; mở tay để gắp lại.
+         </li>
+         <li>
+@@ -397,6 +408,9 @@
+         Bộ lọc nhãn tay không thay đổi quyền giữ bình. A/B là ID theo dõi;
+         trái/phải là nhãn ước lượng có thể chưa chắc chắn.
+       </p>
++      <p>Vòng xanh là tay A, vòng vàng là tay B. Chấm ở giữa là con trỏ thao tác;
++        màu khác nhau không có nghĩa hai thuật toán đang tranh điều khiển.
++        Vòng mờ báo mất dấu. Nếu cần thả ngay, nhấn Space hoặc “Đặt bình”.</p>
+       <button id="close-help" class="primary">Đã hiểu</button>
+     </dialog>
+     <script type="module" src="/src/main.js"></script>
+--- a/web/src/capture.js
++++ b/web/src/capture.js
+@@ -22,27 +22,44 @@
+     this.fault = false;
+     this.ready = false;
+     this.mediaCallback = null;
++    this.scheduleGeneration = 0;
+     this.cameraQuality = "HD";
+     this.activeCameraQuality = "HD";
+     this.autoCameraQuality = true;
+     this.cameraPolicy = new CameraLoadPolicy();
+     this.qualityBusy = false;
+     this.cameraNote = "";
++    this.initPromise = null;
++    this.initCancel = null;
++    this.activeFrame = null;
++    this.lastInputSize = null;
++    this.onReconfigure = () => {};
+   }
+   async init() {
+     if (this.worker && this.ready) return;
++    if (this.initPromise) return this.initPromise;
+     this.worker?.terminate();
+     this.worker = null;
+-    await new Promise((resolve, reject) => {
++    const pending = new Promise((resolve, reject) => {
+       // A classic worker can import the ESM API dynamically while its WASM loader
+       // still uses importScripts. No eval or modification of the vendor bundle.
+       this.worker = new Worker(new URL("./hand-worker.js", import.meta.url));
++      const worker = this.worker;
++      const fail = (error) => {
++        clearTimeout(timer);
++        if (this.worker === worker) {
++          worker.terminate(); this.worker = null; this.ready = false;
++          this.busy = false; this.activeFrame = null;
++        }
++        reject(error);
++      };
+       const timer = setTimeout(
+-        () =>
+-          reject(new Error("Khởi tạo nhận diện quá lâu. Thử tải lại trang.")),
++        () => fail(new Error("Khởi tạo nhận diện quá lâu. Thử tải lại trang.")),
+         45000,
+       );
++      this.initCancel = () => fail(new Error("Đã hủy khởi tạo nhận diện."));
+       this.worker.onmessage = ({ data }) => {
++        if (this.worker !== worker) return;
+         if (data.type === "ready") {
+           clearTimeout(timer);
+           this.ready = true;
+@@ -57,27 +74,28 @@
+           );
+         }
+         if (data.type === "result") {
+-          this.busy = false;
++          if (this.activeFrame && data.sequence !== this.activeFrame.sequence) return;
++          this.finishFrame(data);
+           if (this.running && data.epoch === this.epoch) this.onResult(data);
+         }
+-        if (data.type === "skip") this.busy = false;
++        if (data.type === "skip") this.finishFrame(data);
+         if (data.type === "error") {
+           this.busy = false;
+           this.fault = true;
+           this.ready = false;
+           this.stopVideo();
+           this.onStatus(`Lỗi nhận diện: ${data.message}`);
+-          clearTimeout(timer);
+-          reject(new Error(data.message));
++          fail(new Error(data.message));
+         }
+       };
+       this.worker.onerror = (e) => {
++        if (this.worker !== worker) return;
+         clearTimeout(timer);
+         this.busy = false;
+         this.fault = true;
+         this.ready = false;
+         this.stopVideo();
+-        reject(new Error(e.message));
++        fail(new Error(e.message));
+         this.onStatus("Worker nhận diện dừng; thử bật camera lại.");
+       };
+       this.worker.postMessage({
+@@ -86,6 +104,51 @@
+         nativeAvailable: this.nativeAvailable,
+       });
+     });
++    this.initPromise = pending;
++    try { await pending; }
++    finally { if (this.initPromise === pending) {this.initPromise = null; this.initCancel = null;} }
++  }
++  finishFrame(data) {
++    if (!this.activeFrame || data.sequence === this.activeFrame.sequence) {
++      this.busy = false;
++      this.activeFrame = null;
++    }
++  }
++  setInferenceWidth(width) {
++    if (![640,960].includes(width) || width === this.inferenceWidth) return;
++    this.inferenceWidth = width;
++    this.epoch++; // do not let the previous input size rebase the next frame
++    this.onReconfigure();
++  }
++  setMaxHz(hz) {
++    if ([30,60].includes(hz)) this.maxHz = hz;
++  }
++  cancelSchedule() {
++    this.scheduleGeneration++;
++    if (this.mediaCallback !== null) {
++      if (this.video.cancelVideoFrameCallback) this.video.cancelVideoFrameCallback(this.mediaCallback);
++      else cancelAnimationFrame(this.mediaCallback);
++      this.mediaCallback = null;
++    }
++  }
++  async switchBackend(preference) {
++    const resume = this.running;
++    this.running = false;
++    this.cancelSchedule();
++    this.epoch++;
++    this.initCancel?.();
++    this.initPromise = null; this.initCancel = null;
++    this.worker?.terminate();
++    this.worker = null; this.ready = false; this.busy = false; this.activeFrame = null;
++    this.preference = preference; this.fault = false;
++    const epoch = this.epoch;
++    if (!resume) return;
++    await this.init();
++    if (epoch !== this.epoch) return;
++    this.running = true;
++    this.lastSent = -Infinity;
++    this.onReconfigure();
++    this.schedule();
+   }
+   async start(file = null) {
+     await this.stopVideo();
+@@ -128,11 +191,16 @@
+       video_width: this.video.videoWidth || 0,
+       video_height: this.video.videoHeight || 0,
+       inference_width: this.inferenceWidth,
++      input_width: this.lastInputSize?.width || 0,
++      input_height: this.lastInputSize?.height || 0,
+       note: this.cameraNote,
+     };
+   }
+   async applyCameraQuality(quality, automatic = false) {
+-    if (this.qualityBusy) return;
++    if (this.qualityBusy) {
++      if (!automatic) this.queuedQuality = quality;
++      return;
++    }
+     if (!automatic) {
+       this.cameraQuality = quality;
+       this.cameraPolicy.reset();
+@@ -154,11 +222,16 @@
+       this.onStatus(
+         `${this.delegate || "Camera"} · ${report.settings.width}×${report.settings.height} · ${this.cameraNote}`,
+       );
++      this.onReconfigure();
+     } catch (error) {
+       if (epoch === this.epoch)
+         this.onStatus("Không đổi được chất lượng camera: " + error.message);
+     } finally {
+       this.qualityBusy = false;
++      const next = this.queuedQuality;
++      this.queuedQuality = null;
++      if (next && track === this.video.srcObject?.getVideoTracks?.()[0])
++        await this.applyCameraQuality(next);
+     }
+   }
+   adaptCamera(now, stats) {
+@@ -173,16 +246,21 @@
+     if (next) this.applyCameraQuality(next, true);
+   }
+   schedule() {
+-    if (!this.running) return;
++    if (!this.running || this.mediaCallback !== null) return;
++    const generation = this.scheduleGeneration;
+     if (this.video.requestVideoFrameCallback) {
+       this.mediaCallback = this.video.requestVideoFrameCallback(
+         (now, metadata) => {
++          if (generation !== this.scheduleGeneration) return;
++          this.mediaCallback = null;
+           this.schedule();
+           this.frame(now, metadata.mediaTime);
+         },
+       );
+     } else {
+       this.mediaCallback = requestAnimationFrame((now) => {
++        if (generation !== this.scheduleGeneration) return;
++        this.mediaCallback = null;
+         this.schedule();
+         this.frame(now, this.video.currentTime);
+       });
+@@ -202,6 +280,8 @@
+     this.lastMediaTime = mediaTime;
+     this.lastSent = now;
+     this.busy = true;
++    const ticket = {sequence: ++this.sequence};
++    this.activeFrame = ticket;
+     const epoch = this.epoch;
+     const width = Math.min(this.inferenceWidth, this.video.videoWidth);
+     const height = Math.round(
+@@ -228,9 +308,10 @@
+       }
+       if (!this.running || epoch !== this.epoch) {
+         bitmap.close();
+-        this.busy = false;
++        if (this.activeFrame === ticket) this.finishFrame(ticket);
+         return;
+       }
++      this.lastInputSize = {width,height};
+       // monotonic wall clock avoids timestamps going backwards when a video loops.
+       this.worker.postMessage(
+         {
+@@ -238,7 +319,7 @@
+           bitmap,
+           width,
+           height,
+-          sequence: ++this.sequence,
++          sequence: ticket.sequence,
+           epoch,
+           timestamp: now,
+           capturedAt: performance.timeOrigin + now,
+@@ -246,18 +327,14 @@
+         [bitmap],
+       );
+     } catch (error) {
+-      this.busy = false;
++      if (this.activeFrame === ticket) this.finishFrame(ticket);
+       this.onStatus(`Không lấy được ảnh: ${error.message}`);
+     }
+   }
+   async stopVideo() {
+     this.running = false;
+     this.epoch++;
+-    if (this.mediaCallback !== null) {
+-      if (this.video.cancelVideoFrameCallback)
+-        this.video.cancelVideoFrameCallback(this.mediaCallback);
+-      else cancelAnimationFrame(this.mediaCallback);
+-    }
++    this.cancelSchedule();
+     if (this.video.srcObject) {
+       for (const track of this.video.srcObject.getTracks()) track.stop();
+       this.video.srcObject = null;
+@@ -271,9 +348,12 @@
+   }
+   close() {
+     this.stopVideo();
++    this.initCancel?.();
++    this.initPromise = null; this.initCancel = null;
+     this.worker?.terminate();
+     this.worker = null;
+     this.busy = false;
++    this.activeFrame = null;
+     this.ready = false;
+   }
+ }
+--- a/web/src/combustion-visual.js
++++ b/web/src/combustion-visual.js
+@@ -0,0 +1,33 @@
++import * as THREE from '../vendor/three/three.module.js';
++
++/** Bounded overlay for the engine's existing qualitative fire event.
++ * Pressure, acid dilution and precipitates never acquire these effects. */
++export function createCombustion(scene,geometry) {
++  const sparks=new THREE.InstancedMesh(geometry,new THREE.MeshBasicMaterial({color:0xffe38a,transparent:true,opacity:.95,blending:THREE.AdditiveBlending,depthWrite:false}),16);
++  const smoke=new THREE.InstancedMesh(geometry,new THREE.MeshBasicMaterial({color:0x687174,transparent:true,opacity:.23,depthWrite:false}),12);
++  const flash=new THREE.Mesh(geometry,new THREE.MeshBasicMaterial({color:0xffe1a0,transparent:true,opacity:0,blending:THREE.AdditiveBlending,depthWrite:false}));
++  sparks.frustumCulled=smoke.frustumCulled=false;
++  scene.add(sparks,smoke,flash);
++  return {sparks,smoke,flash,dummy:new THREE.Object3D()};
++}
++export function updateCombustion(fx,center,ageMs) {
++  const d=fx.dummy;
++  for(let i=0;i<16;i++) {
++    const t=((ageMs/1000+i*.061)%1), a=i*2.39996;
++    d.position.set(center.x+Math.sin(a)*t*.9,center.y+.45+t*1.5-t*t*1.4,center.z+Math.cos(a)*t*.7);
++    d.scale.set(.3*(1-t)+.08,.65*(1-t)+.12,.3*(1-t)+.08);d.updateMatrix();fx.sparks.setMatrixAt(i,d.matrix);
++  }
++  for(let i=0;i<12;i++) {
++    const t=((ageMs/2200+i*.081)%1),a=i*2.39996;
++    d.position.set(center.x+Math.sin(a+t*4)*t*.4,center.y+.7+t*1.5,center.z+Math.cos(a)*t*.35);
++    d.scale.setScalar(1+t*3);d.updateMatrix();fx.smoke.setMatrixAt(i,d.matrix);
++  }
++  fx.sparks.instanceMatrix.needsUpdate=fx.smoke.instanceMatrix.needsUpdate=true;
++  fx.flash.position.copy(center);fx.flash.position.y+=.5;
++  fx.flash.scale.setScalar(5+Math.min(1,ageMs/250)*5);
++  fx.flash.material.opacity=.7*Math.max(0,1-ageMs/350);
++}
++export function disposeCombustion(scene,fx) {
++  if(!fx)return;
++  for(const mesh of [fx.sparks,fx.smoke,fx.flash]){scene.remove(mesh);mesh.dispose?.();mesh.material.dispose();}
++}
+--- a/web/src/filters.js
++++ b/web/src/filters.js
+@@ -48,6 +48,19 @@
+     this.elapsed = 0;
+     this.time = null;
+     this.requireOpen = requireOpen;
++    this.strongOpen = false;
++    this.pendingStart = null;
++    this.lastDecision = null;
++  }
++  configure(close, open) {
++    // A settings edit is not gesture evidence. Keep the current hold's release
++    // threshold until it ends; new acquisitions use the new thresholds.
++    this.close = close;
++    this.nextOpen = open;
++    if (!this.closed) this.open = open;
++    this.pending = null;
++    this.elapsed = 0;
++    this.strongOpen = false;
+   }
+   update(ratio, t) {
+     if (!Number.isFinite(ratio) || (this.time !== null && t <= this.time))
+@@ -62,24 +75,31 @@
+     if (next === this.closed) {
+       this.pending = null;
+       this.elapsed = 0;
++      this.strongOpen = false;
+       return null;
+     }
+     if (this.pending !== next) {
+       this.pending = next;
+       this.elapsed = 0;
++      this.pendingStart = t;
++      this.strongOpen = !next && ratio >= Math.max(0.9, this.open + 0.18);
+     } else this.elapsed += dt;
+-    if (this.elapsed < (next ? 55 : 105)) return null;
++    this.strongOpen &&= !next && ratio >= Math.max(0.9, this.open + 0.18);
++    // Two/three clearly open samples release quickly. A single outlier never
++    // releases; ambiguous openings retain the longer existing debounce.
++    if (this.elapsed < (next ? 55 : this.strongOpen ? 32 : 105)) return null;
+     this.closed = next;
++    this.lastDecision = {type:next ? "grab" : "release", debounceMs:t-this.pendingStart};
+     this.pending = null;
+     this.elapsed = 0;
++    if (!next && this.nextOpen !== undefined) this.open = this.nextOpen;
+     return next ? "grab" : "release";
+   }
+   missing(t) {
+     // Short gaps pause evidence; they never count as an open hand.
+-    if (this.time !== null && t - this.time > 180) {
+-      this.pending = null;
+-      this.elapsed = 0;
+-    }
++    this.pending = null;
++    this.elapsed = 0;
++    this.strongOpen = false;
+     this.time = t;
+   }
+ }
+--- a/web/src/interaction.js
++++ b/web/src/interaction.js
+@@ -7,7 +7,11 @@
+   GRABBING: "GRABBING",
+   DRAGGING: "DRAGGING",
+   RELEASED: "RELEASED",
++  PINCH_START: "PINCH_START",
++  ROTATING: "ROTATING",
++  RELEASING: "RELEASING",
+ });
++export const TRACKING_HOLD_MS = 700;
+ 
+ export class Interaction {
+   constructor(
+@@ -55,6 +59,10 @@
+         missing: false,
+         lastValid: -Infinity,
+         lastReceived: -Infinity,
++        lastConfirmed: -Infinity,
++        recoverySamples: 0,
++        grip: "pinch",
++        fistArmed: true,
+         releaseAt: 0,
+         consumed: false,
+         hoverKey: null,
+@@ -125,10 +133,11 @@
+     h.object = object;
+     h.state = STATES.DRAGGING;
+     h.track.held = true;
++    h.lastConfirmed = h.lastReceived;
+     this.adapter.acquire?.(object);
+     this.rebase(h);
+     this.adapter.select(object);
+-    this.record({ type: "grab", hand: h.id, object: object.id });
++    this.record({ type: "grab", hand: h.id, object: object.id, debounceMs:h.gate.lastDecision?.debounceMs });
+     if (hit.type === "inventory") h.anchor.offset = { x: 0, y: 0 };
+     if (this.owners(object).length === 2) this.startDual(object);
+     h.consumed = true;
+@@ -137,18 +146,23 @@
+   release(h, reason = "gesture") {
+     if (h.object) {
+       const obj = h.object;
++      h.state = STATES.RELEASING;
+       h.object = null;
+       h.track.held = false;
+       this.dual.delete(obj.id);
+       const remaining = this.owners(obj);
+-      remaining.forEach((other) => this.rebase(other));
++      remaining.forEach((other) => { this.rebase(other); other.needsRebase = true; });
+       this.adapter.park?.(obj, reason);
+-      this.record({ type: "release", hand: h.id, object: obj.id, reason });
++      this.record({ type: "release", hand: h.id, object: obj.id, reason,
++        debounceMs:reason === "gesture" ? h.gate.lastDecision?.debounceMs : undefined });
+     }
+     h.state = STATES.RELEASED;
+     h.releaseAt = this.now;
+     h.anchor = null;
+     if (reason !== "gesture") h.gate.reset(true);
++    h.gate.configure(this.close, this.open);
++    h.fistArmed = false;
++    h.grip = "pinch";
+   }
+   parkAll(reason = "manual") {
+     for (const h of this.hands.values()) this.release(h, reason);
+@@ -159,13 +173,21 @@
+     this.hands.clear();
+   }
+   setThreshold(close) {
+-    this.parkAll("settings");
++    if (!Number.isFinite(close)) return;
++    close = clamp(close, 0.25, 0.6);
+     this.close = close;
+     this.open = Math.max(close + 0.2, 0.6);
+     for (const h of this.hands.values()) {
+-      h.gate.close = this.close;
+-      h.gate.open = this.open;
+-    }
++      h.gate.configure(this.close, this.open);
++    }
++  }
++  rebaseOnNextSample() {
++    for (const h of this.hands.values()) h.needsRebase = true;
++  }
++  setMode(mode) {
++    if (!["move", "rotate"].includes(mode) || mode === this.mode) return;
++    this.mode = mode;
++    this.rebaseOnNextSample();
+   }
+   update(tracks, t, receivedAt = t) {
+     this.now = t;
+@@ -181,12 +203,14 @@
+       if (!track.observed || track.ambiguous) {
+         h.gate.missing(t);
+         h.missing = true;
+-        if (h.object && t - h.lastValid > 1800)
++        h.recoverySamples = 0;
++        if (h.object && receivedAt - h.lastConfirmed > TRACKING_HOLD_MS)
+           this.release(h, "tracking-timeout");
+         continue;
+       }
+       const pose = track.pose;
+-      const recovering = h.missing || track.recovered;
++      if (!pose.fist) h.fistArmed = true;
++      const recovering = h.missing || track.recovered || h.needsRebase;
+       if (recovering) {
+         h.fx.reset();
+         h.fy.reset();
+@@ -204,7 +228,14 @@
+       h.pointer = pointer;
+       h.lastValid = t;
+       h.lastReceived = receivedAt;
++      // A lone intermittent detection must not renew a stale hold forever.
++      // Require two consecutive samples after a gap; clear opening can still
++      // release immediately after its normal debounce.
++      if (recovering) h.recoverySamples = 0;
++      h.recoverySamples++;
++      if (!h.object || h.recoverySamples >= 2) h.lastConfirmed = receivedAt;
+       h.missing = false;
++      h.needsRebase = false;
+       h.palm = Math.exp(h.fp.update(Math.log(pose.palm), t));
+       h.angleContinuous =
+         h.angleRaw === null
+@@ -218,7 +249,11 @@
+           this.dual.get(h.object.id).resume = true;
+         this.record({ type: "recover", hand: h.id, object: h.object.id });
+       }
+-      const ratio = this.mode === "rotate" && pose.fist ? 0.1 : pose.ratio;
++      // Fist is an optional rotation grip only when the grab STARTED as a fist.
++      // It must never mask opening thumb/index on a pinch-origin hold.
++      if (!h.gate.closed && h.gate.pending === null && !h.gate.requireOpen)
++        h.grip = this.mode === "rotate" && h.fistArmed && pose.fist && pose.ratio > h.gate.open ? "fist" : "pinch";
++      const ratio = h.grip === "fist" ? (pose.fist ? 0.1 : 1.5) : pose.ratio;
+       const event = h.gate.update(ratio, t);
+       if (event === "grab") this.grab(h);
+       else if (event === "release") {
+@@ -245,13 +280,14 @@
+           if (!h.object)
+             h.state =
+               h.gate.pending === true
+-                ? STATES.GRABBING
++                ? STATES.PINCH_START
+                 : hit
+                   ? STATES.HOVER
+                   : STATES.IDLE;
+         }
+       }
+       track.held = !!h.object;
++      if (h.object) h.state = this.mode === "rotate" ? STATES.ROTATING : STATES.DRAGGING;
+     }
+     // Apply each object once: two independent hands cannot overwrite each other.
+     const objects = new Set(
+@@ -259,7 +295,7 @@
+     );
+     for (const object of objects) {
+       const owners = this.owners(object);
+-      if (owners.some((h) => !h.track.observed || h.track.ambiguous)) {
++      if (owners.some((h) => !h.track.observed || h.track.ambiguous || h.needsRebase)) {
+         if (this.dual.has(object.id)) this.dual.get(object.id).resume = true;
+         continue;
+       }
+@@ -330,8 +366,8 @@
+     // Render time can expire a stalled camera without inventing new evidence.
+     this.now = t;
+     for (const h of this.hands.values())
+-      if (h.object && t - h.lastReceived > 1800)
+-        this.release(h, "stalled-camera");
++      if (h.object && t - h.lastConfirmed > TRACKING_HOLD_MS)
++        this.release(h, h.missing ? "tracking-timeout" : "stalled-camera");
+   }
+   validOwners(object, t) {
+     const owners = this.owners(object);
+--- a/web/src/main.js
++++ b/web/src/main.js
+@@ -1,4 +1,5 @@
+ import { readSpillLedger, addSpill } from "./spill-ledger.js";
++import { ReactionHints } from "./reaction-hints.js";
+ import { StudentInteractionLogger } from "./student-logger.js";
+ import { ExperimentalTutor } from "./ai-tutor.js";
+ import { LiquidSimulation } from "./liquid-simulation.js";
+@@ -9,7 +10,7 @@
+ import { LabRenderer } from "./render3d.js";
+ import { HandCapture } from "./capture.js";
+ import { HandTracks, observation } from "./tracks.js";
+-import { Interaction } from "./interaction.js";
++import { Interaction, TRACKING_HOLD_MS } from "./interaction.js";
+ import { Metrics } from "./metrics.js";
+ import { containRect } from "./coordinates.js";
+ import { clamp } from "./filters.js";
+@@ -24,7 +25,7 @@
+   context = overlay.getContext("2d");
+ const metrics = new Metrics(),
+   tracks = new HandTracks();
+-let bench, lessons, liquids;
++let bench, lessons, liquids, reactionHints;
+ const spillLedger = [];
+ const learningLogger = new StudentInteractionLogger(), tutor = new ExperimentalTutor();
+ let lastLearningFeedback = 0;
+@@ -67,6 +68,42 @@
+   lastInputTime = -1,
+   latestResult = null,
+   overlayDirty = true;
++const pendingSettings = new Map();
++let applyingSettings = false;
++function holdingAnything() {
++  return !!mouse || !!bench?.owner || [...interaction.hands.values()].some(h => h.object);
++}
++function queueSetting(name, value) {
++  pendingSettings.set(name, value);
++  setText($("settings-notice"), holdingAnything()
++    ? "Đã nhận thay đổi. Thả bình để áp dụng cấu hình camera/tracking an toàn."
++    : "Đang áp dụng cấu hình…");
++  void flushSettings();
++}
++async function flushSettings() {
++  if (applyingSettings || !pendingSettings.size || holdingAnything() || $("start-camera").disabled) return;
++  applyingSettings = true;
++  try {
++    while (pendingSettings.size && !holdingAnything()) {
++      const [name,value] = pendingSettings.entries().next().value;
++      pendingSettings.delete(name);
++      if (name === "backend") {
++        interaction.reset(); tracks.reset(); lastInputTime = -1;
++        await capture.switchBackend(value);
++        latestResult = null;
++      } else if (name === "camera") await capture.applyCameraQuality(value);
++      else if (name === "size") capture.setInferenceWidth(value);
++      else if (name === "mirror") {
++        tracks.reset(); interaction.reset();
++        mirror = value;
++        video.style.transform = mirror ? "scaleX(-1)" : "none";
++      }
++    }
++    setText($("settings-notice"), pendingSettings.size ? "Thay đổi tiếp theo sẽ áp dụng sau khi thả bình." : "Đã áp dụng cấu hình.");
++  } catch (error) {
++    setText($("settings-notice"), "Chưa áp dụng được: " + error.message);
++  } finally { applyingSettings = false; }
++}
+ const chemistryEvents = [],
+   pending = new Set();
+ const solidDwell = new Map();
+@@ -155,6 +192,7 @@
+       beginMouse(obj, p, true);
+       button.setPointerCapture(event.pointerId);
+     });
++    button.addEventListener("focus", () => reactionHints?.show(stock,lessons?.model?.lesson.id));
+     $("cards").appendChild(button);
+   }
+   setText($("page-label"), `Trang ${page + 1}/${pages}`);
+@@ -185,7 +223,7 @@
+   }
+ }
+ function pick(point) {
+-  if (bench?.active) return null;
++  if (bench?.active || applyingSettings) return null;
+   const element = document.elementFromPoint(point.x, point.y);
+   const card = element?.closest("[data-stock]");
+   if (card) return { type: "inventory", stock: card.dataset.stock };
+@@ -252,6 +290,7 @@
+ function select(item) {
+   selected = item;
+   if (item) learning({type:"select", source:item.id, stock:item.stock.id});
++  reactionHints?.show(item?.stock, lessons?.model?.lesson.id);
+   for (const o of view.objects) {
+     o.ring.visible = o === item;
+     o.label.classList.toggle("selected", o === item);
+@@ -332,7 +371,7 @@
+   if (reason !== "gesture") message("Đã thả bình; mở tay rồi gắp lại.");
+ }
+ function beginMouse(object, p, isNew = false) {
+-  if (!object || interaction.owners(object).length || viewing) return;
++  if (!object || interaction.owners(object).length || viewing || applyingSettings) return;
+   view.physics.beginGrab(object);
+   const at = view.toWorld(p, object.target.z);
+   mouse = {
+@@ -353,6 +392,8 @@
+ }
+ function clearDesk() {
+   lessons?.detach();
++  $("alert").hidden = true;
++  alertUntil = 0;
+   epoch++;
+   interaction.reset();
+   tracks.reset();
+@@ -368,6 +409,7 @@
+   solidDwell.clear();
+   inspector();
+   $("empty").hidden = false;
++  reactionHints?.show(null);
+ }
+ function removeSelected() {
+   if (lessons?.active) {
+@@ -571,7 +613,7 @@
+   for (const h of interaction.hands.values()) {
+     const index = h.track.slot;
+     const age = now - h.lastReceived;
+-    if (age > 1800 && !h.object) continue;
++    if (age > TRACKING_HOLD_MS && !h.object) continue;
+     const visualGrace = Math.min(
+       500,
+       Math.max(180, 1600 / Math.max(1, metrics.hz(now))),
+@@ -624,27 +666,32 @@
+     const h = hands.find((h) => h.track.slot === i),
+       node = $(i === 0 ? "hand-a" : "hand-b"),
+       id = i === 0 ? "A" : "B";
+-    if (!h || (now - h.lastReceived > 1800 && !h.object)) {
++    if (!h || (now - h.lastReceived > TRACKING_HOLD_MS && !h.object)) {
+       setText(node, `Tay ${id} · chưa nhận diện`);
+       continue;
+     }
++    const sameLabel = hands.some(other => other !== h && other.track.observed &&
++      h.track.observed && other.track.label === h.track.label);
+     const label =
+-      h.track.label === null
++      h.track.label === null || sameLabel
+         ? "đang xác định"
+         : h.track.label === "Left"
+           ? "Trái"
+           : "Phải";
+     const status = h.track.ambiguous
+-      ? "giao tay · giữ vị trí"
++      ? (h.object ? "giao tay · tạm giữ" : "giao tay · chưa gắp")
+       : h.missing || now - h.lastReceived > 500
+-        ? "mất dấu · giữ vị trí"
++        ? (h.object ? `mất dấu · thả sau ${Math.max(0, (TRACKING_HOLD_MS - (now-h.lastConfirmed))/1000).toFixed(1)} s` : "mất dấu · đã thả")
+         : now - h.lastValid > 300
+           ? "mẫu chậm · tạm dừng rót"
+           : {
+               IDLE: "Đã nhận diện",
+               HOVER: "Trên dụng cụ",
+               GRABBING: "Đang gắp",
++              PINCH_START: "Đang xác nhận gắp",
+               DRAGGING: "Đang di chuyển",
++              ROTATING: "Đang xoay",
++              RELEASING: "Đang thả",
+               RELEASED: "Đã thả",
+             }[h.state] || h.state;
+     setText(
+@@ -674,20 +721,22 @@
+   );
+   setText(
+     $("latency"),
+-    `Độ tuổi mẫu: ${latestResult ? Math.round(latestResult.ageMs) : "—"} ms · DPR ${view.pixelRatio.toFixed(2)}`,
++    `Tuổi mẫu hiện tại: ${latestResult ? Math.round(Math.max(0,performance.timeOrigin+now-latestResult.capturedAt)) : "—"} ms · DPR ${view.pixelRatio.toFixed(2)}`,
+   );
+   const cam = capture.cameraReport();
+   setText(
+     $("camera-resolution"),
+     video.srcObject
+-      ? `${cam.settings.width || cam.video_width}×${cam.settings.height || cam.video_height} · ${Math.round(cam.settings.frameRate || 0)} FPS camera · ảnh CV ≤${Math.min(capture.inferenceWidth, cam.video_width)} px${cam.note ? " · " + cam.note : ""}`
++      ? `${cam.settings.width || cam.video_width}×${cam.settings.height || cam.video_height} · ${Math.round(cam.settings.frameRate || 0)} FPS camera · ảnh CV ${cam.input_width || "—"}×${cam.input_height || "—"}${cam.note ? " · " + cam.note : ""}`
+       : "Camera chưa bật / video đầu vào",
+   );
+-  capture.adaptCamera(now, {
++  if (!holdingAnything() && !applyingSettings) capture.adaptCamera(now, {
+     fps: metrics.fps(now),
+     inferenceMs: latestResult?.inferenceMs || 0,
+     ageMs: latestResult?.ageMs || 0,
+   });
++  const lastFrame = metrics.renders.at(-1), prevFrame = metrics.renders.at(-2);
++  setText($("pipeline-metrics"), `Xử lý mẫu: ${latestResult?.inferenceMs?.toFixed(1) ?? "—"} ms · Frame render: ${lastFrame && prevFrame ? (lastFrame.t-prevFrame.t).toFixed(1) : "—"} ms · Xác nhận cử chỉ gần nhất: ${metrics.gestures.at(-1)?.debounceMs?.toFixed(0) ?? "—"} ms · Physics: bước 120 Hz (thời gian mô phỏng) · Giới hạn tracking ${capture.maxHz} Hz, camera ${Math.round(cam.settings.frameRate || 0)} FPS. Độ trễ đầu–cuối: chưa đo.`);
+   inspector();
+   if (metrics.current) {
+     const remain = Math.max(0, 60 - (now - metrics.current.start) / 1000);
+@@ -708,6 +757,7 @@
+     dt = Math.min(0.1, realDt);
+   last = now;
+   interaction.sweep(now);
++  void flushSettings();
+ 
+   bench.tick(dt, now);
+   for (const item of view.objects) {
+@@ -770,7 +820,7 @@
+   interaction.height = innerHeight;
+   overlayDirty = true;
+   // Rebase on the next valid observation instead of jumping after a viewport change.
+-  for (const h of interaction.hands.values()) h.missing = true;
++  interaction.rebaseOnNextSample();
+   for (const item of view.objects)
+     if (view.physics.entries.get(item.id)?.held)
+       view.physics.setTarget(item, view.clampPosition(item.target));
+@@ -880,15 +930,11 @@
+   $("help-button").onclick = () => $("help").showModal();
+   $("close-help").onclick = () => $("help").close();
+   $("mirror").onchange = (e) => {
+-    interaction.parkAll("mirror");
+-    tracks.reset();
+-    interaction.hands.clear();
+-    mirror = e.target.checked;
+-    video.style.transform = mirror ? "scaleX(-1)" : "none";
++    queueSetting("mirror", e.target.checked);
+   };
+   $("reach").onchange = (e) => {
+-    interaction.parkAll("reach");
+     interaction.margin = Number(e.target.value);
++    interaction.rebaseOnNextSample();
+   };
+   $("pinch").oninput = (e) => {
+     interaction.setThreshold(Number(e.target.value));
+@@ -901,21 +947,10 @@
+     if (e.target.value !== "auto") view.quality(Number(e.target.value));
+   };
+   $("tracking-backend").onchange = (e) => {
+-    capture.close();
+-    capture.preference = e.target.value;
+-    interaction.parkAll("backend");
+-    tracks.reset();
+-    interaction.hands.clear();
+-    inputSource = "none";
+-    message(
+-      e.target.value === "NATIVE" && !capture.nativeAvailable
+-        ? "Chưa có MediaPipe Python trong Python đang chạy. Cài requirements.txt hoặc chọn Tự động; hiện dùng Web fallback."
+-        : "Đã đổi bộ xử lý. Bấm Bật camera để khởi động lại.",
+-    );
++    queueSetting("backend", e.target.value);
+   };
+   $("gesture-mode").onchange = (e) => {
+-    interaction.parkAll("mode");
+-    interaction.mode = e.target.value;
++    interaction.setMode(e.target.value);
+   };
+   $("park").onclick = () => {
+     interaction.parkAll();
+@@ -1134,6 +1169,7 @@
+     setText($("camera-status"), text),
+   );
+   capture.nativeAvailable = catalog.native_tracking;
++  capture.onReconfigure = () => interaction.rebaseOnNextSample();
+   bench = new Bench(view, () => {
+     interaction.parkAll("mode");
+     endMouse();
+@@ -1151,34 +1187,48 @@
+     if (!bench.active) bench.toggle();
+   };
+   $("sidebar-toggle").onclick = () => {
+-    document.body.classList.toggle("sidebar-closed");
++    const mobile = innerWidth <= 800;
++    const open = mobile
++      ? !document.body.classList.contains("lesson-menu-open")
++      : document.body.classList.contains("sidebar-closed");
++    document.body.classList.toggle("lesson-menu-open", mobile && open);
++    document.body.classList.toggle("sidebar-closed", !open);
+     $("sidebar-toggle").setAttribute(
+       "aria-expanded",
+-      String(!document.body.classList.contains("sidebar-closed")),
++      String(open),
+     );
+   };
++  const toggleSupplies = () => {
++    document.body.classList.remove("lesson-menu-open");
++    document.body.classList.toggle("supplies-closed");
++    $("supplies-toggle").setAttribute("aria-expanded", String(!document.body.classList.contains("supplies-closed")));
++  };
++  $("supplies-toggle").onclick = toggleSupplies;
++  $("supplies-close").onclick = toggleSupplies;
+   setupReactionLibrary();
+   $("camera-quality").onchange = (e) =>
+-    capture.applyCameraQuality(e.target.value);
++    queueSetting("camera", e.target.value);
+   $("camera-auto").onchange = (e) => {
+     capture.autoCameraQuality = e.target.checked;
+     capture.cameraPolicy.reset();
+   };
+   video.addEventListener("resize", () => {
+     overlayDirty = true;
+-    for (const h of interaction.hands.values()) h.missing = true;
++    interaction.rebaseOnNextSample();
+   });
+   $("tracking-size").onchange = (e) => {
+-    capture.inferenceWidth = Number(e.target.value);
++    queueSetting("size", Number(e.target.value));
+   };
+   $("tracking-rate").onchange = (e) => {
+-    capture.maxHz = Number(e.target.value);
++    capture.setMaxHz(Number(e.target.value));
+   };
+   const lessonData = await (await fetch("/data/lessons-thpt.json")).json();
+   for (const stock of lessonStocks(lessonData)) {
+     stocks.set(stock.id, stock);
+     catalog.stocks.push(stock);
+   }
++  const hintData = await (await fetch("/data/reaction-hints.json")).json();
++  reactionHints = new ReactionHints($("reaction-hints"),catalog,lessonData,hintData);
+   lessons = new Lessons(lessonData, {
+     view,
+     bench,
+@@ -1209,6 +1259,7 @@
+   const recordInteraction = interaction.record.bind(interaction);
+   interaction.record = event => {
+     recordInteraction(event);
++    metrics.gesture(performance.now(),event);
+     learning({type:event.type, hand:event.hand, source:event.object, reason:event.reason,
+       quality:["recover", "expired", "tracking-timeout", "stalled-camera"].includes(event.reason || event.type)?"cv_uncertain":"valid"});
+   };
+@@ -1256,6 +1307,7 @@
+       result,
+       select,
+       stocks,
++      reactionHints,
+       replay: (observations, t) => {
+         tracks.update(observations, t);
+         interaction.update(tracks.tracks, t);
+--- a/web/src/metrics.js
++++ b/web/src/metrics.js
+@@ -2,6 +2,7 @@
+   constructor() {
+     this.renders = [];
+     this.tracking = [];
++    this.gestures = [];
+     this.lastRender = null;
+     this.current = null;
+     this.lastReport = null;
+@@ -28,6 +29,13 @@
+       this.tracking.shift();
+     if (this.current) this.current.track.push(row);
+   }
++  gesture(t,event) {
++    if (!Number.isFinite(event.debounceMs)) return;
++    const row={t,type:event.type,debounceMs:event.debounceMs};
++    this.gestures.push(row);
++    if(this.gestures.length>100)this.gestures.shift();
++    this.current?.gesture.push(row);
++  }
+   rate(rows, t) {
+     const data = rows.filter((x) => t - x.t <= 2000);
+     return data.length > 1
+@@ -43,7 +51,7 @@
+       : 0;
+   }
+   begin(t, metadata) {
+-    this.current = { start: t, render: [], track: [], metadata };
++    this.current = { start: t, render: [], track: [], gesture: [], metadata };
+   }
+   finish(t, reason = null) {
+     const run = this.current;
+@@ -57,6 +65,8 @@
+         : null;
+     const duration = (t - run.start) / 1000;
+     const intervals = run.render.slice(1).map((x, i) => x.t - run.render[i].t);
++    const bins = Array.from({length:Math.floor(duration)},()=>0);
++    for(const row of run.render){const bin=Math.floor((row.t-run.start)/1000);if(bin<bins.length)bins[bin]++;}
+     this.lastReport = {
+       schema: "hololab-benchmark-1",
+       ...run.metadata,
+@@ -65,6 +75,8 @@
+       abort_reason: reason,
+       render_frames: run.render.length,
+       render_fps: run.render.length / duration,
++      render_fps_min_1s: bins.length ? Math.min(...bins) : null,
++      render_interval_mean_ms: mean(intervals),
+       render_interval_p95_ms: p95(intervals),
+       render_cpu_mean_ms: mean(run.render.map((x) => x.cost)),
+       physics_cpu_mean_ms: mean(run.render.map((x) => x.physicsCost || 0)),
+@@ -77,6 +89,10 @@
+         run.track.map((x) => x.transportMs).filter((x) => x !== null),
+       ),
+       sample_age_p95_ms: p95(run.track.map((x) => x.ageMs)),
++      gesture_debounce_mean_ms: mean(run.gesture.map(x=>x.debounceMs)),
++      gesture_decisions: run.gesture.length,
++      end_to_end_latency_ms: null,
++      physics_fixed_step_hz: 120,
+       target_render_50: run.render.length / duration >= 50,
+       target_tracking_50: run.track.length / duration >= 50,
+       target_render_45: run.render.length / duration >= 45,
+--- a/web/src/physics.js
++++ b/web/src/physics.js
+@@ -426,7 +426,7 @@
+   }
+   freezeHeld(item) {
+     const e = this.entries.get(item.id);
+-    if (!e?.held) return;
++    if (!e?.held || e.freeze) return;
+     e.freeze = true;
+     e.history = [];
+     e.velocity.set(0, 0, 0);
+--- a/web/src/reaction-hints.js
++++ b/web/src/reaction-hints.js
+@@ -0,0 +1,50 @@
++/** Read-only guidance. Equations and lesson phenomena come from the SAME
++ * datasets as the production chemistry; this module never triggers a reaction. */
++const LEVELS = {relative:'An toàn tương đối',attention:'Cần chú ý',danger:'Nguy hiểm',severe:'Rất nguy hiểm'};
++export function hintsFor(stock, catalog, lessonData, hints, activeLesson=null) {
++  if (!stock) return [];
++  if (activeLesson) {
++    const lesson=lessonData.lessons.find(l=>l.id===activeLesson);
++    if (!lesson || !lesson.setup.some(s=>s.stock===stock.id)) return [];
++    if (stock.id==='lesson-control') return [{title:'Mẫu đối chứng',equation:'Không tạo AgCl khi mẫu nước không chứa chloride.',phenomenon:'Giữ trong, dùng so sánh với mẫu NaCl.',conditions:'Nước đối chứng riêng, chưa nhiễm chloride.',level:'relative',safety:lesson.safety,basis:'Chỉ áp dụng nước sạch ban đầu; thêm thuốc thử làm thay đổi nguy cơ.',sources:lesson.sources.map(k=>lessonData.sources[k]?.url).filter(Boolean)}];
++    return [{title:lesson.title,partners:lesson.setup.filter(s=>s.stock!==stock.id&&s.role!=='control').map(s=>catalog.stocks.find(c=>c.id===s.stock)?.name||s.stock),equation:lesson.equations.join('\n'),phenomenon:lesson.phenomenon,conditions:lesson.conditions,level:lesson.id==='ammonium'?'danger':'attention',safety:lesson.safety,basis:'Mức lưu ý của bài thực hành và lượng/nồng độ ban đầu; không áp dụng cho hỗn hợp tùy ý.',sources:lesson.sources.map(k=>lessonData.sources[k]?.url).filter(Boolean)}];
++  }
++  if (stock.group === 'risk') return hints.qualitative.filter(row=>row.stocks.includes(stock.id));
++  return hints.free.filter(row=>row.stocks.includes(stock.id)).map(row=>{
++    const reaction=catalog.reactions.find(r=>r.id===row.reaction);
++    if (!reaction) throw Error('Missing hint reaction '+row.reaction);
++    const p=reaction.phenomena;
++    const phenomenon = p.precipitate ? `Kết tủa ${catalog.species[p.precipitate.species].formula} màu ${p.precipitate.color_vi}.`
++      : p.gas ? `Sinh khí ${catalog.species[p.gas.species].formula}, có bọt khí.`
++      : 'Trung hòa, tỏa nhiệt; không tự đổi màu nếu thiếu chỉ thị.';
++    return {...row,title:reaction.name,partners:row.stocks.filter(id=>id!==stock.id).map(id=>catalog.stocks.find(s=>s.id===id)?.name||id),equation:reaction.equation_display,phenomenon};
++  });
++}
++export class ReactionHints {
++  constructor(element,catalog,lessonData,data) { Object.assign(this,{element,catalog,lessonData,data}); }
++  show(stock,activeLesson=null) {
++    const el=this.element;
++    el.replaceChildren();
++    const text=(tag,value,parent=el)=>{const n=document.createElement(tag);n.textContent=value;parent.append(n);return n;};
++    text('h3',stock?stock.name+' · '+stock.formula:'Gợi ý phản ứng');
++    if (!stock) {text('p','Chọn một hóa chất để xem.');return;}
++    const rows=hintsFor(stock,this.catalog,this.lessonData,this.data,activeLesson);
++    if (!rows.length) text('p',stock.group==='risk'
++      ? 'Mẫu định tính nguy hiểm. Xem cảnh báo khi thao tác; không có nồng độ hay phương trình định lượng cho vật liệu OX/FUEL ảo.'
++      : stock.id==='water' ? 'Nước dùng làm dung môi/đối chứng. Việc thêm vào hóa chất khác cần được đánh giá theo chất đó.'
++      : 'Chưa có gợi ý đã kiểm chứng cho mẫu này trong chế độ hiện tại.');
++    for (const r of rows) {
++      const article=text('article','');
++      text('strong',r.title,article);
++      if(r.partners?.length)text('p','Kết hợp trong bài: '+r.partners.join(', '),article);
++      text('p',r.equation,article);
++      text('p','Quan sát: '+r.phenomenon,article);
++      text('p','Điều kiện: '+r.conditions,article);
++      const badge=text('span',LEVELS[r.level],article);badge.className='risk-badge';badge.dataset.level=r.level;
++      text('p',r.safety,article);
++      const detail=text('details','',article);text('summary','Cơ sở & nguồn',detail);text('p',r.basis,detail);
++      r.sources.forEach((url,i)=>{const a=text('a','Nguồn '+(i+1)+' ',detail);a.href=url;a.target='_blank';a.rel='noopener noreferrer';});
++    }
++    text('p',this.data.notice).className='small';
++  }
++}
+--- a/web/src/render3d.js
++++ b/web/src/render3d.js
+@@ -2,6 +2,7 @@
+ import { PourableContainer } from "./pourable.js";
+ import { attachLiquid, updateLiquid } from "./liquid-visual.js";
+ import * as THREE from "three";
++import { createCombustion, updateCombustion, disposeCombustion } from "./combustion-visual.js";
+ import { OrbitControls } from "../vendor/controls/OrbitControls.js";
+ import { buildEnvironment } from "./environment.js";
+ import { LabPhysics, initPhysics } from "./physics.js";
+@@ -453,7 +454,8 @@
+     );
+     mesh.frustumCulled = false;
+     this.scene.add(mesh);
+-    this.effects.push({ item, kind, start: now, until: now + 2800, mesh, intensity });
++    this.effects.push({ item, kind, start: now, until: now + 2800, mesh, intensity,
++      combustion: kind === "fire" ? createCombustion(this.scene,this.dropGeometry) : null });
+   }
+   remove(item) {
+     this.physics.remove(item);
+@@ -475,6 +477,7 @@
+     });
+     for (const e of this.effects) if (e.item === item) {
+       this.scene.remove(e.mesh);
++      disposeCombustion(this.scene,e.combustion);
+       e.mesh.dispose();
+       e.mesh.material.dispose();
+     }
+@@ -536,11 +539,13 @@
+     for (const e of this.effects) {
+       if (now > e.until || !this.objects.includes(e.item)) {
+         this.scene.remove(e.mesh);
++        disposeCombustion(this.scene,e.combustion);
+         e.mesh.dispose();
+         e.mesh.material.dispose();
+         continue;
+       }
+       const center = e.item.group.position;
++      if (e.combustion) updateCombustion(e.combustion,center,now-e.start);
+       const count = e.kind === "bubbles" ? Math.max(1, Math.ceil(24 * clamp(e.intensity, 0, 1))) : 24;
+       e.mesh.count = count;
+       for (let i = 0; i < count; i++) {
+--- a/web/src/tracks.js
++++ b/web/src/tracks.js
+@@ -8,6 +8,7 @@
+   aspect = 16 / 9,
+   mirror = true,
+ ) {
++  if (!Number.isFinite(aspect) || aspect <= 0) return null;
+   if (
+     landmarks?.length !== 21 ||
+     landmarks.some((p) => !Number.isFinite(p.x) || !Number.isFinite(p.y))
+@@ -48,6 +49,19 @@
+   };
+ }
+ 
++// Occasionally the detector reports the same image hand twice. Only suppress
++// near-identical 21-landmark skeletons, never just equal handedness labels.
++export function distinctObservations(observations) {
++  const rows = observations.filter(Boolean).slice(0, 2);
++  if (rows.length !== 2) return rows;
++  const [a,b] = rows;
++  if (a.points?.length !== 21 || b.points?.length !== 21 ||
++      Math.abs(Math.log(a.palm / b.palm)) > 0.2) return rows;
++  const rms = Math.sqrt(a.points.reduce((s,p,i) => s +
++    (p.x-b.points[i].x)**2 + (p.y-b.points[i].y)**2,0)/21);
++  return rms < Math.min(a.palm,b.palm)*0.12 ? [a.score >= b.score ? a : b] : rows;
++}
++
+ export class HandTracks {
+   constructor() {
+     this.tracks = [];
+@@ -119,11 +133,12 @@
+     this.lastFrame = t;
+     this.tracks = this.tracks.filter((tr) => tr.held || t - tr.lastSeen < 2200);
+     for (const tr of this.tracks) {
++      tr.previouslyObserved = tr.observed && !tr.ambiguous;
+       tr.observed = false;
+       tr.ambiguous = false;
+       tr.recovered = false;
+     }
+-    const obs = observations.filter(Boolean).slice(0, 2),
++    const obs = distinctObservations(observations),
+       existing = this.tracks.slice(0, 2);
+     const assignments = [];
+     function enumerate(i, used, pairs, cost, tracker) {
+@@ -170,7 +185,9 @@
+         const tr = existing[i],
+           o = obs[j],
+           dt = Math.max(0.01, (t - tr.lastSeen) / 1000);
+-        const recovered = t - tr.lastSeen > 100;
++        // Slow inference is not tracking loss. The former fixed 100 ms test
++        // rebased every frame below 10 Hz, making a held tool stick in midair.
++        const recovered = !tr.previouslyObserved || t - tr.lastSeen > 700;
+         if (recovered) tr.velocity = { x: 0, y: 0 };
+         const speed = recovered ? 0 : 0.5;
+         tr.velocity.x = clamp(
+--- a/web/styles.css
++++ b/web/styles.css
+@@ -1032,3 +1032,45 @@
+ #learning-panel { border-top:1px solid #d5e2e5;padding:8px 0;font-size:14px; }
+ #learning-response { display:block;width:100%;max-width:720px;margin:8px 0;font:inherit;padding:10px; }
+ #learning-panel label { display:block;margin:8px 0; }
++
++/* V3.6: the stock panel reserves its own column, never covers the 3D canvas. */
++body { --lesson-width: 240px; --stock-width: 284px; grid-template-columns: var(--lesson-width) minmax(0,1fr) var(--stock-width); }
++body.sidebar-closed { --lesson-width: 0px; grid-template-columns: var(--lesson-width) minmax(0,1fr) var(--stock-width); }
++body.supplies-closed { --stock-width: 0px; }
++#supplies { grid-column:3; grid-row:1; height:100dvh; overflow:auto; min-width:0; padding:16px 12px; border-left:1px solid var(--border); background:#fafbfc; }
++body.supplies-closed #supplies { display:none; }
++.supply-heading { display:flex; align-items:center; gap:6px; justify-content:space-between; margin-bottom:14px; }
++.supply-heading h2 { font-size:17px; }
++.supply-heading button { font-size:12px; padding:6px; }
++#supplies #cards { grid-template-columns:1fr; }
++#supplies .card { touch-action:none; }
++#reaction-hints { margin-top:18px; border-top:1px solid var(--border); padding-top:12px; font-size:13px; line-height:1.6; overflow-wrap:anywhere; }
++#reaction-hints h3 { margin:5px 0; font-size:15px; }
++#reaction-hints article { padding:10px 0; border-bottom:1px solid var(--border); }
++#reaction-hints p { margin:5px 0; }
++#reaction-hints a { color:#146958; }
++.risk-badge { display:inline-block; padding:3px 7px; border-radius:5px; font-weight:600; color:#28493b; background:#e1f2e8; }
++.risk-badge[data-level="attention"] { color:#6b4c00; background:#fff3c9; }
++.risk-badge[data-level="danger"] { color:#7c3500; background:#ffe6d2; }
++.risk-badge[data-level="severe"] { color:#8b1e22; background:#fde2e4; }
++#settings-notice { font-size:13px; color:#285448; }
++#settings-notice:empty { display:none; }
++#pipeline-metrics { margin:8px 0; }
++#hint-panel { margin:10px 0; padding:8px; border:1px solid var(--border); border-radius:6px; background:#f1f8f5; }
++#hint-panel summary { font-size:13px; font-weight:600; }
++#hint-panel #reaction-hints { max-height:34vh; overflow:auto; margin-top:6px; padding:0; border:0; }
++@media(max-width:1100px) {
++ body { --lesson-width:210px; --stock-width:245px; }
++ main { padding:10px; }
++}
++@media(max-width:800px) {
++ body { --lesson-width:0px; --stock-width:215px; }
++ #inventory { display:none; }
++ body.lesson-menu-open { --lesson-width:210px; --stock-width:0px; }
++ body.lesson-menu-open #inventory { display:block; }
++ body.lesson-menu-open #supplies { display:none; }
++ #supplies { padding:12px 8px; }
++ .camera-deck { flex-wrap:wrap; }
++ #hand-status { flex-basis:100%; }
++ .supply-heading { flex-wrap:wrap; }
++}

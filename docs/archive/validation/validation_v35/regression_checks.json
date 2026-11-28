@@ -1,0 +1,33 @@
+{
+  "checks": [
+    {
+      "name": "Save/load and invalid import preserve IDs/stocks/quantities while physics remains active",
+      "passed": true
+    },
+    {
+      "name": "Guided hazardous transfer remains blocked without changing quantities",
+      "passed": true
+    },
+    {
+      "name": "Free-mode qualitative hazard effects retained",
+      "passed": true
+    },
+    {
+      "name": "OrbitControls exclusive interaction mode retained",
+      "passed": true
+    },
+    {
+      "name": "100-reaction library retained",
+      "passed": true
+    },
+    {
+      "name": "Discrete copper sample still transfers through production loop; no liquid stream or invented reaction",
+      "passed": true
+    },
+    {
+      "name": "Opt-in logger records the actual free-desk aliquot",
+      "passed": true
+    }
+  ],
+  "page_errors": []
+}

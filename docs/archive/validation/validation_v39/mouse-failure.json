@@ -1,0 +1,45 @@
+{
+  "error": "page.waitForFunction: Timeout 10000ms exceeded.\n    at /workspace/scratch/b420c189187b/project/tools/qa_mouse_v39.mjs:74:13",
+  "checks": [
+    {
+      "name": "React library: grade/search/preview/start actual chloride lesson",
+      "passed": true
+    },
+    {
+      "name": "Save and restore actual lesson locally",
+      "passed": true
+    },
+    {
+      "name": "Drag stock card onto desk creates physical beaker",
+      "passed": true
+    },
+    {
+      "name": "Undo/redo create restores full session",
+      "passed": true
+    },
+    {
+      "name": "20 real pointer grab/drop/regrab cycles: dynamic release, no table penetration",
+      "passed": true
+    },
+    {
+      "name": "Right mouse rotation changes actual rigid-body pose; release remains dynamic",
+      "passed": true
+    },
+    {
+      "name": "Mouse depth mode changes world z without camera orbit",
+      "passed": true
+    },
+    {
+      "name": "Lost window focus releases mouse ownership",
+      "passed": true
+    },
+    {
+      "name": "Tube rack: actual joint, 60 simulated seconds stable, save/restore and regrab",
+      "passed": true,
+      "restSeconds": 60,
+      "restore": true,
+      "regrab": true
+    }
+  ],
+  "errors": []
+}

@@ -1,0 +1,355 @@
+{
+  "rows": [
+    {
+      "mode": "render-only",
+      "duration": 12.0405,
+      "renderFPS": 7.308666583613637,
+      "trackingHz": 0,
+      "renderCpuMs": 5.852272727103396,
+      "physicsCpuMs": 1.6147727272896604,
+      "bitmapCopyMs": null,
+      "inferenceMs": null,
+      "sampleAgeMs": null,
+      "resizes": 0,
+      "drawCalls": 81,
+      "triangles": 13060,
+      "camera": {
+        "requested": "HD",
+        "applied": "HD",
+        "auto": false,
+        "settings": {},
+        "video_width": 0,
+        "video_height": 0,
+        "inference_width": 640,
+        "input_width": 0,
+        "input_height": 0,
+        "transport": null,
+        "capture_ms": null,
+        "note": ""
+      },
+      "cpuCounters": {
+        "LayoutDuration": 0.007199,
+        "RecalcStyleDuration": 0.000475,
+        "DevToolsCommandDuration": 0.053599,
+        "ScriptDuration": 0.6300350000000001,
+        "V8CompileDuration": 0,
+        "TaskDuration": 1.043665,
+        "TaskOtherDuration": 0.35235700000000003
+      },
+      "top": [
+        {
+          "function": "(idle)",
+          "url": "",
+          "line": -1,
+          "ms": 11116.193
+        },
+        {
+          "function": "renderObjects",
+          "url": "http://127.0.0.1:8797/vendor/three/three.module.js",
+          "line": 16813,
+          "ms": 208.405
+        },
+        {
+          "function": "(program)",
+          "url": "",
+          "line": -1,
+          "ms": 207.88
+        },
+        {
+          "function": "needsUpdate",
+          "url": "http://127.0.0.1:8797/vendor/three/three.module.js",
+          "line": 1722,
+          "ms": 59.126
+        },
+        {
+          "function": "tick",
+          "url": "http://127.0.0.1:8797/src/main.js",
+          "line": 752,
+          "ms": 51.93
+        },
+        {
+          "function": "step",
+          "url": "http://127.0.0.1:8797/src/physics.js",
+          "line": 794,
+          "ms": 24.928
+        },
+        {
+          "function": "renderObject",
+          "url": "http://127.0.0.1:8797/vendor/three/three.module.js",
+          "line": 16842,
+          "ms": 24.759
+        },
+        {
+          "function": "WebGLRenderer.renderBufferDirect",
+          "url": "http://127.0.0.1:8797/vendor/three/three.module.js",
+          "line": 15934,
+          "ms": 24.533
+        },
+        {
+          "function": "getProgram",
+          "url": "http://127.0.0.1:8797/vendor/three/three.module.js",
+          "line": 16873,
+          "ms": 19.906
+        },
+        {
+          "function": "setup",
+          "url": "http://127.0.0.1:8797/vendor/three/three.module.js",
+          "line": 1598,
+          "ms": 15.548
+        },
+        {
+          "function": "getParameters",
+          "url": "http://127.0.0.1:8797/vendor/three/three.module.js",
+          "line": 6825,
+          "ms": 14.378
+        },
+        {
+          "function": "setProgram",
+          "url": "http://127.0.0.1:8797/vendor/three/three.module.js",
+          "line": 17020,
+          "ms": 12.978
+        }
+      ]
+    },
+    {
+      "mode": "full-pipeline",
+      "duration": 12.060199999995529,
+      "renderFPS": 11.193844214859626,
+      "trackingHz": 1.0779257392087047,
+      "renderCpuMs": 4.14000000020972,
+      "physicsCpuMs": 0.7155555547939406,
+      "bitmapCopyMs": null,
+      "inferenceMs": 876.0307692289352,
+      "sampleAgeMs": 885.0999849759615,
+      "resizes": 0,
+      "drawCalls": 81,
+      "triangles": 13060,
+      "frameTransport": "VideoFrame",
+      "camera": {
+        "requested": "HD",
+        "applied": "HD",
+        "auto": false,
+        "settings": {
+          "width": 1280,
+          "height": 720,
+          "frameRate": 20,
+          "aspectRatio": 1.7777777777777777,
+          "resizeMode": "none",
+          "focusMode": "manual"
+        },
+        "video_width": 1280,
+        "video_height": 720,
+        "inference_width": 640,
+        "input_width": 640,
+        "input_height": 360,
+        "transport": "VideoFrame",
+        "capture_ms": 0.10000000149011612,
+        "note": ""
+      },
+      "cpuCounters": {
+        "LayoutDuration": 0,
+        "RecalcStyleDuration": 0,
+        "DevToolsCommandDuration": 0.08554,
+        "ScriptDuration": 0.6022630000000002,
+        "V8CompileDuration": 0,
+        "TaskDuration": 0.9456129999999998,
+        "TaskOtherDuration": 0.2578100000000001
+      },
+      "top": [
+        {
+          "function": "(idle)",
+          "url": "",
+          "line": -1,
+          "ms": 11228.854
+        },
+        {
+          "function": "(program)",
+          "url": "",
+          "line": -1,
+          "ms": 288.919
+        },
+        {
+          "function": "setup",
+          "url": "http://127.0.0.1:8797/vendor/three/three.module.js",
+          "line": 1598,
+          "ms": 46.779
+        },
+        {
+          "function": "bindVertexArray",
+          "url": "",
+          "line": -1,
+          "ms": 30.927
+        },
+        {
+          "function": "(garbage collector)",
+          "url": "",
+          "line": -1,
+          "ms": 25.296
+        },
+        {
+          "function": "wasm-function[420]",
+          "url": "wasm://wasm/0067a4ae",
+          "line": 0,
+          "ms": 24.093
+        },
+        {
+          "function": "getProgramCacheKey",
+          "url": "http://127.0.0.1:8797/vendor/three/three.module.js",
+          "line": 7153,
+          "ms": 23.624
+        },
+        {
+          "function": "getParameters",
+          "url": "http://127.0.0.1:8797/vendor/three/three.module.js",
+          "line": 6825,
+          "ms": 20.459
+        },
+        {
+          "function": "tick",
+          "url": "http://127.0.0.1:8797/src/main.js",
+          "line": 752,
+          "ms": 20.215
+        },
+        {
+          "function": "getProgram",
+          "url": "http://127.0.0.1:8797/vendor/three/three.module.js",
+          "line": 16873,
+          "ms": 19.807
+        },
+        {
+          "function": "wasm-function[27]",
+          "url": "wasm://wasm/0067a4ae",
+          "line": 0,
+          "ms": 19.623
+        },
+        {
+          "function": "needsUpdate",
+          "url": "http://127.0.0.1:8797/vendor/three/three.module.js",
+          "line": 1722,
+          "ms": 17.624
+        }
+      ]
+    },
+    {
+      "mode": "camera-without-inference",
+      "duration": 12.38210000000149,
+      "renderFPS": 12.598832185169012,
+      "trackingHz": 0,
+      "renderCpuMs": 5.848717948899437,
+      "physicsCpuMs": 1.2974358975218656,
+      "bitmapCopyMs": null,
+      "inferenceMs": null,
+      "sampleAgeMs": null,
+      "resizes": 0,
+      "drawCalls": 81,
+      "triangles": 13060,
+      "frameTransport": "VideoFrame",
+      "camera": {
+        "requested": "HD",
+        "applied": "HD",
+        "auto": false,
+        "settings": {
+          "width": 1280,
+          "height": 720,
+          "frameRate": 20,
+          "aspectRatio": 1.7777777777777777,
+          "resizeMode": "none",
+          "focusMode": "manual"
+        },
+        "video_width": 1280,
+        "video_height": 720,
+        "inference_width": 640,
+        "input_width": 640,
+        "input_height": 360,
+        "transport": "VideoFrame",
+        "capture_ms": 0.10000000149011612,
+        "note": ""
+      },
+      "cpuCounters": {
+        "LayoutDuration": 0,
+        "RecalcStyleDuration": 0,
+        "DevToolsCommandDuration": 0.147751,
+        "ScriptDuration": 1.0176030000000003,
+        "V8CompileDuration": 0,
+        "TaskDuration": 1.5429460000000006,
+        "TaskOtherDuration": 0.37759200000000015
+      },
+      "top": [
+        {
+          "function": "(idle)",
+          "url": "",
+          "line": -1,
+          "ms": 10874.109
+        },
+        {
+          "function": "(program)",
+          "url": "",
+          "line": -1,
+          "ms": 492.688
+        },
+        {
+          "function": "wasm-function[25]",
+          "url": "wasm://wasm/0067a4ae",
+          "line": 0,
+          "ms": 57.397
+        },
+        {
+          "function": "useProgram",
+          "url": "",
+          "line": -1,
+          "ms": 54.958
+        },
+        {
+          "function": "wasm-function[27]",
+          "url": "wasm://wasm/0067a4ae",
+          "line": 0,
+          "ms": 43.986
+        },
+        {
+          "function": "needsUpdate",
+          "url": "http://127.0.0.1:8797/vendor/three/three.module.js",
+          "line": 1722,
+          "ms": 43.664
+        },
+        {
+          "function": "WebGLRenderer.renderBufferDirect",
+          "url": "http://127.0.0.1:8797/vendor/three/three.module.js",
+          "line": 15934,
+          "ms": 37.709
+        },
+        {
+          "function": "setup",
+          "url": "http://127.0.0.1:8797/vendor/three/three.module.js",
+          "line": 1598,
+          "ms": 36.197
+        },
+        {
+          "function": "requestVideoFrameCallback",
+          "url": "",
+          "line": -1,
+          "ms": 34.081
+        },
+        {
+          "function": "getProgram",
+          "url": "http://127.0.0.1:8797/vendor/three/three.module.js",
+          "line": 16873,
+          "ms": 33.458
+        },
+        {
+          "function": "__wrap",
+          "url": "http://127.0.0.1:8797/vendor/rapier/rapier.mjs",
+          "line": 0,
+          "ms": 32.446
+        },
+        {
+          "function": "getParameters",
+          "url": "http://127.0.0.1:8797/vendor/three/three.module.js",
+          "line": 6825,
+          "ms": 32.233
+        }
+      ]
+    }
+  ],
+  "errors": [],
+  "physicalWebcam": false
+}

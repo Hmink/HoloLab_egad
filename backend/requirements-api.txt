@@ -1,0 +1,7 @@
+# API v3.1 (accounts, later learning sessions). Optional: without it server.py runs the lab with accounts off.
+fastapi==0.165.0
+uvicorn==0.54.0
+SQLAlchemy==2.1.9
+alembic==1.20.1
+psycopg[binary]==3.3.9
+argon2-cffi==25.1.0

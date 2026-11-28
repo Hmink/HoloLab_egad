@@ -1,0 +1,47 @@
+{
+  "schema": "chemlab-qualitative-hazards-1",
+  "status": "Illustrative hazard scenarios, not kinetic or explosion predictions; teacher review pending.",
+  "sources": {
+    "sulfuric": "https://www.cdc.gov/niosh/npg/npgd0577.html",
+    "nitric": "https://www.cdc.gov/niosh/npg/npgd0447.html",
+    "hydrochloric": "https://www.cdc.gov/niosh/npg/npgd0332.html"
+  },
+  "rules": [
+    {
+      "id": "oxidizer_combustible",
+      "source_tags": ["oxidizer"], "target_tags": ["fuel"], "either_direction": true,
+      "effect": "fire", "source_refs": ["nitric"],
+      "message": "Chất oxi hóa gặp vật liệu dễ cháy ảo: minh họa nguy cơ cháy. Không phải mọi lần tiếp xúc đều bốc cháy."
+    },
+    {
+      "id": "water_into_sulfuric",
+      "source_tags": ["aqueous"], "target_tags": ["sulfuric"],
+      "effect": "splash", "source_refs": ["sulfuric"],
+      "message": "Dung dịch nước vào H₂SO₄ đặc: nguy cơ nóng cục bộ và bắn tóe. Đây không phải ngọn lửa hay nổ hóa học."
+    },
+    {
+      "id": "sulfuric_into_water",
+      "source_tags": ["sulfuric"], "target_tags": ["aqueous"],
+      "effect": "heat", "source_refs": ["sulfuric"],
+      "message": "H₂SO₄ đặc tiếp xúc dung dịch nước: quá trình tỏa nhiệt; không tự suy ra cháy hoặc nổ."
+    },
+    {
+      "id": "nitric_dilution",
+      "source_tags": ["nitric"], "target_tags": ["aqueous"], "either_direction": true,
+      "effect": "heat", "source_refs": ["nitric"],
+      "message": "HNO₃ đặc tiếp xúc dung dịch nước: minh họa tỏa nhiệt và nguy cơ ăn mòn; chưa tính nhiệt độ thực."
+    },
+    {
+      "id": "hydrochloric_transfer",
+      "source_tags": ["hydrochloric"], "target_tags": ["aqueous"], "either_direction": true,
+      "effect": "fumes", "source_refs": ["hydrochloric"],
+      "message": "HCl đặc: minh họa nguy cơ hơi gây kích ứng và ăn mòn. Làn mờ là ký hiệu, không dự đoán đám khí thực."
+    }
+  ],
+  "limits": [
+    "No concentrations, recipes, ignition thresholds, blast energy or toxic gas synthesis are modeled.",
+    "The fuel and generic oxidizer are fictional teaching materials.",
+    "Water/acid direction changes the educational animation, not a quantitative safety assessment.",
+    "No matched rule means unmodeled, never proven safe."
+  ]
+}

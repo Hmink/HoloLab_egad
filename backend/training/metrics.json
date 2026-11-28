@@ -1,0 +1,302 @@
+{
+  "data_source": "45 AI-simulated answers; labels assigned provisionally by assistant, NOT teacher gold",
+  "validation": "Leave one question out (9 folds); synthetic data only; not student-generalization evidence",
+  "report": {
+    "CORRECT": {
+      "precision": 0.7222222222222222,
+      "recall": 0.7222222222222222,
+      "f1-score": 0.7222222222222222,
+      "support": 18.0
+    },
+    "INCOMPLETE": {
+      "precision": 0.3,
+      "recall": 0.3333333333333333,
+      "f1-score": 0.3157894736842105,
+      "support": 9.0
+    },
+    "INSUFFICIENT_EVIDENCE": {
+      "precision": 0.5,
+      "recall": 0.16666666666666666,
+      "f1-score": 0.25,
+      "support": 6.0
+    },
+    "MISCONCEPTION": {
+      "precision": 0.4,
+      "recall": 0.5,
+      "f1-score": 0.4444444444444444,
+      "support": 12.0
+    },
+    "accuracy": 0.5111111111111111,
+    "macro avg": {
+      "precision": 0.4805555555555555,
+      "recall": 0.4305555555555556,
+      "f1-score": 0.4331140350877193,
+      "support": 45.0
+    },
+    "weighted avg": {
+      "precision": 0.5222222222222223,
+      "recall": 0.5111111111111111,
+      "f1-score": 0.5038986354775828,
+      "support": 45.0
+    }
+  },
+  "classes": [
+    "CORRECT",
+    "INCOMPLETE",
+    "INSUFFICIENT_EVIDENCE",
+    "MISCONCEPTION"
+  ],
+  "confusion_matrix": [
+    [
+      13,
+      1,
+      0,
+      4
+    ],
+    [
+      1,
+      3,
+      1,
+      4
+    ],
+    [
+      0,
+      4,
+      1,
+      1
+    ],
+    [
+      4,
+      2,
+      0,
+      6
+    ]
+  ],
+  "predictions": [
+    {
+      "id": "R001",
+      "expected_provisional": "CORRECT",
+      "predicted": "CORRECT"
+    },
+    {
+      "id": "R002",
+      "expected_provisional": "CORRECT",
+      "predicted": "CORRECT"
+    },
+    {
+      "id": "R003",
+      "expected_provisional": "CORRECT",
+      "predicted": "CORRECT"
+    },
+    {
+      "id": "R004",
+      "expected_provisional": "CORRECT",
+      "predicted": "CORRECT"
+    },
+    {
+      "id": "R005",
+      "expected_provisional": "CORRECT",
+      "predicted": "MISCONCEPTION"
+    },
+    {
+      "id": "R006",
+      "expected_provisional": "CORRECT",
+      "predicted": "MISCONCEPTION"
+    },
+    {
+      "id": "R007",
+      "expected_provisional": "CORRECT",
+      "predicted": "CORRECT"
+    },
+    {
+      "id": "R008",
+      "expected_provisional": "CORRECT",
+      "predicted": "MISCONCEPTION"
+    },
+    {
+      "id": "R009",
+      "expected_provisional": "CORRECT",
+      "predicted": "CORRECT"
+    },
+    {
+      "id": "R010",
+      "expected_provisional": "INCOMPLETE",
+      "predicted": "MISCONCEPTION"
+    },
+    {
+      "id": "R011",
+      "expected_provisional": "CORRECT",
+      "predicted": "MISCONCEPTION"
+    },
+    {
+      "id": "R012",
+      "expected_provisional": "INCOMPLETE",
+      "predicted": "MISCONCEPTION"
+    },
+    {
+      "id": "R013",
+      "expected_provisional": "CORRECT",
+      "predicted": "INCOMPLETE"
+    },
+    {
+      "id": "R014",
+      "expected_provisional": "INCOMPLETE",
+      "predicted": "INCOMPLETE"
+    },
+    {
+      "id": "R015",
+      "expected_provisional": "INCOMPLETE",
+      "predicted": "MISCONCEPTION"
+    },
+    {
+      "id": "R016",
+      "expected_provisional": "CORRECT",
+      "predicted": "CORRECT"
+    },
+    {
+      "id": "R017",
+      "expected_provisional": "INCOMPLETE",
+      "predicted": "MISCONCEPTION"
+    },
+    {
+      "id": "R018",
+      "expected_provisional": "INCOMPLETE",
+      "predicted": "CORRECT"
+    },
+    {
+      "id": "R019",
+      "expected_provisional": "MISCONCEPTION",
+      "predicted": "CORRECT"
+    },
+    {
+      "id": "R020",
+      "expected_provisional": "MISCONCEPTION",
+      "predicted": "MISCONCEPTION"
+    },
+    {
+      "id": "R021",
+      "expected_provisional": "MISCONCEPTION",
+      "predicted": "INCOMPLETE"
+    },
+    {
+      "id": "R022",
+      "expected_provisional": "MISCONCEPTION",
+      "predicted": "MISCONCEPTION"
+    },
+    {
+      "id": "R023",
+      "expected_provisional": "MISCONCEPTION",
+      "predicted": "CORRECT"
+    },
+    {
+      "id": "R024",
+      "expected_provisional": "MISCONCEPTION",
+      "predicted": "MISCONCEPTION"
+    },
+    {
+      "id": "R025",
+      "expected_provisional": "MISCONCEPTION",
+      "predicted": "CORRECT"
+    },
+    {
+      "id": "R026",
+      "expected_provisional": "MISCONCEPTION",
+      "predicted": "MISCONCEPTION"
+    },
+    {
+      "id": "R027",
+      "expected_provisional": "MISCONCEPTION",
+      "predicted": "CORRECT"
+    },
+    {
+      "id": "R028",
+      "expected_provisional": "INCOMPLETE",
+      "predicted": "INSUFFICIENT_EVIDENCE"
+    },
+    {
+      "id": "R029",
+      "expected_provisional": "INSUFFICIENT_EVIDENCE",
+      "predicted": "INCOMPLETE"
+    },
+    {
+      "id": "R030",
+      "expected_provisional": "INSUFFICIENT_EVIDENCE",
+      "predicted": "INCOMPLETE"
+    },
+    {
+      "id": "R031",
+      "expected_provisional": "INCOMPLETE",
+      "predicted": "INCOMPLETE"
+    },
+    {
+      "id": "R032",
+      "expected_provisional": "INSUFFICIENT_EVIDENCE",
+      "predicted": "INCOMPLETE"
+    },
+    {
+      "id": "R033",
+      "expected_provisional": "INSUFFICIENT_EVIDENCE",
+      "predicted": "MISCONCEPTION"
+    },
+    {
+      "id": "R034",
+      "expected_provisional": "INCOMPLETE",
+      "predicted": "INCOMPLETE"
+    },
+    {
+      "id": "R035",
+      "expected_provisional": "INSUFFICIENT_EVIDENCE",
+      "predicted": "INCOMPLETE"
+    },
+    {
+      "id": "R036",
+      "expected_provisional": "INSUFFICIENT_EVIDENCE",
+      "predicted": "INSUFFICIENT_EVIDENCE"
+    },
+    {
+      "id": "R037",
+      "expected_provisional": "MISCONCEPTION",
+      "predicted": "INCOMPLETE"
+    },
+    {
+      "id": "R038",
+      "expected_provisional": "CORRECT",
+      "predicted": "CORRECT"
+    },
+    {
+      "id": "R039",
+      "expected_provisional": "CORRECT",
+      "predicted": "CORRECT"
+    },
+    {
+      "id": "R040",
+      "expected_provisional": "CORRECT",
+      "predicted": "CORRECT"
+    },
+    {
+      "id": "R041",
+      "expected_provisional": "MISCONCEPTION",
+      "predicted": "MISCONCEPTION"
+    },
+    {
+      "id": "R042",
+      "expected_provisional": "MISCONCEPTION",
+      "predicted": "MISCONCEPTION"
+    },
+    {
+      "id": "R043",
+      "expected_provisional": "CORRECT",
+      "predicted": "CORRECT"
+    },
+    {
+      "id": "R044",
+      "expected_provisional": "CORRECT",
+      "predicted": "CORRECT"
+    },
+    {
+      "id": "R045",
+      "expected_provisional": "CORRECT",
+      "predicted": "CORRECT"
+    }
+  ]
+}

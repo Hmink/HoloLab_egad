@@ -1,0 +1,21 @@
+{
+  "input": "SYNTHETIC 120 frames: alternating confident handedness, same continuous landmarks",
+  "physical_camera_test": false,
+  "v21": {
+    "frames": 120,
+    "selected": 60,
+    "control_valid": 2,
+    "grab_events": 0,
+    "recovery_frames": 58
+  },
+  "v3": {
+    "frames": 120,
+    "control_valid": 120,
+    "grab_events": 1,
+    "release_events": 0,
+    "held_objects": 1,
+    "raw_jitter_rms_px_1280": 5.120000000000005,
+    "filtered_jitter_rms_px_1280": 1.0143269662277128,
+    "synthetic_ramp_filter_lag_ms": 37.01648570896005
+  }
+}

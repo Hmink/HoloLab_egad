@@ -1,0 +1,21 @@
+{
+  "js_syntax_files": 76,
+  "python_ast_files": 41,
+  "json_files": 13,
+  "passed": true,
+  "changed_files": 28,
+  "preserved_modules": 22,
+  "runtime_files": 1786,
+  "runtime_changed": [
+    "web/index.html",
+    "web/src/capture.js",
+    "web/src/hand-worker.js",
+    "web/src/main.js",
+    "web/src/metrics.js",
+    "server.py",
+    "START_WINDOWS.bat",
+    "package-lock.json",
+    "package.json"
+  ],
+  "dependencies_model_data_unchanged": true
+}

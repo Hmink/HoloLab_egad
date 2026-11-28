@@ -1,0 +1,40 @@
+{
+  "schema": "hololab-benchmark-1",
+  "version": "3.1.0",
+  "input_source": "Y4M loop of static reference hands; not physical gestures",
+  "environment": "Chromium headless / SwiftShader",
+  "physical_camera_tested": false,
+  "backend": "CPU",
+  "camera_settings": {
+    "aspectRatio": 1.7777777777777777,
+    "frameRate": 30,
+    "height": 720,
+    "resizeMode": "none",
+    "width": 1280
+  },
+  "inference_width": 640,
+  "viewport": {
+    "width": 1366,
+    "height": 900
+  },
+  "objects": 5,
+  "moving_body": "programmatic hand target",
+  "dpr": 1,
+  "duration_s": 60.023100000000746,
+  "complete": true,
+  "abort_reason": null,
+  "render_frames": 1763,
+  "render_fps": 29.372025103668054,
+  "render_interval_p95_ms": 216.59999999999854,
+  "render_cpu_mean_ms": 0.9449234259923919,
+  "tracking_samples": 136,
+  "tracking_hz": 2.265794335847337,
+  "detected_samples": 136,
+  "inference_mean_ms": 179.27499999987947,
+  "transport_mean_ms": null,
+  "sample_age_p95_ms": 553.10009765625,
+  "target_render_50": false,
+  "target_tracking_50": false,
+  "target_render_45": false,
+  "note": "Render FPS is not tracking Hz. Sample age is not end-to-end motion latency. No images saved."
+}

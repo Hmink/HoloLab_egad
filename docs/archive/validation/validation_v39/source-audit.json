@@ -1,0 +1,14 @@
+{
+  "baseline": "V3.8 clean release",
+  "byte_identical": {
+    "capture.js": true,
+    "hand-worker.js": true,
+    "interaction.js": true,
+    "tracks.js": true,
+    "filters.js": true,
+    "physics.js": true,
+    "mouse-motion.js": true,
+    "liquid-simulation.js": true,
+    "reaction-engine.js": true
+  }
+}

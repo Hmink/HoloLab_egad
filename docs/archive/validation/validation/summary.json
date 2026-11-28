@@ -1,0 +1,14 @@
+{
+  "date": "2026-10-26",
+  "source_hashes_verified": true,
+  "python_tests": 90,
+  "javascript_tests": 26,
+  "browser_checks_per_backend": 14,
+  "physical_camera_test": false,
+  "target_device_acceptance": "pending",
+  "os": "Linux x86_64",
+  "cpu": "AMD EPYC 9V74; container quota about 8 CPUs",
+  "browser": "Chromium 134.0.6998.35 headless",
+  "webgl": "SwiftShader software renderer",
+  "native_desktop_gl": "llvmpipe LLVM 20.1.2"
+}

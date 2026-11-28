@@ -1,0 +1,10 @@
+{
+  "error": "AssertionError [ERR_ASSERTION]: Expected values to be strictly equal:\n\nfalse !== true\n",
+  "errors": [],
+  "checks": [
+    {
+      "name": "Startup: local Rapier WASM, Three.js, chemistry API",
+      "passed": true
+    }
+  ]
+}

@@ -1,0 +1,139 @@
+{
+  "schema": "hololab-hints-1",
+  "reviewed": "2026-10-29",
+  "notice": "Màu biểu thị mức lưu ý giáo dục cho điều kiện ghi kèm; không phải phân loại GHS/SDS hay đánh giá an toàn thực nghiệm. Chưa có phản ứng trong mô hình không có nghĩa hỗn hợp an toàn.",
+  "free": [
+    {
+      "stocks": [
+        "hcl",
+        "naoh"
+      ],
+      "reaction": "strong_acid_base",
+      "level": "attention",
+      "conditions": "Dung dịch gốc 0,1 M; trong giới hạn dung dịch loãng của mô hình.",
+      "safety": "Tránh bắn vào mắt; phản ứng tỏa nhiệt. Đeo kính khi thực hành thật.",
+      "basis": "NaOH 0,1 M được tài liệu giáo dục RSC lưu ý gây kích ứng; mức lưu ý dùng cho dung dịch loãng.",
+      "sources": [
+        "https://edu.rsc.org/experiments/testing-the-ph-of-different-solutions/395.article"
+      ]
+    },
+    {
+      "stocks": [
+        "cuso4",
+        "naoh"
+      ],
+      "reaction": "copper_hydroxide",
+      "level": "attention",
+      "conditions": "Dung dịch gốc 0,1 M, tiếp xúc trong cùng bình; không có tác nhân tạo phức.",
+      "safety": "Tránh tiếp xúc da/mắt, thu gom chất thải chứa đồng riêng.",
+      "basis": "Dung dịch loãng; lưu ý tác động của muối đồng và bazơ.",
+      "sources": [
+        "https://www2.chem.wisc.edu/deptfiles/genchem/lab/ccaold/main/naoh/page1.htm",
+        "https://chem.washington.edu/lecture-demos/carbonate-precipitates"
+      ]
+    },
+    {
+      "stocks": [
+        "hcl",
+        "nahco3"
+      ],
+      "reaction": "bicarbonate_acid",
+      "level": "attention",
+      "conditions": "Dung dịch loãng trong bình mở; không đậy kín bình đang sinh khí.",
+      "safety": "Khí CO₂ thoát ra; bình kín có nguy cơ tăng áp. Không thử tăng áp ngoài đời.",
+      "basis": "Mức lưu ý cho dung dịch gốc 0,1 M trong bình mở, không áp dụng cho bình kín.",
+      "sources": [
+        "https://chem.libretexts.org/Ancillary_Materials/Laboratory_Experiments/Wet_Lab_Experiments/General_Chemistry_Labs/Online_Chemistry_Lab_Manual/Chem_9_Experiments/10%3A_Double_Replacement_Reactions_%28Experiment%29"
+      ]
+    },
+    {
+      "stocks": [
+        "cacl2",
+        "na2co3"
+      ],
+      "reaction": "calcium_carbonate",
+      "level": "attention",
+      "conditions": "Dung dịch gốc 0,1 M trong cùng bình.",
+      "safety": "Tránh tiếp xúc mắt; không nếm hóa chất.",
+      "basis": "CaCl₂ có thể gây kích ứng; phản ứng này tạo kết tủa, không sinh lửa.",
+      "sources": [
+        "https://www.colorado.edu/lab/lecture-demo-manual/general-reactions/s130-chemical-rxns-precipitation-cacl2-na2co3-caco3"
+      ]
+    }
+  ],
+  "qualitative": [
+    {
+      "stocks": [
+        "acid_risk"
+      ],
+      "title": "Pha loãng axit đặc (mô phỏng)",
+      "partners": [
+        "Nước / dung dịch nước"
+      ],
+      "equation": "Quá trình pha loãng; không gán phương trình sinh lửa.",
+      "phenomenon": "Tỏa nhiệt; nước vào axit đặc có nguy cơ bắn tóe.",
+      "conditions": "Mẫu H₂SO₄ đặc, không định lượng nồng độ/nhiệt trong mô phỏng.",
+      "level": "danger",
+      "safety": "Ăn mòn và tỏa nhiệt mạnh; không dùng hoạt họa để quyết định thao tác thật.",
+      "basis": "CDC/NIOSH mô tả tương tác mạnh với nước, tỏa nhiệt và bỏng hóa chất.",
+      "sources": [
+        "https://www.cdc.gov/niosh/npg/npgd0577.html"
+      ]
+    },
+    {
+      "stocks": [
+        "nitric_risk"
+      ],
+      "title": "Axit nitric đặc (mô phỏng)",
+      "partners": [
+        "Nước / vật liệu dễ cháy ảo"
+      ],
+      "equation": "Chỉ minh họa nguy cơ; không tính sản phẩm hoặc năng lượng.",
+      "phenomenon": "Pha loãng tỏa nhiệt; chất oxi hóa có thể làm tăng khả năng cháy của vật liệu khác.",
+      "conditions": "Mẫu HNO₃ định tính; không có công thức phối trộn thực.",
+      "level": "danger",
+      "safety": "Tránh tiếp xúc, hít hơi; nguy cơ ăn mòn và oxi hóa.",
+      "basis": "CDC/NIOSH: axit không tự cháy, nhưng làm vật liệu dễ cháy bắt lửa dễ hơn.",
+      "sources": [
+        "https://www.cdc.gov/niosh/npg/npgd0447.html"
+      ]
+    },
+    {
+      "stocks": [
+        "hcl_risk"
+      ],
+      "title": "Axit clohiđric đặc (mô phỏng)",
+      "partners": [
+        "Dung dịch nước"
+      ],
+      "equation": "Chỉ minh họa hơi/kích ứng, không có phản ứng sinh lửa.",
+      "phenomenon": "Làn mờ là ký hiệu hơi gây kích ứng, không phải khói cháy.",
+      "conditions": "Mẫu HCl đặc định tính; không dự đoán đám khí.",
+      "level": "danger",
+      "safety": "Nguy cơ tổn thương mắt/da và đường hô hấp.",
+      "basis": "CDC/NIOSH: hydrogen chloride không cháy; dung dịch có tính ăn mòn.",
+      "sources": [
+        "https://www.cdc.gov/niosh/npg/npgd0332.html"
+      ]
+    },
+    {
+      "stocks": [
+        "oxidizer_risk",
+        "fuel_risk"
+      ],
+      "title": "Tình huống cháy giả định",
+      "partners": [
+        "Chất oxi hóa ảo OX + vật liệu dễ cháy ảo FUEL"
+      ],
+      "equation": "OX/FUEL không phải công thức hóa học, không có phương trình hoặc tỉ lệ thực.",
+      "phenomenon": "Ngọn lửa, tia sáng và khói minh họa sau khi quy tắc nguy cơ trong mô hình khớp.",
+      "conditions": "Chế độ minh họa nguy cơ; không phải mọi chất oxi hóa/chất cháy đều phản ứng như vậy.",
+      "level": "severe",
+      "safety": "Tình huống rất nguy hiểm được dựng cho giáo dục, không thử phối trộn ngoài đời.",
+      "basis": "Mức đỏ áp dụng tình huống cháy giả định; nguồn NIOSH chỉ hỗ trợ nguyên lý chất oxi hóa làm tăng nguy cơ cháy, không xác nhận hỗn hợp hư cấu.",
+      "sources": [
+        "https://www.cdc.gov/niosh/npg/npgd0447.html"
+      ]
+    }
+  ]
+}

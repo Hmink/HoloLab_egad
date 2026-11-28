@@ -1,0 +1,80 @@
+{
+  "schema": "hololab-benchmark-1",
+  "version": "HoloLab AR · ChemLab V3.4",
+  "input_source": "Y4M 1280x720@30 still-photo loop; not physical gestures",
+  "physical_camera_tested": false,
+  "environment": "Chromium 134 headless / SwiftShader / WebCPU",
+  "backend": "CPU",
+  "camera": {
+    "requested": "HD",
+    "applied": "HD",
+    "auto": false,
+    "settings": {
+      "width": 1280,
+      "height": 720,
+      "frameRate": 30,
+      "aspectRatio": 1.7777777777777777,
+      "resizeMode": "none"
+    },
+    "video_width": 1280,
+    "video_height": 720,
+    "inference_width": 640,
+    "note": ""
+  },
+  "viewport": {
+    "width": 1366,
+    "height": 900
+  },
+  "render_surface": {
+    "width": 1022,
+    "height": 418
+  },
+  "dpr": 1,
+  "objects": 2,
+  "lesson": "iron-copper",
+  "moving_body": "one programmatic target; other bodies untouched",
+  "duration_s": 60.075600000005956,
+  "complete": true,
+  "abort_reason": null,
+  "render_frames": 1702,
+  "render_fps": 28.330969644911267,
+  "render_interval_p95_ms": 200.10000000000582,
+  "render_cpu_mean_ms": 1.5056404228268583,
+  "physics_cpu_mean_ms": 0.34095182111344524,
+  "physics_cpu_p95_ms": 0.6999999955296516,
+  "tracking_samples": 155,
+  "tracking_hz": 2.5800824294719424,
+  "detected_samples": 155,
+  "inference_mean_ms": 150.14387096753043,
+  "transport_mean_ms": null,
+  "sample_age_p95_ms": 486.89990234375,
+  "target_render_50": false,
+  "target_tracking_50": false,
+  "target_render_45": false,
+  "note": "Render FPS is not tracking Hz. Sample age is not end-to-end motion latency. No images saved.",
+  "untouched_bodies_60s": [
+    {
+      "id": 1,
+      "drift_scene": 0,
+      "sleeping": true
+    }
+  ],
+  "recovery_count": 0,
+  "camera_final": {
+    "requested": "HD",
+    "applied": "HD",
+    "auto": false,
+    "settings": {
+      "width": 1280,
+      "height": 720,
+      "frameRate": 30,
+      "aspectRatio": 1.7777777777777777,
+      "resizeMode": "none"
+    },
+    "video_width": 1280,
+    "video_height": 720,
+    "inference_width": 640,
+    "note": ""
+  },
+  "page_errors": []
+}

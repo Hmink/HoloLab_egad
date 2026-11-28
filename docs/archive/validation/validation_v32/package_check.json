@@ -1,0 +1,8 @@
+{
+  "zip_crc_verified": true,
+  "flat_root_with_server_py": true,
+  "extracted_javascript_tests_passed": 51,
+  "extracted_python_api_tests_without_site_packages_passed": 5,
+  "archived_reports_match_final_working_files": true,
+  "physical_camera_tested": false
+}

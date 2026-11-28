@@ -1,0 +1,78 @@
+{
+  "before": {
+    "runs": [
+      {
+        "render_fps": 13.679981737808589,
+        "tracking_hz": 1.4663074213485456,
+        "render_cpu_mean_ms": 5.225700365567759,
+        "physics_cpu_mean_ms": 2.382704019537434,
+        "inference_mean_ms": 144.4602272721346
+      },
+      {
+        "render_fps": 21.947476040253733,
+        "tracking_hz": 2.316400280634221,
+        "render_cpu_mean_ms": 3.73424449502494,
+        "physics_cpu_mean_ms": 1.7016704631071247,
+        "inference_mean_ms": 123.49712230179378
+      },
+      {
+        "render_fps": 20.8975802100748,
+        "tracking_hz": 2.214643958517887,
+        "render_cpu_mean_ms": 3.9225498006935138,
+        "physics_cpu_mean_ms": 1.828286852512464,
+        "inference_mean_ms": 122.52556390897897
+      }
+    ],
+    "median": {
+      "render_fps": 20.8975802100748,
+      "tracking_hz": 2.214643958517887,
+      "render_cpu_mean_ms": 3.9225498006935138,
+      "physics_cpu_mean_ms": 1.828286852512464,
+      "inference_mean_ms": 123.49712230179378
+    }
+  },
+  "after": {
+    "runs": [
+      {
+        "render_fps": 9.599771069584436,
+        "tracking_hz": 0.9316935526806386,
+        "render_cpu_mean_ms": 5.307279029405922,
+        "physics_cpu_mean_ms": 2.4530329290951767,
+        "inference_mean_ms": 161.67857142857142
+      },
+      {
+        "render_fps": 19.06631711751951,
+        "tracking_hz": 2.083295139589107,
+        "render_cpu_mean_ms": 3.6844405593819447,
+        "physics_cpu_mean_ms": 1.657692307691005,
+        "inference_mean_ms": 116.7975999994874
+      },
+      {
+        "render_fps": 15.964697687285236,
+        "tracking_hz": 1.6164673023660416,
+        "render_cpu_mean_ms": 4.332254697438446,
+        "physics_cpu_mean_ms": 2.1429018790217307,
+        "inference_mean_ms": 138.64536082437357
+      }
+    ],
+    "median": {
+      "render_fps": 15.964697687285236,
+      "tracking_hz": 1.6164673023660416,
+      "render_cpu_mean_ms": 4.332254697438446,
+      "physics_cpu_mean_ms": 2.1429018790217307,
+      "inference_mean_ms": 138.64536082437357
+    }
+  },
+  "comparison": {
+    "render_fps": -23.605041699571526,
+    "tracking_hz": -27.010059736742743,
+    "render_cpu_mean_ms": 10.444861571228392,
+    "physics_cpu_mean_ms": 17.208187329954107,
+    "inference_mean_ms": 12.266065994284103
+  },
+  "notes": [
+    "Same host, same 1022x418 render surface, DPR 1, HD fake camera; no human hands detected.",
+    "Observed render/tracking regression is unresolved, not hidden by a higher displayed render counter.",
+    "Software GL timing varies substantially across runs; real-device comparison and end-to-end latency remain unverified."
+  ]
+}

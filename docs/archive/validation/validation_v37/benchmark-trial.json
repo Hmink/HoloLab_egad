@@ -1,0 +1,114 @@
+{
+  "schema": "hololab-benchmark-1",
+  "version": "HoloLab AR · ChemLab V3.6",
+  "input_source": "Chromium synthetic camera test pattern; no human hand input",
+  "physical_camera_tested": false,
+  "environment": "Chromium 133 headless / SwiftShader / WebCPU; synthetic camera",
+  "backend": "CPU",
+  "camera": {
+    "requested": "HD",
+    "applied": "HD",
+    "auto": false,
+    "settings": {
+      "width": 1280,
+      "height": 720,
+      "frameRate": 20,
+      "aspectRatio": 1.7777777777777777,
+      "resizeMode": "none",
+      "focusMode": "manual"
+    },
+    "video_width": 1280,
+    "video_height": 720,
+    "inference_width": 640,
+    "input_width": 640,
+    "input_height": 360,
+    "transport": "VideoFrame",
+    "capture_ms": 0.09999999403953552,
+    "note": ""
+  },
+  "viewport": {
+    "width": 1366,
+    "height": 900
+  },
+  "render_surface": {
+    "width": 1022,
+    "height": 418
+  },
+  "dpr": 1,
+  "objects": 5,
+  "lesson": null,
+  "moving_body": "one programmatic target; other bodies untouched",
+  "duration_s": 60.14190000000149,
+  "complete": true,
+  "abort_reason": null,
+  "render_frames": 1423,
+  "render_fps": 23.660709089669012,
+  "render_fps_min_1s": 4,
+  "render_interval_mean_ms": 42.297890295358656,
+  "render_interval_p95_ms": 216.60000000000582,
+  "render_cpu_mean_ms": 4.125790583248593,
+  "physics_cpu_mean_ms": 1.9310611385331133,
+  "physics_cpu_p95_ms": 7.800000004470348,
+  "tracking_samples": 115,
+  "tracking_hz": 1.9121444450540663,
+  "detected_samples": 0,
+  "inference_mean_ms": 494.244347825776,
+  "capture_mean_ms": 0.06260869567808898,
+  "worker_queue_mean_ms": 3.052954738425172,
+  "preprocess_mean_ms": 302.9460869562367,
+  "transport_mean_ms": null,
+  "sample_age_p95_ms": 1041.89990234375,
+  "gesture_debounce_mean_ms": null,
+  "gesture_decisions": 0,
+  "end_to_end_latency_ms": null,
+  "physics_fixed_step_hz": 120,
+  "target_render_50": false,
+  "target_tracking_50": false,
+  "target_render_45": false,
+  "note": "Render FPS is not tracking Hz. Sample age is not end-to-end motion latency. No images saved.",
+  "untouched_bodies_60s": [
+    {
+      "id": 1,
+      "drift_scene": 0,
+      "sleeping": true
+    },
+    {
+      "id": 2,
+      "drift_scene": 0,
+      "sleeping": true
+    },
+    {
+      "id": 3,
+      "drift_scene": 0,
+      "sleeping": true
+    },
+    {
+      "id": 4,
+      "drift_scene": 0,
+      "sleeping": true
+    }
+  ],
+  "recovery_count": 0,
+  "camera_final": {
+    "requested": "HD",
+    "applied": "HD",
+    "auto": false,
+    "settings": {
+      "width": 1280,
+      "height": 720,
+      "frameRate": 20,
+      "aspectRatio": 1.7777777777777777,
+      "resizeMode": "none",
+      "focusMode": "manual"
+    },
+    "video_width": 1280,
+    "video_height": 720,
+    "inference_width": 640,
+    "input_width": 640,
+    "input_height": 360,
+    "transport": "VideoFrame",
+    "capture_ms": 0,
+    "note": ""
+  },
+  "page_errors": []
+}
