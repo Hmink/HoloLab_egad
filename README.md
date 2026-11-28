@@ -27,7 +27,7 @@ Trên Windows có thể dùng `py -3 server.py --browser-tracking` hoặc `backe
 
 | Địa chỉ | Nội dung |
 |---|---|
-| http://127.0.0.1:8765/ | Phòng thí nghiệm 3D |
+| http://127.0.0.1:8765/ | Trang giới thiệu; **Học tập** dẫn tới khu học tập (Tổng quan, Thư viện thí nghiệm, Lịch sử học) và bàn thí nghiệm 3D |
 | http://127.0.0.1:8765/app/ | Ứng dụng EGAD (cần build một lần: `cd frontend && npm ci && npm run build`) |
 | http://127.0.0.1:8765/egad-pilot.html | Bộ phân loại thống kê cũ (TF-IDF, chỉ để tham khảo) |
 

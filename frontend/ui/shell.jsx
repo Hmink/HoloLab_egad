@@ -1,21 +1,75 @@
-import React, {useState, useEffect} from 'react';
+import React, {useEffect, useRef, useState} from 'react';
 import {createRoot} from 'react-dom/client';
+import './tokens.css';
 import './shell.css';
-function Apparatus({color='#81bdd5',kind='tube'}) {
- return <svg viewBox="0 0 320 150" aria-hidden="true"><defs><linearGradient id={'glass-'+kind}><stop stopColor="#effcff" stopOpacity=".55"/><stop offset=".35" stopColor="#c0d4df" stopOpacity=".05"/><stop offset="1" stopColor="#effcff" stopOpacity=".7"/></linearGradient></defs><ellipse cx="160" cy="132" rx="100" ry="7" fill="#151e28" opacity=".35"/><path d="M65 25h34v87q0 20-17 20t-17-20z" fill={'url(#glass-'+kind+')'} stroke="#d2e4eb" strokeWidth="2"/><path d="M69 80h26v31q0 17-13 17t-13-17z" fill={color} opacity=".75"/><path d="M156 25h25v35l30 62q3 8-5 8h-77q-8 0-5-8l32-62z" fill={'url(#glass-'+kind+')'} stroke="#d2e4eb" strokeWidth="2"/><path d="M142 90h52l14 33h-82z" fill={color} opacity=".6"/><path d="M240 55h43l-4 69q0 5-5 5h-28q-5 0-5-5z" fill={'url(#glass-'+kind+')'} stroke="#d2e4eb" strokeWidth="2"/><path d="M243 97h34v28h-32z" fill={color} opacity=".5"/><path d="M247 78h12m-12 12h8m-8 12h12" stroke="#fff" opacity=".7"/></svg>;
+import {href, isLearnRoute, parseRoute} from './lib/routes.js';
+import {TopNav, LearnLayout} from './components/Layout.jsx';
+import {Intro} from './pages/Intro.jsx';
+import {AuthSoon, Experiments, History, Overview, Preview} from './pages/Learn.jsx';
+
+const SAVED_KEY='hololab-saved-v38';
+const PAGE_TITLES={intro:'Giới thiệu',login:'Đăng nhập',register:'Đăng ký',overview:'Tổng quan',experiments:'Thư viện thí nghiệm',history:'Lịch sử học'};
+const go=h=>{if(location.hash!==h)location.hash=h;};
+function useHash(){
+ const [hash,setHash]=useState(location.hash);
+ useEffect(()=>{const f=()=>setHash(location.hash);addEventListener('hashchange',f);return()=>removeEventListener('hashchange',f)},[]);
+ return hash;
 }
+
 function Shell({api}) {
- const [library,showLibrary]=useState(!new URLSearchParams(location.search).has('test'));
- const [grade,setGrade]=useState('all'),[query,setQuery]=useState(''),[preview,setPreview]=useState(null),[mode,setMode]=useState('move');
- const [notice,setNotice]=useState(''),[saved,setSaved]=useState(()=>{try{return JSON.parse(localStorage.getItem('hololab-saved-v38')||'[]')}catch{return []}});
- useEffect(()=>{const b=document.getElementById('sidebar-toggle');const old=b.onclick;b.onclick=()=>{api.release();showLibrary(true)};return()=>{b.onclick=old}},[]);
+ // ?test (automated tests) without a hash starts on the 3D bench, as before.
+ const testMode=new URLSearchParams(location.search).has('test');
+ const hash=useHash(), route=parseRoute(hash);
+ const showBench=route.name==='practice'||(testMode&&!hash);
+ const [preview,setPreview]=useState(null),[mode,setMode]=useState('move');
+ const [notice,setNotice]=useState(''),[libraryNotice,setLibraryNotice]=useState('');
+ const [saved,setSaved]=useState(()=>{try{return JSON.parse(localStorage.getItem(SAVED_KEY)||'[]')}catch{return []}});
+ const started=useRef(null), overlay=useRef(null), labTitle=useRef(document.title);
+ const ready=api.lessons.filter(l=>l.status==='ready');
+
+ const toLibrary=()=>{api.release();go(href.experiments)};
+ useEffect(()=>{const b=document.getElementById('sidebar-toggle');const old=b.onclick;b.onclick=toLibrary;return()=>{b.onclick=old}},[]);
+
+ // Entering a practice route (deep link, reload, back/forward). Explicit starts set `started` first,
+ // so returning to the lesson that is already on the bench never restarts it.
+ useEffect(()=>{
+  if(route.name!=='practice'){api.release();return;}
+  const id=route.id;
+  if(started.current===id)return;
+  if(id==='session'){go(href.history);return;}
+  if(id==='free'){api.free();started.current=id;return;}
+  if(ready.some(l=>l.id===id)){api.start(id);started.current=id;return;}
+  setLibraryNotice(`Không tìm thấy bài thực hành “${id}”. Hãy chọn một bài trong thư viện.`);
+  go(href.experiments);
+ },[route.name,route.id]);
+
+ useEffect(()=>{
+  if(overlay.current)overlay.current.scrollTop=0;
+  document.title=showBench?labTitle.current:`${PAGE_TITLES[route.name]||'HoloLab'} · HoloLab`;
+  if(route.name!=='experiments')setLibraryNotice('');
+ },[route.name,showBench]);
+
  const choose=m=>{api.setMode(m);setMode(m)};
- const start=id=>{api.start(id);showLibrary(false);setPreview(null)};
- const save=()=>{try{const next=[{name:api.title(),date:new Date().toLocaleString('vi-VN'),data:api.snapshot()},...saved].slice(0,12);localStorage.setItem('hololab-saved-v38',JSON.stringify(next));setSaved(next);setNotice('Đã lưu trên trình duyệt này.')}catch(e){setNotice('Không lưu được: '+e.message)}};
+ const start=id=>{api.start(id);started.current=id;setPreview(null);go(href.practice(id))};
+ const free=()=>{api.free();started.current='free';go(href.practice('free'))};
+ const save=()=>{try{const next=[{name:api.title(),date:new Date().toLocaleString('vi-VN'),data:api.snapshot()},...saved].slice(0,12);localStorage.setItem(SAVED_KEY,JSON.stringify(next));setSaved(next);setNotice('Đã lưu trên trình duyệt này.')}catch(e){setNotice('Không lưu được: '+e.message)}};
  const run=async fn=>{try{await fn()}catch(e){setNotice(e.message)}};
- return <><nav className="lab-mouse-toolbar" aria-label="Điều khiển bằng chuột"><button onClick={()=>{api.release();showLibrary(true)}}>‹ Thư viện</button><div className="mode-switch">{[['move','Di chuyển'],['rotate','Nghiêng / rót'],['depth','Gần / xa']].map(([v,t])=><button key={v} aria-pressed={mode===v} onClick={()=>choose(v)}>{t}</button>)}</div><button onClick={()=>api.upright()}>Dựng thẳng</button><button onClick={()=>{const panel=document.getElementById("learning-panel");panel.open=true;panel.scrollIntoView({behavior:"smooth",block:"start"})}}>EGAD · Giải thích</button><button onClick={save}>Lưu</button><button onClick={()=>run(api.undo)}>Hoàn tác</button><button onClick={()=>run(api.redo)}>Làm lại</button><button onClick={()=>api.reset()}>Bắt đầu lại</button><button onClick={()=>api.remove()}>Xóa vật</button><button onClick={()=>document.getElementById('mouse-help').showModal()}>?</button></nav><div className="mouse-hint">{mode==='move'?'Giữ chuột trái trên bình để kéo · Thả chuột: bình rơi':mode==='rotate'?'Giữ chuột và kéo ngang để nghiêng bình · Kéo dọc để xoay trước/sau':'Giữ chuột và kéo lên/xuống để đổi chiều sâu'} · Chuột phải + kéo: nghiêng nhanh</div>{notice&&<div className="mouse-notice" role="status" onClick={()=>setNotice('')}>{notice} ×</div>}
+ const openSaved=s=>run(async()=>{await api.restore(s.data);started.current='session';go(href.practice('session'))});
+ const help=()=>document.getElementById('mouse-help').showModal();
+
+ let page=null;
+ if(route.name==='overview')page=<Overview lessons={api.lessons} saved={saved} onOpenSaved={openSaved}/>;
+ if(route.name==='experiments')page=<Experiments lessons={api.lessons} stocks={api.stocks||[]} saved={saved} onPreview={setPreview} onOpenSaved={openSaved} onFree={free} notice={libraryNotice}/>;
+ if(route.name==='history')page=<History saved={saved} onOpenSaved={openSaved}/>;
+
+ return <><nav className="lab-mouse-toolbar" aria-label="Điều khiển bằng chuột"><button onClick={toLibrary}>‹ Thư viện</button><div className="mode-switch">{[['move','Di chuyển'],['rotate','Nghiêng / rót'],['depth','Gần / xa']].map(([v,t])=><button key={v} aria-pressed={mode===v} onClick={()=>choose(v)}>{t}</button>)}</div><button onClick={()=>api.upright()}>Dựng thẳng</button><button onClick={()=>{const panel=document.getElementById("learning-panel");panel.open=true;panel.scrollIntoView({behavior:"smooth",block:"start"})}}>EGAD · Giải thích</button><button onClick={save}>Lưu</button><button onClick={()=>run(api.undo)}>Hoàn tác</button><button onClick={()=>run(api.redo)}>Làm lại</button><button onClick={()=>api.reset()}>Bắt đầu lại</button><button onClick={()=>api.remove()}>Xóa vật</button><button onClick={()=>document.getElementById('mouse-help').showModal()}>?</button></nav><div className="mouse-hint">{mode==='move'?'Giữ chuột trái trên bình để kéo · Thả chuột: bình rơi':mode==='rotate'?'Giữ chuột và kéo ngang để nghiêng bình · Kéo dọc để xoay trước/sau':'Giữ chuột và kéo lên/xuống để đổi chiều sâu'} · Chuột phải + kéo: nghiêng nhanh</div>{notice&&<div className="mouse-notice" role="status" onClick={()=>setNotice('')}>{notice} ×</div>}
  <dialog id="mouse-help"><h2>Thực hành bằng chuột</h2><p>Chọn bài → chọn chế độ → giữ chuột trên dụng cụ.</p><ul><li>Di chuyển: kéo bình đến vị trí mong muốn.</li><li>Nghiêng / rót: kéo ngang khoảng 350 px để dốc ngược. Giữ chuột để tiếp tục rót.</li><li>Gần / xa: kéo dọc để căn miệng bình theo chiều sâu.</li><li>Chỉ rót vào bình nhận khi dòng chảy đi qua miệng bình; lệch miệng sẽ đổ ra bàn.</li><li>Thả chuột trả vật về hệ vật lý. Camera không cần bật.</li><li>Lưu giữ phiên trong trình duyệt; xuất JSON trong bảng công cụ để chuyển máy.</li></ul><button onClick={()=>document.getElementById('mouse-help').close()}>Đã hiểu</button></dialog>
- {library&&<section className="experiment-library" aria-label="Thư viện HoloLab"><aside><h1>HoloLab<span>ChemLab</span></h1><p>Phòng thí nghiệm Hóa học</p><button className="active">Thí nghiệm</button><button onClick={()=>{document.getElementById('saved-experiments').scrollIntoView()}}>Phiên đã lưu</button><p className="library-note">Điều khiển bằng chuột<br/>Lớp 10 · 11 · 12</p></aside><article><header><div><small>Khám phá qua thực hành</small><h2>Thư viện thí nghiệm</h2></div><button onClick={()=>{api.free();showLibrary(false)}}>＋ Bàn thí nghiệm mới</button></header><div className="library-filters"><input aria-label="Tìm thí nghiệm" placeholder="Tìm tên bài hoặc chủ đề…" value={query} onChange={e=>setQuery(e.target.value)}/><select aria-label="Lọc lớp" value={grade} onChange={e=>setGrade(e.target.value)}><option value="all">Tất cả lớp</option>{[10,11,12].map(g=><option key={g} value={g}>Lớp {g}</option>)}</select></div><div className="experiment-grid">{api.lessons.filter(l=>l.status==='ready'&&(grade==='all'||l.grade===+grade)&&(`${l.title} ${l.topic}`).toLocaleLowerCase('vi').includes(query.toLocaleLowerCase('vi'))).map((l,i)=><button className="experiment-card" key={l.id} onClick={()=>setPreview(l)}><div className="experiment-image"><Apparatus color={['#dde9ec','#ef9cc9','#a4d2ea','#77b5df','#c19be1'][i%5]} kind={l.id}/></div><span className="grade">Lớp {l.grade}</span><h3>{l.title}</h3><p>{l.topic}{l.curriculum?.verified===false?" · Phân lớp đề xuất":""}</p><span>Xem bài thực hành →</span></button>)}</div><h2 id="saved-experiments">Phiên đã lưu</h2>{!saved.length&&<p>Chưa có phiên đã lưu trên trình duyệt này.</p>}{saved.map((s,i)=><button className="saved-session" key={i} onClick={()=>run(async()=>{await api.restore(s.data);showLibrary(false)})}>{s.name}<small>{s.date}</small></button>)}</article></section>}
- {preview&&<div className="preview-scrim"><section role="dialog" aria-modal="true" aria-label="Xem trước thí nghiệm"><button className="preview-close" onClick={()=>setPreview(null)}>Đóng</button><Apparatus kind="preview"/><h2>{preview.title}</h2><p>{preview.objective}</p><ol>{preview.steps.map((s,i)=><li key={i}>{s.replaceAll('Gắp','Nhấc').replaceAll('thả tay','thả chuột')}</li>)}</ol><button className="primary" onClick={()=>start(preview.id)}>Bắt đầu thực hành</button></section></div>}</>;
+ {!showBench&&<div className="hl-app" ref={overlay}>
+  <TopNav route={route}/>
+  {route.name==='intro'&&<Intro lessonCount={ready.length} onHelp={help}/>}
+  {(route.name==='login'||route.name==='register')&&<AuthSoon mode={route.name}/>}
+  {isLearnRoute(route)&&<LearnLayout route={route}>{page}</LearnLayout>}
+ </div>}
+ {preview&&<Preview lesson={preview} index={ready.indexOf(preview)} onClose={()=>setPreview(null)} onStart={()=>start(preview.id)}/>}</>;
 }
 export function initMouseShell(api){const host=document.createElement('div');host.id='mouse-shell';document.querySelector('main').prepend(host);createRoot(host).render(<Shell api={api}/>);document.body.classList.add('mouse-first','sidebar-closed');}

@@ -38,3 +38,6 @@ Rapier API references used for the physics patch: https://rapier.rs/javascript3d
 
 ## V3.8 UI
 React 19.2.0 and React DOM 19.2.0 (MIT), Scheduler (MIT), Vite 7.2.2 build tooling (MIT). License texts in licenses/. No NOBOOK assets, code or logo are included.
+
+## Phông Lora
+Lora 5.3.0 (gói npm `@fontsource/lora`), SIL Open Font License 1.1, giấy phép trong `licenses/LORA-OFL.txt`. Đóng kèm các subset latin, latin-ext, vietnamese (400, 600) trong `frontend/web/vendor/fonts/` để chạy offline. Dùng cho tiêu đề.

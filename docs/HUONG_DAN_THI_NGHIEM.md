@@ -32,7 +32,12 @@ Không mở `frontend/web/index.html` bằng cách nháy đúp (đường dẫn 
 
 ## 2. Quy trình một buổi thực hành
 
-1. **Thư viện:** mở **‹ Thư viện**, lọc theo lớp hoặc gõ tên bài, chọn thẻ bài, đọc phần xem trước, bấm **Bắt đầu thực hành**. Dụng cụ và hóa chất của bài được đặt sẵn trên bàn.
+1. **Vào học:** trang đầu tiên là trang giới thiệu. Bấm **Bắt đầu học** (khu học tập) hoặc **Khám phá thí nghiệm** (thư viện).
+   - **Tổng quan:** tiếp tục phiên đã lưu gần nhất và xem hoạt động gần đây.
+   - **Thư viện thí nghiệm:** danh sách 10 bài. Tìm theo tên bài, chủ đề hoặc hóa chất (gõ không dấu cũng được); lọc theo lớp và chủ đề.
+   - **Lịch sử học:** các phiên đã lưu trên trình duyệt này.
+   Chọn một bài (hoặc nút **Bắt đầu**), đọc mục tiêu và các bước, bấm **Bắt đầu thực hành**. Dụng cụ và hóa chất của bài được đặt sẵn trên bàn. Nút **‹ Thư viện** trên thanh công cụ đưa bạn về danh sách bài.
+   - Có thể mở thẳng một bài bằng đường dẫn, ví dụ `http://127.0.0.1:8765/#/learn/experiments/chloride`.
 2. **Đọc bảng hướng dẫn** phía sau bàn: mục tiêu, phương trình dự đoán, thao tác và quan sát. Dòng thông báo phía trên cập nhật theo từng bước.
 3. **Thao tác** bằng chuột (mục 3) hoặc bằng tay (mục 4).
 4. **Quan sát:** màu, kết tủa, bọt khí, thể tích, pH. Rê chuột lên nhãn vật để xem thành phần và lượng chất.

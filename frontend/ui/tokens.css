@@ -1,0 +1,48 @@
+/* HoloLab design tokens: one source for colour, type, spacing, radius and shadow.
+   Contrast (WCAG): --hl-ink and --hl-muted on --hl-bg/--hl-surface >= 4.5:1; white on --hl-primary >= 4.5:1. */
+:root {
+  --hl-bg: #FAF8F1;
+  --hl-surface: #FFFFFF;
+  --hl-sage: #E7EEDC;
+  --hl-pastel: #D4E2B8;
+  --hl-primary: #527A50;
+  --hl-primary-hover: #436840;
+  --hl-deep: #243C32;
+  --hl-ink: #243C32;
+  --hl-muted: #5B675F;
+  --hl-line: #E3E4D6;
+  --hl-line-strong: #C9D6BC;
+  --hl-accent: #F1D780;
+  --hl-warn-bg: #FBF0C9;
+  --hl-warn-ink: #6B5410;
+  --hl-tint-0: #F7DDD1;
+  --hl-tint-1: #E7EEDC;
+  --hl-tint-2: #FBF0C9;
+  --hl-tint-3: #DCECF4;
+
+  --hl-font-serif: "Lora", Georgia, "Times New Roman", serif;
+  --hl-font-sans: "Be Vietnam Pro", "Segoe UI", system-ui, sans-serif;
+  --hl-text: 16px;
+  --hl-text-sm: 14px;
+  --hl-text-xs: 13px;
+
+  --hl-space-1: 4px;
+  --hl-space-2: 8px;
+  --hl-space-3: 12px;
+  --hl-space-4: 16px;
+  --hl-space-5: 24px;
+  --hl-space-6: 32px;
+  --hl-space-7: 48px;
+  --hl-space-8: 72px;
+  --hl-gutter: clamp(16px, 5vw, 80px);
+
+  --hl-radius-sm: 10px;
+  --hl-radius: 16px;
+  --hl-radius-lg: 24px;
+  --hl-radius-pill: 999px;
+
+  --hl-shadow-sm: 0 1px 2px rgb(36 60 50 / .06);
+  --hl-shadow: 0 6px 18px rgb(36 60 50 / .07);
+  --hl-shadow-lg: 0 18px 44px rgb(36 60 50 / .14);
+  --hl-focus: 0 0 0 3px var(--hl-accent);
+}

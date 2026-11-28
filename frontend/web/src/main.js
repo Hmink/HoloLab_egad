@@ -1463,6 +1463,7 @@ async function launch() {
   bind();
   initMouseShell({
     lessons:lessonData.lessons,
+    stocks:lessonData.stocks, // names/formulas of lesson chemicals, for library search
     setMode:mode=>{endMouse();mouseMode=mode;}, release:endMouse,
     title:()=>$("lab-title").textContent,
     snapshot:()=>structuredClone(session()), restore:async data=>{endMouse();checkpoint();await loadSession(data);},
