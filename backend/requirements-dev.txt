@@ -1,5 +1,9 @@
 # Everything the Python test suite needs (CI uses this file).
 -r requirements-core.txt
-numpy==2.2.6
+-r requirements-api.txt
+# TestClient of the API tests (Starlette 1.x uses httpx2)
+httpx2==2.16.2
+# no exact pin: 2.2.x has no wheels for Python 3.14 (Windows would try to compile it)
+numpy>=2.2.6,<3
 opencv-python-headless==4.11.0.86
 Pillow>=10.4,<13

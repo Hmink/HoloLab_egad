@@ -7,7 +7,7 @@ const COLLAPSE_KEY = 'hololab-sidebar-collapsed';
 const read = (k) => { try { return localStorage.getItem(k); } catch { return null; } };
 const write = (k, v) => { try { localStorage.setItem(k, v); } catch { /* private mode: ignore */ } };
 
-export function TopNav({ route }) {
+export function TopNav({ route, user, onSignOut }) {
   const [open, setOpen] = useState(false);
   const learning = ['overview', 'experiments', 'history'].includes(route.name);
   useEffect(() => setOpen(false), [route.name]);
@@ -28,8 +28,17 @@ export function TopNav({ route }) {
         {link(href.overview, 'Học tập', learning)}
       </nav>
       <div className="hl-topnav-account">
-        <a className="hl-link-quiet" href={href.login} aria-current={route.name === 'login' ? 'page' : undefined}>Đăng nhập</a>
-        <a className="hl-btn hl-btn-primary" href={href.register} aria-current={route.name === 'register' ? 'page' : undefined}>Đăng ký</a>
+        {user ? (
+          <>
+            <span className="hl-user" title={user.role === 'teacher' ? 'Giáo viên' : 'Học sinh'}>{user.username}</span>
+            <button type="button" className="hl-btn hl-btn-ghost" onClick={onSignOut}>Đăng xuất</button>
+          </>
+        ) : (
+          <>
+            <a className="hl-link-quiet" href={href.login} aria-current={route.name === 'login' ? 'page' : undefined}>Đăng nhập</a>
+            <a className="hl-btn hl-btn-primary" href={href.register} aria-current={route.name === 'register' ? 'page' : undefined}>Đăng ký</a>
+          </>
+        )}
       </div>
       <button type="button" className="hl-icon-btn hl-topnav-toggle" aria-expanded={open} aria-controls="hl-topnav-menu"
         aria-label={open ? 'Đóng menu' : 'Mở menu'} onClick={() => setOpen((v) => !v)}>
@@ -39,8 +48,17 @@ export function TopNav({ route }) {
         <div className="hl-topnav-menu" id="hl-topnav-menu">
           {link(href.intro, 'Giới thiệu', route.name === 'intro')}
           {link(href.overview, 'Học tập', learning)}
-          {link(href.login, 'Đăng nhập', route.name === 'login')}
-          <a className="hl-btn hl-btn-primary" href={href.register}>Đăng ký</a>
+          {user ? (
+            <>
+              <span className="hl-user">{user.username}</span>
+              <button type="button" className="hl-btn hl-btn-ghost" onClick={onSignOut}>Đăng xuất</button>
+            </>
+          ) : (
+            <>
+              {link(href.login, 'Đăng nhập', route.name === 'login')}
+              <a className="hl-btn hl-btn-primary" href={href.register}>Đăng ký</a>
+            </>
+          )}
         </div>
       )}
     </header>

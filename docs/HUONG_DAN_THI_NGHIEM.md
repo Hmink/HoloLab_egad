@@ -26,7 +26,7 @@ Không mở `frontend/web/index.html` bằng cách nháy đúp (đường dẫn 
 
 `--browser-tracking` cho nhận diện tay chạy trong trình duyệt (khuyên dùng). Bỏ cờ này nếu bạn đã cài bộ nhận diện Python (`SETUP_FAST_TRACKING_WINDOWS.bat`).
 
-**EGAD · Giải thích** dùng mô hình ngôn ngữ chạy cục bộ (Ollama, Qwen3). Nếu chưa cài Ollama, lab vẫn chạy bình thường và EGAD báo chưa có mô hình. Cách cài: README ở thư mục gốc.
+Khung **EGAD** (bên phải bàn thí nghiệm) dùng mô hình ngôn ngữ chạy cục bộ (Ollama, Qwen3). Nếu chưa cài Ollama, lab vẫn chạy bình thường: EGAD báo chưa có mô hình và chỉ đường sang **Bảng tiêu chí** của bài (không cần mô hình). Cách cài: README ở thư mục gốc.
 
 ---
 
@@ -36,12 +36,17 @@ Không mở `frontend/web/index.html` bằng cách nháy đúp (đường dẫn 
    - **Tổng quan:** tiếp tục phiên đã lưu gần nhất và xem hoạt động gần đây.
    - **Thư viện thí nghiệm:** danh sách 10 bài. Tìm theo tên bài, chủ đề hoặc hóa chất (gõ không dấu cũng được); lọc theo lớp và chủ đề.
    - **Lịch sử học:** các phiên đã lưu trên trình duyệt này.
-   Chọn một bài (hoặc nút **Bắt đầu**), đọc mục tiêu và các bước, bấm **Bắt đầu thực hành**. Dụng cụ và hóa chất của bài được đặt sẵn trên bàn. Nút **‹ Thư viện** trên thanh công cụ đưa bạn về danh sách bài.
+   Chọn một bài (hoặc nút **Bắt đầu**), đọc mục tiêu và các bước, bấm **Bắt đầu thực hành**. Dụng cụ và hóa chất của bài được đặt sẵn trên bàn. Nút **‹ Thư viện** ở góc trên đưa bạn về danh sách bài.
+   - **Màn hình thực hành:** tên bài ở trên cùng; thanh công cụ gồm chế độ chuột (Di chuyển, Nghiêng / rót, Gần / xa), chỉnh sửa (Dựng thẳng, Hoàn tác, Làm lại, Bắt đầu lại, Xóa vật, Lưu: trên màn hẹp chỉ hiện biểu tượng, rê chuột để xem tên), kho, camera, Hỗ trợ tay, Toàn màn hình và Trợ giúp. Khung **EGAD** ở bên phải; nút **EGAD** mở hoặc thu gọn khung này.
+   - Màn hình rộng từ 1360 px: mở được cả kho dụng cụ và khung EGAD. Hẹp hơn: hai khung thay phiên (mở cái này thì cái kia thu lại). Dưới 900 px: EGAD mở thành ngăn kéo phủ lên trang (Esc để đóng). Trên điện thoại, kho dụng cụ thu gọn sẵn; bấm **Kho bên phải** để mở.
    - Có thể mở thẳng một bài bằng đường dẫn, ví dụ `http://127.0.0.1:8765/#/learn/experiments/chloride`.
 2. **Đọc bảng hướng dẫn** phía sau bàn: mục tiêu, phương trình dự đoán, thao tác và quan sát. Dòng thông báo phía trên cập nhật theo từng bước.
 3. **Thao tác** bằng chuột (mục 3) hoặc bằng tay (mục 4).
 4. **Quan sát:** màu, kết tủa, bọt khí, thể tích, pH. Rê chuột lên nhãn vật để xem thành phần và lượng chất.
-5. **Giải thích:** bấm **EGAD · Giải thích** để trả lời câu hỏi của bài (cần tích chọn đồng ý ghi sự kiện thực hành). Kết quả là gợi ý, **không phải điểm**.
+5. **Giải thích với EGAD** (khung bên phải): EGAD hỏi một câu của bài. Tích ô đồng ý, gõ câu trả lời bằng lời của bạn rồi nhấn **Enter** để gửi (**Shift+Enter** để xuống dòng). EGAD trả lời bằng một câu hỏi gợi mở; bấm **Xem nhận xét chi tiết** để xem nhận định cho từng ý và câu trích từ bài của bạn. **Câu hỏi khác** chuyển sang câu tiếp theo.
+   - Mỗi lần gửi được phân tích **riêng**: EGAD chưa nhớ các câu trả lời trước. Kết quả là dự đoán của AI, **chưa được giáo viên xác nhận, không phải điểm**.
+   - Khi lỗi tạm thời (Ollama bận, chưa chạy) có nút **Thử lại**. Khi máy chủ chưa có mô hình, dùng **Bảng tiêu chí** (bộ đánh giá theo tiêu chí của bài, chạy ngay trong trình duyệt, cần tích chọn đồng ý ghi sự kiện thực hành).
+   - Hội thoại chỉ nằm trong trang đang mở; tải lại trang là mất. Trong **Lịch sử học** có mục "Câu trả lời EGAD trong lần mở trang này".
 6. **Lưu** phiên nếu muốn làm tiếp sau (lưu trên trình duyệt của máy này); **Bắt đầu lại** để làm lại từ đầu.
 
 ---
@@ -117,7 +122,7 @@ Ví dụ chi tiết với bài **Nhận biết ion chloride**:
 2. Gắp chai AgNO₃, đưa lên trên ống Mẫu NaCl, chờ dòng "Đã căn miệng…", giữ yên tay.
 3. Sau khoảng 2 mL: ống NaCl vẩn đục trắng (AgCl). Thông báo đổi thành "Kết tủa AgCl trắng…".
 4. Nhích tay, đưa chai sang trên ống **Nước đối chứng**, rót tương tự: không có kết tủa.
-5. Đặt chai về chỗ trống rồi thả tay. Bấm **EGAD · Giải thích** để trả lời câu hỏi của bài.
+5. Đặt chai về chỗ trống rồi thả tay. Trả lời câu hỏi của bài trong khung **EGAD** bên phải.
 
 **Bài cần lượng lớn** (trung hòa, pha loãng): mỗi lần hỗ trợ chỉ rót khoảng 2 mL. Hãy rót nhiều lượt, dùng chuột, hoặc tắt Hỗ trợ tay để tự nghiêng. Lượng mỗi lần chỉnh được ở `doseMl` trong `frontend/web/src/pour-assist.js`.
 
@@ -147,6 +152,7 @@ Ví dụ chi tiết với bài **Nhận biết ion chloride**:
 | Đưa bình lên mà không thấy "Đã căn miệng" | Bình nguồn phải ở **phía trên** bình nhận và gần thẳng hàng; bình nhận phải đứng thẳng và chưa đầy |
 | Rót xong mà không có hiện tượng | Đúng cặp hóa chất chưa? Lượng có thể quá ít: rót thêm một lượt |
 | Dòng trạng thái báo sai tay Trái/Phải | Báo lại cho nhóm phát triển (nhãn đã được đổi chiều theo thử nghiệm với webcam, có thể khác giữa các máy) |
+| EGAD báo "Không kết nối được Ollama" hoặc chưa có mô hình | Trên máy chủ: chạy `ollama serve`, tải model (`ollama pull qwen3:8b`), kiểm tra bằng `python list_models.py`. Trong lúc chờ, dùng **Bảng tiêu chí** |
 | Chạy chậm | Đóng tab khác; bật tăng tốc phần cứng của trình duyệt; tắt camera khi chỉ dùng chuột |
 
 ---
@@ -156,6 +162,7 @@ Ví dụ chi tiết với bài **Nhận biết ion chloride**:
 - Hình ảnh webcam chỉ được xử lý trên máy này, không lưu và không gửi đi.
 - Sự kiện thực hành chỉ được ghi khi bạn tích chọn đồng ý, và chỉ lưu trên trình duyệt của máy. Có thể xuất hoặc xóa.
 - Phiên đã lưu nằm trong trình duyệt của máy này.
+- Câu trả lời gửi EGAD chỉ được gửi khi bạn tích ô đồng ý trong khung EGAD, và chỉ tới máy chủ của lớp (Ollama chạy trên máy chủ, không ra Internet). Không nhập họ tên hay thông tin cá nhân.
 
 ---
 

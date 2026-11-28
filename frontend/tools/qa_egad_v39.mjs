@@ -7,7 +7,18 @@ try{
  await page.goto('http://127.0.0.1:8795/?test');await page.waitForFunction(()=>window.__lab);
  await page.getByRole('button',{name:'‹ Thư viện',exact:true}).click();assert.equal(await page.locator('.experiment-card').count(),10);await page.screenshot({path:new URL('library.png',out).pathname});
  await page.getByLabel('Lọc lớp').selectOption('10');await page.getByLabel('Tìm thí nghiệm').fill('chloride');await page.locator('.experiment-card').click();await page.locator('.preview-scrim').getByRole('button',{name:'Bắt đầu thực hành',exact:true}).click();pass('10-card library and actual start through React UI');
- await page.getByRole('button',{name:'EGAD · Giải thích',exact:true}).click();await page.locator('#learning-response').fill('Tạo khí trắng.');await page.locator('#learning-save-answer').click();assert.match(await page.locator('#learning-status').innerText(),/đồng ý/);
+ // Wave 2: EGAD chat column on the practice screen. No Ollama runs here, so a send must fail clearly, offer
+ // a retry (llm_unavailable is retryable) and point to the rubric panel, which still works without a model.
+ {const dock=page.locator('#egad-dock');if(!await dock.locator('.hl-chat').count())await page.getByRole('button',{name:'EGAD',exact:true}).click();
+  const box=dock.getByLabel('Câu trả lời của bạn');assert.ok(await dock.locator('.hl-msg-question').count()>=1);
+  assert.equal(await dock.getByRole('button',{name:'Gửi câu trả lời'}).isDisabled(),true);
+  await dock.getByLabel(/Tôi đồng ý gửi câu trả lời/).check();await box.fill('Tạo kết tủa trắng AgCl.');
+  await box.press('Shift+Enter');assert.equal(await dock.locator('.hl-msg-student').count(),0);
+  await box.press('Enter');await dock.locator('.hl-msg-error').waitFor({timeout:30000});
+  assert.equal(await dock.locator('.hl-msg-student').count(),1);assert.equal(await dock.getByRole('button',{name:'Thử lại'}).count(),1);
+  await dock.getByRole('button',{name:'Bảng tiêu chí',exact:true}).click();assert.equal(await page.locator('#learning-panel').evaluate(e=>e.open),true);
+  pass('EGAD chat: consent gate, Enter/Shift+Enter, clear error with retry when no model, rubric panel reachable');}
+await page.locator('#learning-response').fill('Tạo khí trắng.');await page.locator('#learning-save-answer').click();assert.match(await page.locator('#learning-status').innerText(),/đồng ý/);
  await page.locator('#learning-consent').check();await page.locator('#learning-save-answer').click();assert.match(await page.locator('#egad-results').innerText(),/Có quan niệm sai/);
  await page.locator('#learning-response').fill('AgCl là kết tủa trắng. Ag và Cl tạo chất ít tan.');await page.locator('#learning-save-answer').click();assert.match(await page.locator('#egad-results').innerText(),/Hiểu đúng/);assert.equal(await page.evaluate(()=>__lab.egad.history.length),2);pass('Consent, real text entry, auto-label, evidence and revision history');
  await page.locator('#learning-response').fill('<img src=x onerror=alert(1)> em chưa biết');await page.locator('#learning-save-answer').click();assert.equal(await page.locator('#egad-results img').count(),0);pass('Untrusted student text renders without HTML execution');

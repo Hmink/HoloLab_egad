@@ -225,9 +225,9 @@ class Scene3DTests(unittest.TestCase):
             restored.load(file)
             self.assertEqual(restored.objects[0].mixture, target.mixture)
             self.assertEqual(restored.objects[1].mixture, source.mixture)
-            bad = json.loads(file.read_text())
+            bad = json.loads(file.read_text(encoding="utf-8"))
             bad["objects"][1]["id"] = bad["objects"][0]["id"]
-            file.write_text(json.dumps(bad))
+            file.write_text(json.dumps(bad), encoding="utf-8")
             before = deepcopy(restored.objects)
             with self.assertRaises(ValueError):
                 restored.load(file)

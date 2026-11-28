@@ -2,7 +2,8 @@ import React, { useMemo, useState } from 'react';
 import { href } from '../lib/routes.js';
 import { chemicalIndex, filterLessons, savedLessonId, savedStatus, topicsOf } from '../lib/search.js';
 import { EmptyArt, LessonThumb } from '../components/Art.jsx';
-import { IconArrow, IconLibrary, IconLock, IconSearch } from '../components/Icons.jsx';
+import { IconArrow, IconLibrary, IconSearch } from '../components/Icons.jsx';
+import { labelInfo } from '../../src/lib/egad.js';
 
 const LOCAL_NOTE = 'Lưu trên trình duyệt này';
 
@@ -18,13 +19,13 @@ function EmptyState({ title, text, action }) {
 }
 
 /* ---------------- Tổng quan ---------------- */
-export function Overview({ lessons, saved, onOpenSaved }) {
+export function Overview({ lessons, saved, onOpenSaved, user }) {
   const latest = saved[0];
   const ready = lessons.filter((l) => l.status === 'ready');
   return (
     <div className="hl-page">
       <header className="hl-page-head">
-        <h1>Chào bạn!</h1>
+        <h1>{user ? `Chào ${user.username}!` : 'Chào bạn!'}</h1>
         <p>Hôm nay bạn muốn thử thí nghiệm nào?</p>
       </header>
       <div className="hl-overview">
@@ -165,50 +166,85 @@ export function Experiments({ lessons, stocks, saved, onPreview, onOpenSaved, on
 }
 
 /* ---------------- Lịch sử học ---------------- */
-export function History({ saved, onOpenSaved }) {
+// `data` comes from lib/history.js (today: this browser only). A server source with the same shape
+// (API v3.1 sessions) can replace it without touching this component.
+function EgadTurn({ turn }) {
+  const info = turn.result ? labelInfo(turn.result.label) : null;
+  return (
+    <li className="hl-turn">
+      {turn.question && <p className="hl-turn-q">{turn.question}</p>}
+      <p className="hl-turn-a"><span className="hl-muted">Bạn trả lời:</span> {turn.answer}</p>
+      {turn.result ? (
+        <div className="hl-turn-r">
+          <p><span className="hl-muted">EGAD:</span> {turn.result.feedback}</p>
+          <p className="hl-ai-note">Nhận định: <span className={`hl-label hl-label-${info.tone}`}>{info.text}</span> · Dự đoán của AI, chưa được giáo viên xác nhận.</p>
+        </div>
+      ) : turn.error ? <p className="hl-turn-r hl-muted">Chưa phân tích được: {turn.error.message}</p> : <p className="hl-turn-r hl-muted">Đang chờ phản hồi…</p>}
+    </li>
+  );
+}
+
+export function History({ data, onOpenSaved }) {
+  const { sessions, live } = data;
+  const [open, setOpen] = useState(null);
   return (
     <div className="hl-page">
       <header className="hl-page-head">
         <h1>Lịch sử học</h1>
-        <p>Các phiên thực hành bạn đã lưu. Dữ liệu chỉ nằm trên trình duyệt này; lưu trên máy chủ và hội thoại EGAD đầy đủ sẽ có khi máy chủ hỗ trợ phiên học.</p>
+        <p>Các phiên thực hành bạn đã lưu và các câu trả lời EGAD trong lần mở trang này. Lưu trên máy chủ và hội thoại EGAD đầy đủ sẽ có khi máy chủ hỗ trợ phiên học.</p>
       </header>
-      {saved.length ? (
-        <ul className="hl-rows">
-          {saved.map((s, i) => (
-            <li key={i}>
-              <article className="hl-row hl-history-row">
-                <div className="hl-row-body">
-                  <h3>{s.name}</h3>
-                  <p className="hl-muted">{s.date}</p>
-                  <div className="hl-tags"><span className="hl-chip">{savedStatus(s)}</span><span className="hl-chip hl-chip-quiet">{LOCAL_NOTE}</span></div>
-                </div>
-                <div className="hl-row-actions">
-                  <button type="button" className="hl-btn hl-btn-primary hl-btn-sm" onClick={() => onOpenSaved(s)}>Xem lại</button>
-                </div>
-              </article>
-            </li>
+
+      {live.length > 0 && (
+        <section className="hl-panel hl-live" aria-labelledby="hl-live-title">
+          <div className="hl-panel-head">
+            <h2 id="hl-live-title">Câu trả lời EGAD trong lần mở trang này</h2>
+            <span className="hl-chip hl-chip-warn">Chưa lưu · mất khi tải lại trang</span>
+          </div>
+          {live.map((g) => (
+            <details key={g.lessonId} className="hl-live-group">
+              <summary><strong>{g.lesson?.title || g.lessonId}</strong> <span className="hl-muted">· {g.turns.length} câu trả lời</span></summary>
+              <ol className="hl-turns">{g.turns.map((t) => <EgadTurn key={t.id} turn={t} />)}</ol>
+            </details>
           ))}
+        </section>
+      )}
+
+      {sessions.length ? (
+        <ul className="hl-rows">
+          {sessions.map((s) => {
+            const expanded = open === s.key, detailId = `hl-session-${s.key}`;
+            return (
+              <li key={s.key}>
+                <article className="hl-row hl-history-row">
+                  <div className="hl-row-body">
+                    <h3>{s.title}</h3>
+                    <p className="hl-muted">{s.date}</p>
+                    <div className="hl-tags"><span className="hl-chip">{s.status}</span><span className="hl-chip hl-chip-quiet">{LOCAL_NOTE}</span></div>
+                  </div>
+                  <div className="hl-row-actions">
+                    <button type="button" className="hl-btn hl-btn-ghost hl-btn-sm" aria-expanded={expanded} aria-controls={detailId} onClick={() => setOpen(expanded ? null : s.key)}>{expanded ? 'Ẩn chi tiết' : 'Chi tiết'}</button>
+                    <button type="button" className="hl-btn hl-btn-primary hl-btn-sm" onClick={() => onOpenSaved(s.raw)}>Xem lại</button>
+                  </div>
+                  {expanded && (
+                    <div className="hl-session-detail" id={detailId}>
+                      <dl>
+                        <div><dt>Bài</dt><dd>{s.lesson ? `${s.lesson.title} · Lớp ${s.lesson.grade}` : 'Bàn thí nghiệm tự do'}</dd></div>
+                        <div><dt>Trạng thái</dt><dd>{s.status}</dd></div>
+                        <div><dt>Thời gian lưu</dt><dd>{s.date}</dd></div>
+                        {s.lesson?.objective && <div><dt>Mục tiêu</dt><dd>{s.lesson.objective}</dd></div>}
+                        <div><dt>EGAD</dt><dd>Phiên lưu trên trình duyệt chỉ gồm bàn thí nghiệm, không kèm câu trả lời EGAD.</dd></div>
+                      </dl>
+                    </div>
+                  )}
+                </article>
+              </li>
+            );
+          })}
         </ul>
       ) : (
-        <EmptyState title="Chưa có lịch sử học" text="Lịch sử xuất hiện khi bạn bấm “Lưu” trong lúc thực hành."
+        <EmptyState title="Chưa có phiên nào được lưu" text="Lịch sử xuất hiện khi bạn bấm “Lưu” trong lúc thực hành."
           action={<a className="hl-btn hl-btn-primary" href={href.experiments}>Chọn thí nghiệm đầu tiên</a>} />
       )}
-    </div>
-  );
-}
-
-/* ---------------- Đăng nhập / Đăng ký (chưa có backend) ---------------- */
-export function AuthSoon({ mode }) {
-  const title = mode === 'register' ? 'Đăng ký tài khoản' : 'Đăng nhập';
-  return (
-    <div className="hl-auth">
-      <section className="hl-panel hl-auth-card" aria-labelledby="hl-auth-title">
-        <span className="hl-feature-icon hl-tint-3"><IconLock size={28} /></span>
-        <h1 id="hl-auth-title">{title}</h1>
-        <p>Tài khoản chưa được kích hoạt trên máy chủ này, nên chưa thể {mode === 'register' ? 'đăng ký' : 'đăng nhập'}.</p>
-        <p className="hl-muted">Bạn vẫn dùng được mọi thí nghiệm mà không cần tài khoản. Phiên đã lưu nằm trong trình duyệt của bạn.</p>
-        <a className="hl-btn hl-btn-primary" href={href.overview}>Vào khu học tập</a>
-      </section>
     </div>
   );
 }

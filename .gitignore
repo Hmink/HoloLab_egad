@@ -16,3 +16,5 @@ student-data/
 frontend/web/app/
 # local browser-QA output
 frontend/validation_github/
+# local SQLite databases (demo/tests); production uses PostgreSQL
+backend/*.db

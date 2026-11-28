@@ -48,5 +48,8 @@ Mọi lỗi có dạng `{"error": "<tiếng Việt>", "error_code": "…", "retr
 
 Quy ước: khi mô hình lỗi, backend **không** trả kết quả "dự phòng" giả danh AI. Người dùng thấy lỗi và thử lại.
 
+## `/api/v1/auth/*` (API v3.1 mục 2)
+Đăng ký, đăng nhập, đăng xuất, `me`: theo `API_v3.1.md` mục 2. Chỉ bật khi có `HOLOLAB_DATABASE_URL`, xem `docs/BACKEND_XAC_THUC.md`. Khi tắt, `/api/v1/*` trả 404 không có `error_code`.
+
 ## Chưa khả dụng
 `/api/catalog`, `/api/transfer`, `/api/session`, `/api/experiment/*` trả 503 cho đến khi có `backend/chemlab`, `backend/lab3d`, `backend/data`.

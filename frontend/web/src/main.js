@@ -1466,6 +1466,7 @@ async function launch() {
     stocks:lessonData.stocks, // names/formulas of lesson chemicals, for library search
     setMode:mode=>{endMouse();mouseMode=mode;}, release:endMouse,
     title:()=>$("lab-title").textContent,
+    lesson:()=>lessons?.model?.lesson.id||null, // id of the lesson on the bench (null on the free bench)
     snapshot:()=>structuredClone(session()), restore:async data=>{endMouse();checkpoint();await loadSession(data);},
     start:id=>{endMouse();checkpoint();lessons.start(id);},
     free:()=>{endMouse();checkpoint();clearDesk();},

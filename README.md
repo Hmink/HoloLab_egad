@@ -8,7 +8,9 @@ Phòng thí nghiệm Hóa học 3D trên trình duyệt (10 bài lớp 10–12),
 |---|---|
 | Phòng thí nghiệm 3D (chuột, bàn tay, 10 bài, vật lý, hóa học) | **Chạy được.** Có **Hỗ trợ tay** (vật nằm dưới tay, tự căn miệng bình, rót nhẹ từng lượng 2 mL) |
 | EGAD qua Ollama (Qwen3) | Có API và trang thử nghiệm; mới kiểm thử với Ollama giả, **chưa đo chất lượng với Qwen3 thật** |
-| Đăng nhập, phiên nhiều lượt, PostgreSQL, trang giáo viên (hợp đồng API v3.1) | **Chưa làm** (bản thiết kế) |
+| Giao diện Đăng nhập/Đăng ký (API v3.1) | Có; báo "chưa được kích hoạt" cho đến khi có backend xác thực |
+| Tài khoản (API v3.1 mục 2): đăng ký học sinh, đăng nhập, cookie phiên, argon2id, PostgreSQL | **Có** (tùy chọn), xem [`docs/BACKEND_XAC_THUC.md`](docs/BACKEND_XAC_THUC.md) |
+| Phiên học nhiều lượt, lưu câu trả lời EGAD trên máy chủ, trang giáo viên (API v3.1 mục 3–6) | **Chưa làm** (bản thiết kế) |
 | Bài học và rubric | 5 bài có ghi "Phân lớp đề xuất" cần giáo viên xác nhận; rubric EGAD là bản minh họa |
 
 Kết quả của EGAD là **dự đoán của AI, chưa được giáo viên xác nhận**, không dùng để chấm điểm.
@@ -27,7 +29,7 @@ Trên Windows có thể dùng `py -3 server.py --browser-tracking` hoặc `backe
 
 | Địa chỉ | Nội dung |
 |---|---|
-| http://127.0.0.1:8765/ | Trang giới thiệu; **Học tập** dẫn tới khu học tập (Tổng quan, Thư viện thí nghiệm, Lịch sử học) và bàn thí nghiệm 3D |
+| http://127.0.0.1:8765/ | Trang giới thiệu; **Học tập** dẫn tới khu học tập (Tổng quan, Thư viện thí nghiệm, Lịch sử học) và bàn thí nghiệm 3D có khung EGAD bên phải |
 | http://127.0.0.1:8765/app/ | Ứng dụng EGAD (cần build một lần: `cd frontend && npm ci && npm run build`) |
 | http://127.0.0.1:8765/egad-pilot.html | Bộ phân loại thống kê cũ (TF-IDF, chỉ để tham khảo) |
 
@@ -37,7 +39,7 @@ Trên Windows có thể dùng `py -3 server.py --browser-tracking` hoặc `backe
 
 1. Cài [Ollama](https://ollama.com) trên máy chủ, rồi tải model: `ollama pull qwen3:8b` (cần khoảng 6 GB RAM/VRAM; máy yếu hơn thử `qwen3:4b`).
 2. `cd backend`, sao chép `.env.example` thành `.env`, rồi kiểm tra bằng `python list_models.py`.
-3. Trong lab bấm **EGAD · Giải thích**, hoặc mở `/app/`.
+3. Trong lab dùng khung **EGAD** bên phải bàn thí nghiệm, hoặc mở `/app/`.
 
 Ollama chỉ được lắng nghe `127.0.0.1`. **Không mở cổng Ollama ra Internet.** Nếu không có Ollama, lab vẫn chạy bình thường và EGAD báo rõ là chưa có mô hình. Hợp đồng API: [`docs/API.md`](docs/API.md).
 
@@ -61,7 +63,7 @@ licenses/   giấy phép thư viện bên thứ ba (xem docs/THIRD_PARTY.md)
 ```bash
 cd frontend
 npm ci
-npm test          # 156 test JavaScript
+npm test          # 173 test JavaScript
 npm run build     # build:shell (web/ui) + build:app (web/app)
 npm run dev       # EGAD app ở http://localhost:5173, proxy sang backend :8765
 ```
@@ -69,7 +71,7 @@ npm run dev       # EGAD app ở http://localhost:5173, proxy sang backend :8765
 ```bash
 cd backend
 pip install -r requirements-dev.txt
-python -m unittest discover -s tests -v    # 124 test Python
+python -m unittest discover -s tests -v    # 142 test Python (18 test tài khoản chạy trên SQLite; đặt HOLOLAB_TEST_DATABASE_URL để chạy trên PostgreSQL)
 ```
 
 Kiểm tra trình duyệt (cần Playwright): `node frontend/tools/qa_mouse_v39.mjs` và `qa_egad_v39.mjs`. Đặt `PLAYWRIGHT_PACKAGE` tới module Playwright và `PYTHON` tới Python có `sympy`. GitHub Actions (`.github/workflows/checks.yml`) chạy test frontend và backend ở mỗi lần push.
@@ -78,6 +80,7 @@ Kiểm tra trình duyệt (cần Playwright): `node frontend/tools/qa_mouse_v39.
 
 - [`docs/HUONG_DAN_THI_NGHIEM.md`](docs/HUONG_DAN_THI_NGHIEM.md): hướng dẫn sử dụng và làm thí nghiệm
 - [`docs/BAO_CAO_THAO_TAC_TAY.md`](docs/BAO_CAO_THAO_TAC_TAY.md): báo cáo cải thiện thao tác tay (nguyên nhân, thay đổi, số đo)
+- [`docs/BACKEND_XAC_THUC.md`](docs/BACKEND_XAC_THUC.md): cài đặt tài khoản (PostgreSQL, HTTPS, lệnh quản trị)
 - [`docs/API.md`](docs/API.md): hợp đồng API hiện tại · [`docs/CHANGELOG.md`](docs/CHANGELOG.md)
 - [`docs/lab/`](docs/lab/): tài liệu kỹ thuật các phiên bản V3.x của lab
 

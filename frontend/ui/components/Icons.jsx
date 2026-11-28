@@ -24,3 +24,10 @@ export const IconChat = (p) => <Icon {...p}><path d="M4 6q0-2 2-2h12q2 0 2 2v8q0
 export const IconRefresh = (p) => <Icon {...p}><path d="M20 12a8 8 0 1 1-2.3-5.6" /><path d="M20 4v5h-5" /></Icon>;
 export const IconLock = (p) => <Icon {...p}><rect x="5" y="10" width="14" height="10" rx="2" /><path d="M8 10V7a4 4 0 0 1 8 0v3" /></Icon>;
 export const IconPlus = (p) => <Icon {...p}><path d="M12 5v14M5 12h14" /></Icon>;
+export const IconSend = (p) => <Icon {...p}><path d="M4 12l16-8-6 16-2.5-6.5z" /><path d="M11.5 13.5L20 4" /></Icon>;
+export const IconHelp = (p) => <Icon {...p}><circle cx="12" cy="12" r="9" /><path d="M9.5 9.5a2.5 2.5 0 1 1 3.5 2.3q-1 .5-1 1.7" /><path d="M12 17h.01" /></Icon>;
+export const IconSave = (p) => <Icon {...p}><path d="M5 4h11l3 3v13H5z" /><path d="M8 4v5h7V4M8 20v-6h8v6" /></Icon>;
+export const IconUndo = (p) => <Icon {...p}><path d="M9 14L4 9l5-5" /><path d="M4 9h10a6 6 0 0 1 0 12h-3" /></Icon>;
+export const IconRedo = (p) => <Icon {...p}><path d="M15 14l5-5-5-5" /><path d="M20 9H10a6 6 0 0 0 0 12h3" /></Icon>;
+export const IconTrash = (p) => <Icon {...p}><path d="M4 7h16M10 11v6M14 11v6M6 7l1 13h10l1-13M9 7V4h6v3" /></Icon>;
+export const IconUpright = (p) => <Icon {...p}><path d="M12 20V5M7 9l5-5 5 5" /><path d="M6 20h12" /></Icon>;

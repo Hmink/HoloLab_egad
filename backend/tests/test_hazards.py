@@ -55,7 +55,7 @@ class HazardTests(unittest.TestCase):
             )
 
     def test_rule_source_references_resolve(self):
-        data = json.loads((ROOT / "data/hazards.json").read_text())
+        data = json.loads((ROOT / "data/hazards.json").read_text(encoding="utf-8"))
         for rule in data["rules"]:
             self.assertTrue(rule["source_refs"])
             for ref in rule["source_refs"]:

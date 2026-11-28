@@ -14,7 +14,7 @@ def fit(rows):
  v=TfidfVectorizer(preprocessor=normalize,analyzer='char',ngram_range=(2,4),max_features=6000,sublinear_tf=False)
  X=v.fit_transform([r['answer'] for r in rows]);m=LogisticRegression(C=2,class_weight='balanced',max_iter=2000,random_state=42).fit(X,[r['label'] for r in rows]);return v,m
 if __name__=='__main__':
- rows=json.loads((ROOT/'training/data.json').read_text()); y=[r['label'] for r in rows];pred=['']*len(rows)
+ rows=json.loads((ROOT/'training/data.json').read_text(encoding='utf-8')); y=[r['label'] for r in rows];pred=['']*len(rows)
  for tr,te in LeaveOneGroupOut().split(rows,y,[r['question_id'] for r in rows]):
   v,m=fit([rows[i] for i in tr]);p=m.predict(v.transform([rows[i]['answer'] for i in te]))
   for i,a in zip(te,p):pred[i]=a

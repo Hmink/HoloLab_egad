@@ -2,8 +2,6 @@ import React from 'react';
 
 // Original flat illustrations for HoloLab (inline SVG, offline, no third-party art).
 const INK = '#243C32';
-const SKIN = '#E9B994';
-const HAIR = '#3B2E28';
 
 export function Logo({ size = 40 }) {
   return (
@@ -33,63 +31,9 @@ export function AssistantAvatar({ size = 44 }) {
 }
 
 /** Hero: a high-school student in a lab coat and goggles, a lab bench and the assistant. */
-export function HeroArt() {
-  return (
-    <svg className="hl-hero-art" viewBox="0 0 600 470" role="img" aria-label="Minh họa: học sinh mặc áo blouse, đeo kính bảo hộ, cầm bình tam giác bên bàn thí nghiệm cùng trợ lý EGAD">
-      <path d="M70 150C90 60 220 20 330 40s240 40 250 150-40 230-190 250S90 430 60 330 50 240 70 150z" fill="#E7EEDC" />
-      <circle cx="505" cy="78" r="30" fill="#F1D780" />
-      <g fill="none" stroke="#527A50" strokeWidth="2.2" opacity=".55">
-        <circle cx="120" cy="96" r="9" /><circle cx="146" cy="80" r="7" /><path d="M127 91l12-7" />
-        <circle cx="470" cy="190" r="7" /><circle cx="492" cy="206" r="9" /><path d="M476 195l9 6" />
-      </g>
-      {/* bench */}
-      <rect x="40" y="380" width="520" height="22" rx="10" fill="#C9A77F" />
-      <rect x="70" y="402" width="16" height="56" rx="4" fill="#B08C63" /><rect x="514" y="402" width="16" height="56" rx="4" fill="#B08C63" />
-      {/* beaker + rack on the bench */}
-      <path d="M90 318h56l-5 58q0 6-6 6h-34q-6 0-6-6z" fill="#FFFFFF" stroke={INK} strokeWidth="3" strokeLinejoin="round" />
-      <path d="M94 348h48l-3 28q0 3-4 3h-34q-4 0-4-3z" fill="#A9D2EA" />
-      <rect x="168" y="352" width="82" height="10" rx="4" fill="#9CC08F" />
-      {[0, 1, 2].map((i) => (
-        <g key={i}><path d={`M${178 + i * 24} 316h12v54q0 7-6 7t-6-7z`} fill="#FFFFFF" stroke={INK} strokeWidth="2.6" />
-          <path d={`M${180 + i * 24} 344h8v24q0 5-4 5t-4-5z`} fill={['#F2B6CB', '#D4E2B8', '#F1D780'][i]} /></g>
-      ))}
-      {/* student */}
-      <path d="M262 380q-6-110 38-128h72q44 18 38 128z" fill="#FFFFFF" stroke={INK} strokeWidth="3" strokeLinejoin="round" />
-      <path d="M336 252l-14 52M336 252l14 52" stroke="#D4E2B8" strokeWidth="10" strokeLinecap="round" />
-      <path d="M318 252h36l-18 30z" fill="#527A50" />
-      <rect x="322" y="214" width="28" height="40" rx="12" fill={SKIN} />
-      <ellipse cx="336" cy="180" rx="44" ry="48" fill={SKIN} />
-      <path d="M290 178q-4-62 50-64 48 2 46 58-12-24-40-28-30 2-56 34z" fill={HAIR} />
-      <path d="M288 176q4 30 14 40" stroke={HAIR} strokeWidth="10" strokeLinecap="round" />
-      <rect x="300" y="166" width="72" height="26" rx="13" fill="#D9EEF3" fillOpacity=".85" stroke={INK} strokeWidth="3" />
-      <path d="M336 166v26" stroke={INK} strokeWidth="2.5" />
-      <circle cx="319" cy="180" r="3.2" fill={INK} /><circle cx="353" cy="180" r="3.2" fill={INK} />
-      <path d="M326 207q10 7 20 0" stroke={INK} strokeWidth="3" fill="none" strokeLinecap="round" />
-      {/* arm + flask */}
-      <path d="M392 290q34 6 40 34" stroke="#FFFFFF" strokeWidth="22" strokeLinecap="round" />
-      <path d="M392 290q34 6 40 34" stroke={INK} strokeWidth="3" fill="none" strokeLinecap="round" opacity=".35" />
-      <path d="M426 300h28M430 300v30l-22 40q-4 9 6 9h52q10 0 6-9l-22-40v-30" fill="#FFFFFF" stroke={INK} strokeWidth="3" strokeLinejoin="round" />
-      <path d="M418 352h50l10 20q2 5-4 5h-62q-6 0-4-5z" fill="#9CC08F" />
-      <circle cx="436" cy="362" r="4" fill="#FFFFFF" opacity=".9" /><circle cx="450" cy="342" r="3" fill="#9CC08F" /><circle cx="444" cy="322" r="2.4" fill="#9CC08F" />
-      <circle cx="430" cy="330" r="12" fill={SKIN} />
-      {/* assistant */}
-      <g transform="translate(470 222)">
-        <path d="M32 30L14 46M32 30l18 16" stroke={INK} strokeWidth="3" strokeLinecap="round" />
-        <circle cx="14" cy="47" r="9" fill="#D4E2B8" stroke={INK} strokeWidth="2.5" />
-        <circle cx="50" cy="47" r="9" fill="#F1D780" stroke={INK} strokeWidth="2.5" />
-        <circle cx="32" cy="26" r="17" fill="#FFFFFF" stroke={INK} strokeWidth="2.5" />
-        <circle cx="26" cy="25" r="2.4" fill={INK} /><circle cx="38" cy="25" r="2.4" fill={INK} />
-        <path d="M26 32q6 5 12 0" stroke={INK} strokeWidth="2.4" fill="none" strokeLinecap="round" />
-      </g>
-      <path d="M468 214q-10-30 18-40h56q14 0 14 14v18q0 14-14 14h-30l-14 12v-12z" fill="#FFFFFF" stroke={INK} strokeWidth="2.5" />
-      <text x="514" y="200" textAnchor="middle" fontFamily="Lora, Georgia, serif" fontSize="20" fill={INK}>Vì sao?</text>
-      {/* leaves */}
-      <path d="M560 376q-6-40 18-60 10 30-18 60z" fill="#9CC08F" /><path d="M42 376q-2-36-24-52-6 30 24 52z" fill="#527A50" opacity=".8" />
-    </svg>
-  );
-}
+// The hero illustration lives in its own file.
+export { HeroArt } from './HeroArt.jsx';
 
-/** About: an open notebook with an equation, a molecule and a speech bubble (asking & explaining). */
 export function AboutArt() {
   return (
     <svg className="hl-about-art" viewBox="0 0 440 330" role="img" aria-label="Minh họa: sổ ghi chép mở với phương trình phản ứng, mô hình phân tử và bong bóng hội thoại">
